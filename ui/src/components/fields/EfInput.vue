@@ -88,18 +88,18 @@ export default {
   props: {
     value: {type: [String, Number]},
     // EF props:
-    valueType: {type: String, description: ''},
-    fieldType: {type: String, description: ''},
-    big: {type: Boolean, description: ''},
-    maxValue: {type: Number, description: ''},
-    align: {type: String, description: 'right or left\ndefaults to right for `valueType: \'number\'` and left for the rest'},
-    format: {type: Function, description: ''},
+    valueType: {type: String},
+    fieldType: {type: String},
+    big: {type: Boolean},
+    maxValue: {type: Number},
+    align: {type: String, description: '\'right\' or \'left\'\ndefaults to right for `valueType: \'number\'` and left for the rest'},
+    format: {type: Function},
     // Quasar props with modified defaults:
     lazyRules: {type: Boolean, quasarProp: true, default: true},
     outlined: {type: Boolean, quasarProp: true, default: true},
     // Quasar props with modified behaviour:
-    rules: {type: Array, quasarProp: true, description: ''},
-    type: {type: String, quasarProp: true, description: ''},
+    rules: {type: Array, quasarProp: true},
+    type: {type: String, quasarProp: true},
   },
   data () {
     return { focussed: false }

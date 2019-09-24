@@ -11,8 +11,12 @@
     </div>
     <InfoCard
       v-model="settings"
-      :settingsSchema="settingsSchema"
+      :settingsSchemaEf="settingsSchemaEf"
+      :settingsSchemaQuasar="settingsSchemaQuasar"
+      :selectedField="selectedField"
+      :settingsMetaData="settingsMetaData"
       :fieldValue="model"
+      @update-all-settings="updateAllSettings"
     />
   </q-page>
 </template>
@@ -22,11 +26,13 @@
 </style>
 
 <script>
-import { isString, isBoolean } from 'is-what'
+import { isString, isBoolean, isUndefined } from 'is-what'
 import copy from 'copy-anything'
 import merge from 'merge-anything'
 import EasyForms from 'ui'
 import schema from '../schemas/index'
+
+const defaultQuasarProps = {}
 
 export default {
   name: 'PageDemoField',
@@ -68,18 +74,23 @@ export default {
       return selectedField[0].toUpperCase() + selectedField.slice(1)
     },
     componentDemoFieldSettings () {
-      const { selectedField, componentSelectedFieldUpper } = this
-      return schema[`efPreview${componentSelectedFieldUpper}`]
+      const { selectedField, componentSelectedFieldUpper, componentPropsInfo } = this
+      const componentPropDefaults = Object.entries(componentPropsInfo)
+        .reduce((carry, [propKey, propInfo]) => {
+          carry[propKey] = propInfo.default
+          return carry
+        }, {})
+      return copy(merge(componentPropDefaults, {fieldType: selectedField}))
     },
     componentPropsInfo () {
       const { selectedField, componentSelectedFieldUpper } = this
       const EasyField = EasyForms['EasyField']
-      const component = EasyForms[`Ef${componentSelectedFieldUpper}`]
-      return merge(EasyField.props, component.props)
+      const component = EasyForms[`Ef${componentSelectedFieldUpper}`] || {}
+      return copy(merge(EasyField.props, component.props))
     },
-    settingsSchema () {
+    settingsMetaData () {
       const { settings, componentPropsInfo, selectedField } = this
-      const propsAsSettingsSchema = Object.entries(componentPropsInfo)
+      return Object.entries(componentPropsInfo)
         .reduce((carry, [propKey, propInfo]) => {
           // fields to not include in the InfoCard settings:
           if (
@@ -88,40 +99,41 @@ export default {
           ) {
             return carry
           }
-          const { description, type, quasarProp } = propInfo
+          const { description, type, quasarProp, default: _df } = propInfo
+          // make the raw prop info from the components into an EasyForm:
+          const subLabel = quasarProp && !isUndefined(_df) && isUndefined(description)
+            ? `Same as Quasar, but defaults to: ${_df}`
+            : description
           carry[propKey] = {
             id: propKey,
             label: propKey,
-            subLabel: description,
-            fieldType: Boolean === type ? 'toggle' : 'input',
+            subLabel,
+            fieldType: type === Boolean ? 'toggle' : 'input',
+            valueType: type === Number ? 'number' : undefined,
             quasarProp,
           }
           return carry
-        }, {
-          // default EfField props
-          label: { id: 'label', label: 'label', fieldType: 'input' },
-          subLabel: { id: 'subLabel', label: 'subLabel', fieldType: 'input' },
-        })
-      const settingsCleaned = propsAsSettingsSchema
-      // const settingsCleaned = Object.entries(settings)
-      //   .reduce((carry, [key, value]) => {
-      //     if (key === 'fieldType') return carry
-      //     const fieldType = isBoolean(value) ? 'toggle' : 'input'
-      //     carry[key] = {
-      //       id: key,
-      //       label: key,
-      //       fieldType,
-      //     }
-      //     return carry
-      //   }, {})
-      const settingsOrder = ['label', 'subLabel']
+        }, {})
+    },
+    settingsSchema () {
+      const { settingsMetaData } = this
+      const settingsOrder = ['label', 'subLabel', 'valueType']
       const settingsArrayTop = settingsOrder
-        .map(id => settingsCleaned[id])
-      const settingsArrayBottom = Object.values(settingsCleaned)
+        .map(id => settingsMetaData[id]).filter(s => s)
+      const settingsArrayBottom = Object.values(settingsMetaData)
         .filter(s => !settingsOrder.includes(s.id))
       return [
         ...settingsArrayTop,
         ...settingsArrayBottom,
+      ]
+    },
+    settingsSchemaEf () {
+      return this.settingsSchema.filter(s => !s.quasarProp)
+    },
+    settingsSchemaQuasar () {
+      return [
+        {label: 'Quasar props with modified behaviour', fieldType: 'title'},
+        ...this.settingsSchema.filter(s => s.quasarProp)
       ]
     },
     modelShownAsBadge () {
@@ -132,6 +144,9 @@ export default {
   methods: {
     log(...args) {
       console.log(...args)
+    },
+    updateAllSettings (newSettings) {
+      this.settings = merge(this.settings, newSettings)
     },
   },
 }

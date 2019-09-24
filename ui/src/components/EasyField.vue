@@ -127,16 +127,16 @@ export default {
     valueType: {
       type: String,
       validator: prop => ['string', 'boolean', 'number', 'array', 'object'].includes(prop),
-      description: 'valueType is the type of the model of the field. When `fieldType: \'input\'` and `valueType: \'number\'` it will make sure to return only numbers. `valueType` will also provide extra documentation so is best always specified.',
+      description: 'valueType is the type of the model of the field. Can be any of \'string\', \'boolean\', \'number\', \'array\', \'object\'.\n\nWhen `valueType: \'number\'` it will make sure the field value is formatted as Number. `valueType` will also provide extra documentation so is best always specified.',
     },
-    label: {type: String},
     subLabel: {type: String, description: 'A smaller label for extra info.'},
-    contentStyle: {type: [Object, Array, String], description: 'Custom styling to be applied to the EasyField.'},
+    contentStyle: {type: [Object, Array, String], description: 'Custom styling to be applied to the EasyField. Applied like so `:style="contentStyle"`'},
     schema: {type: Array, description: '(only for `fieldType: \'form\'`) An array of objects formatted just like an EasyForm.'},
     maxRows: {type: Number, description: '(only for `fieldType: \'form\'`) Allows to limit the max amount of rows.'},
     // Quasar props with modified defaults:
     // Quasar props with modified behaviour:
-    disable: {type: Boolean, quasarProp: true, description: '`disable` is ignored when `readonly` is true'},
+    label: {type: String, quasarProp: true},
+    disable: {type: Boolean, default: false, quasarProp: true, description: '`disable` is ignored when `readonly` is true'},
   },
   computed: {
     fieldProps () {
