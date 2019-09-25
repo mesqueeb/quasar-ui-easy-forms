@@ -90,41 +90,35 @@ export default {
     // prop categories: behaviour content general model state style
     value: [String, Number],
     // EF props:
-    valueType: String, // defined in EasyField
-    fieldType: String, // defined in EasyField
+    valueType: {type: String}, // defined in EasyField
+    fieldType: {type: String}, // defined in EasyField
     big,
     maxValue: {
+      category: 'model',
       type: Number,
       descripton: '(only for `valueType: \'number\'`) limit the max number to be entered. Typing or pasting a higher number will set it to the maxValue.',
       examples: [999]
     },
     align: {
+      category: 'style',
       type: String,
       description: 'Alignment of the content. Defaults to right for `valueType: \'number\'` and left for the rest',
       examples: ['right', 'left']
     },
     // format: {type: Function}, // fix the "commafy" problem first
     // Quasar props with modified defaults:
-    lazyRules: {
-      type: Boolean,
-      quasarProp: true,
-      default: true
-    },
-    outlined: {
-      type: Boolean,
-      quasarProp: true,
-      default: true
-    },
+    lazyRules: { quasarProp: true, type: Boolean, default: true },
+    outlined: { quasarProp: true, type: Boolean, default: true },
     // Quasar props with modified behaviour:
     rules: {
-      type: Array,
       quasarProp: true,
+      type: Array,
       description: 'Same as Quasar, but with added pre-defined rules for \'telJA\' and \'email\'',
       examples: ['telJA', 'email', '[ val => val.length <= 3 || \'Please use maximum 3 characters\' ]'],
     },
     type: {
-      type: String,
       quasarProp: true,
+      type: String,
       descripton: 'The html tag input type. Defaults to \'number\' if `valueType: \'number\'`, otherwise defaults to \'text\'.',
       default: 'text',
       examples: ['text', 'password', 'textarea', 'email', 'search', 'tel', 'file', 'number', 'url', 'time', 'date'],
@@ -146,21 +140,23 @@ export default {
     },
     cValue: {
       get () {
-        if (this.value !== 0 && !this.value) return ''
+        const { value, valueType } = this
+        if (value !== 0 && !value) return ''
         // commafy doesn't work with type="number"
-        return (this.valueType === 'number')
-          ? Number(this.value)
-          : this.value
+        return (valueType === 'number')
+          ? Number(value)
+          : value
       },
       set (val) {
-        if (val !== '' && this.valueType === 'number' && isString(val)) {
+        const { maxValue, valueType } = this
+        if (val !== '' && valueType === 'number' && isString(val)) {
           val = Number(val.replace(/,/g, ''))
         }
-        if (isNumber(val) && isNumber(this.maxValue)) {
-          if (val > this.maxValue) {
+        if (isNumber(val) && isNumber(maxValue)) {
+          if (val > maxValue) {
             // first emit val then maxValue because otherwise the vue component won't rerender
             this.$emit('input', val)
-            this.$nextTick(_ => this.$emit('input', this.maxValue))
+            this.$nextTick(() => this.$emit('input', maxValue))
             return
           }
         }
@@ -175,15 +171,18 @@ export default {
       return 'text'
     },
     cAlign () {
-      if (this.align) return this.align
-      return this.valueType === 'number' ? 'right' : 'left'
+      const { align, valueType } = this
+      if (align) return align
+      return valueType === 'number' ? 'right' : 'left'
     },
     isMaxValue () {
-      return isNumber(this.maxValue) && this.value === this.maxValue
+      const { value, maxValue } = this
+      return isNumber(maxValue) && value === maxValue
     },
     cRules () {
-      if (!isArray(this.rules)) return undefined
-      return this.rules.map(rule => {
+      const { rules } = this
+      if (!isArray(rules)) return undefined
+      return rules.map(rule => {
         if (isString(rule) && rulesMap[rule]) return rulesMap[rule]
         return rule
       })
@@ -198,7 +197,8 @@ export default {
       this.$emit('keyup', event)
     },
     onKeydown (event) {
-      if (this.isMaxValue && event && isNumber(Number(event.key))) {
+      const { isMaxValue } = this
+      if (isMaxValue && event && isNumber(Number(event.key))) {
         event.preventDefault()
         event.stopPropagation()
         return

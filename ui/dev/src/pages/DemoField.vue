@@ -10,6 +10,7 @@
       />
     </div>
     <InfoCard
+      :key="selectedField"
       v-model="settings"
       :settingsSchemaEf="settingsSchemaEf"
       :settingsSchemaQuasar="settingsSchemaQuasar"
@@ -26,22 +27,26 @@
 </style>
 
 <script>
-import { isString, isBoolean, isUndefined, isArray } from 'is-what'
+import { isString, isBoolean, isUndefined, isArray, isFunction } from 'is-what'
 import copy from 'copy-anything'
 import merge from 'merge-anything'
 import EasyForms from 'ui'
-import schema from '../schemas/index'
 
-const defaultQuasarProps = {}
+const selectableFields = require.context('../../../src/components/fields', true, /^\.\/.*\.vue$/)
+  .keys()
+  .map(k => {
+    const name = k.replace(/\.\/Ef/, '').replace(/\.vue/, '')
+    return name[0].toLowerCase() + name.slice(1)
+  })
+  .sort()
 
 export default {
   name: 'PageDemoField',
   data () {
     const selectedField = 'input'
-    const selectableFields = Object.values(schema).map(field => field.fieldType)
     const fieldPicker = {
       label: 'Pick a field',
-      fieldType: 'dropdown',
+      fieldType: 'select',
       options: selectableFields,
     }
     return {
@@ -77,16 +82,22 @@ export default {
       const { selectedField, componentSelectedFieldUpper, componentPropsInfo } = this
       const componentPropDefaults = Object.entries(componentPropsInfo)
         .reduce((carry, [propKey, propInfo]) => {
-          carry[propKey] = propInfo.default
+          carry[propKey] = isFunction(propInfo.default) ? propInfo.default() : propInfo.default
           return carry
         }, {})
-      return copy(merge(componentPropDefaults, {fieldType: selectedField}))
+      return copy(merge(componentPropDefaults, {fieldType: selectedField})) || {}
     },
     componentPropsInfo () {
       const { selectedField, componentSelectedFieldUpper } = this
       const EasyField = EasyForms['EasyField']
       const component = EasyForms[`Ef${componentSelectedFieldUpper}`] || {}
-      return copy(merge(EasyField.props, component.props))
+      console.log('component !!! → ', component)
+      let componentProps = component.props || {}
+      if (selectedField === 'inputDate') {
+        const subComponent = EasyForms['EfInput']
+        componentProps = merge(subComponent.props, componentProps)
+      }
+      return copy(merge(EasyField.props, componentProps)) || {}
     },
     settingsMetaData () {
       const { settings, componentPropsInfo, selectedField } = this
@@ -94,8 +105,7 @@ export default {
         .reduce((carry, [propKey, propInfo]) => {
           // fields to not include in the InfoCard settings:
           if (
-            ['value', 'fieldType'].includes(propKey) ||
-            (selectedField !== 'form' && ['schema', 'maxRows'].includes(propKey))
+            ['value', 'fieldType'].includes(propKey)
           ) {
             return carry
           }
@@ -108,7 +118,7 @@ export default {
             id: propKey,
             label: propKey,
             subLabel,
-            fieldType: type === Boolean ? 'toggle' : 'input',
+            fieldType: type === Boolean ? 'toggle' : type === Array ? 'form' : 'input',
             valueType: type === Number ? 'number' : undefined,
             placeholder: !isArray(examples) ? '' : examples.join(', '),
             quasarProp,
@@ -147,6 +157,8 @@ export default {
       console.log(...args)
     },
     updateAllSettings (newSettings) {
+      console.log('merge(this.settings, newSettings) → ', merge(this.settings, newSettings))
+
       this.settings = merge(this.settings, newSettings)
     },
   },

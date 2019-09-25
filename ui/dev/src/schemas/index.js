@@ -7,9 +7,9 @@ export const efPreviewButtons = {
   id: 'efPreviewButtons',
   fieldType: 'buttons',
 }
-export const efPreviewDropdown = {
-  id: 'efPreviewDropdown',
-  fieldType: 'dropdown',
+export const efPreviewSelect = {
+  id: 'efPreviewSelect',
+  fieldType: 'select',
 }
 export const efPreviewInput = {
   id: 'efPreviewInput',
@@ -56,17 +56,17 @@ export const efPreviewForm = {
 }
 
 export default {
-  efPreviewTitle,
   efPreviewButtons,
-  efPreviewDropdown,
-  efPreviewInput,
   efPreviewDate,
-  efPreviewRange,
-  efPreviewSlider,
-  efPreviewVideo,
-  efPreviewToggle,
-  efPreviewImg,
-  efPreviewPdf,
-  efPreviewUploaderFirebase,
   efPreviewForm,
+  efPreviewImg,
+  efPreviewInput,
+  efPreviewPdf,
+  efPreviewRange,
+  efPreviewSelect,
+  efPreviewSlider,
+  efPreviewTitle,
+  efPreviewToggle,
+  efPreviewUploaderFirebase,
+  efPreviewVideo,
 }

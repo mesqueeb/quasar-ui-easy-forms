@@ -52,12 +52,17 @@ import { isArray } from 'is-what'
 import merge from 'merge-anything'
 import copy from 'copy-anything'
 
+function getQuasarComponentName (efFieldName) {
+  if (efFieldName.toLowerCase() === 'inputdate') efFieldName = 'input'
+  return 'Q' + efFieldName[0].toUpperCase() + efFieldName.slice(1)
+}
+
 export default {
   name: 'InfoCard',
   props: {
     value: Object,
-    settingsSchemaEf: {type: Array, default: []},
-    settingsSchemaQuasar: {type: Array, default: []},
+    settingsSchemaEf: {type: Array, default: () => []},
+    settingsSchemaQuasar: {type: Array, default: () => []},
     selectedField: String,
     settingsMetaData: Object,
     fieldValue: undefined, // any
@@ -69,55 +74,63 @@ export default {
     }
   },
   mounted () {
-    const { selectedField, updateAllSettings } = this
-    const quasarComponentName = 'Q' + selectedField[0].toUpperCase() + selectedField.slice(1)
+    const { selectedField, updateAllSettings, settingsSchemaQuasar } = this
+    // EfForm has nothing to do with QForm so abort early
+    if (selectedField === 'form') {
+      this.iSettingsSchemaQuasar.push(
+        {label: 'Be careful as EasyField \'form\' has nothing to do with QForm!', fieldType: 'title'}
+      )
+      return
+    }
+    const quasarComponentName = getQuasarComponentName(selectedField)
+    // get the Quasar Component meta data
     import(
-        /* webpackChunkName: "quasar-api" */
-        /* webpackMode: "lazy-once" */
-        `quasar/dist/api/${quasarComponentName}.json`
-      ).then(component => {
-        console.log('component → ', component)
-        if (!component.props) return
-        const updateSettingsWith = {}
-        const otherProps = Object.entries(component.props)
-          .reduce((carry, [propKey, propInfo]) => {
-            // do nothing on duplicate props
-            if (propKey === 'value') return carry
-            const camelCased = propKey.replace(/-([a-z])/g, g => g[1].toUpperCase())
-            if (this.settingsSchemaQuasar.some(s => s.id === camelCased)) return carry
+      /* webpackChunkName: "quasar-api" */
+      /* webpackMode: "lazy-once" */
+      `quasar/dist/api/${quasarComponentName}.json`
+    ).then(component => {
+      console.log('component → ', component)
+      if (!component.props) return
+      const updateSettingsWith = {}
+      const otherProps = Object.entries(component.props)
+        .reduce((carry, [propKey, propInfo]) => {
+          // do nothing on duplicate props
+          if (propKey === 'value') return carry
+          const camelCased = propKey.replace(/-([a-z])/g, g => g[1].toUpperCase())
+          if (settingsSchemaQuasar.some(s => s.id === camelCased)) return carry
 
-            const { desc, type, examples } = propInfo
+          const { desc, type, examples, default: _df, values } = propInfo
 
-            const typeIsOrIncludesBoolean = type === 'Boolean' || (isArray(type) && type.includes('Boolean'))
-            const typeIsOrIncludesString = type === 'String' || (isArray(type) && type.includes('String'))
-            // make the updateSettingsWith object to send to parent
-            if (typeIsOrIncludesBoolean) {
-              updateSettingsWith[propKey] = false
-            } else if (typeIsOrIncludesString) {
-              updateSettingsWith[propKey] = ''
-            } else {
-              updateSettingsWith[propKey] = null
-            }
+          const typeIsOrIncludesBoolean = type === 'Boolean' || (isArray(type) && type.includes('Boolean'))
+          const typeIsOrIncludesString = type === 'String' || (isArray(type) && type.includes('String'))
+          // make the updateSettingsWith object to send to parent
+          if (typeIsOrIncludesBoolean) {
+            updateSettingsWith[propKey] = (_df === 'true')
+          } else if (typeIsOrIncludesString) {
+            updateSettingsWith[propKey] = _df || (isArray(values) && values.length ? undefined : '')
+          } else {
+            updateSettingsWith[propKey] = null
+          }
 
-            // make the raw prop info from the components into an EasyForm:
-            const easyField = {
-              id: propKey,
-              label: propKey,
-              subLabel: desc,
-              fieldType: typeIsOrIncludesBoolean ? 'toggle' : 'input',
-              valueType: type === 'Number' ? 'number' : undefined,
-              placeholder: !isArray(examples) ? '' : examples.join(', '),
-            }
-            carry.push(easyField)
-            return carry
-          }, [])
-        updateAllSettings(updateSettingsWith)
-        this.iSettingsSchemaQuasar.push(
-          {label: 'Regular Quasar props', fieldType: 'title'},
-          ...otherProps,
-          {label: 'And many more...', fieldType: 'title'},
-        )
-      })
+          // make the raw prop info from the components into an EasyForm:
+          const easyField = {
+            id: propKey,
+            label: propKey,
+            subLabel: desc,
+            fieldType: typeIsOrIncludesBoolean ? 'toggle' : 'input',
+            valueType: type === 'Number' ? 'number' : undefined,
+            placeholder: !isArray(examples) ? '' : examples.join(', '),
+          }
+          carry.push(easyField)
+          return carry
+        }, [])
+      updateAllSettings(updateSettingsWith)
+      this.iSettingsSchemaQuasar.push(
+        {label: 'Regular Quasar props', fieldType: 'title'},
+        ...otherProps,
+        {label: 'And many more...', fieldType: 'title'},
+      )
+    })
   },
   computed: {
     settings () {

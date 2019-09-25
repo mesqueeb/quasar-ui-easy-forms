@@ -105,7 +105,7 @@ import l from '../helpers/formGeneratorLang'
 
 function requiredValuePasses (value, blueprint = {}) {
   if (!blueprint.required) return true
-  if (blueprint.fieldType === 'dropdown' && blueprint.multiple) {
+  if (blueprint.fieldType === 'select' && blueprint.multiple) {
     return Object.values(value).some(v => v)
   }
   return value || value === 0

@@ -1,14 +1,8 @@
 <template>
   <EfInput
     class="ef-input-date"
-    :big="big"
     v-model="cValue"
-    :mask="maskForInput"
-    valueType="string"
-    :disable="disable"
-    :view-mode="viewMode"
-    :placeholder="maskForQDate"
-    :rules="cRules"
+    v-bind="propsToPass"
   >
     <q-icon name="event" class="cursor-pointer">
       <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -30,6 +24,7 @@
 </style>
 
 <script>
+import merge from 'merge-anything'
 import {
   dateStamp,
   // timeStamp,
@@ -37,35 +32,83 @@ import {
 } from '../../helpers/dateHelpers'
 import { isString, isFullString, isDate } from 'is-what'
 
+import { date, QIcon, QPopupProxy, ClosePopup, QDate } from 'quasar'
+const { formatDate, adjustDate } = date
+
 const defaultMask = 'YYYY/MM/DD'
 
+// console.log('formatDate(value, format) → ', formatDate(new Date(), 'YYYY/MM/DD'))
+
 export default {
+  components: { QIcon, QPopupProxy, QDate },
+  directives: { ClosePopup },
   name: 'EfInputDate',
   props: {
+    // prop categories: behaviour content general model state style
     value: [String, Date],
-    valueType: String,
-    type: String,
-    mask: String,
-    big: Boolean,
-    disable: Boolean,
-    viewMode: Boolean,
-    rules: Array,
+    // EF props:
+    valueType: {
+      category: 'model',
+      type: String,
+      validator: val => ['string', 'date'].includes(val),
+      examples: ['string', 'date'],
+      default: 'string',
+      description: 'When `valueType: \'date\'` it will try and return a `new Date` instance. However, if the user input does not provide a valid `Date`, it will return the user input as `string`.',
+    },
+    validDateErrorMessage: {
+      category: 'behaviour',
+      type: String,
+      description: 'The error that should be returned for the default "valid date" rule. Defaults to "Please enter a valid date."',
+      default: 'Please enter a valid date.',
+    },
+    // format: {type: Function}, // fix the "commafy" problem first
+    // Quasar props with modified defaults:
+    // Quasar props with modified behaviour:
+    mask: {
+      quasarProp: true,
+      type: String,
+      default: defaultMask,
+      examples: ['YYYY-MM-DD', 'MMMM Do, YYYY', 'YYYY-MM-DD HH:mm:ss'],
+      description: 'Default: \'YYYY/MM/DD\'. Will automatically convert the Date mask to the underlying input mask like so: \'YYYY/MM/DD\' → \'####/##/##\'',
+    },
+    rules: {
+      quasarProp: true,
+      type: Array,
+      examples: ['[ val => val.length <= 10 || \'Please use maximum 10 characters\' ]'],
+      description: 'When `valueType: \'date\'`, the default rule will check if the model results to a valid date.',
+    },
   },
   computed: {
+    propsToPass () {
+      return merge(this.$attrs, {
+        // EF props to pass:
+        valueType: 'string', // default to 'string' for underlying input
+        // Quasar props with modified defaults:
+        // Quasar props with modified behaviour:
+        mask: this.maskForInput,
+        placeholder: this.maskForQDate,
+        rules: this.cRules,
+      })
+    },
     cValue: {
       get () {
-        const { value } = this
+        const { value, mask } = this
         // value input has to be a string
         if (isString(value)) return value
-        const format = this.mask || defaultMask
+        console.log('mask → ', mask)
+        const format = mask
+        console.log('value, format → ', value, format)
+        console.log('formatDate(value, format) → ', formatDate(value, format))
+        console.log('dateStamp(value, format) → ', dateStamp(value, format))
         if (isDate(value)) return dateStamp(value, format)
         return ''
       },
       set (val) {
+        const { valueType, mask } = this
         // @input will always return a string
-        if (this.valueType !== 'date') return this.$emit('input', val)
+        if (valueType !== 'date') return this.$emit('input', val)
         // if the value is shorter than the format, return value as is
-        const format = this.mask || defaultMask
+        const format = mask
         if (val.length < format.length) return this.$emit('input', val)
         // if valueType is a date, try returning a date only if it's a valid date
         const dateVal = new Date(val)
@@ -82,17 +125,17 @@ export default {
       if (this.mask.includes('[')) return undefined
       return this.mask.replace(/\w/g, '#')
     },
-    maskForQDate () { return this.mask || defaultMask },
+    maskForQDate () { return this.mask },
     cRules () {
-      const { value, valueType, mask, rules } = this
-      const format = mask || defaultMask
+      const { value, valueType, mask, rules, validDateErrorMessage } = this
+      const format = mask
       function defaultRule () {
         const validDate = (
           !value ||
           (valueType === 'date' && isDate(value)) ||
           (valueType === 'string' && value.length >= format.length)
         )
-        return validDate || '正確な日付を記入してきださい。'
+        return validDate || validDateErrorMessage
       }
       return !rules ? [defaultRule] : rules
     },
