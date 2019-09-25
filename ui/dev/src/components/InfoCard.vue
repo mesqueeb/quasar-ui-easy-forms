@@ -41,10 +41,7 @@
         />
       </q-tab-panel>
       <q-tab-panel name="source">
-        <h6 class="q-my-sm">regular prop binding template</h6>
-        <q-input standout autogrow v-model="sourceCodeTemplate" />
-        <h6 class="q-my-sm">with v-bind</h6>
-        <q-input standout autogrow v-model="sourceCodeVBind" />
+        <SourceTab :settings="settings" :settingsMetaData="settingsMetaData" />
       </q-tab-panel>
     </q-tab-panels>
   </q-card>
@@ -79,6 +76,7 @@ export default {
         /* webpackMode: "lazy-once" */
         `quasar/dist/api/${quasarComponentName}.json`
       ).then(component => {
+        console.log('component → ', component)
         if (!component.props) return
         const updateSettingsWith = {}
         const otherProps = Object.entries(component.props)
@@ -133,57 +131,6 @@ export default {
         readonly: false,
       }, settings)
       return cleanSettings
-    },
-    settingsFormattedForSource () {
-      const { settings, settingsMetaData } = this
-      return Object.entries(settings)
-        .reduce((carry, [key, value]) => {
-          if (value === undefined || value === '' || value === false) {
-            return carry
-          }
-          const { fieldType } = settingsMetaData[key] || {}
-          carry[key] = (fieldType === 'input')
-            ? `'${value}'`.replace(/"/g, `\\"`)
-            : value
-          return carry
-        }, {})
-    },
-    sourceCodeTemplate () {
-      const { settingsFormattedForSource } = this
-      const open = '<EasyField\n  v-model="model"'
-      const props = Object.entries(settingsFormattedForSource)
-        .reduce((carry, [key, value]) => {
-          carry += `\n  :${key}="${value}"`
-          return carry
-        }, '')
-      const close = '\n/>\n'
-      return `${open}${props}${close}`
-    },
-    sourceCodeVBind () {
-      const { settingsFormattedForSource } = this
-      const open = `<template>
-  <EasyField
-    v-model="model"
-    v-bind="fieldProps"
-  />
-</template>
-<script>
-export default {
-  data () {
-    return {
-      fieldProps: {`
-      const props = Object.entries(settingsFormattedForSource)
-        .reduce((carry, [key, value]) => {
-          carry += `\n        ${key}: ${value},`
-          return carry
-        }, '')
-      const close = `
-      }
-    }
-  },
-}
-</ script>`
-      return `${open}${props}${close}`
     },
   },
   methods: {

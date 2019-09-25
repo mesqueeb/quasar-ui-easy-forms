@@ -23,7 +23,7 @@
         v-bind="fieldProps"
       />
       <EfInput
-        v-if="fieldType === 'input' || fieldType === 'textarea'"
+        v-if="fieldType === 'input'"
         v-model="cValue"
         v-bind="fieldProps"
       />
@@ -121,22 +121,54 @@ import { isNumber } from 'is-what'
 export default {
   name: 'EasyField',
   props: {
+    // prop categories: behaviour content general model state style
     value: [Object, Array, String, Number, Boolean, Date],
     // EF props used here:
-    fieldType: {type: String, required: true},
-    valueType: {
+    fieldType: {
+      category: 'general',
       type: String,
-      validator: prop => ['string', 'boolean', 'number', 'array', 'object'].includes(prop),
-      description: 'valueType is the type of the model of the field. Can be any of \'string\', \'boolean\', \'number\', \'array\', \'object\'.\n\nWhen `valueType: \'number\'` it will make sure the field value is formatted as Number. `valueType` will also provide extra documentation so is best always specified.',
+      required: true,
     },
-    subLabel: {type: String, description: 'A smaller label for extra info.'},
-    contentStyle: {type: [Object, Array, String], description: 'Custom styling to be applied to the EasyField. Applied like so `:style="contentStyle"`'},
-    schema: {type: Array, description: '(only for `fieldType: \'form\'`) An array of objects formatted just like an EasyForm.'},
-    maxRows: {type: Number, description: '(only for `fieldType: \'form\'`) Allows to limit the max amount of rows.'},
+    valueType: {
+      category: 'model',
+      type: String,
+      validator: prop => ['string', 'boolean', 'number', 'array', 'object', 'date'].includes(prop),
+      description: 'valueType is the type of the model of the field. Can be any of \'string\', \'boolean\', \'number\', \'array\', \'object\'.\n\nWhen `valueType: \'number\'` it will make sure the field value is formatted as Number. `valueType` will also provide extra documentation so is best always specified.',
+      examples: ['string', 'boolean', 'number', 'array', 'object', 'date'],
+    },
+    subLabel: {
+      category: 'content',
+      type: String,
+      description: 'A smaller label for extra info.',
+    },
+    contentStyle: {
+      category: 'style',
+      type: [Object, Array, String],
+      description: 'Custom styling to be applied to the EasyField. Applied like so `:style="contentStyle"`',
+      examples: ['padding: 1em;'],
+    },
+    schema: {
+      category: 'model',
+      type: Array,
+      description: '(only for `fieldType: \'form\'`) An array of objects formatted just like an EasyForm.',
+    },
+    maxRows: {
+      category: 'model',
+      type: Number,
+      description: '(only for `fieldType: \'form\'`) Allows to limit the max amount of rows.',
+    },
     // Quasar props with modified defaults:
     // Quasar props with modified behaviour:
-    label: {type: String, quasarProp: true},
-    disable: {type: Boolean, default: false, quasarProp: true, description: '`disable` is ignored when `readonly` is true'},
+    label: {
+      type: String,
+      quasarProp: true,
+    },
+    disable: {
+      type: Boolean,
+      default: false,
+      quasarProp: true,
+      description: '`disable` is ignored when `readonly` is true',
+    },
   },
   computed: {
     fieldProps () {

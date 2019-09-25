@@ -78,6 +78,7 @@
 import merge from 'merge-anything'
 import { isNumber, isString, isArray } from 'is-what'
 import { QInput } from 'quasar'
+import { big } from './sharedProps.js'
 import { rulesMap } from '../../helpers/inputValidators'
 import focusInput from '../../helpers/focusInput'
 
@@ -86,20 +87,48 @@ export default {
   name: 'EfInput',
   inheritAttrs: false,
   props: {
-    value: {type: [String, Number]},
+    // prop categories: behaviour content general model state style
+    value: [String, Number],
     // EF props:
-    valueType: {type: String},
-    fieldType: {type: String},
-    big: {type: Boolean},
-    maxValue: {type: Number},
-    align: {type: String, description: '\'right\' or \'left\'\ndefaults to right for `valueType: \'number\'` and left for the rest'},
-    format: {type: Function},
+    valueType: String, // defined in EasyField
+    fieldType: String, // defined in EasyField
+    big,
+    maxValue: {
+      type: Number,
+      descripton: '(only for `valueType: \'number\'`) limit the max number to be entered. Typing or pasting a higher number will set it to the maxValue.',
+      examples: [999]
+    },
+    align: {
+      type: String,
+      description: 'Alignment of the content. Defaults to right for `valueType: \'number\'` and left for the rest',
+      examples: ['right', 'left']
+    },
+    // format: {type: Function}, // fix the "commafy" problem first
     // Quasar props with modified defaults:
-    lazyRules: {type: Boolean, quasarProp: true, default: true},
-    outlined: {type: Boolean, quasarProp: true, default: true},
+    lazyRules: {
+      type: Boolean,
+      quasarProp: true,
+      default: true
+    },
+    outlined: {
+      type: Boolean,
+      quasarProp: true,
+      default: true
+    },
     // Quasar props with modified behaviour:
-    rules: {type: Array, quasarProp: true},
-    type: {type: String, quasarProp: true},
+    rules: {
+      type: Array,
+      quasarProp: true,
+      description: 'Same as Quasar, but with added pre-defined rules for \'telJA\' and \'email\'',
+      examples: ['telJA', 'email', '[ val => val.length <= 3 || \'Please use maximum 3 characters\' ]'],
+    },
+    type: {
+      type: String,
+      quasarProp: true,
+      descripton: 'The html tag input type. Defaults to \'number\' if `valueType: \'number\'`, otherwise defaults to \'text\'.',
+      default: 'text',
+      examples: ['text', 'password', 'textarea', 'email', 'search', 'tel', 'file', 'number', 'url', 'time', 'date'],
+    },
   },
   data () {
     return { focussed: false }

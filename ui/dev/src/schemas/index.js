@@ -18,10 +18,6 @@ export const efPreviewInput = {
   suffix: '',
   // format: val => val + '!',
 }
-export const efPreviewTextarea = {
-  id: 'efPreviewTextarea',
-  fieldType: 'textarea',
-}
 export const efPreviewDate = {
   id: 'efPreviewDate',
   fieldType: 'date',
@@ -64,7 +60,6 @@ export default {
   efPreviewButtons,
   efPreviewDropdown,
   efPreviewInput,
-  efPreviewTextarea,
   efPreviewDate,
   efPreviewRange,
   efPreviewSlider,

@@ -6,7 +6,7 @@ const isJapaneseTel = str => str.length >= 10 && str.length <= 12
 // length 11: +813 0000 0000
 // length 12: +8190 0000 0000
 
-export function tel (val) {
+export function telJA (val) {
   const numbers = extractNumbers(val)
   return isJapaneseTel(numbers) || '入力が間違っています'
 }
@@ -17,5 +17,5 @@ const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+")
 export const email = val => emailRegex.test(val) || '入力が間違っています'
 
 export const rulesMap = {
-  tel, email
+  telJA, email
 }

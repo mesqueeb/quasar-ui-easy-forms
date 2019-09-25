@@ -26,7 +26,7 @@
 </style>
 
 <script>
-import { isString, isBoolean, isUndefined } from 'is-what'
+import { isString, isBoolean, isUndefined, isArray } from 'is-what'
 import copy from 'copy-anything'
 import merge from 'merge-anything'
 import EasyForms from 'ui'
@@ -99,7 +99,7 @@ export default {
           ) {
             return carry
           }
-          const { description, type, quasarProp, default: _df } = propInfo
+          const { description, type, quasarProp, examples, default: _df } = propInfo
           // make the raw prop info from the components into an EasyForm:
           const subLabel = quasarProp && !isUndefined(_df) && isUndefined(description)
             ? `Same as Quasar, but defaults to: ${_df}`
@@ -110,6 +110,7 @@ export default {
             subLabel,
             fieldType: type === Boolean ? 'toggle' : 'input',
             valueType: type === Number ? 'number' : undefined,
+            placeholder: !isArray(examples) ? '' : examples.join(', '),
             quasarProp,
           }
           return carry
