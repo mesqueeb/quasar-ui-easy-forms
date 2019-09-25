@@ -8,6 +8,8 @@
 </template>
 
 <script>
+// import { isPlainObject, isArray } from 'is-what'
+
 export default {
   name: 'SourceTab',
   props: {
@@ -24,9 +26,11 @@ export default {
             return carry
           }
           const { fieldType } = settingsMetaData[key] || {}
-          carry[key] = (fieldType === 'input')
-            ? `'${value}'`.replace(/"/g, `\\"`)
-            : value
+          let valueParsed = JSON.stringify(value)
+          valueParsed = valueParsed
+            .replace(/'/g, `\\'`)
+            .replace(/"/g, `'`)
+          carry[key] = valueParsed
           return carry
         }, {})
     },

@@ -103,23 +103,32 @@ export default {
 
           const typeIsOrIncludesBoolean = type === 'Boolean' || (isArray(type) && type.includes('Boolean'))
           const typeIsOrIncludesString = type === 'String' || (isArray(type) && type.includes('String'))
+          const propHasValues = isArray(values) && values.length
           // make the updateSettingsWith object to send to parent
           if (typeIsOrIncludesBoolean) {
             updateSettingsWith[propKey] = (_df === 'true')
           } else if (typeIsOrIncludesString) {
-            updateSettingsWith[propKey] = _df || (isArray(values) && values.length ? undefined : '')
+            updateSettingsWith[propKey] = _df || (propHasValues ? undefined : '')
           } else {
             updateSettingsWith[propKey] = null
           }
 
           // make the raw prop info from the components into an EasyForm:
+          let options
+          let fieldType = 'input'
+          if (typeIsOrIncludesBoolean) fieldType = 'toggle'
+          if (propHasValues) {
+            fieldType = 'select'
+            options = values.map(v => ({label: v, value: v}))
+          }
           const easyField = {
             id: propKey,
             label: propKey,
             subLabel: desc,
-            fieldType: typeIsOrIncludesBoolean ? 'toggle' : 'input',
+            fieldType,
             valueType: type === 'Number' ? 'number' : undefined,
             placeholder: !isArray(examples) ? '' : examples.join(', '),
+            options,
           }
           carry.push(easyField)
           return carry

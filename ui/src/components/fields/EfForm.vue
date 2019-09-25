@@ -2,15 +2,27 @@
   <div class="ef-form">
     <div
       class="_row"
+      :style="`grid-template-columns:${' 1fr'.repeat(columnCountSubForm)}`"
+    >
+      <EasyField
+        v-for="(subfield, fieldIndex) in schemaLabels"
+        :key="fieldIndex"
+        class="_sub-field"
+        v-bind="subfield"
+        :style="subfield.span === true ? 'grid-column: 1 / -1' : subfield.span ? `grid-column: span ${subfield.span}` : ''"
+      />
+    </div>
+    <div
+      class="_row"
       v-for="(row, rowIndex) in cValue"
-      :style="`grid-template-columns:${' 1fr'.repeat(columnsSubForm)}`"
+      :style="`grid-template-columns:${' 1fr'.repeat(columnCountSubForm)}`"
       :key="rowIndex"
     >
       <EasyField
-        v-for="(subfield, fieldIndex) in schema"
+        v-for="(subfield, fieldIndex) in cSchema"
         :key="fieldIndex"
         class="_sub-field"
-        :v-bind="rowIndex > 0 ? merge({disable}, subfield, {label: ''}) : merge({disable}, subfield)"
+        v-bind="subfield"
         :style="subfield.span === true ? 'grid-column: 1 / -1' : subfield.span ? `grid-column: span ${subfield.span}` : ''"
         :value="cValue[rowIndex][subfield.id]"
         @input="val => setSubFieldValue(val, rowIndex, subfield.id)"
@@ -52,14 +64,17 @@ export default {
     valueType: {
       category: 'model',
       type: String,
+      validator: val => (!val || val === 'array'),
       description: 'Defaults to \'array\'. Currently only \'array\' is supported.',
       default: 'array',
+      values: ['array'],
     },
     schema: {
       category: 'model',
       type: Array,
-      description: 'An array of objects formatted just like an EasyForm.',
-      default: () => [{fieldType: 'input', id: '_'}],
+      description: 'This is the information on the columns you want to be shown. An array of objects just like an EasyForm.',
+      default: () => [{fieldType: 'input'}],
+      examples: ['[{label: \'Amount\', id: \'amount\', fieldType: \'input\', valueType: \'number\'}, {label: \'Currency\', id: \'curr\', fieldType: \'select\', options: [{label: \'USD\', value: \'usd\'}]}]'],
     },
     maxRows: {
       category: 'model',
@@ -84,7 +99,19 @@ export default {
         this.$emit('input', val)
       },
     },
-    columnsSubForm () {
+    cSchema () {
+      const { schema, disable } = this
+      return schema.map(subfield => {
+        return merge({disable}, subfield, {label: ''})
+      })
+    },
+    schemaLabels () {
+      const { schema } = this
+      return schema.map(subfield => {
+        return merge(subfield, {fieldType: 'none'})
+      })
+    },
+    columnCountSubForm () {
       const { schema } = this
       if (!schema) return 0
       return schema.reduce((total, field) => {

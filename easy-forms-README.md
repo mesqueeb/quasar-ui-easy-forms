@@ -48,15 +48,15 @@ max: Number
 step: Number
 ```
 
-### Dropdown
+### Select
 
 ```js
-type DropdownOptionOb = {label: string, value: any}
-type DropdownOptionFn = (store: any) => (DropdownOptionOb|string)[]
+type SelectOptionOb = {label: string, value: any}
+type selectOptionFn = (store: any) => (SelectOptionOb|string)[]
 
-options: ((DropdownOptionOb|string)[]|dropdownOptionFn)
+options: ((SelectOptionOb|string)[]|selectOptionFn)
 // ==
 options: string[] // or
-options: DropdownOptionOb[] // or
-options: dropdownOptionFn
+options: SelectOptionOb[] // or
+options: selectOptionFn
 ```

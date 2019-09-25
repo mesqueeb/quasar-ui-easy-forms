@@ -10,7 +10,7 @@
     >{{ subLabel }}</div>
     <div
       class="_field"
-      v-if="!['title', 'form', 'space', undefined].includes(fieldType)"
+      v-if="!['title', 'space', 'none', undefined].includes(fieldType)"
     >
       <EfImg v-if="fieldType === 'img'" v-model="cValue" v-bind="fieldProps" />
       <EfPdf v-if="fieldType === 'pdf'" v-model="cValue" v-bind="fieldProps" />
@@ -56,9 +56,10 @@ export default {
     valueType: {
       category: 'model',
       type: String,
-      validator: prop => ['string', 'boolean', 'number', 'array', 'object', 'date'].includes(prop),
+      validator: prop => ['string', 'boolean', 'number', 'array', 'object', 'date', 'null'].includes(prop),
       description: 'valueType is the type of the model of the field. Can be any of \'string\', \'boolean\', \'number\', \'array\', \'object\'.\n\nWhen `valueType: \'number\'` it will make sure the field value is formatted as Number. `valueType` will also provide extra documentation so is best always specified.',
-      examples: ['string', 'boolean', 'number', 'array', 'object', 'date'],
+      examples: ['string', 'boolean', 'number', 'array', 'object', 'date', 'null'],
+      values: ['string', 'boolean', 'number', 'array', 'object', 'date', 'null'],
     },
     subLabel: {
       category: 'content',

@@ -27,7 +27,7 @@
 </style>
 
 <script>
-import { isString, isBoolean, isUndefined, isArray, isFunction } from 'is-what'
+import { isString, isBoolean, isUndefined, isArray, isFunction, isPlainObject } from 'is-what'
 import copy from 'copy-anything'
 import merge from 'merge-anything'
 import EasyForms from 'ui'
@@ -63,6 +63,11 @@ export default {
     selectedField: {
       handler (newValue, oldValue) {
         const { componentDemoFieldSettings } = this
+        if (newValue === 'form') {
+          this.model = []
+        } else {
+          this.model = ''
+        }
         if (newValue === oldValue) return
         this.settings = copy(componentDemoFieldSettings)
         this.settings.label = `My awesome "${newValue}" field`
@@ -109,19 +114,39 @@ export default {
           ) {
             return carry
           }
-          const { description, type, quasarProp, examples, default: _df } = propInfo
+          const { description, type, quasarProp, examples, default: _df, values } = propInfo
           // make the raw prop info from the components into an EasyForm:
-          const subLabel = quasarProp && !isUndefined(_df) && isUndefined(description)
+          const propHasValues = isArray(values) && values.length
+          let subLabel = quasarProp && !isUndefined(_df) && isUndefined(description)
             ? `Same as Quasar, but defaults to: ${_df}`
             : description
+          let options
+          let fieldType = 'input'
+          if (type === Boolean) fieldType = 'toggle'
+          if (type === Array) fieldType = 'form'
+          if (propHasValues) {
+            fieldType = 'select'
+            options = values.map(v => ({label: v, value: v}))
+          }
+          let schema
+          if (selectedField === 'form' && propKey === 'schema') {
+            schema = [
+              {label: 'column id', id: 'id', fieldType: 'input'},
+              {label: 'column label', id: 'label', fieldType: 'input'},
+              {label: 'column fieldType', id: 'fieldType', fieldType: 'input'},
+            ]
+            subLabel += `\neg.\n\`${examples.join('')}\`\n\nTry setting a schema here and see what happens to the field preview...`
+          }
           carry[propKey] = {
             id: propKey,
+            fieldType,
+            valueType: type === Number ? 'number' : undefined,
+            schema,
             label: propKey,
             subLabel,
-            fieldType: type === Boolean ? 'toggle' : type === Array ? 'form' : 'input',
-            valueType: type === Number ? 'number' : undefined,
             placeholder: !isArray(examples) ? '' : examples.join(', '),
             quasarProp,
+            options,
           }
           return carry
         }, {})
@@ -148,8 +173,13 @@ export default {
       ]
     },
     modelShownAsBadge () {
-      const model = (isString(this.model)) ? `"${this.model}"` : this.model
-      return `v-model: ${model}`
+      const { model } = this
+      const parsedModel = isString(model)
+        ? `"${model}"`
+        : (isArray(model) || isPlainObject(model))
+          ? JSON.stringify(model)
+          : model
+      return `v-model: ${parsedModel}`
     },
   },
   methods: {
