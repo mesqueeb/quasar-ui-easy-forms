@@ -101,9 +101,11 @@ export default {
     },
     align: {
       category: 'style',
+      validator: val => (!val || ['right', 'left', null].includes(val)),
       type: String,
       description: 'Alignment of the content. Defaults to right for `valueType: \'number\'` and left for the rest',
-      examples: ['right', 'left']
+      examples: ['right', 'left', null],
+      values: ['right', 'left', null],
     },
     // format: {type: Function}, // fix the "commafy" problem first
     // Quasar props with modified defaults:

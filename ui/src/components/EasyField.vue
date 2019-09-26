@@ -40,6 +40,7 @@
 </style>
 
 <script>
+import { isFunction } from 'is-what'
 import merge from 'merge-anything'
 
 export default {
@@ -72,6 +73,18 @@ export default {
       description: 'Custom styling to be applied to the EasyField. Applied like so `:style="contentStyle"`',
       examples: ['padding: 1em;'],
     },
+    format: {
+      category: 'behaviour',
+      type: Function,
+      description: 'You can change how the value is formatted even though the underlying data might be different. Depending on the `fieldType`, you will also need to provide a `parseInput` function to reverse the effect.',
+      examples: ['val => commafy(val)' ],
+    },
+    parseInput: {
+      category: 'behaviour',
+      type: Function,
+      description: 'You can change how the value is parsed before it\'s updated. You must return the parsed value.',
+      examples: ['val => removeCommas(val)' ],
+    },
     // Quasar props with modified defaults:
     // Quasar props with modified behaviour:
     label: {
@@ -99,8 +112,12 @@ export default {
       })
     },
     cValue: {
-      get () { return this.value },
-      set (value) { this.$emit('input', value) },
+      get () {
+        const { format, value } = this
+        if (isFunction(format)) return format(value, this)
+        return value
+      },
+      set (val) { this.updateValue(val) },
     },
     cDisable () {
       const { readonly } = this.$attrs
@@ -119,6 +136,12 @@ export default {
       return classes
     },
   },
-  methods: {}
+  methods: {
+    updateValue (val) {
+      const { parseInput } = this
+      if (isFunction(parseInput)) val = parseInput(val, this)
+      this.$emit('input', val)
+    },
+  }
 }
 </script>
