@@ -27,10 +27,17 @@
 </style>
 
 <script>
-import { isString, isBoolean, isUndefined, isArray, isFunction, isPlainObject } from 'is-what'
+import { isString, isBoolean, isUndefined, isArray, isFunction, isPlainObject, isFullString } from 'is-what'
 import copy from 'copy-anything'
 import merge from 'merge-anything'
 import EasyForms from 'ui'
+
+function stringToJs (string) {
+  const jsonString = string
+    .replace(/([a-zA-Z0-9]+?):/g, '"$1":')
+    .replace(/'/g, '"')
+  return JSON.parse(jsonString)
+}
 
 const selectableFields = require.context('../../../src/components/fields', true, /^\.\/.*\.vue$/)
   .keys()
@@ -116,44 +123,55 @@ export default {
           }
           const { description, type, quasarProp, examples, default: _df, values } = propInfo
           // make the raw prop info from the components into an EasyForm:
-          const propHasValues = isArray(values) && values.length
           let subLabel = quasarProp && !isUndefined(_df) && isUndefined(description)
             ? `Same as Quasar, but defaults to: ${_df}`
             : description
-          let options
+          let options, outlined, standout, disable, parseInput, format, autogrow
           let fieldType = 'input'
           if (type === Boolean) fieldType = 'toggle'
-          if (type === Array) fieldType = 'form'
+          const propHasValues = isArray(values) && values.length
           if (propHasValues) {
             fieldType = 'select'
             options = values.map(v => ({label: v, value: v}))
           }
-          let schema
-          if (selectedField === 'form' && propKey === 'schema') {
-            schema = [
-              {label: 'column id', id: 'id', fieldType: 'input'},
-              {label: 'column label', id: 'label', fieldType: 'input'},
-              {label: 'column fieldType', id: 'fieldType', fieldType: 'input'},
-            ]
-            subLabel += `\neg.\n\`${examples.join('')}\`\n\nTry setting a schema here and see what happens to the field preview...`
+          if (
+            type === Array ||
+            type === Object ||
+            (isArray(type) && [Array, Object].every(t => type.includes(t)) && type.length === 2)
+          ) {
+            outlined = false
+            standout = true
+            parseInput = stringToJs
+            format = JSON.stringify
+            autogrow = true
+          }
+          if (propKey === 'schema') subLabel += `\nEg.\n${examples.join(', ')}`
+          if (type === Function) {
+            disable = true
           }
           carry[propKey] = {
             id: propKey,
             fieldType,
             valueType: type === Number ? 'number' : undefined,
-            schema,
+            // schema,
             label: propKey,
             subLabel,
             placeholder: !isArray(examples) ? '' : examples.join(', '),
             quasarProp,
             options,
+            outlined,
+            standout,
+            disable,
+            parseInput,
+            format,
+            autogrow
           }
           return carry
         }, {})
     },
     settingsSchema () {
       const { settingsMetaData } = this
-      const settingsOrder = ['label', 'subLabel', 'valueType']
+      const settingsOrder = ['label', 'subLabel', 'valueType', 'schema']
       const settingsArrayTop = settingsOrder
         .map(id => settingsMetaData[id]).filter(s => s)
       const settingsArrayBottom = Object.values(settingsMetaData)
