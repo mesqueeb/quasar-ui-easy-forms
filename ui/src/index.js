@@ -4,11 +4,12 @@ import EasyForm from './components/EasyForm'
 import EasyField from './components/EasyField'
 
 import EfBtn from './components/fields/EfBtn'
-import EfButtons from './components/fields/EfButtons'
+import EfBtnToggle from './components/fields/EfBtnToggle'
 import EfForm from './components/fields/EfForm'
 import EfImg from './components/fields/EfImg'
 import EfInputDate from './components/fields/EfInputDate'
 import EfInput from './components/fields/EfInput'
+import EfLink from './components/fields/EfLink'
 import EfPdf from './components/fields/EfPdf'
 import EfRange from './components/fields/EfRange'
 import EfSelect from './components/fields/EfSelect'
@@ -24,11 +25,12 @@ export {
   EasyField,
 
   EfBtn,
-  EfButtons,
+  EfBtnToggle,
   EfForm,
   EfImg,
   EfInput,
   EfInputDate,
+  EfLink,
   EfPdf,
   EfRange,
   EfSelect,
@@ -45,11 +47,12 @@ export default {
   EasyField,
 
   EfBtn,
-  EfButtons,
+  EfBtnToggle,
   EfForm,
   EfImg,
   EfInput,
   EfInputDate,
+  EfLink,
   EfPdf,
   EfRange,
   EfSelect,
@@ -63,11 +66,12 @@ export default {
     Vue.component(EasyForm.name, EasyForm)
 
     Vue.component(EfBtn.name, EfBtn)
-    Vue.component(EfButtons.name, EfButtons)
+    Vue.component(EfBtnToggle.name, EfBtnToggle)
     Vue.component(EfForm.name, EfForm)
     Vue.component(EfImg.name, EfImg)
     Vue.component(EfInput.name, EfInput)
     Vue.component(EfInputDate.name, EfInputDate)
+    Vue.component(EfLink.name, EfLink)
     Vue.component(EfPdf.name, EfPdf)
     Vue.component(EfRange.name, EfRange)
     Vue.component(EfSelect.name, EfSelect)

@@ -6,3 +6,8 @@ export const big = {
   type: Boolean,
   description: 'Display as "big" element.',
 }
+
+export const descriptionImgPdf = `EfImg and EfPdf both accept a single or multiple files as its \`value\`. The downloadURL (or "source" of the files) can be formatted as
+- a \`String\`
+- \`{downloadURL: String}\`
+- an array of \`{downloadURL: String}\``

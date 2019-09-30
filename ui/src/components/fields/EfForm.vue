@@ -54,6 +54,8 @@ import { isNumber } from 'is-what'
 
 export default {
   name: 'EfForm',
+  inheritAttrs: false,
+  description: `EfForm is a single component to which you can pass a "schema". The difference between \`<EasyField fieldType="form" />\` and \`<EasyForm />\` is that the former can be used _as part of_ the latter. The "schema" passed to this component will be parsed as a list with rows. Each EasyField object in the "schema" will be added as a single column.\n(EfForm has nothing to do with QForm)`,
   props: {
     // prop categories: behaviour content general model state style
     value: {
@@ -86,12 +88,13 @@ export default {
   computed: {
     cValue: {
       get () {
-        const { value, disable, maxRows } = this
+        const { value, schema, disable, maxRows } = this
+        const emptyRow = schema.reduce((carry, {id, fieldType}) => ({...carry, [id]: undefined}), {})
         if (
           !disable &&
           (!isNumber(maxRows) || maxRows < value.length)
         ) {
-          return value.concat([{}])
+          return value.concat([emptyRow])
         }
         return value
       },

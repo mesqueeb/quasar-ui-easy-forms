@@ -56,6 +56,18 @@ function getQuasarComponentName (efFieldName) {
   if (efFieldName.toLowerCase() === 'inputdate') efFieldName = 'input'
   return 'Q' + efFieldName[0].toUpperCase() + efFieldName.slice(1)
 }
+function kebabCase (str) {
+  const result = str.replace(
+    /[A-Z\u00C0-\u00D6\u00D8-\u00DE]/g,
+    match => '-' + match.toLowerCase()
+  )
+  return (str[0] === str[0].toUpperCase())
+    ? result.substring(1)
+    : result
+}
+function slugify (str) {
+  return encodeURIComponent(String(str).trim().replace(/\s+/g, '-'))
+}
 
 export default {
   name: 'InfoCard',
@@ -88,10 +100,10 @@ export default {
       /* webpackChunkName: "quasar-api" */
       /* webpackMode: "lazy-once" */
       `quasar/dist/api/${quasarComponentName}.json`
-    ).then(component => {
-      console.log('component → ', component)
-      if (!component.props) return
-      const updateSettingsWith = {}
+    )
+    .catch(e => {})
+    .then(component => {
+      if (!component || !component.props) return
       const otherProps = Object.entries(component.props)
         .reduce((carry, [propKey, propInfo]) => {
           // do nothing on duplicate props
@@ -104,14 +116,6 @@ export default {
           const typeIsOrIncludesBoolean = type === 'Boolean' || (isArray(type) && type.includes('Boolean'))
           const typeIsOrIncludesString = type === 'String' || (isArray(type) && type.includes('String'))
           const propHasValues = isArray(values) && values.length
-          // make the updateSettingsWith object to send to parent
-          if (typeIsOrIncludesBoolean) {
-            updateSettingsWith[propKey] = (_df === 'true')
-          } else if (typeIsOrIncludesString) {
-            updateSettingsWith[propKey] = _df || (propHasValues ? undefined : '')
-          } else {
-            updateSettingsWith[propKey] = null
-          }
 
           // make the raw prop info from the components into an EasyForm:
           let options
@@ -133,11 +137,12 @@ export default {
           carry.push(easyField)
           return carry
         }, [])
-      updateAllSettings(updateSettingsWith)
+
       this.iSettingsSchemaQuasar.push(
         {label: 'Regular Quasar props', fieldType: 'title'},
         ...otherProps,
-        {label: 'And many more...', fieldType: 'title'},
+        {label: 'And much more...', fieldType: 'title'},
+        {label: 'See the Quasar documentation', value: 'open documentation', newWindow: true, fieldType: 'link', href: `https://quasar.dev/vue-components/${slugify(kebabCase(selectedField))}`},
       )
     })
   },
@@ -160,9 +165,6 @@ export default {
       const settings = copy(this.settings)
       settings[id] = value
       this.$emit('input', settings)
-    },
-    updateAllSettings (newSettings) {
-      this.$emit('update-all-settings', newSettings)
     },
   },
 }

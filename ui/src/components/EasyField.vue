@@ -12,18 +12,7 @@
       class="_field"
       v-if="!['title', 'space', 'none', undefined].includes(fieldType)"
     >
-      <EfImg v-if="fieldType === 'img'" v-model="cValue" v-bind="fieldProps" />
-      <EfPdf v-if="fieldType === 'pdf'" v-model="cValue" v-bind="fieldProps" />
-      <EfForm v-if="fieldType === 'form'" v-model="cValue" v-bind="fieldProps" />
-      <EfRange v-if="fieldType === 'range'" v-model="cValue" v-bind="fieldProps" />
-      <EfVideo v-if="fieldType === 'video'" v-model="cValue" v-bind="fieldProps" />
-      <EfInput v-if="fieldType === 'input'" v-model="cValue" v-bind="fieldProps" />
-      <EfToggle v-if="fieldType === 'toggle'" v-model="cValue" v-bind="fieldProps" />
-      <EfSlider v-if="fieldType === 'slider'" v-model="cValue" v-bind="fieldProps" />
-      <EfSelect v-if="fieldType === 'select'" v-model="cValue" v-bind="fieldProps" />
-      <EfButtons v-if="fieldType === 'buttons'" v-model="cValue" v-bind="fieldProps" />
-      <EfInputDate v-if="fieldType === 'inputDate'" v-model="cValue" v-bind="fieldProps" />
-      <EfUploaderFirebase v-if="fieldType === 'uploaderFirebase'" v-model="cValue" v-bind="fieldProps" />
+      <component :is="componentIdentifier" v-model="cValue" v-bind="fieldProps" />
     </div>
   </div>
 </template>
@@ -32,7 +21,8 @@
 // $
 @import '../index.styl'
 
-// .easy-field
+.easy-field
+  max-width 100%
 ._sub-label
   opacity 0.8
   font-weight 300
@@ -77,35 +67,48 @@ export default {
       category: 'behaviour',
       type: Function,
       description: 'You can change how the value is formatted even though the underlying data might be different. Depending on the `fieldType`, you will also need to provide a `parseInput` function to reverse the effect.',
-      examples: ['val => commafy(val)' ],
+      examples: ['val => thousandToK(val)' ],
     },
     parseInput: {
       category: 'behaviour',
       type: Function,
       description: 'You can change how the value is parsed before it\'s updated. You must return the parsed value.',
-      examples: ['val => removeCommas(val)' ],
+      examples: ['val => kToThousand(val)' ],
     },
     // Quasar props with modified defaults:
-    // Quasar props with modified behaviour:
-    label: {
-      type: String,
+    readonly: {
       quasarProp: true,
-    },
-    disable: {
       type: Boolean,
       default: false,
+      description: '`readonly` is used for \'view\' mode of an EasyForm.',
+    },
+    // Quasar props with modified behaviour:
+    label: {
       quasarProp: true,
+      type: String,
+    },
+    disable: {
+      quasarProp: true,
+      type: Boolean,
+      default: false,
       description: '`disable` is ignored when `readonly` is true',
     },
   },
   computed: {
+    componentIdentifier () {
+      const { fieldType } = this
+      if (!fieldType) return ''
+      return 'Ef' + fieldType[0].toUpperCase() + fieldType.slice(1)
+    },
     fieldProps () {
       return merge(this.$attrs, {
+        // format: this.format,   // do not pass format
         // EF props used here, but also to pass:
         subLabel: this.subLabel,
         fieldType: this.fieldType,
         valueType: this.valueType,
         // Quasar props with modified defaults:
+        readonly: this.readonly,
         // Quasar props with modified behaviour:
         // label: this.label,     // do not pass label
         disable: this.cDisable,

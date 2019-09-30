@@ -6,6 +6,7 @@
     }]"
     v-model="cValue"
     v-bind="quasarProps"
+    v-on="$listeners"
   />
 </template>
 
@@ -52,23 +53,29 @@
 </style>
 
 <script>
-import { isFunction, isString, isPlainObject } from 'is-what'
-import copy from 'copy-anything'
 import merge from 'merge-anything'
+import copy from 'copy-anything'
+import { isFunction, isString, isPlainObject } from 'is-what'
 import { QSelect } from 'quasar'
 import { big } from './sharedProps.js'
 
 export default {
   components: { QSelect },
   name: 'EfSelect',
+  inheritAttrs: false,
   props: {
     // prop categories: behaviour content general model state style
     value: [String, Object, Number, Array],
     // EF props:
     big,
+    placeholder: {
+      type: String,
+      description: 'Will be shown when nothing is selected. (Takes the place of the `label` Quasar prop, because with EfSelect the label is external.)'
+    },
     // Quasar props with modified defaults:
     outlined: { quasarProp: true, type: Boolean, default: true },
     mapOptions: { quasarProp: true, type: Boolean, default: true },
+    emitValue: { quasarProp: true, type: Boolean, default: true },
     autogrow: { quasarProp: true, type: Boolean, default: true },
     // Quasar props with modified behaviour:
     label: {
@@ -80,6 +87,8 @@ export default {
       quasarProp: true,
       type: [Array, Function],
       default: () => [],
+      description: 'Can be an array of options (just like Quasar) or a Function which has to return an array. The function will receive the EfSelect Vue component and the store as parameters: \`options(this, this.$store)\`',
+      examples: [`[{label: 'JPY', value: 'jpy'}]`],
     },
     hideDropdownIcon: {
       quasarProp: true,
@@ -98,6 +107,7 @@ export default {
         // Quasar props with modified defaults:
         outlined: this.outlined,
         mapOptions: this.mapOptions,
+        emitValue: this.emitValue,
         autogrow: this.autogrow,
         // Quasar props with modified behaviour:
         label: this.cLabel,
@@ -138,11 +148,13 @@ export default {
     },
     cLabel () {
       // hidden when a value is selected
-      return this.cValue ? undefined : this.$attrs.placeholder
+      return this.cValue || this.cValue === 0
+        ? undefined
+        : this.placeholder
     },
     cOptions () {
       const { options } = this
-      if (isFunction(options)) return options(this.$store)
+      if (isFunction(options)) return options(this, this.$store)
       if (options.some(o => isString(o))) {
         return options.map(o => ({label: o, value: o}))
       }

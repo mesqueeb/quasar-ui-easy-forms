@@ -116,7 +116,7 @@ export default {
       quasarProp: true,
       type: Array,
       description: 'Same as Quasar, but with added pre-defined rules for \'telJA\' and \'email\'',
-      examples: ['telJA', 'email', '[ val => val.length <= 3 || \'Please use maximum 3 characters\' ]'],
+      examples: ['[\'telJA\']', '[\'email\']', '[ val => val.length <= 3 || \'Please use maximum 3 characters\' ]'],
     },
     type: {
       quasarProp: true,

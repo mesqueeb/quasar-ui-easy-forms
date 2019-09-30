@@ -1,19 +1,15 @@
 <template>
   <div :class="[
     'ef-buttons', {
-    '--big': big,
-    '--disabled': disable
+    '-big': big,
+    '-readonly': $attrs.readonly,
   }]">
     <q-btn-toggle
       class="_q-tgl"
       v-if="!big"
       :value="value"
       @input="val => $emit('input', val)"
-      toggle-color="primary"
-      :options="options"
-      unelevated
-      rounded
-      :disable="disable"
+      v-bind="quasarProps"
     />
     <div
       v-if="big"
@@ -25,12 +21,12 @@
         :key="option.label"
         :class="{'_chosen': value === option.value}"
       >
-        <q-btn
-          :label="option.label"
-          @click="$emit('input', option.value)"
-          class="my-q-btn--square"
-          :disable="option.disabled || disable"
-          push
+        <EfBtn
+          :value="option.label"
+          @click.native="$emit('input', option.value)"
+          class="ef-btn--square"
+          :disable="option.disable || quasarProps.disable"
+          v-bind="quasarProps"
         />
       </div>
     </div>
@@ -59,8 +55,8 @@
     >._chosen > *
       transform translate3d(0, 3px, 0)
       border-bottom-width 0
-      background darken($primary, 20%)
-  &.--disabled
+      background darken($primary, 20%) !important
+  &.-readonly
     ._q-tgl
       border 2px solid $gray-bg--dark
     .q-btn.disabled
@@ -73,19 +69,41 @@
 </style>
 
 <script>
+import merge from 'merge-anything'
 import { isOdd } from '../../helpers/intHelpers'
 import { QBtnToggle, QBtn } from 'quasar'
+import { big } from './sharedProps.js'
 
 export default {
   components: { QBtnToggle, QBtn },
-  name: 'EfButtons',
+  name: 'EfBtnToggle',
+  description: 'EfBtnToggle has a very different view when `big: true`',
+  inheritAttrs: false,
   props: {
+    // prop categories: behaviour content general model state style
     value: [String, Number],
-    options: Array,
-    big: Boolean,
-    disable: Boolean,
+    // EF props:
+    big,
+    // Quasar props with modified defaults:
+    unelevated: {type: Boolean, default: true, quasarProp: true},
+    rounded: {type: Boolean, default: true, quasarProp: true},
+    toggleColor: {type: String, default: 'primary', quasarProp: true},
+    // Quasar props with modified behaviour:
+    options: {
+      quasarProp: true,
+      type: Array,
+      description: 'An array of options. The options can be anything you can pass to EfBtn. Eg. `[{label: \'One\', value: 1}, {label: \'Two\', value: 2}]',
+      default: () => [],
+    },
   },
   computed: {
+    quasarProps () {
+      return merge(this.$attrs, {
+        // Quasar props with modified defaults:
+        // Quasar props with modified behaviour:
+        options: this.options,
+      })
+    },
     style () {
       const ipadLandscape = this.$q.screen.md || this.$q.screen.gt.md
       const btnWidth = (ipadLandscape) ? '25vw' : '1fr'

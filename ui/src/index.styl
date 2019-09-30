@@ -7,3 +7,18 @@ $gray-bg--dark = #E4E4E4
 .text-wrap-all
   white-space pre-line
   word-break break-word
+
+grid--square($width = 100%)
+  display grid
+  justify-content center
+  align-content center
+  > div
+    height 0
+    width $width
+    padding-bottom 100%
+    position relative
+    > *
+      position absolute
+
+.grid--square
+  grid--square()

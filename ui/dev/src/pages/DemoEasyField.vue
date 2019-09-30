@@ -1,13 +1,23 @@
 <template>
   <q-page padding>
     <div class="q-gutter-md q-pb-md column items-start">
-      <EasyField v-model="selectedField" v-bind="fieldPicker" />
+      <div class="flex">
+        <EasyField v-model="selectedField" v-bind="fieldPicker" />
+      </div>
       <q-badge color="primary">{{ modelShownAsBadge }}</q-badge>
       <EasyField
         v-model="model"
         v-bind="field"
-        style="align-self: stretch"
+        style="width: 95%"
       />
+      <div>
+        {{ component.description }}
+      </div>
+      <q-markdown
+        v-if="component.description"
+      >
+        {{ component.description }}
+      </q-markdown>
     </div>
     <InfoCard
       :key="selectedField"
@@ -17,7 +27,6 @@
       :selectedField="selectedField"
       :settingsMetaData="settingsMetaData"
       :fieldValue="model"
-      @update-all-settings="updateAllSettings"
     />
   </q-page>
 </template>
@@ -31,15 +40,24 @@ import { isString, isBoolean, isUndefined, isArray, isFunction, isPlainObject, i
 import copy from 'copy-anything'
 import merge from 'merge-anything'
 import EasyForms from 'ui'
+import demoOptions from '../schemas/index'
 
 function stringToJs (string) {
+  if (!string) return undefined
   const jsonString = string
     .replace(/([a-zA-Z0-9]+?):/g, '"$1":')
     .replace(/'/g, '"')
-  return JSON.parse(jsonString)
+  let parsed
+  try {
+    parsed = JSON.parse(jsonString)
+  } catch (e) {
+    return string
+  }
+  return parsed
 }
 
-const selectableFields = require.context('../../../src/components/fields', true, /^\.\/.*\.vue$/)
+const selectableFields = require
+  .context('../../../src/components/fields', true, /^\.\/.*\.vue$/)
   .keys()
   .map(k => {
     const name = k.replace(/\.\/Ef/, '').replace(/\.vue/, '')
@@ -61,22 +79,16 @@ export default {
       selectableFields,
       fieldPicker,
       model: '',
-      settings: {
-        disable: false,
-      },
+      settings: {},
     }
   },
   watch: {
     selectedField: {
       handler (newValue, oldValue) {
-        const { componentDemoFieldSettings } = this
-        if (newValue === 'form') {
-          this.model = []
-        } else {
-          this.model = ''
-        }
+        const { componentDemoFieldSettings, addTestOptions } = this
+        this.model = undefined
         if (newValue === oldValue) return
-        this.settings = copy(componentDemoFieldSettings)
+        addTestOptions()
         this.settings.label = `My awesome "${newValue}" field`
       },
       immediate: true,
@@ -88,27 +100,23 @@ export default {
     },
     componentSelectedFieldUpper () {
       const { selectedField } = this
+      console.log('selectedField → ', selectedField)
       return selectedField[0].toUpperCase() + selectedField.slice(1)
     },
-    componentDemoFieldSettings () {
-      const { selectedField, componentSelectedFieldUpper, componentPropsInfo } = this
-      const componentPropDefaults = Object.entries(componentPropsInfo)
-        .reduce((carry, [propKey, propInfo]) => {
-          carry[propKey] = isFunction(propInfo.default) ? propInfo.default() : propInfo.default
-          return carry
-        }, {})
-      return copy(merge(componentPropDefaults, {fieldType: selectedField})) || {}
+    component () {
+      const { selectedField, componentSelectedFieldUpper } = this
+      return EasyForms[`Ef${componentSelectedFieldUpper}`] || {}
     },
     componentPropsInfo () {
-      const { selectedField, componentSelectedFieldUpper } = this
+      const { selectedField, component } = this
       const EasyField = EasyForms['EasyField']
-      const component = EasyForms[`Ef${componentSelectedFieldUpper}`] || {}
-      console.log('component !!! → ', component)
       let componentProps = component.props || {}
       if (selectedField === 'inputDate') {
         const subComponent = EasyForms['EfInput']
         componentProps = merge(subComponent.props, componentProps)
       }
+      console.log('EasyField.props → ', copy(EasyField.props))
+      console.log('componentProps → ', copy(componentProps))
       return copy(merge(EasyField.props, componentProps)) || {}
     },
     settingsMetaData () {
@@ -137,7 +145,7 @@ export default {
           if (
             type === Array ||
             type === Object ||
-            (isArray(type) && [Array, Object].every(t => type.includes(t)) && type.length === 2)
+            (isArray(type) && [Array, Object].some(t => type.includes(t)) && type.length === 2)
           ) {
             outlined = false
             standout = true
@@ -164,7 +172,7 @@ export default {
             disable,
             parseInput,
             format,
-            autogrow
+            autogrow,
           }
           return carry
         }, {})
@@ -199,15 +207,30 @@ export default {
           : model
       return `v-model: ${parsedModel}`
     },
+    demoOptions () {
+      const { selectedField } = this
+      return demoOptions[selectedField]
+    },
   },
   methods: {
+    addTestOptions () {
+      const { demoOptions, updateAllSettings } = this
+      const ops = copy(demoOptions)
+      if (!ops) return
+      const { value } = ops
+      if (value !== undefined) {
+        this.model = value
+        delete ops.value
+      }
+      updateAllSettings(ops)
+    },
     log(...args) {
       console.log(...args)
     },
-    updateAllSettings (newSettings) {
-      console.log('merge(this.settings, newSettings) → ', merge(this.settings, newSettings))
-
-      this.settings = merge(this.settings, newSettings)
+    updateAllSettings (newSettings = {}) {
+      Object.entries(newSettings).forEach(([key, value]) => {
+        this.$set(this.settings, key, value)
+      })
     },
   },
 }

@@ -25,24 +25,18 @@
 
 <script>
 import merge from 'merge-anything'
-import {
-  dateStamp,
-  // timeStamp,
-  // makeDateFromStamps
-} from '../../helpers/dateHelpers'
+import { dateStamp } from '../../helpers/dateHelpers'
 import { isString, isFullString, isDate } from 'is-what'
-
-import { date, QIcon, QPopupProxy, ClosePopup, QDate } from 'quasar'
-const { formatDate, adjustDate } = date
+import { QIcon, QPopupProxy, ClosePopup, QDate } from 'quasar'
 
 const defaultMask = 'YYYY/MM/DD'
-
-// console.log('formatDate(value, format) → ', formatDate(new Date(), 'YYYY/MM/DD'))
 
 export default {
   components: { QIcon, QPopupProxy, QDate },
   directives: { ClosePopup },
   name: 'EfInputDate',
+  inheritAttrs: false,
+  description: `EfInputDate is handy because it automatically returns a date object whenever the user input is as long as the specified \`mask\` and the string can be converted to a valid date instance. Otherwise a string will be returned.`,
   props: {
     // prop categories: behaviour content general model state style
     value: [String, Date],
@@ -52,7 +46,7 @@ export default {
       type: String,
       validator: val => ['string', 'date'].includes(val),
       examples: ['string', 'date'],
-      default: 'string',
+      default: 'date',
       description: 'When `valueType: \'date\'` it will try and return a `new Date` instance. However, if the user input does not provide a valid `Date`, it will return the user input as `string`.',
     },
     validDateErrorMessage: {
@@ -61,15 +55,15 @@ export default {
       description: 'The error that should be returned for the default "valid date" rule. Defaults to "Please enter a valid date."',
       default: 'Please enter a valid date.',
     },
-    // format: {type: Function}, // fix the "commafy" problem first
     // Quasar props with modified defaults:
+    fillMask: {quasarProp: true, type: Boolean, default: false},
     // Quasar props with modified behaviour:
     mask: {
       quasarProp: true,
       type: String,
       default: defaultMask,
       examples: ['YYYY-MM-DD', 'MMMM Do, YYYY', 'YYYY-MM-DD HH:mm:ss'],
-      description: 'Default: \'YYYY/MM/DD\'. Will automatically convert the Date mask to the underlying input mask like so: \'YYYY/MM/DD\' → \'####/##/##\'',
+      description: 'Default: \'YYYY/MM/DD\'. Is shown as placeholder. Will be passed as \'input\' field mask as well (and converted like so: \'YYYY/MM/DD\' → \'####/##/##\').',
     },
     rules: {
       quasarProp: true,
@@ -95,11 +89,7 @@ export default {
         const { value, mask } = this
         // value input has to be a string
         if (isString(value)) return value
-        console.log('mask → ', mask)
         const format = mask
-        console.log('value, format → ', value, format)
-        console.log('formatDate(value, format) → ', formatDate(value, format))
-        console.log('dateStamp(value, format) → ', dateStamp(value, format))
         if (isDate(value)) return dateStamp(value, format)
         return ''
       },

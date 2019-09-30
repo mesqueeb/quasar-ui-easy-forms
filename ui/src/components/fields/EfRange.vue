@@ -2,14 +2,7 @@
   <div class="ef-range">
     <q-range
       v-model="cValue"
-      :min="min"
-      :max="max"
-      :step="step"
-      label-always
-      label
-      :left-label-value="cFormat(cValue.min)"
-      :right-label-value="cFormat(cValue.max)"
-      :disable="disable"
+      v-bind="quasarProps"
     />
   </div>
 </template>
@@ -25,39 +18,67 @@
 </style>
 
 <script>
-import { isObject, isFunction } from 'is-what'
+import merge from 'merge-anything'
+import { isObject, isFullString } from 'is-what'
 import { QRange } from 'quasar'
 
 export default {
   components: { QRange },
   name: 'EfRange',
+  inheritAttrs: false,
   props: {
-    value: Object,
-    min: Number,
-    max: Number,
-    step: Number,
-    format: Function,
-    disable: Boolean,
+    // prop categories: behaviour content general model state style
+    value: {
+      quasarProp: true,
+      type: Object,
+      description: `Model of the component of type \`{ min, max }\` (both values must be between global \`min\`/\`max\`); Either use this property (along with a listener for \`'input'\` event) OR use v-model directive`,
+      validator: val => isObject(val) && ('min' in val) && ('max' in val),
+      default: {min: 0, max: 0},
+    },
+    // EF props:
+    prefix: {
+      type: String,
+      description: 'Prefix shown inside the label.',
+    },
+    suffix: {
+      type: String,
+      description: 'Suffix shown inside the label.',
+    },
+    format: {
+      type: Function,
+      description: 'Formats the slider label.',
+      examples: ['val => val / 1000 + \'K\'', 'val => commafy(val)'],
+    },
+    // Quasar props with modified defaults:
+    labelAlways: {
+      quasarProp: true,
+      type: Boolean,
+      default: true,
+    },
+    // Quasar props with modified behaviour:
   },
   computed: {
+    quasarProps () {
+      return merge(this.$attrs, {
+        // Quasar props with modified defaults:
+        labelAlways: this.labelAlways,
+        // Quasar props with modified behaviour:
+        leftLabelValue: this.cFormat(this.cValue.min),
+        rightLabelValue: this.cFormat(this.cValue.max),
+      })
+    },
     cValue: {
-      get () {
-        if (!isObject(this.value)) throw new Error('SRange value needs to be an object like {min: 0, max: 10}')
-        const { from, to } = this.value
-        if (from !== undefined) return {min: from, max: to}
-        return this.value
-      },
-      set (val) {
-        const { from } = this.value
-        if (from !== undefined) val = {from: val.min, to: val.max}
-        this.$emit('input', val)
-      },
+      get () { return this.value },
+      set (val) { this.$emit('input', val) },
     },
   },
   methods: {
     cFormat (val) {
-      if (!isFunction(this.format)) return val
-      return this.format(val)
+      const { format, prefix, suffix } = this
+      if (isFunction(format)) val = format(val)
+      if (isFullString(prefix)) val = `${prefix}${val}`
+      if (isFullString(suffix)) val = `${val}${suffix}`
+      return val
     },
   }
 }

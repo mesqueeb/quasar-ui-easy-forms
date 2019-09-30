@@ -5,7 +5,6 @@ const { formatDate, adjustDate } = date
 export function dateStamp (date, format) {
   if (isString(date)) date = new Date(date)
   if (!isDate(date)) return 'null'
-  debugger
   if (format === 'short') return formatDate(date, 'YYYY/MM/DD')
   if (isString(format)) return formatDate(date, format)
   return formatDate(date, 'YYYY年MM月DD日')

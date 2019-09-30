@@ -2,14 +2,7 @@
   <div class="ef-slider">
     <q-slider
       v-model="cValue"
-      :min="min"
-      :max="max"
-      :step="step"
-      label
-      label-always
-      :label-value="cFormat(cValue)"
-      markers
-      :disable="disable"
+      v-bind="quasarProps"
     />
   </div>
 </template>
@@ -25,38 +18,59 @@
 </style>
 
 <script>
-import { isFunction } from 'is-what'
+import merge from 'merge-anything'
+import { isFunction, isFullString } from 'is-what'
 import { QSlider } from 'quasar'
 
 export default {
   components: { QSlider },
   name: 'EfSlider',
+  inheritAttrs: false,
   props: {
+    // prop categories: behaviour content general model state style
     value: Number,
-    min: Number,
-    max: Number,
-    step: Number,
-    format: Function,
-    suffix: String,
-    prefix: String,
-    disable: Boolean,
+    // EF props:
+    prefix: {
+      type: String,
+      description: 'Prefix shown inside the label.',
+    },
+    suffix: {
+      type: String,
+      description: 'Suffix shown inside the label.',
+    },
+    format: {
+      type: Function,
+      description: 'Formats the slider label.',
+      examples: ['val => val / 1000 + \'K\'', 'val => commafy(val)'],
+    },
+    // Quasar props with modified defaults:
+    labelAlways: {
+      quasarProp: true,
+      type: Boolean,
+      default: true,
+    },
+    // Quasar props with modified behaviour:
   },
   computed: {
+    quasarProps () {
+      return merge(this.$attrs, {
+        // Quasar props with modified defaults:
+        labelAlways: this.labelAlways,
+        // Quasar props with modified behaviour:
+        labelValue: this.cFormat(this.cValue),
+      })
+    },
     cValue: {
-      get () {
-        return this.value
-      },
-      set (val) {
-        this.$emit('input', val)
-      },
+      get () { return this.value },
+      set (val) { this.$emit('input', val) },
     },
   },
   methods: {
     cFormat (val) {
       const { format, prefix, suffix } = this
       if (isFunction(format)) val = format(val)
-      if (prefix) val = `${prefix}${val}`
-      if (suffix) val = `${val}${suffix}`
+      if (isFullString(prefix)) val = `${prefix}${val}`
+      if (isFullString(suffix)) val = `${val}${suffix}`
       return val
     },
   }
