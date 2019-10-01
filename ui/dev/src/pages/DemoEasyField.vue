@@ -10,20 +10,14 @@
         v-bind="field"
         style="width: 95%"
       />
-      <div>
-        {{ component.description }}
-      </div>
-      <q-markdown
-        v-if="component.description"
-      >
-        {{ component.description }}
-      </q-markdown>
+      <q-markdown v-if="rawComponent.desc">{{
+        rawComponent.desc
+      }}</q-markdown>
     </div>
     <InfoCard
       :key="selectedField"
       v-model="settings"
-      :settingsSchemaEf="settingsSchemaEf"
-      :settingsSchemaQuasar="settingsSchemaQuasar"
+      :settingsSchema="settingsSchema"
       :selectedField="selectedField"
       :settingsMetaData="settingsMetaData"
       :fieldValue="model"
@@ -36,25 +30,12 @@
 </style>
 
 <script>
-import { isString, isBoolean, isUndefined, isArray, isFunction, isPlainObject, isFullString } from 'is-what'
+import { isString, isUndefined, isArray, isPlainObject } from 'is-what'
 import copy from 'copy-anything'
 import merge from 'merge-anything'
 import EasyForms from 'ui'
 import demoOptions from '../schemas/index'
-
-function stringToJs (string) {
-  if (!string) return undefined
-  const jsonString = string
-    .replace(/([a-zA-Z0-9]+?):/g, '"$1":')
-    .replace(/'/g, '"')
-  let parsed
-  try {
-    parsed = JSON.parse(jsonString)
-  } catch (e) {
-    return string
-  }
-  return parsed
-}
+import { getInfoCardSchema, getRawComponent } from '../helpers/schemaBuilders'
 
 const selectableFields = require
   .context('../../../src/components/fields', true, /^\.\/.*\.vue$/)
@@ -83,6 +64,14 @@ export default {
     }
   },
   watch: {
+    model (newValue, oldValue) {
+      if (isUndefined(this.settings.value)) return
+      this.settings.value = newValue
+    },
+    settings (newSettings, oldSettings) {
+      if (!newSettings.value || newSettings.value === oldSettings.value) return
+      this.model = newSettings.value
+    },
     selectedField: {
       handler (newValue, oldValue) {
         const { componentDemoFieldSettings, addTestOptions } = this
@@ -98,88 +87,11 @@ export default {
     field () {
       return this.settings
     },
-    componentSelectedFieldUpper () {
-      const { selectedField } = this
-      console.log('selectedField → ', selectedField)
-      return selectedField[0].toUpperCase() + selectedField.slice(1)
-    },
-    component () {
-      const { selectedField, componentSelectedFieldUpper } = this
-      return EasyForms[`Ef${componentSelectedFieldUpper}`] || {}
-    },
-    componentPropsInfo () {
-      const { selectedField, component } = this
-      const EasyField = EasyForms['EasyField']
-      let componentProps = component.props || {}
-      if (selectedField === 'inputDate') {
-        const subComponent = EasyForms['EfInput']
-        componentProps = merge(subComponent.props, componentProps)
-      }
-      console.log('EasyField.props → ', copy(EasyField.props))
-      console.log('componentProps → ', copy(componentProps))
-      return copy(merge(EasyField.props, componentProps)) || {}
-    },
-    settingsMetaData () {
-      const { settings, componentPropsInfo, selectedField } = this
-      return Object.entries(componentPropsInfo)
-        .reduce((carry, [propKey, propInfo]) => {
-          // fields to not include in the InfoCard settings:
-          if (
-            ['value', 'fieldType'].includes(propKey)
-          ) {
-            return carry
-          }
-          const { description, type, quasarProp, examples, default: _df, values } = propInfo
-          // make the raw prop info from the components into an EasyForm:
-          let subLabel = quasarProp && !isUndefined(_df) && isUndefined(description)
-            ? `Same as Quasar, but defaults to: ${_df}`
-            : description
-          let options, outlined, standout, disable, parseInput, format, autogrow
-          let fieldType = 'input'
-          if (type === Boolean) fieldType = 'toggle'
-          const propHasValues = isArray(values) && values.length
-          if (propHasValues) {
-            fieldType = 'select'
-            options = values.map(v => ({label: v, value: v}))
-          }
-          if (
-            type === Array ||
-            type === Object ||
-            (isArray(type) && [Array, Object].some(t => type.includes(t)) && type.length === 2)
-          ) {
-            outlined = false
-            standout = true
-            parseInput = stringToJs
-            format = JSON.stringify
-            autogrow = true
-          }
-          if (propKey === 'schema') subLabel += `\nEg.\n${examples.join(', ')}`
-          if (type === Function) {
-            disable = true
-          }
-          carry[propKey] = {
-            id: propKey,
-            fieldType,
-            valueType: type === Number ? 'number' : undefined,
-            // schema,
-            label: propKey,
-            subLabel,
-            placeholder: !isArray(examples) ? '' : examples.join(', '),
-            quasarProp,
-            options,
-            outlined,
-            standout,
-            disable,
-            parseInput,
-            format,
-            autogrow,
-          }
-          return carry
-        }, {})
-    },
+    rawComponent () { return getRawComponent(this.selectedField) },
+    settingsMetaData () { return getInfoCardSchema(this.selectedField) },
     settingsSchema () {
       const { settingsMetaData } = this
-      const settingsOrder = ['label', 'subLabel', 'valueType', 'schema']
+      const settingsOrder = ['value', 'label', 'subLabel', 'valueType', 'schema']
       const settingsArrayTop = settingsOrder
         .map(id => settingsMetaData[id]).filter(s => s)
       const settingsArrayBottom = Object.values(settingsMetaData)
@@ -187,15 +99,6 @@ export default {
       return [
         ...settingsArrayTop,
         ...settingsArrayBottom,
-      ]
-    },
-    settingsSchemaEf () {
-      return this.settingsSchema.filter(s => !s.quasarProp)
-    },
-    settingsSchemaQuasar () {
-      return [
-        {label: 'Quasar props with modified behaviour', fieldType: 'title'},
-        ...this.settingsSchema.filter(s => s.quasarProp)
       ]
     },
     modelShownAsBadge () {
@@ -220,7 +123,6 @@ export default {
       const { value } = ops
       if (value !== undefined) {
         this.model = value
-        delete ops.value
       }
       updateAllSettings(ops)
     },

@@ -4,7 +4,7 @@
 export const big = {
   category: 'style',
   type: Boolean,
-  description: 'Display as "big" element.',
+  desc: 'Display as "big" element.',
 }
 
 export const descriptionImgPdf = `EfImg and EfPdf both accept a single or multiple files as its \`value\`. The downloadURL (or "source" of the files) can be formatted as

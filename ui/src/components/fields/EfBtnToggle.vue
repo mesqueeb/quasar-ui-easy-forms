@@ -2,7 +2,7 @@
   <div :class="[
     'ef-buttons', {
     '-big': big,
-    '-readonly': $attrs.readonly,
+    '-readonly': quasarProps.readonly,
   }]">
     <q-btn-toggle
       class="_q-tgl"
@@ -71,15 +71,16 @@
 <script>
 import merge from 'merge-anything'
 import { isOdd } from '../../helpers/intHelpers'
-import { QBtnToggle, QBtn } from 'quasar'
+import { QBtnToggle } from 'quasar'
+import EfBtn from './EfBtn.vue'
 import { big } from './sharedProps.js'
 
 export default {
-  components: { QBtnToggle, QBtn },
+  components: { QBtnToggle },
   name: 'EfBtnToggle',
-  description: 'EfBtnToggle has a very different view when `big: true`',
+  desc: 'EfBtnToggle has a very different view when `big: true`',
   inheritAttrs: false,
-  props: {
+  props: merge(EfBtn.props, {
     // prop categories: behaviour content general model state style
     value: [String, Number],
     // EF props:
@@ -92,13 +93,18 @@ export default {
     options: {
       quasarProp: true,
       type: Array,
-      description: 'An array of options. The options can be anything you can pass to EfBtn. Eg. `[{label: \'One\', value: 1}, {label: \'Two\', value: 2}]',
+      desc: 'An array of options. The options can be anything you can pass to EfBtn. Eg. `[{label: \'One\', value: 1}, {label: \'Two\', value: 2}]',
       default: () => [],
     },
-  },
+  }),
   computed: {
     quasarProps () {
-      return merge(this.$attrs, {
+      const inheritedProps = Object.keys(EfInput.props)
+        .reduce((carry, propKey) => {
+          carry[propKey] = this[propKey]
+          return carry
+        }, {})
+      return merge(inheritedProps, this.$attrs, {
         // Quasar props with modified defaults:
         // Quasar props with modified behaviour:
         options: this.options,

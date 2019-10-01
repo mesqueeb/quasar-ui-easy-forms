@@ -27,12 +27,13 @@
 <script>
 import merge from 'merge-anything'
 import { QVideo } from 'quasar'
+import EfInput from './EfInput.vue'
 
 export default {
-  components: { QVideo },
+  components: { EfInput, QVideo },
   name: 'EfVideo',
   inheritAttrs: false,
-  props: {
+  props: merge(EfInput.props, {
     // prop categories: behaviour content general model state style
     value: String,
     // EF props:
@@ -44,10 +45,15 @@ export default {
     autofocus: Boolean,
     autogrow: Boolean,
     viewMode: Boolean,
-  },
+  }),
   computed: {
     quasarProps () {
-      return merge(this.$attrs, {
+      const inheritedProps = Object.keys(EfInput.props)
+        .reduce((carry, propKey) => {
+          carry[propKey] = this[propKey]
+          return carry
+        }, {})
+      return merge(inheritedProps, this.$attrs, {
         // Quasar props with modified defaults:
         // Quasar props with modified behaviour:
       })

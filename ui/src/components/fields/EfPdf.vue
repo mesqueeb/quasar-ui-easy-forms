@@ -37,14 +37,15 @@ import merge from 'merge-anything'
 import copy from 'copy-anything'
 import { isPlainObject, isFullString } from 'is-what'
 import { QBtn, QDialog, Dialog } from 'quasar'
+import EfBtn from './EfBtn.vue'
 import PdfDialog from '../dialogs/DPdf'
 import { descriptionImgPdf } from './sharedProps.js'
 
 export default {
-  components: { QBtn, QDialog },
+  components: { QBtn, QDialog, EfBtn },
   name: 'EfPdf',
   inheritAttrs: false,
-  description: descriptionImgPdf,
+  desc: descriptionImgPdf,
   props: {
     // prop categories: behaviour content general model state style
     value: [String, Array, Object],
@@ -52,7 +53,7 @@ export default {
     deletable: {
       type: Boolean,
       default: true,
-      description: 'Wether or not uploaded files are deletable (deleting would update the `value`). `true` by default but `false` when `readonly: true`',
+      desc: 'Wether or not uploaded files are deletable (deleting would update the `value`). `true` by default but `false` when `readonly: true`',
     },
     // Quasar props with modified defaults:
     // Quasar props with modified behaviour:

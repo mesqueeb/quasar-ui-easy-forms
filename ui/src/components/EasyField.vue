@@ -48,31 +48,31 @@ export default {
       category: 'model',
       type: String,
       validator: prop => ['string', 'boolean', 'number', 'array', 'object', 'date', 'null'].includes(prop),
-      description: 'valueType is the type of the model of the field. Can be any of \'string\', \'boolean\', \'number\', \'array\', \'object\'.\n\nWhen `valueType: \'number\'` it will make sure the field value is formatted as Number. `valueType` will also provide extra documentation so is best always specified.',
+      desc: 'valueType is the type of the model of the field. Can be any of \'string\', \'boolean\', \'number\', \'array\', \'object\'.\n\nWhen `valueType: \'number\'` it will make sure the field value is formatted as Number. `valueType` will also provide extra documentation so is best always specified.',
       examples: ['string', 'boolean', 'number', 'array', 'object', 'date', 'null'],
       values: ['string', 'boolean', 'number', 'array', 'object', 'date', 'null'],
     },
     subLabel: {
       category: 'content',
       type: String,
-      description: 'A smaller label for extra info.',
+      desc: 'A smaller label for extra info.',
     },
     contentStyle: {
       category: 'style',
       type: [Object, Array, String],
-      description: 'Custom styling to be applied to the EasyField. Applied like so `:style="contentStyle"`',
+      desc: 'Custom styling to be applied to the EasyField. Applied like so `:style="contentStyle"`',
       examples: ['padding: 1em;'],
     },
     format: {
       category: 'behaviour',
       type: Function,
-      description: 'You can change how the value is formatted even though the underlying data might be different. Depending on the `fieldType`, you will also need to provide a `parseInput` function to reverse the effect.',
+      desc: 'You can change how the value is formatted even though the underlying data might be different. Depending on the `fieldType`, you will also need to provide a `parseInput` function to reverse the effect.',
       examples: ['val => thousandToK(val)' ],
     },
     parseInput: {
       category: 'behaviour',
       type: Function,
-      description: 'You can change how the value is parsed before it\'s updated. You must return the parsed value.',
+      desc: 'You can change how the value is parsed before it\'s updated. You must return the parsed value.',
       examples: ['val => kToThousand(val)' ],
     },
     // Quasar props with modified defaults:
@@ -80,7 +80,7 @@ export default {
       quasarProp: true,
       type: Boolean,
       default: false,
-      description: '`readonly` is used for \'view\' mode of an EasyForm.',
+      desc: '`readonly` is used for \'view\' mode of an EasyForm.',
     },
     // Quasar props with modified behaviour:
     label: {
@@ -91,7 +91,7 @@ export default {
       quasarProp: true,
       type: Boolean,
       default: false,
-      description: '`disable` is ignored when `readonly` is true',
+      desc: '`disable` is ignored when `readonly` is true',
     },
   },
   computed: {

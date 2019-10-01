@@ -32,15 +32,15 @@ export default {
     // EF props:
     prefix: {
       type: String,
-      description: 'Prefix shown inside the label.',
+      desc: 'Prefix shown inside the label.',
     },
     suffix: {
       type: String,
-      description: 'Suffix shown inside the label.',
+      desc: 'Suffix shown inside the label.',
     },
     format: {
       type: Function,
-      description: 'Formats the slider label.',
+      desc: 'Formats the slider label.',
       examples: ['val => val / 1000 + \'K\'', 'val => commafy(val)'],
     },
     // Quasar props with modified defaults:

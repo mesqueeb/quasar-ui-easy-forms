@@ -19,7 +19,7 @@
 
 <script>
 import merge from 'merge-anything'
-import { isObject, isFullString } from 'is-what'
+import { isObject, isFullString, isFunction } from 'is-what'
 import { QRange } from 'quasar'
 
 export default {
@@ -31,22 +31,22 @@ export default {
     value: {
       quasarProp: true,
       type: Object,
-      description: `Model of the component of type \`{ min, max }\` (both values must be between global \`min\`/\`max\`); Either use this property (along with a listener for \`'input'\` event) OR use v-model directive`,
+      desc: `Model of the component of type \`{ min, max }\` (both values must be between global \`min\`/\`max\`); Either use this property (along with a listener for \`'input'\` event) OR use v-model directive`,
       validator: val => isObject(val) && ('min' in val) && ('max' in val),
       default: {min: 0, max: 0},
     },
     // EF props:
     prefix: {
       type: String,
-      description: 'Prefix shown inside the label.',
+      desc: 'Prefix shown inside the label.',
     },
     suffix: {
       type: String,
-      description: 'Suffix shown inside the label.',
+      desc: 'Suffix shown inside the label.',
     },
     format: {
       type: Function,
-      description: 'Formats the slider label.',
+      desc: 'Formats the slider label.',
       examples: ['val => val / 1000 + \'K\'', 'val => commafy(val)'],
     },
     // Quasar props with modified defaults:

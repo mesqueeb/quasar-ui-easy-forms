@@ -55,7 +55,7 @@ import { isNumber } from 'is-what'
 export default {
   name: 'EfForm',
   inheritAttrs: false,
-  description: `EfForm is a single component to which you can pass a "schema". The difference between \`<EasyField fieldType="form" />\` and \`<EasyForm />\` is that the former can be used _as part of_ the latter. The "schema" passed to this component will be parsed as a list with rows. Each EasyField object in the "schema" will be added as a single column.\n(EfForm has nothing to do with QForm)`,
+  desc: `EfForm is a single component to which you can pass a "schema". The difference between \`<EasyField fieldType="form" />\` and \`<EasyForm />\` is that the former can be used _as part of_ the latter. The "schema" passed to this component will be parsed as a list with rows. Each EasyField object in the "schema" will be added as a single column.\n(EfForm has nothing to do with QForm)`,
   props: {
     // prop categories: behaviour content general model state style
     value: {
@@ -67,21 +67,21 @@ export default {
       category: 'model',
       type: String,
       validator: val => (!val || val === 'array'),
-      description: 'Defaults to \'array\'. Currently only \'array\' is supported.',
+      desc: 'Defaults to \'array\'. Currently only \'array\' is supported.',
       default: 'array',
       values: ['array'],
     },
     schema: {
       category: 'model',
       type: Array,
-      description: 'This is the information on the columns you want to be shown. An array of objects just like an EasyForm.',
+      desc: 'This is the information on the columns you want to be shown. An array of objects just like an EasyForm.',
       default: () => [{fieldType: 'input'}],
       examples: ['[{label: \'Amount\', id: \'amount\', fieldType: \'input\', valueType: \'number\'}, {label: \'Currency\', id: \'curr\', fieldType: \'select\', options: [{label: \'USD\', value: \'usd\'}]}]'],
     },
     maxRows: {
       category: 'model',
       type: Number,
-      description: 'Allows to limit the max amount of rows.',
+      desc: 'Allows to limit the max amount of rows.',
     },
     disable: {type: Boolean},
   },

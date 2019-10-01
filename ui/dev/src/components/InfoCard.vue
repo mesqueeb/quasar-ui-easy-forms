@@ -10,37 +10,21 @@
       narrow-indicator
       no-caps
     >
-      <q-tab name="EasyField props" label="EasyField props" />
-      <q-tab name="Quasar props" label="Quasar props" v-if="iSettingsSchemaQuasar.length" />
-      <q-tab name="source" label="View source" />
+      <q-tab name="Props" label="Props" />
+      <q-tab name="Source" label="View source" />
     </q-tabs>
 
     <q-separator />
 
     <q-tab-panels v-model="tabControl" animated>
-      <q-tab-panel name="EasyField props">
-        <EasyForm
-          style="grid-gap: 1em"
-          @field-input="updateSettings"
-          :action-buttons="[]"
-          :columnCount="2"
-          mode="edit"
-          :schema="settingsSchemaEf"
-          :data="settings"
+      <q-tab-panel name="Props">
+        <PropTabsPanel
+          :value="settings"
+          @input="$emit('input', settings)"
+          :settingsSchema="settingsSchema"
         />
       </q-tab-panel>
-      <q-tab-panel name="Quasar props" v-if="iSettingsSchemaQuasar.length">
-        <EasyForm
-          style="grid-gap: 1em"
-          @field-input="updateSettings"
-          :action-buttons="[]"
-          :columnCount="2"
-          mode="edit"
-          :schema="iSettingsSchemaQuasar"
-          :data="settings"
-        />
-      </q-tab-panel>
-      <q-tab-panel name="source">
+      <q-tab-panel name="Source">
         <SourceTab :settings="settings" :settingsMetaData="settingsMetaData" />
       </q-tab-panel>
     </q-tab-panels>
@@ -52,99 +36,19 @@ import { isArray } from 'is-what'
 import merge from 'merge-anything'
 import copy from 'copy-anything'
 
-function getQuasarComponentName (efFieldName) {
-  if (efFieldName.toLowerCase() === 'inputdate') efFieldName = 'input'
-  return 'Q' + efFieldName[0].toUpperCase() + efFieldName.slice(1)
-}
-function kebabCase (str) {
-  const result = str.replace(
-    /[A-Z\u00C0-\u00D6\u00D8-\u00DE]/g,
-    match => '-' + match.toLowerCase()
-  )
-  return (str[0] === str[0].toUpperCase())
-    ? result.substring(1)
-    : result
-}
-function slugify (str) {
-  return encodeURIComponent(String(str).trim().replace(/\s+/g, '-'))
-}
-
 export default {
   name: 'InfoCard',
   props: {
     value: Object,
-    settingsSchemaEf: {type: Array, default: () => []},
-    settingsSchemaQuasar: {type: Array, default: () => []},
+    settingsSchema: {type: Array, default: () => []},
     selectedField: String,
     settingsMetaData: Object,
     fieldValue: undefined, // any
   },
   data () {
     return {
-      tabControl: 'EasyField props',
-      iSettingsSchemaQuasar: this.settingsSchemaQuasar
+      tabControl: 'Props',
     }
-  },
-  mounted () {
-    const { selectedField, updateAllSettings, settingsSchemaQuasar } = this
-    // EfForm has nothing to do with QForm so abort early
-    if (selectedField === 'form') {
-      this.iSettingsSchemaQuasar.push(
-        {label: 'Be careful as EasyField \'form\' has nothing to do with QForm!', fieldType: 'title'}
-      )
-      return
-    }
-    const quasarComponentName = getQuasarComponentName(selectedField)
-    // get the Quasar Component meta data
-    import(
-      /* webpackChunkName: "quasar-api" */
-      /* webpackMode: "lazy-once" */
-      `quasar/dist/api/${quasarComponentName}.json`
-    )
-    .catch(e => {})
-    .then(component => {
-      if (!component || !component.props) return
-      const otherProps = Object.entries(component.props)
-        .reduce((carry, [propKey, propInfo]) => {
-          // do nothing on duplicate props
-          if (propKey === 'value') return carry
-          const camelCased = propKey.replace(/-([a-z])/g, g => g[1].toUpperCase())
-          if (settingsSchemaQuasar.some(s => s.id === camelCased)) return carry
-
-          const { desc, type, examples, default: _df, values } = propInfo
-
-          const typeIsOrIncludesBoolean = type === 'Boolean' || (isArray(type) && type.includes('Boolean'))
-          const typeIsOrIncludesString = type === 'String' || (isArray(type) && type.includes('String'))
-          const propHasValues = isArray(values) && values.length
-
-          // make the raw prop info from the components into an EasyForm:
-          let options
-          let fieldType = 'input'
-          if (typeIsOrIncludesBoolean) fieldType = 'toggle'
-          if (propHasValues) {
-            fieldType = 'select'
-            options = values.map(v => ({label: v, value: v}))
-          }
-          const easyField = {
-            id: propKey,
-            label: propKey,
-            subLabel: desc,
-            fieldType,
-            valueType: type === 'Number' ? 'number' : undefined,
-            placeholder: !isArray(examples) ? '' : examples.join(', '),
-            options,
-          }
-          carry.push(easyField)
-          return carry
-        }, [])
-
-      this.iSettingsSchemaQuasar.push(
-        {label: 'Regular Quasar props', fieldType: 'title'},
-        ...otherProps,
-        {label: 'And much more...', fieldType: 'title'},
-        {label: 'See the Quasar documentation', value: 'open documentation', newWindow: true, fieldType: 'link', href: `https://quasar.dev/vue-components/${slugify(kebabCase(selectedField))}`},
-      )
-    })
   },
   computed: {
     settings () {
@@ -160,12 +64,6 @@ export default {
       return cleanSettings
     },
   },
-  methods: {
-    updateSettings ({id, value}) {
-      const settings = copy(this.settings)
-      settings[id] = value
-      this.$emit('input', settings)
-    },
-  },
+  methods: {},
 }
 </script>

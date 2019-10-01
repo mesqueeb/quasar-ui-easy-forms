@@ -70,7 +70,7 @@ export default {
     big,
     placeholder: {
       type: String,
-      description: 'Will be shown when nothing is selected. (Takes the place of the `label` Quasar prop, because with EfSelect the label is external.)'
+      desc: 'Will be shown when nothing is selected. (Takes the place of the `label` Quasar prop, because with EfSelect the label is external.)'
     },
     // Quasar props with modified defaults:
     outlined: { quasarProp: true, type: Boolean, default: true },
@@ -81,24 +81,24 @@ export default {
     label: {
       quasarProp: true,
       type: String,
-      description: 'Hidden when a value is selected, shows the placeholder when nothing is selected.',
+      desc: 'Hidden when a value is selected, shows the placeholder when nothing is selected.',
     },
     options: {
       quasarProp: true,
       type: [Array, Function],
       default: () => [],
-      description: 'Can be an array of options (just like Quasar) or a Function which has to return an array. The function will receive the EfSelect Vue component and the store as parameters: \`options(this, this.$store)\`',
+      desc: 'Can be an array of options (just like Quasar) or a Function which has to return an array. The function will receive the EfSelect Vue component and the store as parameters: \`options(this, this.$store)\`',
       examples: [`[{label: 'JPY', value: 'jpy'}]`],
     },
     hideDropdownIcon: {
       quasarProp: true,
       type: Boolean,
-      description: 'Defaults to `true` when `readonly: true`',
+      desc: 'Defaults to `true` when `readonly: true`',
     },
     useChips: {
       quasarProp: true,
       type: Boolean,
-      description: 'Defaults to `true` when `multiple: true`',
+      desc: 'Defaults to `true` when `multiple: true`',
     },
   },
   computed: {

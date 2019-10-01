@@ -40,6 +40,14 @@ export default {
     if (this.fileType === 'pdf') iAccept = '.pdf'
     return { iAccept }
   },
+  computed: {
+    quasarProps () {
+      return merge(this.$attrs, {
+        // Quasar props with modified defaults:
+        // Quasar props with modified behaviour:
+      })
+    },
+  },
   methods: {
     onUploaded (payload) { this.$emit('input', payload) },
   },

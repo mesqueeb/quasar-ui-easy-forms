@@ -42,12 +42,12 @@ export default {
     value: {
       category: 'content',
       type: String,
-      description: '`value` is the button\'s "label". (`label` on the other hand is used for the external label of `<EfField />`)',
+      desc: '`value` is the button\'s "label". (`label` on the other hand is used for the external label of `<EfField />`)',
     },
     onClick: {
       category: 'behaviour',
       type: Function,
-      description: 'The function to be triggered on click. Will receive ',
+      desc: 'The function to be triggered on click. Will receive ',
     },
     // Quasar props with modified defaults:
     color: {

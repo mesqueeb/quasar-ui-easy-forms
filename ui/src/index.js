@@ -18,6 +18,8 @@ import EfToggle from './components/fields/EfToggle'
 import EfUploaderFirebase from './components/fields/EfUploaderFirebase'
 import EfVideo from './components/fields/EfVideo'
 
+import dependencyMap from './meta/dependencyMap'
+
 export {
   version,
 
@@ -38,6 +40,8 @@ export {
   EfToggle,
   EfUploaderFirebase,
   EfVideo,
+
+  dependencyMap,
 }
 
 export default {
@@ -60,6 +64,8 @@ export default {
   EfToggle,
   EfUploaderFirebase,
   EfVideo,
+
+  dependencyMap,
 
   install (Vue) {
     Vue.component(EasyField.name, EasyField)

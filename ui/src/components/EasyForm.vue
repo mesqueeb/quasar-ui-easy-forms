@@ -56,7 +56,7 @@
     </div>
     <div
       class="_form"
-      :style="`grid-template-columns:${' 1fr'.repeat(columnCount)}`"
+      :style="`grid-template-columns:${' 1fr'.repeat(columnCount)}; grid-gap: ${gridGap}`"
     >
       <EasyField
         v-for="field in cSchema"
@@ -78,7 +78,6 @@
 // .form-generator
 ._form
   display grid
-  grid-gap md
   align-items start
   justify-items stretch
   > .--title
@@ -95,11 +94,11 @@
 </style>
 
 <script>
-import { QBtn } from 'quasar'
 import merge from 'merge-anything'
 import copy from 'copy-anything'
 import { isArray, isFunction, isString } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
+import { QBtn } from 'quasar'
 import flattenPerSchema from '../helpers/flattenPerSchema'
 import l from '../helpers/formGeneratorLang'
 
@@ -147,6 +146,10 @@ export default {
       type: String,
       default: 'view',
       validator: val => ['edit', 'add', 'view'].includes(val)
+    },
+    gridGap: {
+      type: String,
+      default: '1em',
     },
   },
   data () {

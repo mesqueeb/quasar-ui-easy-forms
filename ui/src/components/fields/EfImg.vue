@@ -37,14 +37,15 @@
 import merge from 'merge-anything'
 import copy from 'copy-anything'
 import { isFullString, isString, isPlainObject } from 'is-what'
-import { QBtn } from 'quasar'
+import { QImg } from 'quasar'
+import EfBtn from './EfBtn.vue'
 import { descriptionImgPdf } from './sharedProps.js'
 
 export default {
-  components: { QBtn },
+  components: { EfBtn, QImg },
   name: 'EfImg',
   inheritAttrs: false,
-  description: descriptionImgPdf,
+  desc: descriptionImgPdf,
   props: {
     // prop categories: behaviour content general model state style
     value: [Array, String, Object],
@@ -52,7 +53,7 @@ export default {
     deletable: {
       type: Boolean,
       default: true,
-      description: 'Wether or not uploaded files are deletable (deleting would update the `value`). `true` by default but `false` when `readonly: true`',
+      desc: 'Wether or not uploaded files are deletable (deleting would update the `value`). `true` by default but `false` when `readonly: true`',
     },
     // Quasar props with modified defaults:
     // Quasar props with modified behaviour:
