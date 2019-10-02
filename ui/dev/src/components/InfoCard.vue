@@ -1,5 +1,11 @@
 <template>
   <q-card>
+    <div class="pa-md">
+      <slot />
+    </div>
+
+    <q-separator />
+
     <q-tabs
       v-model="tabControl"
       dense

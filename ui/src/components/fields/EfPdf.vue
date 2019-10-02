@@ -36,7 +36,7 @@
 <script>
 import merge from 'merge-anything'
 import copy from 'copy-anything'
-import { isPlainObject, isFullString } from 'is-what'
+import { isString, isPlainObject, isFullString } from 'is-what'
 import { QBtn, QDialog, Dialog } from 'quasar'
 import EfBtn from './EfBtn.vue'
 import PdfDialog from '../dialogs/DPdf'

@@ -1,19 +1,7 @@
 <template>
   <q-page padding>
-    <div class="q-gutter-md q-pb-md column items-start">
-      <div class="row no-wrap items-start">
-        <EasyField v-model="selectedField" v-bind="fieldPicker" />
-        <div class="pl-md" style="flex: 2">
-          <q-badge color="primary">v-model:</q-badge>
-          <q-markdown class="_model-md" :src="modelShownAsBadge" />
-        </div>
-        <q-markdown
-          class="pl-md"
-          style="flex: 1"
-          v-if="rawComponent.desc"
-          :src="rawComponent.desc"
-        />
-      </div>
+    <q-badge color="purple-4">interactive preview:</q-badge>
+    <div class="_preview">
       <EasyField
         v-model="model"
         v-bind="field"
@@ -27,7 +15,20 @@
       :selectedField="selectedField"
       :settingsMetaData="settingsMetaData"
       :fieldValue="model"
-    />
+    >
+      <div class="row no-wrap items-start q-gutter-md">
+        <EasyField v-model="selectedField" v-bind="fieldPicker" />
+        <div style="flex: 2">
+          <q-badge color="primary">v-model:</q-badge>
+          <q-markdown class="_model-md" :src="modelShownAsBadge" />
+        </div>
+        <q-markdown
+          style="flex: 1"
+          v-if="rawComponent.desc"
+          :src="rawComponent.desc"
+        />
+      </div>
+    </InfoCard>
   </q-page>
 </template>
 
@@ -43,6 +44,13 @@
   .q-markdown--token
     white-space pre-line
     word-break break-word
+._preview
+  border thin solid alpha(#CE93D8, 0.7)
+  margin-top -10px
+  padding 1.3em
+  padding-top 1.9em
+  padding-bottom 1.6em
+  margin-bottom 1.5em
 
 </style>
 
