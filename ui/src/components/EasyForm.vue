@@ -64,7 +64,7 @@
         v-bind="field"
         :value="innerData[field.id]"
         @input="value => fieldInput({id: field.id, value})"
-        :class="field.fieldType === 'title' ? '--title' : ''"
+        :class="field.fieldType === 'title' ? '-title' : ''"
         :style="field.span ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}` : ''"
       />
     </div>
@@ -78,9 +78,9 @@
 // .form-generator
 ._form
   display grid
-  align-items start
+  align-items stretch
   justify-items stretch
-  > .--title
+  > .-title
     grid-column 1 / -1
 ._nav-row
   mb md

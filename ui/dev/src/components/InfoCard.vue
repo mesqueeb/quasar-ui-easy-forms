@@ -17,15 +17,18 @@
     <q-separator />
 
     <q-tab-panels v-model="tabControl" animated>
-      <q-tab-panel name="Props">
+      <q-tab-panel name="Props" class="pa-none">
         <PropTabsPanel
           :value="settings"
-          @input="$emit('input', settings)"
+          @input="val => $emit('input', val)"
           :settingsSchema="settingsSchema"
         />
       </q-tab-panel>
       <q-tab-panel name="Source">
-        <SourceTab :settings="settings" :settingsMetaData="settingsMetaData" />
+        <SourceTab
+          :settings="settings"
+          :settingsMetaData="settingsMetaData"
+        />
       </q-tab-panel>
     </q-tab-panels>
   </q-card>

@@ -1,14 +1,19 @@
-import Firebase from 'firebase/app'
-import 'firebase/storage'
 import { QUploaderBase } from 'quasar'
 
 export default {
-  name: 's-uploader',
+  name: 'QUploaderFirebase',
   mixins: [ QUploaderBase ],
   props: {
+    firebaseDependency: undefined,
     path: String,
   },
   data () {
+    const Firebase = this.firebaseDependency || window.firebase
+    if (!Firebase) throw new Error(`[QUploaderFirebase]
+      No Firebase instance was found.
+      Please pass a Firebase instance via the prop \`:firebaseDependency="firebase"\` or set your firebase instance to \`window.firebase\`.
+      Don't forget to also import Firebase storage like so: \`import 'firebase/storage'\`
+    `)
     const storage = Firebase.storage()
     return {
       storage: storage.ref(),

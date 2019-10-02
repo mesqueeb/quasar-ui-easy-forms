@@ -1,4 +1,5 @@
 import copy from 'copy-anything'
+import { camelCase } from 'case-anything'
 import { isArray } from 'is-what'
 import QBtnJson       from 'quasar/dist/api/QBtn.json'
 import QBtnToggleJson from 'quasar/dist/api/QBtnToggle.json'
@@ -33,7 +34,7 @@ function jsonToPropFormat ({props}) {
       value.type = isArray(value.type)
         ? value.type.map(stringToTypeFn)
         : stringToTypeFn(value.type)
-      carry[key] = value
+      carry[camelCase(key)] = value
       return carry
     }, {})
 }

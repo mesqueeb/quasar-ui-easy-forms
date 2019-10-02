@@ -25,8 +25,10 @@
           :value="option.label"
           @click.native="$emit('input', option.value)"
           class="ef-btn--square"
-          :disable="option.disable || quasarProps.disable"
-          v-bind="quasarProps"
+          v-bind="merge(option, {
+            label: undefined,
+            disable: option.disable || quasarProps.disable
+          })"
         />
       </div>
     </div>
@@ -41,10 +43,11 @@
   width 100%
   ._q-tgl
     border 3px solid $primary
-    border-radius md !important
+    border-radius md !important // these two are connected
     color $text--dark
     > *
       py 1em !important
+      border-radius sm // these two are connected
   >._inner
     width 100%
     grid--square()
@@ -73,40 +76,42 @@ import merge from 'merge-anything'
 import { isOdd } from '../../helpers/intHelpers'
 import { QBtnToggle } from 'quasar'
 import EfBtn from './EfBtn.vue'
-import { big } from './sharedProps.js'
+import { big, getGenericValueType } from './sharedProps.js'
 
 export default {
-  components: { QBtnToggle },
+  components: { QBtnToggle, EfBtn },
   name: 'EfBtnToggle',
   desc: 'EfBtnToggle has a very different view when `big: true`',
   inheritAttrs: false,
-  props: merge(EfBtn.props, {
-    // prop categories: behaviour content general model state style
-    value: [String, Number],
+  props: {
+    // prop categories: behavior content general model state style
+    value: {
+      category: 'model',
+      type: undefined,
+      desc: '`value` is the selected button\'s "value".',
+    },
+    valueType: getGenericValueType(['string', 'boolean', 'number', 'array', 'object', 'date', 'null']),
     // EF props:
     big,
     // Quasar props with modified defaults:
-    unelevated: {type: Boolean, default: true, quasarProp: true},
-    rounded: {type: Boolean, default: true, quasarProp: true},
-    toggleColor: {type: String, default: 'primary', quasarProp: true},
-    // Quasar props with modified behaviour:
+    unelevated: {type: Boolean, default: true, quasarProp: 'modified'},
+    toggleColor: {type: String, default: 'primary', quasarProp: 'modified'},
+    // Quasar props with modified behavior:
     options: {
-      quasarProp: true,
+      quasarProp: 'modified',
       type: Array,
-      desc: 'An array of options. The options can be anything you can pass to EfBtn. Eg. `[{label: \'One\', value: 1}, {label: \'Two\', value: 2}]',
+      desc: 'An array of options. The options can be anything you can pass to EfBtn.',
+      examples: ['`[{label: \'One\', value: 1}, {label: \'Two\', value: 2}]`'],
       default: () => [],
     },
-  }),
+  },
   computed: {
     quasarProps () {
-      const inheritedProps = Object.keys(EfInput.props)
-        .reduce((carry, propKey) => {
-          carry[propKey] = this[propKey]
-          return carry
-        }, {})
-      return merge(inheritedProps, this.$attrs, {
+      return merge(this.$attrs, {
         // Quasar props with modified defaults:
-        // Quasar props with modified behaviour:
+        unelevated: this.unelevated,
+        toggleColor: this.toggleColor,
+        // Quasar props with modified behavior:
         options: this.options,
       })
     },

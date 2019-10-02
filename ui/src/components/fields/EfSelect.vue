@@ -64,8 +64,11 @@ export default {
   name: 'EfSelect',
   inheritAttrs: false,
   props: {
-    // prop categories: behaviour content general model state style
-    value: [String, Object, Number, Array],
+    // prop categories: behavior content general model state style
+    value: {
+      category: 'model',
+      type: [String, Object, Number, Array]},
+    // valueType inherited from `easyField`,
     // EF props:
     big,
     placeholder: {
@@ -73,30 +76,30 @@ export default {
       desc: 'Will be shown when nothing is selected. (Takes the place of the `label` Quasar prop, because with EfSelect the label is external.)'
     },
     // Quasar props with modified defaults:
-    outlined: { quasarProp: true, type: Boolean, default: true },
-    mapOptions: { quasarProp: true, type: Boolean, default: true },
-    emitValue: { quasarProp: true, type: Boolean, default: true },
-    autogrow: { quasarProp: true, type: Boolean, default: true },
-    // Quasar props with modified behaviour:
+    outlined: { quasarProp: 'modified', type: Boolean, default: true },
+    mapOptions: { quasarProp: 'modified', type: Boolean, default: true },
+    emitValue: { quasarProp: 'modified', type: Boolean, default: true },
+    autogrow: { quasarProp: 'modified', type: Boolean, default: true },
+    // Quasar props with modified behavior:
     label: {
-      quasarProp: true,
+      quasarProp: 'modified',
       type: String,
       desc: 'Hidden when a value is selected, shows the placeholder when nothing is selected.',
     },
     options: {
-      quasarProp: true,
+      quasarProp: 'modified',
       type: [Array, Function],
       default: () => [],
       desc: 'Can be an array of options (just like Quasar) or a Function which has to return an array. The function will receive the EfSelect Vue component and the store as parameters: \`options(this, this.$store)\`',
       examples: [`[{label: 'JPY', value: 'jpy'}]`],
     },
     hideDropdownIcon: {
-      quasarProp: true,
+      quasarProp: 'modified',
       type: Boolean,
       desc: 'Defaults to `true` when `readonly: true`',
     },
     useChips: {
-      quasarProp: true,
+      quasarProp: 'modified',
       type: Boolean,
       desc: 'Defaults to `true` when `multiple: true`',
     },
@@ -109,7 +112,7 @@ export default {
         mapOptions: this.mapOptions,
         emitValue: this.emitValue,
         autogrow: this.autogrow,
-        // Quasar props with modified behaviour:
+        // Quasar props with modified behavior:
         label: this.cLabel,
         options: this.cOptions,
         hideDropdownIcon: this.cHideDropdownIcon,

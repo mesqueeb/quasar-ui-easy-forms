@@ -17,26 +17,29 @@
 <script>
 import merge from 'merge-anything'
 import { QToggle } from 'quasar'
+import { getGenericValueType } from './sharedProps.js'
 
 export default {
   components: { QToggle },
   name: 'EfToggle',
   inheritAttrs: false,
   props: {
-    // prop categories: behaviour content general model state style
+    // prop categories: behavior content general model state style
     value: {
+      category: 'model',
       type: Boolean,
       default: false,
     },
+    valueType: getGenericValueType('boolean'),
     // EF props:
     // Quasar props with modified defaults:
-    // Quasar props with modified behaviour:
+    // Quasar props with modified behavior:
   },
   computed: {
     quasarProps () {
       return merge(this.$attrs, {
         // Quasar props with modified defaults:
-        // Quasar props with modified behaviour:
+        // Quasar props with modified behavior:
       })
     },
     cValue: {

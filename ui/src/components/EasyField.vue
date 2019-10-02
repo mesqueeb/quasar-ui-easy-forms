@@ -36,21 +36,16 @@ import merge from 'merge-anything'
 export default {
   name: 'EasyField',
   props: {
-    // prop categories: behaviour content general model state style
-    value: [Object, Array, String, Number, Boolean, Date],
+    // prop categories: behavior content general model state style
     // EF props used here:
     fieldType: {
       category: 'general',
       type: String,
       required: true,
     },
-    valueType: {
+    value: {
       category: 'model',
-      type: String,
-      validator: prop => ['string', 'boolean', 'number', 'array', 'object', 'date', 'null'].includes(prop),
-      desc: 'valueType is the type of the model of the field. Can be any of \'string\', \'boolean\', \'number\', \'array\', \'object\'.\n\nWhen `valueType: \'number\'` it will make sure the field value is formatted as Number. `valueType` will also provide extra documentation so is best always specified.',
-      examples: ['string', 'boolean', 'number', 'array', 'object', 'date', 'null'],
-      values: ['string', 'boolean', 'number', 'array', 'object', 'date', 'null'],
+      type: undefined,
     },
     subLabel: {
       category: 'content',
@@ -64,31 +59,37 @@ export default {
       examples: ['padding: 1em;'],
     },
     format: {
-      category: 'behaviour',
+      category: 'model',
       type: Function,
       desc: 'You can change how the value is formatted even though the underlying data might be different. Depending on the `fieldType`, you will also need to provide a `parseInput` function to reverse the effect.',
       examples: ['val => thousandToK(val)' ],
     },
     parseInput: {
-      category: 'behaviour',
+      category: 'model',
       type: Function,
       desc: 'You can change how the value is parsed before it\'s updated. You must return the parsed value.',
       examples: ['val => kToThousand(val)' ],
     },
     // Quasar props with modified defaults:
+    // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
     readonly: {
-      quasarProp: true,
+      category: 'state',
+      quasarProp: 'modified',
       type: Boolean,
       default: false,
       desc: '`readonly` is used for \'view\' mode of an EasyForm.',
     },
-    // Quasar props with modified behaviour:
+    // Quasar props with modified behavior:
+    // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
     label: {
-      quasarProp: true,
+      category: 'content',
+      quasarProp: 'modified',
       type: String,
+      desc: 'An EasyField label is always "external" to the field. (It replaces the Quasar label)',
     },
     disable: {
-      quasarProp: true,
+      category: 'state',
+      quasarProp: 'modified',
       type: Boolean,
       default: false,
       desc: '`disable` is ignored when `readonly` is true',
@@ -106,10 +107,9 @@ export default {
         // EF props used here, but also to pass:
         subLabel: this.subLabel,
         fieldType: this.fieldType,
-        valueType: this.valueType,
         // Quasar props with modified defaults:
         readonly: this.readonly,
-        // Quasar props with modified behaviour:
+        // Quasar props with modified behavior:
         // label: this.label,     // do not pass label
         disable: this.cDisable,
       })

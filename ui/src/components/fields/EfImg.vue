@@ -9,6 +9,7 @@
       <div class="_nav">
         <EfBtn
           v-if="cDeletable"
+          :disable="quasarProps.disable"
           value="削除"
           :push="true"
           @click.stop="tapDelete(imgIndex)"
@@ -39,16 +40,20 @@ import copy from 'copy-anything'
 import { isFullString, isString, isPlainObject } from 'is-what'
 import { QImg } from 'quasar'
 import EfBtn from './EfBtn.vue'
-import { descriptionImgPdf } from './sharedProps.js'
+import { valueDescImgPdf, getGenericValueType } from './sharedProps.js'
 
 export default {
   components: { EfBtn, QImg },
   name: 'EfImg',
   inheritAttrs: false,
-  desc: descriptionImgPdf,
   props: {
-    // prop categories: behaviour content general model state style
-    value: [Array, String, Object],
+    // prop categories: behavior content general model state style
+    value: {
+      category: 'model',
+      type: [Array, String, Object],
+      desc: valueDescImgPdf,
+    },
+    valueType: getGenericValueType(['string', 'object', 'array']),
     // EF props:
     deletable: {
       type: Boolean,
@@ -56,13 +61,13 @@ export default {
       desc: 'Wether or not uploaded files are deletable (deleting would update the `value`). `true` by default but `false` when `readonly: true`',
     },
     // Quasar props with modified defaults:
-    // Quasar props with modified behaviour:
+    // Quasar props with modified behavior:
   },
   computed: {
     quasarProps () {
       return merge(this.$attrs, {
         // Quasar props with modified defaults:
-        // Quasar props with modified behaviour:
+        // Quasar props with modified behavior:
       })
     },
     cValue: {

@@ -1,18 +1,24 @@
 <template>
   <q-page padding>
     <div class="q-gutter-md q-pb-md column items-start">
-      <div class="flex">
+      <div class="row no-wrap items-start">
         <EasyField v-model="selectedField" v-bind="fieldPicker" />
+        <div class="pl-md" style="flex: 2">
+          <q-badge color="primary">v-model:</q-badge>
+          <q-markdown class="_model-md" :src="modelShownAsBadge" />
+        </div>
+        <q-markdown
+          class="pl-md"
+          style="flex: 1"
+          v-if="rawComponent.desc"
+          :src="rawComponent.desc"
+        />
       </div>
-      <q-badge color="primary">{{ modelShownAsBadge }}</q-badge>
       <EasyField
         v-model="model"
         v-bind="field"
         style="width: 95%"
       />
-      <q-markdown v-if="rawComponent.desc">{{
-        rawComponent.desc
-      }}</q-markdown>
     </div>
     <InfoCard
       :key="selectedField"
@@ -25,7 +31,18 @@
   </q-page>
 </template>
 
-<style lang="sass" scoped>
+<style lang="stylus">
+
+._model-md
+  border thin solid $primary
+  min-height 70px
+  min-width 170px
+  max-width 60vw
+  margin-top -10px
+  padding 1em
+  .q-markdown--token
+    white-space pre-line
+    word-break break-word
 
 </style>
 
@@ -76,6 +93,7 @@ export default {
       handler (newValue, oldValue) {
         const { componentDemoFieldSettings, addTestOptions } = this
         this.model = undefined
+        this.settings.valueType = undefined
         if (newValue === oldValue) return
         addTestOptions()
         this.settings.label = `My awesome "${newValue}" field`
@@ -108,17 +126,13 @@ export default {
         : (isArray(model) || isPlainObject(model))
           ? JSON.stringify(model)
           : model
-      return `v-model: ${parsedModel}`
-    },
-    demoOptions () {
-      const { selectedField } = this
-      return demoOptions[selectedField]
+      return `\`${parsedModel}\``
     },
   },
   methods: {
     addTestOptions () {
-      const { demoOptions, updateAllSettings } = this
-      const ops = copy(demoOptions)
+      const { selectedField, updateAllSettings } = this
+      const ops = copy(demoOptions[selectedField])
       if (!ops) return
       const { value } = ops
       if (value !== undefined) {

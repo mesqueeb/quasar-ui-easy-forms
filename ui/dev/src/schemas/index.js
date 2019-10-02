@@ -72,10 +72,12 @@ export const toggle = {
 export const uploaderFirebase = {
   id: 'uploaderFirebase',
   fieldType: 'uploaderFirebase',
+  path: 'test',
 }
 export const video = {
   id: 'video',
   fieldType: 'video',
+  value: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
 }
 
 export default {

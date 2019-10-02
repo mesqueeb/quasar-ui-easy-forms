@@ -21,14 +21,18 @@
 import merge from 'merge-anything'
 import { isFunction, isFullString } from 'is-what'
 import { QSlider } from 'quasar'
+import { getGenericValueType } from './sharedProps.js'
 
 export default {
   components: { QSlider },
   name: 'EfSlider',
   inheritAttrs: false,
   props: {
-    // prop categories: behaviour content general model state style
-    value: Number,
+    // prop categories: behavior content general model state style
+    value: {
+      category: 'model',
+      type: Number},
+    valueType: getGenericValueType('number'),
     // EF props:
     prefix: {
       type: String,
@@ -45,18 +49,18 @@ export default {
     },
     // Quasar props with modified defaults:
     labelAlways: {
-      quasarProp: true,
+      quasarProp: 'modified',
       type: Boolean,
       default: true,
     },
-    // Quasar props with modified behaviour:
+    // Quasar props with modified behavior:
   },
   computed: {
     quasarProps () {
       return merge(this.$attrs, {
         // Quasar props with modified defaults:
         labelAlways: this.labelAlways,
-        // Quasar props with modified behaviour:
+        // Quasar props with modified behavior:
         labelValue: this.cFormat(this.cValue),
       })
     },

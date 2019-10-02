@@ -51,26 +51,21 @@
 import merge from 'merge-anything'
 import copy from 'copy-anything'
 import { isNumber } from 'is-what'
+import { getGenericValueType } from './sharedProps.js'
 
 export default {
   name: 'EfForm',
   inheritAttrs: false,
   desc: `EfForm is a single component to which you can pass a "schema". The difference between \`<EasyField fieldType="form" />\` and \`<EasyForm />\` is that the former can be used _as part of_ the latter. The "schema" passed to this component will be parsed as a list with rows. Each EasyField object in the "schema" will be added as a single column.\n(EfForm has nothing to do with QForm)`,
   props: {
-    // prop categories: behaviour content general model state style
+    // prop categories: behavior content general model state style
     value: {
+      category: 'model',
       type: Array,
       default: () => [],
     },
+    valueType: getGenericValueType('array'),
     // EF props used here:
-    valueType: {
-      category: 'model',
-      type: String,
-      validator: val => (!val || val === 'array'),
-      desc: 'Defaults to \'array\'. Currently only \'array\' is supported.',
-      default: 'array',
-      values: ['array'],
-    },
     schema: {
       category: 'model',
       type: Array,

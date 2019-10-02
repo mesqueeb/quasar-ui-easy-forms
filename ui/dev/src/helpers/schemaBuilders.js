@@ -16,11 +16,12 @@ export function getAllComponentProps (selectedField) {
   const EasyField = EasyForms['EasyField'] || {}
   const EasyFieldProps = EasyField.props || {}
   const quasarComponentProps = getPassedProps(selectedField) || {}
-  return copy(merge(
+  const result = copy(merge(
     quasarComponentProps,
     EasyFieldProps,
     componentProps,
   ))
+  return result
 }
 
 export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) {
@@ -28,14 +29,15 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
   // make the raw prop info from the components into an EasyForm:
   // whatever the prop is, default to an 'input' EasyField
   let fieldType = 'input'
+  let subLabel = desc
   let options, outlined, standout, disable, parseInput, format, autogrow
   let contentStyle = 'padding: 1em;'
   // If it's a quasarProp, add a specific indentifier
-  if (quasarProp) contentStyle += 'background: whitesmoke'
-  // If the prop has no description, it's a quasarProp and it has a different default value, create a description here on the fly
-  let subLabel = quasarProp && !isUndefined(_df) && isUndefined(desc)
-    ? `Same as Quasar, but defaults to: ${_df}`
-    : desc
+  if (quasarProp) contentStyle += (quasarProp === true)
+    ? 'background: whitesmoke'
+    : 'background: lavender'
+  // If it has a default, write it in the description
+  if (!isUndefined(_df)) subLabel += `\n\nDefault: \`${_df}\``
   // if the prop is a Boolean, show this as a 'toggle' EasyField
   if (type === Boolean) fieldType = 'toggle'
   // if the prop has a fixed set of possible values, show this as an 'option' EasyField
@@ -87,8 +89,7 @@ export function getInfoCardSchema (selectedField) {
     .reduce((carry, [propKey, propInfo]) => {
       // fields to not include in the InfoCard settings:
       if (
-        propKey === 'fieldType' ||
-        (propKey === 'value' && !['link', 'btn'].includes(selectedField))
+        propKey === 'fieldType'
       ) {
         return carry
       }

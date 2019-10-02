@@ -21,20 +21,22 @@
 import merge from 'merge-anything'
 import { isObject, isFullString, isFunction } from 'is-what'
 import { QRange } from 'quasar'
+import { getGenericValueType } from './sharedProps.js'
 
 export default {
   components: { QRange },
   name: 'EfRange',
   inheritAttrs: false,
   props: {
-    // prop categories: behaviour content general model state style
+    // prop categories: behavior content general model state style
     value: {
+      category: 'model',
       quasarProp: true,
       type: Object,
-      desc: `Model of the component of type \`{ min, max }\` (both values must be between global \`min\`/\`max\`); Either use this property (along with a listener for \`'input'\` event) OR use v-model directive`,
       validator: val => isObject(val) && ('min' in val) && ('max' in val),
       default: {min: 0, max: 0},
     },
+    valueType: getGenericValueType('object'),
     // EF props:
     prefix: {
       type: String,
@@ -51,18 +53,18 @@ export default {
     },
     // Quasar props with modified defaults:
     labelAlways: {
-      quasarProp: true,
+      quasarProp: 'modified',
       type: Boolean,
       default: true,
     },
-    // Quasar props with modified behaviour:
+    // Quasar props with modified behavior:
   },
   computed: {
     quasarProps () {
       return merge(this.$attrs, {
         // Quasar props with modified defaults:
         labelAlways: this.labelAlways,
-        // Quasar props with modified behaviour:
+        // Quasar props with modified behavior:
         leftLabelValue: this.cFormat(this.cValue.min),
         rightLabelValue: this.cFormat(this.cValue.max),
       })

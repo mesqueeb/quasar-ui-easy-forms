@@ -1,17 +1,13 @@
 <template>
   <div class="ef-video">
     <EfInput
-      v-if="!disable && !viewMode"
+      v-if="!readonly"
       :value="value"
       @input="onInput"
-      :rules="rules"
-      :lazy-rules="lazyRules"
-      :autofocus="autofocus"
-      :autogrow="autogrow"
-      :view-mode="viewMode"
+      v-bind="quasarProps"
     />
     <q-video
-      v-if="value && (disable || viewMode)"
+      v-if="value && readonly"
       :src="value"
     />
   </div>
@@ -28,23 +24,31 @@
 import merge from 'merge-anything'
 import { QVideo } from 'quasar'
 import EfInput from './EfInput.vue'
+import { getGenericValueType } from './sharedProps.js'
 
 export default {
   components: { EfInput, QVideo },
   name: 'EfVideo',
   inheritAttrs: false,
+  desc: 'Try toggling readonly mode with a YouTube url for its model.',
   props: merge(EfInput.props, {
-    // prop categories: behaviour content general model state style
-    value: String,
+    // prop categories: behavior content general model state style
+    value: {
+      category: 'model',
+      type: String,
+      desc: 'Requires a YouTube url to be pasted. Will automatically re-format itself to an "embed" url after.',
+    },
+    valueType: getGenericValueType('string'),
     // EF props:
     // Quasar props with modified defaults:
-    // Quasar props with modified behaviour:
-    disable: Boolean,
-    rules: Array,
-    lazyRules: Boolean,
-    autofocus: Boolean,
-    autogrow: Boolean,
-    viewMode: Boolean,
+    // Quasar props with modified behavior:
+    readonly: {
+      category: 'state',
+      quasarProp: 'modified',
+      type: Boolean,
+      default: false,
+      desc: '`readonly` is used for \'view\' mode of an EasyForm. It will show this field\'s embedded YouTube video in this case. Powered by QVideo.',
+    },
   }),
   computed: {
     quasarProps () {
@@ -55,7 +59,7 @@ export default {
         }, {})
       return merge(inheritedProps, this.$attrs, {
         // Quasar props with modified defaults:
-        // Quasar props with modified behaviour:
+        // Quasar props with modified behavior:
       })
     },
   },

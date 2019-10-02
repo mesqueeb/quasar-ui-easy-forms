@@ -78,7 +78,7 @@
 import merge from 'merge-anything'
 import { isNumber, isString, isArray } from 'is-what'
 import { QInput } from 'quasar'
-import { big } from './sharedProps.js'
+import { big, getGenericValueType } from './sharedProps.js'
 import { rulesMap } from '../../helpers/inputValidators'
 import focusInput from '../../helpers/focusInput'
 
@@ -87,10 +87,13 @@ export default {
   name: 'EfInput',
   inheritAttrs: false,
   props: {
-    // prop categories: behaviour content general model state style
-    value: [String, Number],
+    // prop categories: behavior content general model state style
+    value: {
+      category: 'model',
+      type: [String, Number]
+    },
+    valueType: getGenericValueType(['string', 'number'], `When \`valueType: 'number'\` it will make sure the model is formatted as Number.`),
     // EF props:
-    valueType: {type: String}, // defined in EasyField
     fieldType: {type: String}, // defined in EasyField
     big,
     maxValue: {
@@ -103,25 +106,25 @@ export default {
       category: 'style',
       validator: val => (!val || ['right', 'left', null].includes(val)),
       type: String,
-      desc: 'Alignment of the content. Defaults to right for `valueType: \'number\'` and left for the rest',
+      desc: `Alignment of the content. Defaults to 'right' for \`valueType: 'number'\` and 'left' for the rest'`,
       examples: ['right', 'left', null],
       values: ['right', 'left', null],
     },
     // format: {type: Function}, // fix the "commafy" problem first
     // Quasar props with modified defaults:
-    lazyRules: { quasarProp: true, type: Boolean, default: true },
-    outlined: { quasarProp: true, type: Boolean, default: true },
-    // Quasar props with modified behaviour:
+    lazyRules: { quasarProp: 'modified', type: Boolean, default: true },
+    outlined: { quasarProp: 'modified', type: Boolean, default: true },
+    // Quasar props with modified behavior:
     rules: {
-      quasarProp: true,
+      quasarProp: 'modified',
       type: Array,
       desc: 'Same as Quasar, but with added pre-defined rules for \'telJA\' and \'email\'',
       examples: ['[\'telJA\']', '[\'email\']', '[ val => val.length <= 3 || \'Please use maximum 3 characters\' ]'],
     },
     type: {
-      quasarProp: true,
+      quasarProp: 'modified',
       type: String,
-      descripton: 'The html tag input type. Defaults to \'number\' if `valueType: \'number\'`, otherwise defaults to \'text\'.',
+      descripton: `The html tag input type. Defaults to 'number' if \`valueType: 'number'\`, otherwise defaults to 'text'.`,
       default: 'text',
       examples: ['text', 'password', 'textarea', 'email', 'search', 'tel', 'file', 'number', 'url', 'time', 'date'],
     },
@@ -135,7 +138,7 @@ export default {
         // Quasar props with modified defaults:
         outlined: this.outlined,
         lazyRules: this.lazyRules,
-        // Quasar props with modified behaviour:
+        // Quasar props with modified behavior:
         rules: this.cRules,
         type: this.cType,
       })

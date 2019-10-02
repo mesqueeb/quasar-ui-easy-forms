@@ -31,38 +31,40 @@ ef-btn($size = 20px)
 import merge from 'merge-anything'
 import { isFunction } from 'is-what'
 import { QBtn } from 'quasar'
+import { getGenericValueType } from './sharedProps.js'
 
 export default {
   components: { QBtn },
   name: 'EfBtn',
   inheritAttrs: false,
   props: {
-    // prop categories: behaviour content general model state style
+    // prop categories: behavior content general model state style
     // EF props:
     value: {
-      category: 'content',
+      category: 'model|content',
       type: String,
       desc: '`value` is the button\'s "label". (`label` on the other hand is used for the external label of `<EfField />`)',
     },
+    valueType: getGenericValueType('string'),
     onClick: {
-      category: 'behaviour',
+      category: 'behavior',
       type: Function,
       desc: 'The function to be triggered on click. Will receive ',
     },
     // Quasar props with modified defaults:
     color: {
-      quasarProp: true,
+      quasarProp: 'modified',
       type: String,
       default: 'primary',
     },
-    // Quasar props with modified behaviour:
+    // Quasar props with modified behavior:
   },
   computed: {
     quasarProps () {
       return merge(this.$attrs, {
         // Quasar props with modified defaults:
         color: this.color,
-        // Quasar props with modified behaviour:
+        // Quasar props with modified behavior:
         label: this.value,
       })
     },

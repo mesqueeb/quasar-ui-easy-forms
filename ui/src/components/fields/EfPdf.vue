@@ -12,6 +12,7 @@
             <div>{{ pdf.fileName }}</div>
             <EfBtn
               v-if="cDeletable"
+              :disable="quasarProps.disable"
               @click.stop="tapDelete(pdfIndex)"
               value="削除"
               :flat="true"
@@ -39,16 +40,20 @@ import { isPlainObject, isFullString } from 'is-what'
 import { QBtn, QDialog, Dialog } from 'quasar'
 import EfBtn from './EfBtn.vue'
 import PdfDialog from '../dialogs/DPdf'
-import { descriptionImgPdf } from './sharedProps.js'
+import { valueDescImgPdf, getGenericValueType } from './sharedProps.js'
 
 export default {
   components: { QBtn, QDialog, EfBtn },
   name: 'EfPdf',
   inheritAttrs: false,
-  desc: descriptionImgPdf,
   props: {
-    // prop categories: behaviour content general model state style
-    value: [String, Array, Object],
+    // prop categories: behavior content general model state style
+    value: {
+      category: 'model',
+      type: [String, Array, Object],
+      desc: valueDescImgPdf,
+    },
+    valueType: getGenericValueType(['string', 'object', 'array']),
     // EF props:
     deletable: {
       type: Boolean,
@@ -56,13 +61,13 @@ export default {
       desc: 'Wether or not uploaded files are deletable (deleting would update the `value`). `true` by default but `false` when `readonly: true`',
     },
     // Quasar props with modified defaults:
-    // Quasar props with modified behaviour:
+    // Quasar props with modified behavior:
   },
   computed: {
     quasarProps () {
       return merge(this.$attrs, {
         // Quasar props with modified defaults:
-        // Quasar props with modified behaviour:
+        // Quasar props with modified behavior:
       })
     },
     cValue: {

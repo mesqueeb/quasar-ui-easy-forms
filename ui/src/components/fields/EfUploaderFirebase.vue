@@ -1,11 +1,8 @@
 <template>
-  <FirebaseUploader
+  <QUploaderFirebase
     v-on="$listeners"
     @uploaded="onUploaded"
-    :path="path"
-    auto-upload
-    hide-upload-btn
-    :accept="iAccept"
+    v-bind="propsToPass"
   />
 </template>
 
@@ -19,32 +16,71 @@
 
 <script>
 import merge from 'merge-anything'
-import FirebaseUploader from '../FirebaseUploader'
+import QUploaderFirebase from '../QUploaderFirebase'
 
 export default {
-  components: { FirebaseUploader },
+  components: { QUploaderFirebase },
   name: 'EfUploaderFirebase',
   inheritAttrs: false,
   props: {
-    // prop categories: behaviour content general model state style
-    value: { type: [String, Array, Object] },
+    // prop categories: behavior content general model state style
+    value: {
+      category: 'model',
+      type: [Array, Object],
+      desc: 'No `value` needs to be set for UploaderFirebase. However an @input event will be triggered which receives an object as payload with the information on where the image was stored.',
+    },
     // EF props:
+    firebaseDependency: {
+      category: 'model',
+      type: Object,
+      desc: `Since this is an uploader specific for Firebase, a Firebase dependency must be passed. If none is passed it will search for Firebase at \`window.firebase\`. If no firebase instance can be found, an error will be thrown.
+        Don't forget to also import Firebase storage like so: \`import 'firebase/storage'\``,
+    },
+    path: {
+      category: 'model',
+      type: [String, Function],
+      desc: 'This should be the Firebase storage path where files should be uploaded to. It should be a string.\nWhen used inside an <EasyForm /> it can also be a function that resolves into a string. In this case the function will receive the current data object of the form and the store. (doc, store) => string',
+      required: true,
+    },
+    fileType: {
+      category: 'model',
+      type: String,
+      desc: 'The file type the uploader can accept. Currently limited to \'image\' or \'pdf\'. This will automatically limit the uploader to those file types via Quasar\'s `accept` prop.',
+      values: ['image', 'pdf'],
+    },
     // Quasar props with modified defaults:
-    // Quasar props with modified behaviour:
-    path: String,
-    fileType: String,
+    autoUpload: {
+      type: Boolean,
+      default: true,
+      quasarProp: 'modified',
+    },
+    hideUploadBtn: {
+      type: Boolean,
+      default: true,
+      quasarProp: 'modified',
+    },
+    // Quasar props with modified behavior:
+    accept: {
+      quasarProp: true,
+    },
   },
   data () {
-    let iAccept
-    if (this.fileType === 'image') iAccept = '.jpg, image/*'
-    if (this.fileType === 'pdf') iAccept = '.pdf'
-    return { iAccept }
+    const { accept, fileType } = this
+    let defaultAccept
+    if (fileType === 'image') iAccept = '.jpg, image/*'
+    if (fileType === 'pdf') iAccept = '.pdf'
+    return { iAccept: accept || defaultAccept }
   },
   computed: {
-    quasarProps () {
+    propsToPass () {
       return merge(this.$attrs, {
+        path: this.path,
+        firebaseDependency: this.firebaseDependency,
         // Quasar props with modified defaults:
-        // Quasar props with modified behaviour:
+        autoUpload: this.autoUpload,
+        hideUploadBtn: this.hideUploadBtn,
+        // Quasar props with modified behavior:
+        accept: this.iAccept,
       })
     },
   },

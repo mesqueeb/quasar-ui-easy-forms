@@ -29,6 +29,7 @@ import { dateStamp } from '../../helpers/dateHelpers'
 import { isString, isFullString, isDate } from 'is-what'
 import { QIcon, QPopupProxy, ClosePopup, QDate } from 'quasar'
 import EfInput from './EfInput.vue'
+import { getGenericValueType } from './sharedProps.js'
 
 const defaultMask = 'YYYY/MM/DD'
 
@@ -39,35 +40,34 @@ export default {
   inheritAttrs: false,
   desc: `EfInputDate is handy because it automatically returns a date object whenever the user input is as long as the specified \`mask\` and the string can be converted to a valid date instance. Otherwise a string will be returned.`,
   props: merge(EfInput.props, {
-    // prop categories: behaviour content general model state style
-    value: [String, Date],
-    // EF props:
-    valueType: {
+    // prop categories: behavior content general model state style
+    value: {
       category: 'model',
-      type: String,
-      validator: val => ['string', 'date'].includes(val),
-      examples: ['string', 'date'],
-      default: 'date',
-      desc: 'When `valueType: \'date\'` it will try and return a `new Date` instance. However, if the user input does not provide a valid `Date`, it will return the user input as `string`.',
+      type: [String, Date]
     },
+    // EF props:
+    valueType: merge(
+      getGenericValueType(['string', 'date'], `\`valueType: 'date'\` is the default.\nWhen \`valueType: 'date'\` it will try and return a \`new Date\` instance. However, if the user input is not convertable to a valid \`Date\`, it will return the user input as \`string\`.`),
+      {default: 'date'}
+    ),
     validDateErrorMessage: {
-      category: 'behaviour',
+      category: 'behavior',
       type: String,
-      desc: 'The error that should be returned for the default "valid date" rule. Defaults to "Please enter a valid date."',
+      desc: 'The error that should be returned for the default "valid date" rule.',
       default: 'Please enter a valid date.',
     },
     // Quasar props with modified defaults:
-    fillMask: {quasarProp: true, type: Boolean, default: false},
-    // Quasar props with modified behaviour:
+    fillMask: {quasarProp: 'modified', type: Boolean, default: false},
+    // Quasar props with modified behavior:
     mask: {
-      quasarProp: true,
+      quasarProp: 'modified',
       type: String,
       default: defaultMask,
       examples: ['YYYY-MM-DD', 'MMMM Do, YYYY', 'YYYY-MM-DD HH:mm:ss'],
-      desc: 'Default: \'YYYY/MM/DD\'. Is shown as placeholder. Will be passed as \'input\' field mask as well (and converted like so: \'YYYY/MM/DD\' → \'####/##/##\').',
+      desc: 'Is shown as placeholder. Will be passed as \'input\' field mask as well (and converted like so: \'YYYY/MM/DD\' → \'####/##/##\').',
     },
     rules: {
-      quasarProp: true,
+      quasarProp: 'modified',
       type: Array,
       examples: ['[ val => val.length <= 10 || \'Please use maximum 10 characters\' ]'],
       desc: 'When `valueType: \'date\'`, the default rule will check if the model results to a valid date.',
@@ -84,7 +84,7 @@ export default {
         // EF props to pass:
         valueType: 'string', // default to 'string' for underlying input
         // Quasar props with modified defaults:
-        // Quasar props with modified behaviour:
+        // Quasar props with modified behavior:
         mask: this.maskForInput,
         placeholder: this.maskForQDate,
         rules: this.cRules,
