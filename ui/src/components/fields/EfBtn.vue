@@ -49,7 +49,7 @@ export default {
     onClick: {
       category: 'behavior',
       type: Function,
-      desc: 'The function to be triggered on click. Will receive ',
+      desc: 'The function to be triggered on click. Will receive ...',
     },
     // Quasar props with modified defaults:
     color: {

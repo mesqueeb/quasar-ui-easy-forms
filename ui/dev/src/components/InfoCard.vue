@@ -9,6 +9,7 @@
     <q-tabs
       v-model="tabControl"
       dense
+      style="background: whitesmoke"
       class="text-grey"
       active-color="primary"
       indicator-color="primary"

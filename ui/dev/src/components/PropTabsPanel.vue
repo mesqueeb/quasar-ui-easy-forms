@@ -1,14 +1,15 @@
 <template>
   <q-splitter
     v-model="splitterModel"
-    style="max-height: 400px"
+    style="height: 400px"
     class="api-card"
   >
     <template v-slot:before>
       <q-tabs
         v-model="tabControl"
         vertical
-        class="text-grey"
+        style="background: whitesmoke"
+        class="text-grey full-height"
         active-color="primary"
         indicator-color="primary"
         no-caps
@@ -51,6 +52,7 @@
             mode="edit"
             :schema="panel.schema"
             :data="value"
+            class="mb-lg"
           />
         </q-tab-panel>
       </q-tab-panels>
