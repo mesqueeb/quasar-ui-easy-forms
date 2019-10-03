@@ -100,7 +100,7 @@ import { isArray, isFunction, isString } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
 import { QBtn } from 'quasar'
 import flattenPerSchema from '../helpers/flattenPerSchema'
-import l from '../helpers/formGeneratorLang'
+import lang from '../meta/lang'
 
 function requiredValuePasses (value, blueprint = {}) {
   if (!blueprint.required) return true
@@ -132,29 +132,51 @@ export default {
   name: 'EasyForm',
   components: { QBtn },
   props: {
-    lang: { type: String, default: 'ja' },
-    docId: { type: String },
-    schema: { type: Array, required: true },
-    data: { type: Object },
-    columnCount: { type: Number, default: 1 },
-    validator: { type: Function },
+    // prop categories: behavior content general model state style
+    value: {
+      category: 'model',
+      type: Object,
+    },
+    schema: {
+      category: 'model',
+      type: Array,
+      required: true,
+    },
+    validator: {
+      category: 'behavior',
+      type: Function,
+    },
     actionButtons: {
+      category: 'content',
       type: Array,
       default: () => ['cancel', 'archive', 'edit', 'save']
     },
     mode: {
+      category: 'state',
       type: String,
       default: 'view',
-      validator: val => ['edit', 'add', 'view'].includes(val)
+      validator: val => ['edit', 'add', 'view'].includes(val),
+    },
+    columnCount: {
+      category: 'style',
+      type: Number,
+      default: 1,
     },
     gridGap: {
+      category: 'style',
       type: String,
       default: '1em',
+    },
+    lang: {
+      category: 'content',
+      type: Object,
+      desc: 'The text used in the UI, eg. edit/save buttons etc...',
+      default: () => lang,
     },
   },
   data () {
     const innerMode = this.mode
-    const dataFlat = flattenPerSchema(this.data, this.schema)
+    const dataFlat = flattenPerSchema(this.value, this.schema)
     const innerData = copy(dataFlat)
     return {
       innerMode,
@@ -165,13 +187,13 @@ export default {
     }
   },
   watch: {
-    data (newValue) {
+    value (newValue) {
       const innerData = copy(newValue)
       this.innerData = innerData
     },
   },
   computed: {
-    l () { return l[this.lang] },
+    l () { return this.lang },
     nestedInnerData () { return nestifyObject(this.innerData) },
     schemaObject () {
       return this.schema.reduce((carry, blueprint) => {
@@ -254,7 +276,7 @@ export default {
   methods: {
     isString,
     fieldInput ({id, value}) {
-      console.log('field id → ', id, '| new value → ', value)
+      // console.log('field id → ', id, '| new value → ', value)
       this.$emit('field-input', {id, value})
       const blueprint = this.schemaObject[id]
       if (blueprint && isFunction(blueprint.onInput)) {
@@ -264,6 +286,7 @@ export default {
       this.edited = true
       if (!this.editedFields.includes(id)) this.editedFields.push(id)
       this.innerData[id] = value
+      this.$emit('input', this.innerData)
     },
     resetState () {
       this.cMode = 'view'

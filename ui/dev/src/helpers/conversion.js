@@ -1,3 +1,4 @@
+import { isFullString } from 'is-what'
 
 export function kebabCase (string) {
   const result = string.replace(
@@ -14,7 +15,7 @@ export function slugify (string) {
 }
 
 export function stringToJs (string) {
-  if (!string) return undefined
+  if (!isFullString(string)) return undefined
   const jsonString = string
     .replace(/([a-zA-Z0-9]+?):/g, '"$1":')
     .replace(/'/g, '"')

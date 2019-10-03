@@ -7,12 +7,12 @@
     }]"
     v-model="cValue"
     v-bind="quasarProps"
-
+    v-on="events"
     @keydown="onKeydown"
     @keyup="onKeyup"
     @click="onClick"
-    @focus="focussed = true"
-    @blur="focussed = false"
+    @focus="onFocus"
+    @blur="onBlur"
   >
     <template v-slot:append>
       <slot />
@@ -76,7 +76,7 @@
 
 <script>
 import merge from 'merge-anything'
-import { isNumber, isString, isArray } from 'is-what'
+import { isNumber, isString, isArray, isFunction } from 'is-what'
 import { QInput } from 'quasar'
 import { big, getGenericValueType } from './sharedProps.js'
 import { rulesMap } from '../../helpers/inputValidators'
@@ -109,6 +109,13 @@ export default {
       desc: `Alignment of the content. Defaults to 'right' for \`valueType: 'number'\` and 'left' for the rest'`,
       examples: ['right', 'left', null],
       values: ['right', 'left', null],
+    },
+    events: {
+      category: 'behavior',
+      type: Object,
+      desc: 'An Object with an event name as key and the handler function as value. The function you pass will receive the native event payload as first parameter and the current value as second: ($event, val) => {}',
+      examples: ['{click: console.log, input: console.log}', '{blur: (event, val) => console.log(val)}'],
+      default: () => ({}),
     },
     // format: {type: Function}, // fix the "commafy" problem first
     // Quasar props with modified defaults:
@@ -153,19 +160,19 @@ export default {
           : value
       },
       set (val) {
-        const { maxValue, valueType } = this
+        const { maxValue, valueType, executeEvent } = this
         if (val !== '' && valueType === 'number' && isString(val)) {
           val = Number(val.replace(/,/g, ''))
         }
         if (isNumber(val) && isNumber(maxValue)) {
           if (val > maxValue) {
             // first emit val then maxValue because otherwise the vue component won't rerender
-            this.$emit('input', val)
-            this.$nextTick(() => this.$emit('input', maxValue))
+            executeEvent('input', val)
+            this.$nextTick(() => executeEvent('input', maxValue))
             return
           }
         }
-        this.$emit('input', val)
+        executeEvent('input', val)
       },
     },
     cType () {
@@ -194,12 +201,16 @@ export default {
     },
   },
   methods: {
-    onClick (event) {
-      this.$emit('click', event)
-      focusInput(event)
+    executeEvent (eventName, event) {
+      const { events, cValue } = this
+      const evts = events || {}
+      const fn = evts[eventName]
+      if (isFunction(fn)) fn(event, cValue)
+      this.$emit(eventName, event)
     },
-    onKeyup (event) {
-      this.$emit('keyup', event)
+    onClick (event) {
+      focusInput(event)
+      this.executeEvent('click', event)
     },
     onKeydown (event) {
       const { isMaxValue } = this
@@ -208,8 +219,11 @@ export default {
         event.stopPropagation()
         return
       }
-      this.$emit('keydown', event)
+      this.executeEvent('keydown', event)
     },
+    onKeyup (event) { this.executeEvent('keyup', event) },
+    onFocus (event) { this.executeEvent('focus', event) },
+    onBlur (event) { this.executeEvent('blur', event) },
   }
 }
 </script>

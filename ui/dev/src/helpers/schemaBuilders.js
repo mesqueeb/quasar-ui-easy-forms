@@ -28,9 +28,10 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
   const { desc, type, quasarProp, examples, default: _df, values, category } = propInfo
   // make the raw prop info from the components into an EasyForm:
   // whatever the prop is, default to an 'input' EasyField
+  const events = {}
   let fieldType = 'input'
   let subLabel = desc
-  let options, outlined, standout, disable, parseInput, format, autogrow
+  let options, outlined, standout, disable, parseInput, format, autogrow, debounce
   let contentStyle = 'padding: 1em;'
   // If it's a quasarProp, add a specific indentifier
   if (quasarProp) contentStyle += (quasarProp === true)
@@ -52,8 +53,10 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
     type === Object ||
     (isArray(type) && [Array, Object].some(t => type.includes(t)) && type.length === 2)
   ) {
+    // events.blur = (e, val) => console.log(stringToJs(val))
     outlined = false
     standout = true
+    debounce = 500
     parseInput = stringToJs
     format = JSON.stringify
     autogrow = true
@@ -80,11 +83,15 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
     autogrow,
     category,
     contentStyle,
+    debounce,
+    events,
   }
 }
 
 export function getInfoCardSchema (selectedField) {
-  const allComponentProps = getAllComponentProps(selectedField)
+  const allComponentProps = selectedField === 'EasyForm'
+    ? copy(EasyForms['EasyForm'].props)
+    : getAllComponentProps(selectedField)
   return Object.entries(allComponentProps)
     .reduce((carry, [propKey, propInfo]) => {
       // fields to not include in the InfoCard settings:

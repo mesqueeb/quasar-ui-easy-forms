@@ -34,7 +34,7 @@
       <q-tab-panel name="Source">
         <SourceTab
           :settings="settings"
-          :settingsMetaData="settingsMetaData"
+          :settingsSchema="settingsSchema"
         />
       </q-tab-panel>
     </q-tab-panels>
@@ -50,10 +50,7 @@ export default {
   name: 'InfoCard',
   props: {
     value: Object,
-    settingsSchema: {type: Array, default: () => []},
-    selectedField: String,
-    settingsMetaData: Object,
-    fieldValue: undefined, // any
+    settingsSchema: {type: [Array, Object], default: () => []},
   },
   data () {
     return {
@@ -63,7 +60,6 @@ export default {
   computed: {
     settings () {
       const settings = copy(this.value)
-      delete settings.id
       const cleanSettings = merge({
         // default global easyField settings
         label: `My awesome "${settings.fieldType}" field`,

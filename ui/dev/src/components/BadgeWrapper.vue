@@ -1,40 +1,13 @@
 <template>
-  <q-page padding>
-    <q-badge color="purple-4">interactive preview:</q-badge>
-    <div class="_preview">
-      <EasyField
-        v-model="model"
-        v-bind="field"
-        style="width: 95%"
-      />
-    </div>
-    <InfoCard
-      :key="selectedField"
-      v-model="settings"
-      :settingsSchema="settingsSchema"
-      :selectedField="selectedField"
-      :settingsMetaData="settingsMetaData"
-      :fieldValue="model"
-    >
-      <div class="row no-wrap items-start q-gutter-md">
-        <EasyField v-model="selectedField" v-bind="fieldPicker" />
-        <div style="flex: 2">
-          <q-badge color="primary">v-model:</q-badge>
-          <q-markdown class="_model-md" :src="modelShownAsBadge" />
-        </div>
-        <q-markdown
-          style="flex: 1"
-          v-if="rawComponent.desc"
-          :src="rawComponent.desc"
-        />
-      </div>
-    </InfoCard>
-  </q-page>
+  <div class="badge-wrapper">
+    <q-badge :color="color">interactive preview:</q-badge>
+    <slot />
+  </div>
 </template>
 
 <style lang="stylus">
 
-._model-md
+.badge-wrapper
   border thin solid $primary
   min-height 70px
   min-width 170px

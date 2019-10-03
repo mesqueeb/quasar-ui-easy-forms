@@ -45,13 +45,13 @@
             <div class="_legend pl-xs pr-md">Quasar prop (regular)</div>
           </div>
           <EasyForm
-            grid-gap="0"
+            :value="value"
             @field-input="updateSettings"
+            grid-gap="0"
             :action-buttons="[]"
             :columnCount="2"
             mode="edit"
             :schema="panel.schema"
-            :data="value"
             class="mb-lg"
           />
         </q-tab-panel>
@@ -83,7 +83,7 @@ export default {
   name: 'PropTabsPanel',
   props: {
     value: Object,
-    settingsSchema: Array,
+    settingsSchema: [Array, Object],
   },
   data () {
     return {
@@ -93,7 +93,9 @@ export default {
   },
   computed: {
     settingsSchemaPerCategory () {
-      const perCat = this.settingsSchema.reduce((carry, blueprint) => {
+      const { settingsSchema } = this
+      const schema = (!isArray(settingsSchema)) ? Object.values(settingsSchema) : settingsSchema
+      const perCat = schema.reduce((carry, blueprint) => {
         const { category, quasarProp } = blueprint
         if (!category) return carry
         const categoryArray = category.split('|')
