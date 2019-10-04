@@ -66,40 +66,8 @@ export default {
       if (isUndefined(this.settings.value)) return
       this.settings.value = newValue
     },
-    settings (newSettings, oldSettings) {
-      if (!newSettings.value || newSettings.value === oldSettings.value) return
-      this.model = newSettings.value
-    },
-    selectedField: {
-      handler (newValue, oldValue) {
-        const { componentDemoFieldSettings, addTestOptions } = this
-        this.model = undefined
-        this.settings.valueType = undefined
-        if (newValue === oldValue) return
-        addTestOptions()
-        this.settings.label = `My awesome "${newValue}" field`
-      },
-      immediate: true,
-    },
   },
   computed: {
-    field () {
-      return this.settings
-    },
-    rawComponent () { return getRawComponent(this.selectedField) },
-    settingsMetaData () { return getInfoCardSchema(this.selectedField) },
-    settingsSchema () {
-      const { settingsMetaData } = this
-      const settingsOrder = ['value', 'label', 'subLabel', 'valueType', 'schema']
-      const settingsArrayTop = settingsOrder
-        .map(id => settingsMetaData[id]).filter(s => s)
-      const settingsArrayBottom = Object.values(settingsMetaData)
-        .filter(s => !settingsOrder.includes(s.id))
-      return [
-        ...settingsArrayTop,
-        ...settingsArrayBottom,
-      ]
-    },
     modelShownAsBadge () {
       const { model } = this
       const parsedModel = isString(model)
@@ -111,24 +79,6 @@ export default {
     },
   },
   methods: {
-    addTestOptions () {
-      const { selectedField, updateAllSettings } = this
-      const ops = copy(demoOptions[selectedField])
-      if (!ops) return
-      const { value } = ops
-      if (value !== undefined) {
-        this.model = value
-      }
-      updateAllSettings(ops)
-    },
-    log(...args) {
-      console.log(...args)
-    },
-    updateAllSettings (newSettings = {}) {
-      Object.entries(newSettings).forEach(([key, value]) => {
-        this.$set(this.settings, key, value)
-      })
-    },
   },
 }
 </script>

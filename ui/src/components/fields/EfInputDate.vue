@@ -63,14 +63,14 @@ export default {
       quasarProp: 'modified',
       type: String,
       default: defaultMask,
-      examples: ['YYYY-MM-DD', 'MMMM Do, YYYY', 'YYYY-MM-DD HH:mm:ss'],
-      desc: 'Is shown as placeholder. Will be passed as \'input\' field mask as well (and converted like so: \'YYYY/MM/DD\' → \'####/##/##\').',
+      desc: `Is shown as placeholder. Will be passed as 'input' field mask as well (and converted like so: 'YYYY/MM/DD' → '####/##/##').`,
+      examples: [`'YYYY-MM-DD'`, `'MMMM Do, YYYY'`, `'YYYY-MM-DD HH:mm:ss'`],
     },
     rules: {
       quasarProp: 'modified',
       type: Array,
-      examples: ['[ val => val.length <= 10 || \'Please use maximum 10 characters\' ]'],
-      desc: 'When `valueType: \'date\'`, the default rule will check if the model results to a valid date.',
+      desc: `When \`valueType: 'date'\`, the default rule will check if the model results to a valid date.`,
+      examples: [`[ val => val.length <= 10 || 'Please use maximum 10 characters' ]`],
     },
   }),
   computed: {

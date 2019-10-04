@@ -13,6 +13,7 @@
       v-if="!['title', 'space', 'none', undefined].includes(fieldType)"
     >
       <component :is="componentIdentifier" v-model="cValue" v-bind="fieldProps" />
+      <pre v-if="fieldType === 'q-markdown'" v-bind="fieldProps">{{ cValue }}</pre>
     </div>
   </div>
 </template>
@@ -30,7 +31,7 @@
 </style>
 
 <script>
-import { isFunction } from 'is-what'
+import { isFunction, isPlainObject } from 'is-what'
 import merge from 'merge-anything'
 
 export default {
@@ -40,7 +41,7 @@ export default {
     // EF props used here:
     fieldType: {
       category: 'general',
-      type: String,
+      type: [String, Object],
       required: true,
     },
     value: {
@@ -56,7 +57,7 @@ export default {
       category: 'style',
       type: [Object, Array, String],
       desc: 'Custom styling to be applied to the EasyField. Applied like so `:style="contentStyle"`',
-      examples: ['padding: 1em;'],
+      examples: [`'padding: 1em;'`],
     },
     format: {
       category: 'model',
@@ -99,6 +100,8 @@ export default {
     componentIdentifier () {
       const { fieldType } = this
       if (!fieldType) return ''
+      if (isPlainObject(fieldType)) return fieldType
+      if (fieldType.slice(0, 2) === 'q-') return fieldType
       return 'Ef' + fieldType[0].toUpperCase() + fieldType.slice(1)
     },
     fieldProps () {

@@ -19,7 +19,7 @@
           :key="panel.name"
           :name="panel.name"
           :label="panel.name[0].toUpperCase() + panel.name.slice(1)"
-          class="_left-tab"
+          class="api-card__left-tab"
         />
       </q-tabs>
     </template>
@@ -36,20 +36,29 @@
           :key="panel.name"
           :name="panel.name"
         >
-          <div class="pb-md flex flex-center">
-            <div class="_box" style="background: white"></div>
-            <div class="_legend pl-xs pr-md">EasyField prop</div>
-            <div class="_box" style="background: lavender"></div>
-            <div class="_legend pl-xs pr-md">Quasar prop (with modified behavior)</div>
-            <div class="_box" style="background: whitesmoke"></div>
-            <div class="_legend pl-xs pr-md">Quasar prop (regular)</div>
+          <div
+            v-if="tag === 'EasyField'"
+            class="pb-md flex flex-center q-gutter-md"
+          >
+            <div class="flex">
+              <div class="_box" style="background: white"></div>
+              <div class="_legend pl-xs">EasyField prop</div>
+            </div>
+            <div class="flex">
+              <div class="_box" style="background: lavender"></div>
+              <div class="_legend pl-xs">Quasar prop (with modified behavior)</div>
+            </div>
+            <div class="flex">
+              <div class="_box" style="background: whitesmoke"></div>
+              <div class="_legend pl-xs">Quasar prop (regular)</div>
+            </div>
           </div>
           <EasyForm
             :value="value"
             @field-input="updateSettings"
             grid-gap="0"
             :action-buttons="[]"
-            :columnCount="2"
+            :columnCount="tag === 'EasyForm' ? 1 : 2"
             mode="edit"
             :schema="panel.schema"
             class="mb-lg"
@@ -63,9 +72,6 @@
 <style lang="stylus">
 
 .api-card
-  ._left-tab .q-tab__content
-    width: 100%
-    align-items: start
   ._box
     border thin solid lightgrey
     width 30px
@@ -82,13 +88,19 @@ import sort from 'sort-anything'
 export default {
   name: 'PropTabsPanel',
   props: {
+    tag: {
+      type: String,
+      validator: prop => ['EasyField', 'EasyForm'].includes(prop),
+      values: ['EasyField', 'EasyForm'],
+      examples: [`'EasyField'`, `'EasyForm'`],
+    },
     value: Object,
     settingsSchema: [Array, Object],
   },
   data () {
     return {
       tabControl: 'model',
-      splitterModel: 10,
+      splitterModel: 12,
     }
   },
   computed: {

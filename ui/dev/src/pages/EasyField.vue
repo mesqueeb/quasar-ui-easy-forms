@@ -9,6 +9,7 @@
       />
     </div>
     <InfoCard
+      tag="EasyField"
       v-model="settings"
       :settingsSchema="settingsSchema"
     >

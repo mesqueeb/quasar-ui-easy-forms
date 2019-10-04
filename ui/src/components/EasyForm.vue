@@ -5,50 +5,50 @@
         class="_validation-error text-negative"
         v-if="isString(validatorMessage)"
       >{{ validatorMessage }}</div>
-      <q-btn
+      <EfBtn
         v-for="btn in actionButtons.filter(b => !isString(b))"
         :key="btn.label"
-        :label="btn.label"
-        class="_btn"
+        :value="btn.label"
+        size="md"
         push
         :color="btn.color || 'primary'"
         @click="e => tapCustomBtn(e, btn.handler)"
       />
-      <q-btn
+      <EfBtn
         v-if="actionButtons.includes('delete')"
-        :label="l.delete"
-        class="_btn"
+        :value="l.delete"
+        size="md"
         flat
         color="negative"
         @click="tapDelete"
       />
-      <q-btn
+      <EfBtn
         v-if="actionButtons.includes('archive')"
-        :label="l.archive"
-        class="_btn"
+        :value="l.archive"
+        size="md"
         flat
         color="negative"
         @click="tapArchive"
       />
-      <q-btn
+      <EfBtn
         v-if="(cMode === 'edit' || cMode === 'add') && actionButtons.includes('cancel')"
-        :label="l.cancel"
-        class="_btn"
+        :value="l.cancel"
+        size="md"
         color="primary"
         flat
         @click="tapCancel"
       />
-      <q-btn
+      <EfBtn
         v-if="cMode === 'view' && actionButtons.includes('edit')"
-        :label="l.edit"
-        class="my-q-btn--small _btn"
+        :value="l.edit"
+        size="md"
         push
         @click="cMode = 'edit'"
       />
-      <q-btn
+      <EfBtn
         v-if="(cMode === 'edit' || cMode === 'add') && actionButtons.includes('save')"
-        :label="l.save"
-        class="my-q-btn--small _btn"
+        :value="l.save"
+        size="md"
         push
         :disable="!validated"
         @click="tapSave"
@@ -101,6 +101,7 @@ import { nestifyObject } from 'nestify-anything'
 import { QBtn } from 'quasar'
 import flattenPerSchema from '../helpers/flattenPerSchema'
 import lang from '../meta/lang'
+import EfBtn from './fields/EfBtn.vue'
 
 function requiredValuePasses (value, blueprint = {}) {
   if (!blueprint.required) return true
@@ -136,42 +137,58 @@ export default {
     value: {
       category: 'model',
       type: Object,
+      desc: `An object with the data of the entire form. The object keys are the ids of the fields passed in the 'schema'.\nTo be used with \`:value\` or \`v-model\`.`,
+      default: () => ({}),
+      examples: [`{name: ''}`],
     },
     schema: {
       category: 'model',
       type: Array,
       required: true,
-    },
-    validator: {
-      category: 'behavior',
-      type: Function,
-    },
-    actionButtons: {
-      category: 'content',
-      type: Array,
-      default: () => ['cancel', 'archive', 'edit', 'save']
+      desc: `This is the heart of your EasyForm. It's the schema that will defined what fields will be generated.`,
+      examples: [`[{id: 'name', fieldType: 'input'}]`],
     },
     mode: {
       category: 'state',
       type: String,
       default: 'view',
-      validator: val => ['edit', 'add', 'view'].includes(val),
+      validator: prop => ['edit', 'add', 'view'].includes(prop),
+      values: ['edit', 'add', 'view'],
+      examples: [`'edit'`, `'add'`, `'view'`],
+    },
+    actionButtons: {
+      category: 'content',
+      type: Array,
+      default: () => ['cancel', 'archive', 'edit', 'save'],
+      desc: `Buttons on top of the form that control the 'mode' of the form; clicking them will $emit the following events: 'cancel', 'save', 'delete', 'archive'.
+
+You can decide which buttons you want to show/hide by passing them in an array to \`:action-buttons="[]"\`. You can also pass custom buttons with a label and handler.`,
+      examples: [`[] (no buttons)`, `['delete', 'cancel', 'edit', 'save']`, `[{label: 'log', handler: console.log}]`],
+    },
+    validator: {
+      category: 'behavior',
+      type: Function,
+      desc: `A function which serves as global validator for your form. It will receive the edited data as first param and the original data (before user edits) as second. It should return true if all is OK or a string with error message.`,
+      examples: [`(newData, oldData) => newData.pass1 === newData.pass2 || 'passwords don't match'`],
     },
     columnCount: {
       category: 'style',
       type: Number,
       default: 1,
+      desc: `The amount of columns the form should have.\nEach field can set a specific 'span' to be able to span multiple columns.`,
     },
     gridGap: {
       category: 'style',
       type: String,
       default: '1em',
+      desc: `The gap between each field in the form.`,
     },
     lang: {
       category: 'content',
       type: Object,
-      desc: 'The text used in the UI, eg. edit/save buttons etc...',
+      desc: `The text used in the UI, eg. edit/save buttons etc... Pass an object with keys: archive, delete, cancel, edit, save.`,
       default: () => lang,
+      examples: [`{cancel: 'キャンセル', edit: '編集', save: '保存'}`],
     },
   },
   data () {
@@ -187,10 +204,8 @@ export default {
     }
   },
   watch: {
-    value (newValue) {
-      const innerData = copy(newValue)
-      this.innerData = innerData
-    },
+    value (newValue) { this.innerData = copy(newValue) },
+    mode (newValue) { this.innerMode = copy(newValue) },
   },
   computed: {
     l () { return this.lang },
@@ -226,11 +241,11 @@ export default {
         // return early when showCondition fails
         if (!checkShowCondition(blueprint)) return carry
         const dataToOverwrite = (cMode === 'view')
-          ? {path: assessPath(blueprint), disable: true, deletable: false, readonly: true}
+          ? {path: assessPath(blueprint), deletable: false, readonly: true}
           : {path: assessPath(blueprint), disable: assessDisable(blueprint)}
         if (blueprint.schema && cMode === 'view') {
           dataToOverwrite.schema = blueprint.schema.map(bp => {
-            return merge(bp, {disable: true, deletable: false, readonly: true})
+            return merge(bp, {deletable: false, readonly: true})
           })
         }
         carry.push(merge(blueprint, dataToOverwrite))
@@ -238,8 +253,9 @@ export default {
       }, [])
     },
     dataBackup () {
-      if (!this.innerDataBackups.length) return {}
-      const lastBackup = this.innerDataBackups.slice(-1)[0]
+      const { innerDataBackups } = this
+      if (!innerDataBackups.length) return {}
+      const lastBackup = innerDataBackups.slice(-1)[0]
       const dataNested = nestifyObject(lastBackup)
       return dataNested
     },
@@ -253,14 +269,15 @@ export default {
       return dataNested
     },
     validatorErrors () {
+      const { cSchema, validator, dataEdited, dataBackup } = this
       const errors = []
       const requiredFieldsError = checkRequiredFields(
-        merge(this.dataEdited),
-        this.cSchema
+        merge(dataEdited),
+        cSchema
       )
       if (isString(requiredFieldsError)) errors.push(requiredFieldsError)
-      if (!isFunction(this.validator)) return errors
-      const validatorRes = this.validator(this.dataEdited, this.dataBackup)
+      if (!isFunction(validator)) return errors
+      const validatorRes = validator(dataEdited, dataBackup)
       if (isString(validatorRes)) errors.push(validatorRes)
       return errors
     },
@@ -268,9 +285,10 @@ export default {
       return this.validatorErrors.join('、\n')
     },
     validated () {
-      const hasErrors = this.validatorMessage.length
-      if (this.cMode === 'add') return !hasErrors
-      return this.edited && !hasErrors
+      const { validatorMessage, cMode, edited } = this
+      const hasErrors = validatorMessage.length
+      if (cMode === 'add') return !hasErrors
+      return edited && !hasErrors
     },
   },
   methods: {

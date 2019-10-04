@@ -1,6 +1,6 @@
 <template>
   <div :class="[
-    'ef-buttons', {
+    'ef-btn-toggle', {
     '-big': big,
     '-readonly': quasarProps.readonly,
   }]">
@@ -39,7 +39,7 @@
 // $
 @import '../../index.styl'
 
-.ef-buttons
+.ef-btn-toggle
   width 100%
   ._q-tgl
     border 3px solid $primary
@@ -61,7 +61,7 @@
       background darken($primary, 20%) !important
   &.-readonly
     ._q-tgl
-      border 2px solid $gray-bg--dark
+      border 1px solid $gray-bg--dark
     .q-btn.disabled
       opacity 0.2 !important
     .q-btn.bg-primary

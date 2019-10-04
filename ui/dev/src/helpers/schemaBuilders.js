@@ -1,4 +1,4 @@
-import { isArray, isUndefined } from 'is-what'
+import { isArray, isUndefined, isFunction } from 'is-what'
 import copy from 'copy-anything'
 import merge from 'merge-anything'
 import EasyForms from 'ui'
@@ -38,7 +38,7 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
     ? 'background: whitesmoke'
     : 'background: lavender'
   // If it has a default, write it in the description
-  if (!isUndefined(_df)) subLabel += `\n\nDefault: \`${_df}\``
+  if (!isUndefined(_df)) subLabel += `\n\nDefault: \`${isFunction(_df) ? JSON.stringify(_df()) : _df}\``
   // if the prop is a Boolean, show this as a 'toggle' EasyField
   if (type === Boolean) fieldType = 'toggle'
   // if the prop has a fixed set of possible values, show this as an 'option' EasyField
@@ -60,7 +60,7 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
     parseInput = stringToJs
     format = JSON.stringify
     autogrow = true
-    if (isArray(examples)) subLabel += `\nEg.\n${examples.join(', ')}`
+    if (isArray(examples)) subLabel += `\nExamples:\n\`${examples.join('` | `')}\``
   }
   // Don't allow editing props that accept functions.
   if (type === Function) disable = true
@@ -102,5 +102,23 @@ export function getInfoCardSchema (selectedField) {
       }
       carry[propKey] = createInfoCardSchemaFromProp(propKey, propInfo, selectedField)
       return carry
-    }, {})
+    }, {
+      schemaAsCode: {
+        quasarProp: false,
+        id: 'schemaAsCode',
+        fieldType: 'title',
+        label: 'Check the Source tab',
+        subLabel: `Check the Source tab > script to see the code of the prop 'schema' in color and with indentation.`,
+        category: 'model',
+      }
+      // schemaAsCode: {
+      //   quasarProp: false,
+      //   id: 'schemaAsCode',
+      //   fieldType: 'q-markdown',
+      //   valueType: 'string',
+      //   label: 'Schema formatted:',
+      //   subLabel: 'This is just a formatted representation of the `schema` field above.',
+      //   category: 'model',
+      // }
+    })
 }

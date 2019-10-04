@@ -54,18 +54,18 @@
   &.-align-right
     .q-field__native
       text-align right
-  // &.q-field--disabled
-  //   .q-field__control
-  //     background $gray-bg
-  //     > div
-  //       opacity 1 !important
-  //   .q-field__control:before
-  //     border none !important
-  // &.q-field--readonly
-  //   .q-field__control:before
-  //     border 1px $gray-bg--dark solid !important
-  //   .q-field__control > div
-  //     opacity 1 !important
+  &.q-field--disabled
+    .q-field__control
+      background $gray-bg
+      > div
+        opacity 1 !important
+    .q-field__control:before
+      border none !important
+  &.q-field--readonly
+    .q-field__control:before
+      border 1px $gray-bg--dark solid !important
+    .q-field__control > div
+      opacity 1 !important
   &.q-textarea
     .q-field__native
       line-height 1.8
@@ -107,15 +107,15 @@ export default {
       validator: val => (!val || ['right', 'left', null].includes(val)),
       type: String,
       desc: `Alignment of the content. Defaults to 'right' for \`valueType: 'number'\` and 'left' for the rest'`,
-      examples: ['right', 'left', null],
       values: ['right', 'left', null],
+      examples: [`'right'`, `'left'`, null],
     },
     events: {
       category: 'behavior',
       type: Object,
       desc: 'An Object with an event name as key and the handler function as value. The function you pass will receive the native event payload as first parameter and the current value as second: ($event, val) => {}',
-      examples: ['{click: console.log, input: console.log}', '{blur: (event, val) => console.log(val)}'],
       default: () => ({}),
+      examples: ['{click: console.log, input: console.log}', '{blur: (event, val) => console.log(val)}'],
     },
     // format: {type: Function}, // fix the "commafy" problem first
     // Quasar props with modified defaults:
@@ -126,14 +126,14 @@ export default {
       quasarProp: 'modified',
       type: Array,
       desc: 'Same as Quasar, but with added pre-defined rules for \'telJA\' and \'email\'',
-      examples: ['[\'telJA\']', '[\'email\']', '[ val => val.length <= 3 || \'Please use maximum 3 characters\' ]'],
+      examples: [`['telJA']`, `['email']`, `[ val => val.length <= 3 || 'Please use maximum 3 characters' ]`],
     },
     type: {
       quasarProp: 'modified',
       type: String,
       descripton: `The html tag input type. Defaults to 'number' if \`valueType: 'number'\`, otherwise defaults to 'text'.`,
       default: 'text',
-      examples: ['text', 'password', 'textarea', 'email', 'search', 'tel', 'file', 'number', 'url', 'time', 'date'],
+      examples: [`'text'`, `'password'`, `'textarea'`, `'email'`, `'search'`, `'tel'`, `'file'`, `'number'`, `'url'`, `'time'`, `'date'`],
     },
   },
   data () {
