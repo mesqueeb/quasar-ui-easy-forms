@@ -11,7 +11,7 @@
         />
 
         <q-toolbar-title>
-          easy-forms v{{ version }}
+          quasar-ui-easy-forms v{{ version }}
         </q-toolbar-title>
 
         <div>Quasar v{{ $q.version }}</div>

@@ -56,7 +56,7 @@ const builds = [
         input: resolve(`entry/index.umd.js`)
       },
       output: {
-        name: 'EasyForms',
+        name: 'easyForms',
         file: resolve(`../dist/index.umd.js`),
         format: 'umd'
       }

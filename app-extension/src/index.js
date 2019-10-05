@@ -7,9 +7,6 @@
  */
 
 function extendConf (conf) {
-  // push Platform, required for QSelect
-  conf.framework.plugins.push('Platform')
-
   // register our boot file
   conf.boot.push('~quasar-app-extension-easy-forms/src/boot/register.js')
 
@@ -17,8 +14,8 @@ function extendConf (conf) {
   conf.build.transpileDependencies.push(/quasar-app-extension-easy-forms[\\/]src/)
 
   // make sure the stylesheet goes through webpack to avoid SSR issues
-  conf.css.push('~{{name}}/src/index.sass')
-  conf.css.push('~{{name}}/src/index.styl')
+  conf.css.push('~quasar-ui-easy-forms/src/index.sass')
+  conf.css.push('~quasar-ui-easy-forms/src/index.styl')
 }
 
 module.exports = function (api) {
@@ -27,6 +24,9 @@ module.exports = function (api) {
   // package or a minimum version of "@quasar/app" CLI
   api.compatibleWith('quasar', '^1.1.1')
   api.compatibleWith('@quasar/app', '^1.1.0')
+
+  // Uncomment the line below if you provide a JSON API for your component
+  // api.registerDescribeApi('EasyForm', '~quasar-ui-easy-forms/src/component/EasyForm.json')
 
   // We extend /quasar.conf.js
   api.extendQuasarConf(extendConf)

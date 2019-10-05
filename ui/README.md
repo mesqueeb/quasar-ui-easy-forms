@@ -1,8 +1,9 @@
-# Component easyForm
+# Component EasyForm
 
-<img src="https://img.shields.io/npm/v/easy-forms.svg?label=easy-forms">
+[![npm](https://img.shields.io/npm/v/quasar-ui-easy-forms.svg?label=quasar-ui-easy-forms)](https://www.npmjs.com/package/quasar-ui-easy-forms)
+[![npm](https://img.shields.io/npm/dt/quasar-ui-easy-forms.svg)](https://www.npmjs.com/package/quasar-ui-easy-forms)
 
-# Component easyForm
+# Component EasyForm
 > Short description of the component
 
 
@@ -10,22 +11,57 @@
 
 ## Quasar CLI project
 
+Install the [App Extension](../app-extension).
+
+**OR**:
+
+Create and register a boot file:
+
 ```js
 import Vue from 'vue'
-import Plugin from 'easy-forms'
+import Plugin from 'quasar-ui-easy-forms'
+import 'quasar-ui-easy-forms/dist/index.css'
 
 Vue.use(Plugin)
 ```
 
-or:
+**OR**:
 
 ```js
+<style src="quasar-ui-easy-forms/dist/index.css"></style>
+
 <script>
-import { Component } from 'easy-forms'
+import { Component as EasyForm } from 'quasar-ui-easy-forms'
 
 export default {
   components: {
-    Component
+    EasyForm
+  }
+}
+</script>
+```
+
+## Vue CLI project
+
+```js
+import Vue from 'vue'
+import Plugin from 'quasar-ui-easy-forms'
+import 'quasar-ui-easy-forms/dist/index.css'
+
+Vue.use(Plugin)
+```
+
+**OR**:
+
+```js
+<style src="quasar-ui-easy-forms/dist/index.css"></style>
+
+<script>
+import { Component as EasyForm } from 'quasar-ui-easy-forms'
+
+export default {
+  components: {
+    EasyForm
   }
 }
 </script>
@@ -33,23 +69,23 @@ export default {
 
 ## UMD variant
 
-Exports `window.EasyForms`.
+Exports `window.easyForms`.
 
 Add the following tag(s) after the Quasar ones:
 
 ```html
 <head>
   <!-- AFTER the Quasar stylesheet tags: -->
-  <link href="https://cdn.jsdelivr.net/npm/easy-forms/dist/index.min.css" rel="stylesheet" type="text/css">
+  <link href="https://cdn.jsdelivr.net/npm/quasar-ui-easy-forms/dist/index.min.css" rel="stylesheet" type="text/css">
 </head>
 <body>
   <!-- at end of body, AFTER Quasar script(s): -->
-  <script src="https://cdn.jsdelivr.net/npm/easy-forms/dist/index.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/quasar-ui-easy-forms/dist/index.umd.min.js"></script>
 </body>
 ```
 If you need the RTL variant of the CSS, then go for the following (instead of the above stylesheet link):
 ```html
-<link href="https://cdn.jsdelivr.net/npm/easy-forms/dist/index.rtl.min.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.jsdelivr.net/npm/quasar-ui-easy-forms/dist/index.rtl.min.css" rel="stylesheet" type="text/css">
 ```
 
 # Setup

@@ -1,16 +1,19 @@
 {
   "name": "quasar-app-extension-easy-forms",
   "version": "0.0.1",
-  "description": "A Quasar extension to easily generate forms by only defining an object.",
+  "description": "Easily generate forms by only defining a \"fields scheme\" as an object.",
   "author": "Luca Ban - Mesqueeb",
   "license": "MIT",
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mesqueeb/quasar-app-extension-easy-forms"
+    "url": "https://github.com/mesqueeb/quasar-ui-easy-forms"
   },
-  "bugs": "https://github.com/mesqueeb/quasar-app-extension-easy-forms/issues",
-  "homepage": "https://quasar-app-extension-easy-forms.netlify.com/",
+  "bugs": "https://github.com/mesqueeb/quasar-ui-easy-forms/issues",
+  "homepage": "https://quasar-ui-easy-forms.netlify.com",
+  "dependencies": {
+    "quasar-ui-easy-forms": "latest"
+  },
   "engines": {
     "node": ">= 8.9.0",
     "npm": ">= 5.6.0",

@@ -1,4 +1,4 @@
 import Vue from 'vue'
-import VuePlugin from 'easy-forms'
+import VuePlugin from 'quasar-ui-easy-forms'
 
 Vue.use(VuePlugin)

@@ -2,7 +2,8 @@
 
 > Add a short description of your App Extension. What does it do? How is it beneficial? Why would someone want to use it?
 
-<img src="https://img.shields.io/npm/v/quasar-app-extension-easy-forms.svg?label=quasar-app-extension-easy-forms">
+[![npm](https://img.shields.io/npm/v/quasar-app-extension-easy-forms.svg?label=quasar-app-extension-easy-forms)](https://www.npmjs.com/package/quasar-app-extension-easy-forms)
+[![npm](https://img.shields.io/npm/dt/quasar-app-extension-easy-forms.svg)](https://www.npmjs.com/package/quasar-app-extension-easy-forms)
 
 # Install
 ```bash
