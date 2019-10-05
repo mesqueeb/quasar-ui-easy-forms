@@ -1,7 +1,3 @@
-/build
-/dev
-umd-test.html
-
 .DS_Store
 .thumbs.db
 yarn.lock
