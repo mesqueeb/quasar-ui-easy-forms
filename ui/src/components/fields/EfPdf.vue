@@ -46,6 +46,13 @@ export default {
   components: { QBtn, QDialog, EfBtn },
   name: 'EfPdf',
   inheritAttrs: false,
+  desc: `For the time being you need to **manually** add the quasar plugin 'Dialog' and the ui element 'q-pdf-viewer':
+
+1. Add \`'Dialog'\` to the \`plugins\` section of \`quasar.conf.js\`
+2. Install \`q-pdf-viewer\` like so:
+\`\`\`bash
+quasar ext add @quasar/qpdfviewer
+\`\`\``,
   props: {
     // prop categories: behavior content general model state style
     value: {

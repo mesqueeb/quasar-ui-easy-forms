@@ -27,11 +27,11 @@ Vue.use(Plugin)
 
 **OR**:
 
-```js
+```html
 <style src="quasar-ui-easy-forms/dist/index.css"></style>
 
 <script>
-import { Component as EasyForm } from 'quasar-ui-easy-forms'
+import { EasyForm } from 'quasar-ui-easy-forms'
 
 export default {
   components: {
@@ -53,11 +53,11 @@ Vue.use(Plugin)
 
 **OR**:
 
-```js
+```html
 <style src="quasar-ui-easy-forms/dist/index.css"></style>
 
 <script>
-import { Component as EasyForm } from 'quasar-ui-easy-forms'
+import { EasyForm } from 'quasar-ui-easy-forms'
 
 export default {
   components: {
