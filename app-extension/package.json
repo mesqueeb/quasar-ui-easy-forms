@@ -10,7 +10,7 @@
     "url": "https://github.com/mesqueeb/quasar-ui-easy-forms"
   },
   "bugs": "https://github.com/mesqueeb/quasar-ui-easy-forms/issues",
-  "homepage": "https://quasar-ui-easy-forms.netlify.com",
+  "homepage": "https://quasar-easy-forms.web.app",
   "dependencies": {
     "quasar-ui-easy-forms": "latest"
   },

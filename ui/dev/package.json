@@ -6,6 +6,7 @@
   "cordovaId": "org.cordova.quasar.app",
   "private": true,
   "scripts": {
+    "build": "quasar build",
     "dev": "quasar dev",
     "dev:ssr": "quasar dev -m ssr",
     "dev:ios": "quasar dev -m ios",
