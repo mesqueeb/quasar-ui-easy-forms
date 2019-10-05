@@ -24,7 +24,7 @@
         <EfBtn
           :value="option.label"
           @click.native="$emit('input', option.value)"
-          class="ef-btn--square"
+          class="ef-btn -square"
           v-bind="merge(option, {
             label: undefined,
             disable: option.disable || quasarProps.disable

@@ -11,17 +11,12 @@
 // $
 @import '../../index.styl'
 
-// .ef-btn
-ef-btn($size = 20px)
+.ef-btn // use with: push
   font-size 20px
-  media-sm font-size $size
+  media-sm font-size 20px
   white-space pre-line
   border-radius sm
-
-.ef-btn // use with: push
-  ef-btn()
-.ef-btn--square
-  ef-btn()
+.-square
   width 100%
   height 100%
 

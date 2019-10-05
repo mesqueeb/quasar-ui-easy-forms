@@ -37,13 +37,13 @@
 import merge from 'merge-anything'
 import copy from 'copy-anything'
 import { isString, isPlainObject, isFullString } from 'is-what'
-import { QBtn, QDialog, Dialog } from 'quasar'
+import { QDialog, Dialog } from 'quasar'
 import EfBtn from './EfBtn.vue'
-import PdfDialog from '../dialogs/DPdf'
+import PdfDialog from '../dialogs/DPdf.vue'
 import { valueDescImgPdf, getGenericValueType } from './sharedProps.js'
 
 export default {
-  components: { QBtn, QDialog, EfBtn },
+  components: { QDialog, EfBtn },
   name: 'EfPdf',
   inheritAttrs: false,
   desc: `For the time being you need to **manually** add the quasar plugin 'Dialog' and the ui element 'q-pdf-viewer':

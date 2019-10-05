@@ -1,5 +1,5 @@
 <template>
-  <div class="form-generator">
+  <div class="easy-form">
     <div class="_nav-row" v-if="actionButtons.length">
       <div
         class="_validation-error text-negative"
@@ -75,7 +75,7 @@
 // $
 @import '../index.styl'
 
-// .form-generator
+// .easy-form
 ._form
   display grid
   align-items stretch
@@ -98,7 +98,6 @@ import merge from 'merge-anything'
 import copy from 'copy-anything'
 import { isArray, isFunction, isString } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
-import { QBtn } from 'quasar'
 import flattenPerSchema from '../helpers/flattenPerSchema'
 import lang from '../meta/lang'
 import EfBtn from './fields/EfBtn.vue'
@@ -131,7 +130,7 @@ function checkRequiredFields (formData, schema) {
 
 export default {
   name: 'EasyForm',
-  components: { QBtn },
+  components: { EfBtn },
   props: {
     // prop categories: behavior content general model state style
     value: {
