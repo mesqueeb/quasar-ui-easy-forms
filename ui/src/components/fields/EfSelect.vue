@@ -22,7 +22,7 @@
 <script>
 import merge from 'merge-anything'
 import copy from 'copy-anything'
-import { isString, isPlainObject } from 'is-what'
+import { isString, isPlainObject, isArray } from 'is-what'
 import { QSelect } from 'quasar'
 import { big } from './sharedProps.js'
 
@@ -34,7 +34,8 @@ export default {
     // prop categories: behavior content general model state style
     value: {
       category: 'model',
-      type: [String, Object, Number, Array]},
+      type: undefined, // any
+    },
     // valueType inherited from `easyField`,
     // EF props:
     big,
@@ -87,10 +88,13 @@ export default {
     },
     cValue: {
       get () {
-        const { value, $attrs } = this
-        return ($attrs.multiple)
-          ? Object.keys(value).filter(key => value[key])
-          : value
+        const { value, $attrs, cOptions } = this
+        if (!isArray(value) && $attrs.multiple) {
+          return cOptions.find(o => o.value === value)
+            ? [value]
+            : []
+        }
+        return value
       },
       set (val) {
         const { value, $attrs } = this
