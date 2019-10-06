@@ -140,6 +140,11 @@ export default {
       default: () => ({}),
       examples: [`{name: ''}`],
     },
+    id: {
+      category: 'model',
+      type: String,
+      desc: `The 'id' of the EasyForm. Can be set to be able to use inside the evaluation of props passed a function.`,
+    },
     schema: {
       category: 'model',
       type: Array,
@@ -223,31 +228,39 @@ You can decide which buttons you want to show/hide by passing them in an array t
       },
     },
     cSchema () {
-      const { cMode, schema, $store, nestedInnerData } = this
+      const { cMode, schema, $store, nestedInnerData, innerData } = this
+      const self = this
+      function formatBlueprintProps (blueprint) {
+        const propsToIgnore = ['showCondition', 'format', 'parseInput'] // there are currently none
+        return Object.entries(blueprint)
+          .reduce((carry, [propKey, propValue]) => {
+            if (propsToIgnore.includes(propKey)) {
+              carry[propKey] = propValue
+            } else {
+              carry[propKey] = (isFunction(propValue))
+                ? propValue(innerData[propKey], self, nestedInnerData)
+                : propValue
+            }
+            return carry
+          }, {})
+      }
       function checkShowCondition ({ showCondition }) {
         if (!isFunction(showCondition)) return true
         return showCondition(nestedInnerData, cMode)
-      }
-      function assessDisable ({ disable }) {
-        if (!isFunction(disable)) return disable
-        return disable(nestedInnerData, cMode, $store)
-      }
-      function assessPath ({ path }) {
-        if (!isFunction(path)) return path
-        return path(nestedInnerData, $store)
       }
       return schema.reduce((carry, blueprint) => {
         // return early when showCondition fails
         if (!checkShowCondition(blueprint)) return carry
         const dataToOverwrite = (cMode === 'view')
-          ? {path: assessPath(blueprint), deletable: false, readonly: true}
-          : {path: assessPath(blueprint), disable: assessDisable(blueprint)}
+          ? {deletable: false, readonly: true}
+          : {}
         if (blueprint.schema && cMode === 'view') {
           dataToOverwrite.schema = blueprint.schema.map(bp => {
             return merge(bp, {deletable: false, readonly: true})
           })
         }
-        carry.push(merge(blueprint, dataToOverwrite))
+        const cleanBlueprint = merge(formatBlueprintProps(blueprint), dataToOverwrite)
+        carry.push(cleanBlueprint)
         return carry
       }, [])
     },

@@ -100,7 +100,7 @@ export default {
     cSchema () {
       const { schema, disable } = this
       return schema.map(subfield => {
-        return merge({disable}, subfield, {label: ''})
+        return merge({disable}, subfield, {label: '', subLabel: ''})
       })
     },
     schemaLabels () {

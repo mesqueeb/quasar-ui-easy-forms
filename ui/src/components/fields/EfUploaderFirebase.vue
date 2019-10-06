@@ -38,8 +38,8 @@ export default {
     },
     path: {
       category: 'model',
-      type: [String, Function],
-      desc: 'This should be the Firebase storage path where files should be uploaded to. It should be a string.\nWhen used inside an <EasyForm /> it can also be a function that resolves into a string. In this case the function will receive the current data object of the form and the store. (doc, store) => string',
+      type: String,
+      desc: 'This should be the Firebase storage path where files should be uploaded to.',
       required: true,
     },
     fileType: {
@@ -67,8 +67,8 @@ export default {
   data () {
     const { accept, fileType } = this
     let defaultAccept
-    if (fileType === 'image') iAccept = '.jpg, image/*'
-    if (fileType === 'pdf') iAccept = '.pdf'
+    if (fileType === 'image') defaultAccept = '.jpg, image/*'
+    if (fileType === 'pdf') defaultAccept = '.pdf'
     return { iAccept: accept || defaultAccept }
   },
   computed: {

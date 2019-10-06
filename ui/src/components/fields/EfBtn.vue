@@ -2,8 +2,7 @@
   <q-btn
     class="ef-btn"
     v-bind="quasarProps"
-    v-on="$listeners"
-    @click="qClick"
+    v-on="merge(events, $listeners)"
   />
 </template>
 
@@ -20,7 +19,7 @@
 
 <script>
 import merge from 'merge-anything'
-import { isFunction } from 'is-what'
+// import { isFunction } from 'is-what'
 import { QBtn } from 'quasar'
 import { getGenericValueType } from './sharedProps.js'
 
@@ -37,10 +36,12 @@ export default {
       desc: '`value` is the button\'s "label". (`label` on the other hand is used for the external label of `<EfField />`)',
     },
     valueType: getGenericValueType('string'),
-    onClick: {
+    events: {
       category: 'behavior',
-      type: Function,
-      desc: 'The function to be triggered on click. Will receive ...',
+      type: Object,
+      desc: 'An Object with an event name as key and the handler function as value. The function you pass will receive the native event payload as first parameter and the current value as second: ($event, val) => {}',
+      default: () => ({}),
+      examples: ['{click: console.log}'],
     },
     // Quasar props with modified defaults:
     color: {
@@ -61,11 +62,7 @@ export default {
     },
   },
   methods: {
-    qClick (event) {
-      const { onClick } = this
-      if (isFunction(onClick)) return onClick(this, this.$store)
-      this.$emit('click', event)
-    },
+    merge,
   }
 }
 </script>

@@ -22,7 +22,7 @@
 <script>
 import merge from 'merge-anything'
 import copy from 'copy-anything'
-import { isFunction, isString, isPlainObject } from 'is-what'
+import { isString, isPlainObject } from 'is-what'
 import { QSelect } from 'quasar'
 import { big } from './sharedProps.js'
 
@@ -54,11 +54,10 @@ export default {
       desc: 'Hidden when a value is selected, shows the placeholder when nothing is selected.',
     },
     options: {
-      quasarProp: 'modified',
-      type: [Array, Function],
+      quasarProp: true,
       default: () => [],
-      desc: 'Can be an array of options (just like Quasar) or a Function which has to return an array. The function will receive the EfSelect Vue component and the store as parameters: \`options(this, this.$store)\`',
-      examples: [`[{label: 'JPY', value: 'jpy'}]`],
+      desc: 'The options to select from. Should be an array of strings or objects (`{label, value}`).\n\nFor best performance freeze the list of options with `Object.freeze`.',
+      examples: [`[{label: 'JPY', value: 'jpy'}, {label: 'USD', value: 'usd'}]`, `['jpy', 'usd']`],
     },
     hideDropdownIcon: {
       quasarProp: 'modified',
@@ -124,7 +123,6 @@ export default {
     },
     cOptions () {
       const { options } = this
-      if (isFunction(options)) return options(this, this.$store)
       if (options.some(o => isString(o))) {
         return options.map(o => ({label: o, value: o}))
       }

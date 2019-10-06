@@ -20,7 +20,7 @@
 
 <script>
 import merge from 'merge-anything'
-import { isFunction, isFullString } from 'is-what'
+import { isFullString } from 'is-what'
 import { QSlider } from 'quasar'
 import { getGenericValueType } from './sharedProps.js'
 
@@ -43,11 +43,11 @@ export default {
       type: String,
       desc: 'Suffix shown inside the label.',
     },
-    format: {
-      type: Function,
-      desc: 'Formats the slider label.',
-      examples: ['val => val / 1000 + \'K\'', 'val => commafy(val)'],
-    },
+    // format: {
+    //   type: Function,
+    //   desc: 'Formats the slider label.',
+    //   examples: ['val => val / 1000 + \'K\'', 'val => commafy(val)'],
+    // },
     // Quasar props with modified defaults:
     labelAlways: {
       quasarProp: 'modified',
@@ -72,8 +72,8 @@ export default {
   },
   methods: {
     cFormat (val) {
-      const { format, prefix, suffix } = this
-      if (isFunction(format)) val = format(val)
+      const { prefix, suffix } = this
+      // if (isFunction(format)) val = format(val)
       if (isFullString(prefix)) val = `${prefix}${val}`
       if (isFullString(suffix)) val = `${val}${suffix}`
       return val
