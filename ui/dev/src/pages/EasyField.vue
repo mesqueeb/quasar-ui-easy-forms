@@ -29,18 +29,18 @@
   </q-page>
 </template>
 
-<style lang="stylus">
+<style lang="sass">
 
 ._model-md
-  border thin solid $primary
-  min-height 70px
-  min-width 170px
-  max-width 60vw
-  margin-top -10px
-  padding 1em
+  border: thin solid $primary
+  min-height: 70px
+  min-width: 170px
+  max-width: 60vw
+  margin-top: -10px
+  padding: 1em
   .q-markdown--token
-    white-space pre-line
-    word-break break-word
+    white-space: pre-line
+    word-break: break-word
 
 </style>
 

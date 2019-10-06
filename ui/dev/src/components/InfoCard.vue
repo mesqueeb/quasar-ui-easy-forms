@@ -1,6 +1,6 @@
 <template>
   <q-card>
-    <div class="pa-md">
+    <div class="q-pa-md">
       <slot />
     </div>
 
@@ -24,7 +24,7 @@
     <q-separator />
 
     <q-tab-panels v-model="tabControl" animated>
-      <q-tab-panel name="Props" class="pa-none">
+      <q-tab-panel name="Props" class="q-pa-none">
         <PropTabsPanel
           :tag="tag"
           :value="settings"
@@ -32,7 +32,7 @@
           :settingsSchema="settingsSchema"
         />
       </q-tab-panel>
-      <q-tab-panel name="Source" class="pa-none">
+      <q-tab-panel name="Source" class="q-pa-none">
         <SourceTab
           :tag="tag"
           :settings="settings"

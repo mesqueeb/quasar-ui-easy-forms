@@ -38,19 +38,19 @@
         >
           <div
             v-if="tag === 'EasyField'"
-            class="pb-md flex flex-center q-gutter-md"
+            class="q-pb-md flex flex-center q-gutter-md"
           >
             <div class="flex">
               <div class="_box" style="background: white"></div>
-              <div class="_legend pl-xs">EasyField prop</div>
+              <div class="_legend q-pl-xs">EasyField prop</div>
             </div>
             <div class="flex">
               <div class="_box" style="background: lavender"></div>
-              <div class="_legend pl-xs">Quasar prop (with modified behavior)</div>
+              <div class="_legend q-pl-xs">Quasar prop (with modified behavior)</div>
             </div>
             <div class="flex">
               <div class="_box" style="background: whitesmoke"></div>
-              <div class="_legend pl-xs">Quasar prop (regular)</div>
+              <div class="_legend q-pl-xs">Quasar prop (regular)</div>
             </div>
           </div>
           <EasyForm
@@ -61,7 +61,7 @@
             :columnCount="tag === 'EasyForm' ? 1 : 2"
             mode="edit"
             :schema="panel.schema"
-            class="mb-lg"
+            class="q-mb-lg"
           />
         </q-tab-panel>
       </q-tab-panels>
@@ -69,13 +69,13 @@
   </q-splitter>
 </template>
 
-<style lang="stylus">
+<style lang="sass">
 
 .api-card
   ._box
-    border thin solid lightgrey
-    width 30px
-    height 20px
+    border: thin solid lightgrey
+    width: 30px
+    height: 20px
 
 </style>
 

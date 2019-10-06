@@ -6,7 +6,7 @@
       >{{ descAdvanced }}</q-markdown>
     </div>
     <q-badge color="purple-4">interactive preview:</q-badge>
-    <div class="interactive-preview mb-md">
+    <div class="interactive-preview q-mb-md">
       <EasyForm
         v-model="settings.value"
         v-bind="settings"
@@ -27,7 +27,7 @@
   </q-page>
 </template>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 
 </style>
 
