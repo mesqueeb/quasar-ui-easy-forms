@@ -18,6 +18,7 @@
       no-caps
     >
       <q-tab name="Props" label="Props" />
+      <!-- <q-tab name="Style" label="Style" /> -->
       <q-tab name="Source" label="Source" />
     </q-tabs>
 

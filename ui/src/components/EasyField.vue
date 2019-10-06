@@ -6,10 +6,10 @@
     >{{ label }}</div>
     <div
       v-if="subLabel"
-      :class="`_sub-label q-mb-sm text-wrap-all`"
+      :class="`easy-field__sub-label q-mb-sm text-wrap-all`"
     >{{ subLabel }}</div>
     <div
-      class="_field"
+      class="easy-field__field"
       v-if="!['title', 'space', 'none', undefined].includes(fieldType)"
     >
       <component :is="componentIdentifier" v-model="cValue" v-bind="fieldProps" />
@@ -18,15 +18,15 @@
   </div>
 </template>
 
-<style lang="sass" scoped>
+<style lang="sass">
 // $
 @import '../index.sass'
 
 .easy-field
   max-width: 100%
-._sub-label
-  opacity: 0.8
-  font-weight: 300
+  .easy-field__sub-label
+    opacity: 0.8
+    font-weight: 300
 
 </style>
 

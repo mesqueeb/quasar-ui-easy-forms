@@ -1,8 +1,8 @@
 <template>
   <div class="easy-form">
-    <div class="_nav-row" v-if="actionButtons.length">
+    <div class="easy-form__nav-row" v-if="actionButtons.length">
       <div
-        class="_validation-error text-negative"
+        class="easy-form__validation-error text-negative"
         v-if="isString(validatorMessage)"
       >{{ validatorMessage }}</div>
       <EfBtn
@@ -55,7 +55,7 @@
       />
     </div>
     <div
-      class="_form"
+      class="easy-form__form"
       :style="`grid-template-columns:${' 1fr'.repeat(columnCount)}; grid-gap: ${gridGap}`"
     >
       <EasyField
@@ -76,13 +76,13 @@
 @import '../index.sass'
 
 // .easy-form
-._form
+.easy-form__form
   display: grid
   align-items: stretch
   justify-items: stretch
   > .-title
     grid-column: 1 / -1
-._nav-row
+.easy-form__nav-row
   margin-bottom: $md
   min-height: 42px
   display: grid

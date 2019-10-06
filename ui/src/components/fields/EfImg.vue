@@ -1,12 +1,12 @@
 <template>
   <div class="ef-img q-gutter-xs">
     <div
-      class="_wrapper"
+      class="ef-img__wrapper"
       v-for="(img, imgIndex) in cValue"
       :key="img.downloadURL"
     >
       <q-img :src="img.downloadURL" v-bind="quasarProps" />
-      <div class="_nav">
+      <div class="ef-img__nav">
         <EfBtn
           v-if="cDeletable"
           :disable="quasarProps.disable"
@@ -19,14 +19,14 @@
   </div>
 </template>
 
-<style lang="sass" scoped>
+<style lang="sass">
 // $
 @import '../../index.sass'
 
 .ef-img
-  ._wrapper
+  .ef-img__wrapper
     position: relative
-  ._nav
+  .ef-img__nav
     position: absolute
     top: 0
     right: 0

@@ -8,12 +8,11 @@
   </a>
 </template>
 
-<style lang="sass" scoped>
+<style lang="sass">
 // $
 @import '../../index.sass'
 
 .ef-link
-  color: $primary
   text-decoration: none
 
 </style>

@@ -1,19 +1,19 @@
 <template>
   <div class="ef-form">
     <div
-      class="_row"
+      class="ef-form__row"
       :style="`grid-template-columns:${' 1fr'.repeat(columnCountSubForm)}`"
     >
       <EasyField
         v-for="(subfield, fieldIndex) in schemaLabels"
         :key="fieldIndex"
-        class="_sub-field"
+        class="ef-form__sub-field"
         v-bind="subfield"
         :style="subfield.span === true ? 'grid-column: 1 / -1' : subfield.span ? `grid-column: span ${subfield.span}` : ''"
       />
     </div>
     <div
-      class="_row"
+      class="ef-form__row"
       v-for="(row, rowIndex) in cValue"
       :style="`grid-template-columns:${' 1fr'.repeat(columnCountSubForm)}`"
       :key="rowIndex"
@@ -21,7 +21,7 @@
       <EasyField
         v-for="(subfield, fieldIndex) in cSchema"
         :key="fieldIndex"
-        class="_sub-field"
+        class="ef-form__sub-field"
         v-bind="subfield"
         :style="subfield.span === true ? 'grid-column: 1 / -1' : subfield.span ? `grid-column: span ${subfield.span}` : ''"
         :value="cValue[rowIndex][subfield.id]"
@@ -32,13 +32,13 @@
   </div>
 </template>
 
-<style lang="sass" scoped>
+<style lang="sass">
 // $
 @import '../../index.sass'
 
 .ef-form
   margin-top: $md
-  ._row
+  >.ef-form__row
     display: grid
     justify-items: stretch
     align-items: flex-end
@@ -119,7 +119,6 @@ export default {
     },
   },
   methods: {
-    merge,
     deleteRow (rowIndex) {
       const { value } = this
       const allRows = copy(value)

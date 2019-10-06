@@ -5,7 +5,6 @@
     '-readonly': quasarProps.readonly,
   }]">
     <q-btn-toggle
-      class="_q-tgl"
       v-if="!big"
       :value="value"
       @input="val => $emit('input', val)"
@@ -14,12 +13,12 @@
     <div
       v-if="big"
       :style="style"
-      class="_inner"
+      class="ef-btn-toggle__inner"
     >
       <div
         v-for="option in options"
         :key="option.label"
-        :class="{'_chosen': value === option.value}"
+        :class="{'ef-btn-toggle__chosen': value === option.value}"
       >
         <EfBtn
           :value="option.label"
@@ -41,15 +40,7 @@
 
 .ef-btn-toggle
   width: 100%
-  ._q-tgl
-    border: 3px solid $primary
-    border-radius: $md !important // these two are connected
-    color: $text--dark
-    > *
-      padding-top: 1em !important
-      padding-bottom: 1em !important
-      border-radius: $sm // these two are connected
-  >._inner
+  >.ef-btn-toggle__inner
     width: 100%
     grid-template-columns: 1fr 1fr
     @media screen and (min-width: $breakpoint-sm-min)
@@ -68,19 +59,10 @@
       > *
         position: absolute
     // end grid--square
-    >._chosen > *
+    >.ef-btn-toggle__chosen > *
       transform: translate3d(0, 3px, 0)
       border-bottom-width: 0
-      background: darken($primary, 20%) !important
-  &.-readonly
-    ._q-tgl
-      border: 1px solid $gray-bg--dark
-    .q-btn.disabled
-      opacity: 0.2 !important
-    .q-btn.bg-primary
-      background: $gray-bg--dark !important
-      color: inherit !important
-      opacity: 1 !important
+      box-shadow: inset 0 0 0 1000px rgba(0,0,0,.2)
 
 </style>
 
@@ -138,7 +120,7 @@ export default {
     },
   },
   methods: {
-    isOdd,
+    merge,
   }
 }
 </script>

@@ -16,40 +16,6 @@
 
 .ef-select
   width: 100%
-  .q-field__control
-    border-radius: $md !important
-  .q-field__control:before
-    border: 3px $primary solid !important
-  .q-field__suffix
-    color: $text--dark
-  .q-field__native
-    color: $text--dark
-    text-align: right
-    > span
-      width: 100%
-  &.-big
-    font-size: 25px
-    .q-field__control
-      padding-top: .4em !important
-      padding-bottom: .4em !important
-    .q-field__control:before
-      border: 6px $primary solid !important
-    .q-field__native
-      line-height: 1.2 !important
-    .q-select__dropdown-icon
-      transform: scale(1.5)
-  &.q-field--disabled
-    .q-field__control
-      background: $gray-bg
-      > div
-        opacity: 1 !important
-    .q-field__control:before
-      border: none !important
-  &.q-field--readonly
-    .q-field__control:before
-      border: 1px $gray-bg--dark solid !important
-    .q-field__control > div
-      opacity: 1 !important
 
 </style>
 
