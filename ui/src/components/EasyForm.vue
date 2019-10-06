@@ -231,7 +231,7 @@ You can decide which buttons you want to show/hide by passing them in an array t
       const { cMode, schema, $store, nestedInnerData, innerData } = this
       const self = this
       function formatBlueprintProps (blueprint) {
-        const propsToIgnore = ['showCondition', 'format', 'parseInput'] // there are currently none
+        const propsToIgnore = ['showCondition', 'format', 'parseInput', 'onInput'] // there are currently none
         return Object.entries(blueprint)
           .reduce((carry, [propKey, propValue]) => {
             if (propsToIgnore.includes(propKey)) {
