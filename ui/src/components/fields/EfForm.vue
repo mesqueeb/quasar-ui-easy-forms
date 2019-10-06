@@ -79,14 +79,16 @@ export default {
       desc: 'Allows to limit the max amount of rows.',
     },
     disable: {type: Boolean},
+    readonly: {type: Boolean},
   },
   computed: {
     cValue: {
       get () {
-        const { value, schema, disable, maxRows } = this
+        const { value, schema, disable, readonly, maxRows } = this
         const emptyRow = schema.reduce((carry, {id, fieldType}) => ({...carry, [id]: undefined}), {})
         if (
           !disable &&
+          !readonly &&
           (!isNumber(maxRows) || maxRows < value.length)
         ) {
           return value.concat([emptyRow])
@@ -98,9 +100,9 @@ export default {
       },
     },
     cSchema () {
-      const { schema, disable } = this
+      const { schema, disable, readonly } = this
       return schema.map(subfield => {
-        return merge({disable}, subfield, {label: '', subLabel: ''})
+        return merge({disable, readonly}, subfield, {label: '', subLabel: ''})
       })
     },
     schemaLabels () {

@@ -55,6 +55,12 @@ export default {
       default: true,
     },
     // Quasar props with modified behavior:
+    disable: {
+      quasarProp: 'modified',
+      type: Boolean,
+      default: false,
+      desc: 'Disables the ability to interact with the field. Is `true` when `readonly: true`'
+    },
   },
   computed: {
     quasarProps () {
@@ -63,12 +69,14 @@ export default {
         labelAlways: this.labelAlways,
         // Quasar props with modified behavior:
         labelValue: this.cFormat(this.cValue),
+        disable: this.cDisable,
       })
     },
     cValue: {
       get () { return this.value },
       set (val) { this.$emit('input', val) },
     },
+    cDisable () { return this.$attrs.readonly || this.disable },
   },
   methods: {
     cFormat (val) {

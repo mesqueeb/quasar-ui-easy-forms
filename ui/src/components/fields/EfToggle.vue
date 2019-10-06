@@ -34,12 +34,19 @@ export default {
     // EF props:
     // Quasar props with modified defaults:
     // Quasar props with modified behavior:
+    disable: {
+      quasarProp: 'modified',
+      type: Boolean,
+      default: false,
+      desc: 'Disables the ability to interact with the field. Is `true` when `readonly: true`'
+    },
   },
   computed: {
     quasarProps () {
       return merge(this.$attrs, {
         // Quasar props with modified defaults:
         // Quasar props with modified behavior:
+        disable: this.cDisable,
       })
     },
     cValue: {
@@ -49,6 +56,7 @@ export default {
       },
       set (val) { this.$emit('input', val) },
     },
+    cDisable () { return this.$attrs.readonly || this.disable },
   },
   methods: {},
 }
