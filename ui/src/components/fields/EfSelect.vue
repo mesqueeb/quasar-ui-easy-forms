@@ -10,45 +10,46 @@
   />
 </template>
 
-<style lang="stylus">
+<style lang="sass">
 // $
-@import '../../index.styl'
+@import '../../index.sass'
 
 .ef-select
-  width 100%
+  width: 100%
   .q-field__control
-    border-radius md !important
+    border-radius: $md !important
   .q-field__control:before
-    border 3px $primary solid !important
+    border: 3px $primary solid !important
   .q-field__suffix
-    color $text--dark
+    color: $text--dark
   .q-field__native
-    color $text--dark
-    text-align right
+    color: $text--dark
+    text-align: right
     > span
-      width 100%
+      width: 100%
   &.-big
-    font-size 25px
+    font-size: 25px
     .q-field__control
-      py .4em !important
+      padding-top: .4em !important
+      padding-bottom: .4em !important
     .q-field__control:before
-      border 6px $primary solid !important
+      border: 6px $primary solid !important
     .q-field__native
-      line-height 1.2 !important
+      line-height: 1.2 !important
     .q-select__dropdown-icon
-      transform scale(1.5)
+      transform: scale(1.5)
   &.q-field--disabled
     .q-field__control
-      background $gray-bg
+      background: $gray-bg
       > div
-        opacity 1 !important
+        opacity: 1 !important
     .q-field__control:before
-      border none !important
+      border: none !important
   &.q-field--readonly
     .q-field__control:before
-      border 1px $gray-bg--dark solid !important
+      border: 1px $gray-bg--dark solid !important
     .q-field__control > div
-      opacity 1 !important
+      opacity: 1 !important
 
 </style>
 

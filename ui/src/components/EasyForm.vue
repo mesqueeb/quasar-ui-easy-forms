@@ -71,25 +71,25 @@
   </div>
 </template>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 // $
-@import '../index.styl'
+@import '../index.sass'
 
 // .easy-form
 ._form
-  display grid
-  align-items stretch
-  justify-items stretch
+  display: grid
+  align-items: stretch
+  justify-items: stretch
   > .-title
-    grid-column 1 / -1
+    grid-column: 1 / -1
 ._nav-row
-  mb md
-  min-height 42px
-  display grid
-  justify-content end
-  align-items center
-  grid-auto-flow column
-  grid-gap md
+  margin-bottom: $md
+  min-height: 42px
+  display: grid
+  justify-content: end
+  align-items: center
+  grid-auto-flow: column
+  grid-gap: $md
 
 </style>
 

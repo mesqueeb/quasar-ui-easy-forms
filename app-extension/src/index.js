@@ -15,7 +15,6 @@ function extendConf (conf) {
 
   // make sure the stylesheet goes through webpack to avoid SSR issues
   conf.css.push('~quasar-ui-easy-forms/src/index.sass')
-  conf.css.push('~quasar-ui-easy-forms/src/index.styl')
 }
 
 module.exports = function (api) {

@@ -7,18 +7,19 @@
   />
 </template>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 // $
-@import '../../index.styl'
+@import '../../index.sass'
 
 .ef-btn // use with: push
-  font-size 20px
-  media-sm font-size 20px
-  white-space pre-line
-  border-radius sm
+  font-size: 20px
+  @media screen and (min-width: $breakpoint-sm-min)
+    font-size: 20px
+  white-space: pre-line
+  border-radius: $sm
 .-square
-  width 100%
-  height 100%
+  width: 100%
+  height: 100%
 
 </style>
 

@@ -35,39 +35,52 @@
   </div>
 </template>
 
-<style lang="stylus">
+<style lang="sass">
 // $
-@import '../../index.styl'
+@import '../../index.sass'
 
 .ef-btn-toggle
-  width 100%
+  width: 100%
   ._q-tgl
-    border 3px solid $primary
-    border-radius md !important // these two are connected
-    color $text--dark
+    border: 3px solid $primary
+    border-radius: $md !important // these two are connected
+    color: $text--dark
     > *
-      py 1em !important
-      border-radius sm // these two are connected
+      padding-top: 1em !important
+      padding-bottom: 1em !important
+      border-radius: $sm // these two are connected
   >._inner
-    width 100%
-    grid--square()
-    grid-template-columns 1fr 1fr
-    media-sm grid-template-columns 1fr 1fr 1fr
+    width: 100%
+    grid-template-columns: 1fr 1fr
+    @media screen and (min-width: $breakpoint-sm-min)
+      grid-template-columns: 1fr 1fr 1fr
     // ↳ these are hard coded in the style in the template
-    grid-gap 6vw
+    grid-gap: 6vw
+    // start grid--square:
+    display: grid
+    justify-content: center
+    align-content: center
+    > div
+      height: 0
+      width: 100%
+      padding-bottom: 100%
+      position: relative
+      > *
+        position: absolute
+    // end grid--square
     >._chosen > *
-      transform translate3d(0, 3px, 0)
-      border-bottom-width 0
-      background darken($primary, 20%) !important
+      transform: translate3d(0, 3px, 0)
+      border-bottom-width: 0
+      background: darken($primary, 20%) !important
   &.-readonly
     ._q-tgl
-      border 1px solid $gray-bg--dark
+      border: 1px solid $gray-bg--dark
     .q-btn.disabled
-      opacity 0.2 !important
+      opacity: 0.2 !important
     .q-btn.bg-primary
-      background $gray-bg--dark !important
-      color inherit !important
-      opacity 1 !important
+      background: $gray-bg--dark !important
+      color: inherit !important
+      opacity: 1 !important
 
 </style>
 

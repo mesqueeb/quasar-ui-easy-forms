@@ -16,9 +16,9 @@
   </EfInput>
 </template>
 
-<style lang="stylus">
+<style lang="sass">
 // $
-@import '../../index.styl'
+@import '../../index.sass'
 // .ef-input-date
 
 </style>

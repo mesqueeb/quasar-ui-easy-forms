@@ -24,29 +24,27 @@
 </q-dialog>
 </template>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 // $
-@import '../../index.styl'
-
 .d-pdf
-  background white
-  position relative
+  background: white
+  position: relative
 ._container
-  top 0
-  position absolute
+  top: 0
+  position: absolute
 ._close-btn
-  position fixed
-  z-index 2
-  top 25px
-  right 25px
+  position: fixed
+  z-index: 2
+  top: 25px
+  right: 25px
 ._loading
-  width 100vw
-  height 100vh
-  display flex
-  flex-wrap wrap
-  flex-direction column
-  justify-content center
-  align-items center
+  width: 100vw
+  height: 100vh
+  display: flex
+  flex-wrap: wrap
+  flex-direction: column
+  justify-content: center
+  align-items: center
 
 </style>
 

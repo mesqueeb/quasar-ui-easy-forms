@@ -19,18 +19,18 @@
   </div>
 </template>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 // $
-@import '../../index.styl'
+@import '../../index.sass'
 
 .ef-img
   ._wrapper
-    position relative
+    position: relative
   ._nav
-    position absolute
-    top 0
-    right 0
-    z-index 2
+    position: absolute
+    top: 0
+    right: 0
+    z-index: 2
 
 </style>
 

@@ -32,18 +32,18 @@
   </div>
 </template>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 // $
-@import '../../index.styl'
+@import '../../index.sass'
 
 .ef-form
-  mt md
+  margin-top: $md
   ._row
-    display grid
-    justify-items stretch
-    align-items flex-end
-    grid-gap sm
-    mb sm
+    display: grid
+    justify-items: stretch
+    align-items: flex-end
+    grid-gap: $sm
+    margin-bottom: $sm
 
 </style>
 

@@ -25,9 +25,9 @@
   </div>
 </template>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 // $
-@import '../../index.styl'
+@import '../../index.sass'
 
 // .ef-pdf
 

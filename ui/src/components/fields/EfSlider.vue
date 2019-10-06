@@ -7,13 +7,14 @@
   </div>
 </template>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 // $
-@import '../../index.styl'
+@import '../../index.sass'
 
 .ef-slider
-  pt 30px
-  px md
+  padding-top: 30px
+  padding-left: $md
+  padding-right: $md
 
 </style>
 

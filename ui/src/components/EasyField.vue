@@ -6,7 +6,7 @@
     >{{ label }}</div>
     <div
       v-if="subLabel"
-      :class="`_sub-label mb-sm text-wrap-all`"
+      :class="`_sub-label q-mb-sm text-wrap-all`"
     >{{ subLabel }}</div>
     <div
       class="_field"
@@ -18,15 +18,15 @@
   </div>
 </template>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 // $
-@import '../index.styl'
+@import '../index.sass'
 
 .easy-field
-  max-width 100%
+  max-width: 100%
 ._sub-label
-  opacity 0.8
-  font-weight 300
+  opacity: 0.8
+  font-weight: 300
 
 </style>
 
@@ -135,9 +135,9 @@ export default {
       const { fieldType, subLabel } = this
       let classes = '_label text-wrap-all'
       if (fieldType === 'title' || fieldType === 'form') {
-        classes += ' mt-md text-bold'
+        classes += ' q-mt-md text-bold'
       } else if (!subLabel) {
-        classes += ' mb-sm'
+        classes += ' q-mb-sm'
       }
       return classes
     },

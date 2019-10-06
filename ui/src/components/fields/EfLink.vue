@@ -8,13 +8,13 @@
   </a>
 </template>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 // $
-@import '../../index.styl'
+@import '../../index.sass'
 
 .ef-link
-  color $primary
-  text-decoration none
+  color: $primary
+  text-decoration: none
 
 </style>
 <script>
