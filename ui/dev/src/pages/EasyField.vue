@@ -1,13 +1,12 @@
 <template>
   <q-page padding>
-    <q-badge color="purple-4">interactive preview:</q-badge>
-    <div class="interactive-preview">
+    <InfoBoxWrapper color="purple-4" label="interactive preview" class="q-mb-md">
       <EasyField
         v-model="model"
         v-bind="field"
         style="width: 95%"
       />
-    </div>
+    </InfoBoxWrapper>
     <InfoCard
       tag="EasyField"
       v-model="settings"
@@ -15,10 +14,9 @@
     >
       <div class="row no-wrap items-start q-gutter-md">
         <EasyField v-model="selectedField" v-bind="fieldPicker" />
-        <div style="flex: 2">
-          <q-badge color="primary">v-model:</q-badge>
-          <q-markdown class="_model-md" :src="modelShownAsBadge" />
-        </div>
+        <InfoBoxWrapper color="primary" label="v-model" style="flex: 2">
+          <q-markdown :src="modelShownAsBadge" />
+        </InfoBoxWrapper>
         <q-markdown
           style="flex: 1"
           v-if="rawComponent.desc"
@@ -30,18 +28,6 @@
 </template>
 
 <style lang="sass">
-
-._model-md
-  border: thin solid $primary
-  min-height: 70px
-  min-width: 170px
-  max-width: 60vw
-  margin-top: -10px
-  padding: 1em
-  .q-markdown--token
-    white-space: pre-line
-    word-break: break-word
-
 </style>
 
 <script>

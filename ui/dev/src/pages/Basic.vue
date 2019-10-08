@@ -5,8 +5,7 @@
         style="flex: 1"
       >{{ descBasic }}</q-markdown>
     </div>
-    <q-badge color="purple-4">interactive preview:</q-badge>
-    <div class="interactive-preview q-mb-md">
+    <InfoBoxWrapper color="purple-4" label="interactive preview" class="q-mb-md">
       <EasyForm
         v-model="settings.value"
         v-bind="settings"
@@ -17,7 +16,7 @@
         @delete="log('@delete', $event)"
         @archive="log('@archive', $event)"
       />
-    </div>
+    </InfoBoxWrapper>
     <InfoCard
       tag="EasyForm"
       v-model="settings"
@@ -49,7 +48,6 @@ export default {
         schema,
         value,
         mode: 'view',
-        schemaAsCode: schema,
       },
       settingsSchema,
     }
