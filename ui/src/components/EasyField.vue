@@ -148,6 +148,8 @@ Read more on Evaluated Props in its dedicade page.`,
       })
       // quasar props that can accept functions should be ignored:
       const propsToIgnore = [
+        // EasyForm:
+        'onInput',
         // QSelect:
         'optionValue', 'optionLabel', 'optionDisable',
         // QUploader:

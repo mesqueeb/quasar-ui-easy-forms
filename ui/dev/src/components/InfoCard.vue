@@ -1,10 +1,9 @@
 <template>
   <q-card>
-    <div class="q-pa-md">
+    <div v-if="!!$slots.default" class="q-pa-md">
       <slot />
     </div>
-
-    <q-separator />
+    <q-separator v-if="!!$slots.default" />
 
     <q-tabs
       v-model="tabControl"

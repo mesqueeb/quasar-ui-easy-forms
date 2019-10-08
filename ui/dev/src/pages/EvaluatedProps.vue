@@ -6,27 +6,28 @@
       >{{ description }}</q-markdown>
     </div>
     <div
-      v-for="(schema, index) in schemas"
+      v-for="(example, index) in examples"
       :key="index"
       class="q-mb-lg"
     >
-      <InfoBoxWrapper color="accent" label="interactive preview" class="q-mb-md">
-        <EasyForm
-          v-model="schema.settings.value"
-          v-bind="schema.settings"
-          @update:mode="log('update:mode', $event)"
-          @field-input="log('@field-input', $event)"
-          @cancel="log('@cancel', $event)"
-          @save="log('@save', $event)"
-          @delete="log('@delete', $event)"
-          @archive="log('@archive', $event)"
-        />
-      </InfoBoxWrapper>
       <InfoCard
         tag="EasyForm"
-        v-model="schema.settings"
-        :settingsSchema="schema.settingsSchema"
+        v-model="example.settings"
+        :settingsSchema="example.settingsSchema"
       >
+        <EasyField v-bind="example.titleField" style="margin: -1em 0 1.6em" />
+        <InfoBoxWrapper color="accent" label="interactive preview" class="q-mb-md">
+          <EasyForm
+            v-model="example.settings.value"
+            v-bind="example.settings"
+            @update:mode="log('update:mode', $event)"
+            @field-input="log('@field-input', $event)"
+            @cancel="log('@cancel', $event)"
+            @save="log('@save', $event)"
+            @delete="log('@delete', $event)"
+            @archive="log('@archive', $event)"
+          />
+        </InfoBoxWrapper>
       </InfoCard>
     </div>
   </q-page>
@@ -48,9 +49,10 @@ export default {
     return schemasEvaluatedProps.reduce((carry, schema) => {
       const value = schema.reduce((carry, bp) => ({...carry, [bp.id]: undefined}), {})
       const settingsSchema = getInfoCardSchema('EasyForm')
-      carry.schemas.push({
+      carry.examples.push({
+        titleField: schema.slice(0, 1),
         settings: {
-          schema,
+          schema: schema.slice(1),
           value,
           mode: 'edit',
           actionButtons: [],
@@ -61,7 +63,7 @@ export default {
       return carry
     }, {
       description,
-      schemas: []
+      examples: []
     })
   },
   methods: {
