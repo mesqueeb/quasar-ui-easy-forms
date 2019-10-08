@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <InfoBoxWrapper color="purple-4" label="interactive preview" class="q-mb-md">
+    <InfoBoxWrapper color="accent" label="interactive preview" class="q-mb-md">
       <EasyField
         v-model="model"
         v-bind="field"

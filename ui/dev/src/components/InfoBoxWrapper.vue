@@ -1,7 +1,7 @@
 <template>
   <div class="info-box-wrapper">
     <q-badge :color="color">{{ label }}</q-badge>
-    <div class="_inner-wrapper">
+    <div class="_inner-wrapper" :style="{borderColor: colorAsHex}">
       <slot />
     </div>
   </div>
@@ -12,7 +12,7 @@
 
 .info-box-wrapper
   > ._inner-wrapper
-    border: thin solid $primary
+    border: thin solid
     min-height: 70px
     min-width: 170px
     margin-top: -10px
@@ -31,14 +31,23 @@
 
 <script>
 import { pascalCase } from 'case-anything'
+import { colors } from 'quasar'
 
 export default {
   name: pascalCase('info-box-wrapper'),
   props: {
-    color: String,
+    color: {
+      type: String,
+      validator: val => ['primary', 'secondary', 'accent', 'positive', 'negative', 'info', 'warning'].includes(val),
+    },
     label: String,
   },
-  computed: {},
+  computed: {
+    colorAsHex () {
+      console.log('colors.getBrand(this.color) → ', colors.getBrand(this.color))
+      return colors.getBrand(this.color)
+    },
+  },
   methods: {},
 }
 </script>
