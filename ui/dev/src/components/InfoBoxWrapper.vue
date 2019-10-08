@@ -44,7 +44,6 @@ export default {
   },
   computed: {
     colorAsHex () {
-      console.log('colors.getBrand(this.color) → ', colors.getBrand(this.color))
       return colors.getBrand(this.color)
     },
   },
