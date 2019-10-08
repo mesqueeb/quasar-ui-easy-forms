@@ -56,6 +56,7 @@ export default {
     valueType: getGenericValueType(['string', 'object', 'array']),
     // EF props:
     deletable: {
+      category: 'behavior',
       type: Boolean,
       default: true,
       desc: 'Wether or not uploaded files are deletable (deleting would update the `value`). `true` by default but `false` when `readonly: true`',
