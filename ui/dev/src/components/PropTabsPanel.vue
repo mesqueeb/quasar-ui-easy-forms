@@ -35,6 +35,7 @@
           v-for="panel in Object.values(settingsSchemaPerCategory)"
           :key="panel.name"
           :name="panel.name"
+          class="q-pa-none q-pt-md"
         >
           <div
             v-if="tag === 'EasyField'"
@@ -58,7 +59,7 @@
             @field-input="updateSettings"
             grid-gap="0"
             :action-buttons="[]"
-            :columnCount="tag === 'EasyForm' ? 1 : 2"
+            :column-count="2"
             mode="edit"
             :schema="panel.schema"
             class="q-mb-lg"

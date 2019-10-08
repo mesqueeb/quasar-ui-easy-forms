@@ -31,7 +31,7 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
   const events = {}
   let fieldType = 'input'
   let subLabel = desc
-  let options, outlined, standout, disable, parseInput, format, autogrow, debounce
+  let options, outlined, standout, disable, parseInput, format, autogrow, debounce, span
   let contentStyle = 'padding: 1em;'
   // If it's a quasarProp, add a specific indentifier
   if (quasarProp) contentStyle += (quasarProp === true)
@@ -64,6 +64,8 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
   }
   // Don't allow editing props that accept functions.
   if (type === Function) disable = true
+  // If it's the prop called 'schema', span the entire form
+  if (propKey === 'schema') span = true
   // Create the EfField schema for the prop
   return {
     id: propKey,
@@ -85,6 +87,9 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
     contentStyle,
     debounce,
     events,
+    span,
+    // if the prop is `true` by default, set to true
+    default: _df === true || undefined,
   }
 }
 
@@ -92,6 +97,19 @@ export function getInfoCardSchema (selectedField) {
   const allComponentProps = selectedField === 'EasyForm'
     ? copy(EasyForms['EasyForm'].props)
     : getAllComponentProps(selectedField)
+  const propsCarry = selectedField !== 'EasyForm'
+    ? {}
+    : {
+      schemaAsCode: {
+        quasarProp: false,
+        id: 'schemaAsCode',
+        fieldType: 'title',
+        label: 'Check the Source tab',
+        contentStyle: 'padding: 1em;',
+        subLabel: `Check the Source tab > script to see the code of the prop 'schema' in color and with indentation.`,
+        category: 'model',
+      }
+    }
   return Object.entries(allComponentProps)
     .reduce((carry, [propKey, propInfo]) => {
       // fields to not include in the InfoCard settings:
@@ -102,23 +120,5 @@ export function getInfoCardSchema (selectedField) {
       }
       carry[propKey] = createInfoCardSchemaFromProp(propKey, propInfo, selectedField)
       return carry
-    }, {
-      schemaAsCode: {
-        quasarProp: false,
-        id: 'schemaAsCode',
-        fieldType: 'title',
-        label: 'Check the Source tab',
-        subLabel: `Check the Source tab > script to see the code of the prop 'schema' in color and with indentation.`,
-        category: 'model',
-      }
-      // schemaAsCode: {
-      //   quasarProp: false,
-      //   id: 'schemaAsCode',
-      //   fieldType: 'q-markdown',
-      //   valueType: 'string',
-      //   label: 'Schema formatted:',
-      //   subLabel: 'This is just a formatted representation of the `schema` field above.',
-      //   category: 'model',
-      // }
-    })
+    }, propsCarry)
 }
