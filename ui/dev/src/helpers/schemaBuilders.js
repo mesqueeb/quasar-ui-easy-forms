@@ -40,7 +40,7 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
   // If it has a default, write it in the description
   if (!isUndefined(_df)) subLabel += `\n\nDefault: \`${isFunction(_df) ? JSON.stringify(_df()) : _df}\``
   // if the prop is a Boolean, show this as a 'toggle' EasyField
-  if (type === Boolean) fieldType = 'toggle'
+  if (type === Boolean || ['readonly', 'disable'].includes(propKey)) fieldType = 'toggle'
   // if the prop has a fixed set of possible values, show this as an 'option' EasyField
   const propHasValues = isArray(values) && values.length
   if (propHasValues) {
@@ -64,8 +64,11 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
   }
   // Don't allow editing props that accept functions.
   if (type === Function) disable = true
-  // If it's the prop called 'schema', span the entire form
-  if (propKey === 'schema') span = true
+  // If it's the prop called 'schema', span the entire form and add extra info
+  if (propKey === 'schema') {
+    span = true
+    subLabel += '\n\n> 👀 Check「Source tab」→「Schema」to see the following code in color and with indentation.'
+  }
   // Create the EfField schema for the prop
   return {
     id: propKey,
@@ -97,19 +100,6 @@ export function getInfoCardSchema (selectedField) {
   const allComponentProps = selectedField === 'EasyForm'
     ? copy(EasyForms['EasyForm'].props)
     : getAllComponentProps(selectedField)
-  const propsCarry = selectedField !== 'EasyForm'
-    ? {}
-    : {
-      schemaAsCode: {
-        quasarProp: false,
-        id: 'schemaAsCode',
-        fieldType: 'title',
-        label: 'Check the Source tab',
-        contentStyle: 'padding: 1em;',
-        subLabel: `Check the Source tab > script to see the code of the prop 'schema' in color and with indentation.`,
-        category: 'model',
-      }
-    }
   return Object.entries(allComponentProps)
     .reduce((carry, [propKey, propInfo]) => {
       // fields to not include in the InfoCard settings:
@@ -120,5 +110,5 @@ export function getInfoCardSchema (selectedField) {
       }
       carry[propKey] = createInfoCardSchemaFromProp(propKey, propInfo, selectedField)
       return carry
-    }, propsCarry)
+    }, {})
 }

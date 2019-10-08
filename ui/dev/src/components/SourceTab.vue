@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { pascalCase } from 'case-anything'
+import { pascalCase, camelCase } from 'case-anything'
 // import { isPlainObject, isArray } from 'is-what'
 
 function parseCodeAsString (code) {
@@ -116,7 +116,7 @@ const ${schemaVarName} = ${parseCodeAsString(schema)}
       const { settings, settingsSchema, schemaVarName } = this
       return Object.entries(settings)
         .reduce((carry, [propKey, propValue]) => {
-          if (propValue === undefined || propValue === '') {
+          if (propValue === undefined || propValue === '' || propKey === 'value') {
             return carry
           }
           if (propKey === 'schema') {
@@ -131,9 +131,9 @@ const ${schemaVarName} = ${parseCodeAsString(schema)}
       const { settingsFormattedForSource, tag } = this
       const props = Object.entries(settingsFormattedForSource)
         .reduce((carry, [key, value]) => {
-          carry += `\n  :${key}="props${pascalCase(tag)}.${key}"`
+          carry += `\n  :${key}="${camelCase(tag)}Props.${key}"`
           return carry
-        }, `v-model="props${pascalCase(tag)}.value"`)
+        }, `v-model="${camelCase(tag)}value"`)
       const content = `
 \`\`\`html
 <${tag}
@@ -147,8 +147,8 @@ const ${schemaVarName} = ${parseCodeAsString(schema)}
       const content = `
 \`\`\`html
 <${tag}
-  v-bind="props${pascalCase(tag)}"
-  v-model="props${pascalCase(tag)}.value"
+  v-model="${camelCase(tag)}Value"
+  v-bind="${camelCase(tag)}Props"
 />
 \`\`\``
       return content.trim()
@@ -165,7 +165,8 @@ const ${schemaVarName} = ${parseCodeAsString(schema)}
 {
   data () {
     return {
-      props${pascalCase(tag)}: {${props}
+      ${camelCase(tag)}Value: {}, // this is in sync with the data when used with v-model
+      ${camelCase(tag)}Props: {${props}
       }
     }
   },

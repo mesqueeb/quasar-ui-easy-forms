@@ -68,15 +68,7 @@ export default {
   },
   computed: {
     settings () {
-      const settings = copy(this.value)
-      const cleanSettings = merge({
-        // default global easyField settings
-        label: `My awesome "${settings.fieldType}" field`,
-        subLabel: '',
-        disable: false,
-        readonly: false,
-      }, settings)
-      return cleanSettings
+      return copy(this.value)
     },
   },
   methods: {},

@@ -3,7 +3,7 @@
     <div class="row no-wrap items-start q-gutter-md">
       <q-markdown
         style="flex: 1"
-      >{{ descAdvanced }}</q-markdown>
+      >{{ description }}</q-markdown>
     </div>
     <InfoBoxWrapper color="accent" label="interactive preview" class="q-mb-md">
       <EasyForm
@@ -34,7 +34,7 @@
 import EasyForms from 'ui'
 import schemaAdvanced from '../schemas/advanced'
 import { getInfoCardSchema } from '../helpers/schemaBuilders'
-import { descAdvanced } from '../helpers/descriptions'
+import { descAdvanced as description } from '../helpers/descriptions'
 
 export default {
   name: 'PageDemo',
@@ -43,7 +43,7 @@ export default {
     const value = schemaAdvanced.reduce((carry, bp) => ({...carry, [bp.id]: undefined}), {})
     const settingsSchema = getInfoCardSchema('EasyForm')
     return {
-      descAdvanced,
+      description,
       settings: {
         schema,
         value,
