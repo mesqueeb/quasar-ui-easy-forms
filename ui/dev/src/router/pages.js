@@ -16,7 +16,7 @@ function slugify (str) {
   return encodeURIComponent(String(str).trim().replace(/\s+/g, '-'))
 }
 
-export default require.context('../pages', true, /^\.\/.*\.vue$/)
+const pages = require.context('../pages', true, /^\.\/.*\.vue$/)
   .keys()
   .map(page => page.slice(2).replace('.vue', ''))
   .filter(page => page !== "Index")
@@ -25,3 +25,14 @@ export default require.context('../pages', true, /^\.\/.*\.vue$/)
     title: page + '.vue',
     path: slugify(kebabCase(page)),
   }))
+
+const order = [
+  'Basic',
+  'Advanced',
+]
+
+const pagesOrdered = order
+  .map(name => pages.find(p => p.file === name))
+  .concat(pages.filter(p => !order.includes(p.file)))
+
+export default pagesOrdered
