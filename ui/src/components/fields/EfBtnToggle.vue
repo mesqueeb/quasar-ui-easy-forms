@@ -85,7 +85,7 @@ export default {
       type: undefined,
       desc: '`value` is the selected button\'s "value".',
     },
-    valueType: getGenericValueType(['string', 'boolean', 'number', 'array', 'object', 'date', 'null']),
+    valueType: getGenericValueType(['string', 'boolean', 'number', 'array', 'object', 'date', 'null', 'undefined']),
     // EF props:
     big,
     // Quasar props with modified defaults:
