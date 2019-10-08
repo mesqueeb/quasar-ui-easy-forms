@@ -40,11 +40,8 @@
             <h6 class="q-my-sm">dynamic prop binding with v-bind</h6>
             <q-markdown :src="panel.codeVBind" />
             <h6 class="q-my-sm">regular prop binding</h6>
-            <q-markdown :src="panel.codeRegular" />
           </template>
-          <template v-else>
-            <q-markdown :src="panel.codeRegular" />
-          </template>
+          <q-markdown :src="panel.codeRegular" />
         </q-tab-panel>
       </q-tab-panels>
     </template>
@@ -52,8 +49,15 @@
 </template>
 
 <script>
-import { camelCase } from 'case-anything'
+import { pascalCase } from 'case-anything'
 // import { isPlainObject, isArray } from 'is-what'
+
+function parseCodeAsString (code) {
+  const string = JSON.stringify(code, null, 2)
+  return string
+    .replace(/'/g, `\\'`)
+    .replace(/"/g, `'`)
+}
 
 export default {
   name: 'SourceTab',
@@ -75,32 +79,51 @@ export default {
   },
   computed: {
     codePerCategory () {
-      const { templateVBind, templateRegular, scriptVBind, scriptRegular } = this
+      const { templateVBind, templateRegular, scriptVBind, scriptRegular, propSchema } = this
       return [
         {
           name: 'template',
           codeVBind: templateVBind,
           codeRegular: templateRegular,
         },
+        propSchema ? {
+          name: 'schema',
+          codeRegular: propSchema,
+        } : null,
         {
           name: 'script',
           codeRegular: scriptRegular,
         },
-      ]
+      ].filter(notNull => notNull)
+    },
+    schemaVarName () {
+      const { tag, settings } = this
+      const { fieldType } = settings
+      return (tag === 'EasyField')
+        ? `schema${pascalCase(tag) + pascalCase(fieldType)}`
+        : `schema${pascalCase(tag)}`
+    },
+    propSchema () {
+      const { settings, schemaVarName } = this
+      const { schema } = settings
+      if (!schema) return false
+      return `
+\`\`\`js
+const ${schemaVarName} = ${parseCodeAsString(schema)}
+\`\`\``.trim()
     },
     settingsFormattedForSource () {
-      const { settings, settingsSchema } = this
+      const { settings, settingsSchema, schemaVarName } = this
       return Object.entries(settings)
-        .reduce((carry, [key, value]) => {
-          if (value === undefined || value === '' || value === false) {
+        .reduce((carry, [propKey, propValue]) => {
+          if (propValue === undefined || propValue === '') {
             return carry
           }
-          const { fieldType } = settingsSchema[key] || {}
-          let valueParsed = JSON.stringify(value)
-          valueParsed = valueParsed
-            .replace(/'/g, `\\'`)
-            .replace(/"/g, `'`)
-          carry[key] = valueParsed
+          if (propKey === 'schema') {
+            carry[propKey] = `${schemaVarName} // see 'Schema' tab on the left`
+            return carry
+          }
+          carry[propKey] = parseCodeAsString(propValue)
           return carry
         }, {})
     },
@@ -108,9 +131,9 @@ export default {
       const { settingsFormattedForSource, tag } = this
       const props = Object.entries(settingsFormattedForSource)
         .reduce((carry, [key, value]) => {
-          carry += `\n  :${key}="${camelCase(tag)}Props.${key}"`
+          carry += `\n  :${key}="props${pascalCase(tag)}.${key}"`
           return carry
-        }, `v-model="${camelCase(tag)}Props.value"`)
+        }, `v-model="props${pascalCase(tag)}.value"`)
       const content = `
 \`\`\`html
 <${tag}
@@ -124,8 +147,8 @@ export default {
       const content = `
 \`\`\`html
 <${tag}
-  v-bind="${camelCase(tag)}Props"
-  v-model="${camelCase(tag)}Props.value"
+  v-bind="props${pascalCase(tag)}"
+  v-model="props${pascalCase(tag)}.value"
 />
 \`\`\``
       return content.trim()
@@ -142,7 +165,7 @@ export default {
 {
   data () {
     return {
-      ${camelCase(tag)}Props: {${props}
+      props${pascalCase(tag)}: {${props}
       }
     }
   },
