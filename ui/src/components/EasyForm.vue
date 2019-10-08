@@ -62,7 +62,10 @@
         v-for="field in cSchema"
         :key="field.id"
         v-bind="field"
-        :value="innerData[field.id]"
+        :form-data-nested="innerDataNested"
+        :form-data-flat="innerDataFlat"
+        :id="id"
+        :value="innerDataFlat[field.id]"
         @input="value => fieldInput({id: field.id, value})"
         :class="field.fieldType === 'title' ? '-title' : ''"
         :style="field.span ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}` : ''"
@@ -101,6 +104,7 @@ import { nestifyObject } from 'nestify-anything'
 import flattenPerSchema from '../helpers/flattenPerSchema'
 import lang from '../meta/lang'
 import EfBtn from './fields/EfBtn.vue'
+import EasyField from './EasyField.vue'
 
 function requiredValuePasses (value, blueprint = {}) {
   if (!blueprint.required) return true
@@ -130,7 +134,7 @@ function checkRequiredFields (formData, schema) {
 
 export default {
   name: 'EasyForm',
-  components: { EfBtn },
+  components: { EfBtn, EasyField },
   props: {
     // prop categories: behavior content general model state style
     value: {
@@ -143,7 +147,9 @@ export default {
     id: {
       category: 'model',
       type: String,
-      desc: `The 'id' of the EasyForm. Can be set to be able to use inside the evaluation of props passed a function.`,
+      desc: `A manually set 'id' of the EasyForm. This prop is accessible in the \`context\` of the Function of any "evaluated prop"*.
+
+Read more on Evaluated Props in its dedicade page.`,
     },
     schema: {
       category: 'model',
@@ -159,6 +165,7 @@ export default {
       validator: prop => ['edit', 'add', 'view'].includes(prop),
       values: ['edit', 'add', 'view'],
       examples: [`'edit'`, `'add'`, `'view'`],
+      desc: 'The state of the EasyForm.',
     },
     actionButtons: {
       category: 'content',
@@ -198,22 +205,22 @@ You can decide which buttons you want to show/hide by passing them in an array t
   data () {
     const innerMode = this.mode
     const dataFlat = flattenPerSchema(this.value, this.schema)
-    const innerData = copy(dataFlat)
+    const innerDataFlat = copy(dataFlat)
     return {
       innerMode,
       edited: false,
       editedFields: [],
-      innerData,
-      innerDataBackups: [copy(dataFlat)],
+      innerDataFlat,
+      innerDataFlatBackups: [copy(dataFlat)],
     }
   },
   watch: {
-    value (newValue) { this.innerData = copy(newValue) },
+    value (newValue) { this.innerDataFlat = copy(newValue) },
     mode (newValue) { this.innerMode = copy(newValue) },
   },
   computed: {
     l () { return this.lang },
-    nestedInnerData () { return nestifyObject(this.innerData) },
+    innerDataNested () { return nestifyObject(this.innerDataFlat) },
     schemaObject () {
       return this.schema.reduce((carry, blueprint) => {
         carry[blueprint.id] = blueprint
@@ -228,53 +235,37 @@ You can decide which buttons you want to show/hide by passing them in an array t
       },
     },
     cSchema () {
-      const { cMode, schema, $store, nestedInnerData, innerData } = this
+      const { cMode, schema, innerDataNested, innerDataFlat } = this
       const self = this
-      function formatBlueprintProps (blueprint) {
-        const propsToIgnore = ['showCondition', 'format', 'parseInput', 'onInput'] // there are currently none
-        return Object.entries(blueprint)
-          .reduce((carry, [propKey, propValue]) => {
-            if (propsToIgnore.includes(propKey)) {
-              carry[propKey] = propValue
-            } else {
-              carry[propKey] = (isFunction(propValue))
-                ? propValue(innerData[propKey], self, nestedInnerData)
-                : propValue
-            }
-            return carry
-          }, {})
-      }
-      function checkShowCondition ({ showCondition }) {
+      function checkShowCondition ({ id, showCondition }) {
         if (!isFunction(showCondition)) return true
-        return showCondition(nestedInnerData, cMode)
+        return showCondition(innerDataNested[id], merge(self, {
+          formDataNested: innerDataNested,
+          formDataFlat: innerDataFlat,
+        }))
       }
       return schema.reduce((carry, blueprint) => {
         // return early when showCondition fails
         if (!checkShowCondition(blueprint)) return carry
-        const dataToOverwrite = (cMode === 'view')
-          ? {deletable: false, readonly: true}
-          : {}
-        if (blueprint.schema && cMode === 'view') {
-          dataToOverwrite.schema = blueprint.schema.map(bp => {
-            return merge(bp, {deletable: false, readonly: true})
-          })
+        if (cMode === 'view') {
+          carry.push(merge(blueprint, {readonly: true}))
+          return carry
         }
-        const cleanBlueprint = merge(formatBlueprintProps(blueprint), dataToOverwrite)
-        carry.push(cleanBlueprint)
+        carry.push(blueprint)
         return carry
       }, [])
     },
     dataBackup () {
-      const { innerDataBackups } = this
-      if (!innerDataBackups.length) return {}
-      const lastBackup = innerDataBackups.slice(-1)[0]
+      const { innerDataFlatBackups } = this
+      if (!innerDataFlatBackups.length) return {}
+      const lastBackup = innerDataFlatBackups.slice(-1)[0]
       const dataNested = nestifyObject(lastBackup)
       return dataNested
     },
     dataEdited () {
-      const { editedFields, innerData } = this
+      const { editedFields, innerDataFlat } = this
       const dataFlat = editedFields.reduce((carry, prop) => {
-        carry[prop] = innerData[prop]
+        carry[prop] = innerDataFlat[prop]
         return carry
       }, {})
       const dataNested = nestifyObject(dataFlat)
@@ -315,19 +306,19 @@ You can decide which buttons you want to show/hide by passing them in an array t
       }
       this.edited = true
       if (!this.editedFields.includes(id)) this.editedFields.push(id)
-      this.innerData[id] = value
-      this.$emit('input', this.innerData)
+      this.innerDataFlat[id] = value
+      this.$emit('input', this.innerDataFlat)
     },
     resetState () {
       this.cMode = 'view'
       this.edited = false
       this.editedFields = []
-      this.innerDataBackups.push(copy(this.innerData))
+      this.innerDataFlatBackups.push(copy(this.innerDataFlat))
     },
     restoreBackup () {
-      if (!this.innerDataBackups.length) return
-      const lastBackup = this.innerDataBackups.pop()
-      this.innerData = lastBackup
+      if (!this.innerDataFlatBackups.length) return
+      const lastBackup = this.innerDataFlatBackups.pop()
+      this.innerDataFlat = lastBackup
     },
     tapCancel () {
       this.restoreBackup()

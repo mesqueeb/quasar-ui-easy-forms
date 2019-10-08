@@ -1,19 +1,26 @@
 <template>
   <div class="easy-field" :style="contentStyle">
     <div
-      v-if="label"
+      v-if="cLabel"
       :class="classFieldLabel"
-    >{{ label }}</div>
+    >{{ cLabel }}</div>
     <div
-      v-if="subLabel"
+      v-if="cSubLabel"
       :class="`easy-field__sub-label q-mb-sm text-wrap-all`"
-    >{{ subLabel }}</div>
+    >{{ cSubLabel }}</div>
     <div
       class="easy-field__field"
       v-if="!['title', 'space', 'none', undefined].includes(fieldType)"
     >
-      <component :is="componentIdentifier" v-model="cValue" v-bind="fieldProps" />
-      <pre v-if="fieldType === 'q-markdown'" v-bind="fieldProps">{{ cValue }}</pre>
+      <component
+        :is="componentIdentifier"
+        v-model="cValue"
+        v-bind="fieldProps"
+      />
+      <!-- <pre
+        v-if="fieldType === 'q-markdown'"
+        v-bind="fieldProps"
+      >{{ cValue }}</pre> -->
     </div>
   </div>
 </template>
@@ -42,7 +49,6 @@ export default {
     fieldType: {
       category: 'general',
       type: [String, Object],
-      required: true,
     },
     value: {
       category: 'model',
@@ -50,12 +56,12 @@ export default {
     },
     subLabel: {
       category: 'content',
-      type: String,
+      type: [String, Function],
       desc: 'A smaller label for extra info.',
     },
     contentStyle: {
       category: 'style',
-      type: [Object, Array, String],
+      type: [Object, Array, String, Function],
       desc: 'Custom styling to be applied to the EasyField. Applied like so `:style="contentStyle"`',
       examples: [`'padding: 1em;'`],
     },
@@ -71,12 +77,35 @@ export default {
       desc: 'You can change how the value is parsed before it\'s updated. You must return the parsed value.',
       examples: ['val => kToThousand(val)' ],
     },
+    formDataNested: {
+      category: 'general',
+      type: Object,
+      desc: `This is the *nested* data of all the fields inside an EasyForm. This prop is accessible in the \`context\` of the Function of any "evaluated prop"*.
+When using EasyField as standalone this prop won't doesn't exist, but you can still pass data to the \`formDataNested\` prop manually.
+
+Read more on Evaluated Props in its dedicade page.`,
+    },
+    formDataFlat: {
+      category: 'general',
+      type: Object,
+      desc: `This is the *flattened* data of all the fields inside an EasyForm. This prop is accessible in the \`context\` of the Function of any "evaluated prop"*.
+When using EasyField as standalone this prop won't doesn't exist, but you can still pass data to the \`formDataFlat\` prop manually.
+
+Read more on Evaluated Props in its dedicade page.`,
+    },
+    id: {
+      category: 'model',
+      type: String,
+      desc: `A manually set 'id' of the EasyForm. This prop is accessible in the \`context\` of the Function of any "evaluated prop"*.
+
+Read more on Evaluated Props in its dedicade page.`,
+    },
     // Quasar props with modified defaults:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
     readonly: {
       category: 'state',
       quasarProp: 'modified',
-      type: Boolean,
+      type: [Boolean, Function],
       default: false,
       desc: '`readonly` is used for \'view\' mode of an EasyForm.',
     },
@@ -85,13 +114,13 @@ export default {
     label: {
       category: 'content',
       quasarProp: 'modified',
-      type: String,
+      type: [String, Function],
       desc: 'An EasyField label is always "external" to the field. (It replaces the Quasar label)',
     },
     disable: {
       category: 'state',
       quasarProp: 'modified',
-      type: Boolean,
+      type: [Boolean, Function],
       default: false,
       desc: '`disable` is ignored when `readonly` is true',
     },
@@ -105,17 +134,38 @@ export default {
       return 'Ef' + fieldType[0].toUpperCase() + fieldType.slice(1)
     },
     fieldProps () {
-      return merge(this.$attrs, {
-        // format: this.format,   // do not pass format
+      // props only used here: format, parseInput, label
+      const { cValue } = this
+      const self = this
+      const mergedProps = merge(this.$attrs, {
         // EF props used here, but also to pass:
-        subLabel: this.subLabel,
+        subLabel: this.cSubLabel,
         fieldType: this.fieldType,
         // Quasar props with modified defaults:
         readonly: this.readonly,
         // Quasar props with modified behavior:
-        // label: this.label,     // do not pass label
         disable: this.cDisable,
       })
+      // quasar props that can accept functions should be ignored:
+      const propsToIgnore = [
+        // QSelect:
+        'optionValue', 'optionLabel', 'optionDisable',
+        // QUploader:
+        'filter', 'factory', 'url', 'method', 'headers','fieldName','formFields','withCredentials','sendRaw','batch',
+      ]
+      function formatProp (propKey, propValue) {
+        if (propsToIgnore.includes(propKey)) {
+          return propValue
+        }
+        return (isFunction(propValue))
+          ? propValue(cValue, self)
+          : propValue
+      }
+      return Object.entries(mergedProps)
+        .reduce((carry, [propKey, propValue]) => {
+          carry[propKey] = formatProp(propKey, propValue)
+          return carry
+        }, {})
     },
     cValue: {
       get () {
@@ -125,6 +175,16 @@ export default {
       },
       set (val) { this.updateValue(val) },
     },
+    cLabel () {
+      const { label, cValue } = this
+      if (isFunction(label)) return label(cValue, this)
+      return label
+    },
+    cSubLabel () {
+      const { subLabel, cValue } = this
+      if (isFunction(subLabel)) return subLabel(cValue, this)
+      return subLabel
+    },
     cDisable () {
       const { readonly } = this.$attrs
       if (readonly) return false
@@ -132,11 +192,11 @@ export default {
       return disable
     },
     classFieldLabel () {
-      const { fieldType, subLabel } = this
+      const { fieldType, cSubLabel } = this
       let classes = '_label text-wrap-all'
       if (fieldType === 'title' || fieldType === 'form') {
         classes += ' q-mt-md text-bold'
-      } else if (!subLabel) {
+      } else if (!cSubLabel) {
         classes += ' q-mb-sm'
       }
       return classes

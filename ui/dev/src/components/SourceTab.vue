@@ -50,13 +50,28 @@
 
 <script>
 import { pascalCase, camelCase } from 'case-anything'
-// import { isPlainObject, isArray } from 'is-what'
+import { isFunction } from 'is-what'
 
 function parseCodeAsString (code) {
-  const string = JSON.stringify(code, null, 2)
-  return string
+  const stringifiedFns = []
+  function replacer (key, value) {
+    if (isFunction(value) && value.prototype.stringifiedFn) {
+      const fnString = value.prototype.stringifiedFn
+      stringifiedFns.push(fnString)
+      return fnString
+    }
+    return value
+  }
+  const string = JSON.stringify(code, replacer, 2)
+  const cleanedString = string
     .replace(/'/g, `\\'`)
     .replace(/"/g, `'`)
+  const formatedString = stringifiedFns.reduce((str, fnString) => {
+    // const fnStringRegex = new RegExp(`'${fnString}'`)
+    const fnStringRegex = `'${fnString.replace(/'/g, `\\'`).replace(/"/g, `'`)}'`
+    return str.replace(fnStringRegex, fnString)
+  }, cleanedString)
+  return formatedString
 }
 
 export default {
@@ -73,7 +88,7 @@ export default {
   },
   data () {
     return {
-      tabControl: 'template',
+      tabControl: 'schema',
       splitterModel: 12,
     }
   },
@@ -81,15 +96,15 @@ export default {
     codePerCategory () {
       const { templateVBind, templateRegular, scriptVBind, scriptRegular, propSchema } = this
       return [
+        propSchema ? {
+          name: 'schema',
+          codeRegular: propSchema,
+        } : null,
         {
           name: 'template',
           codeVBind: templateVBind,
           codeRegular: templateRegular,
         },
-        propSchema ? {
-          name: 'schema',
-          codeRegular: propSchema,
-        } : null,
         {
           name: 'script',
           codeRegular: scriptRegular,
@@ -120,7 +135,7 @@ const ${schemaVarName} = ${parseCodeAsString(schema)}
             return carry
           }
           if (propKey === 'schema') {
-            carry[propKey] = `${schemaVarName} // see 'Schema' tab on the left`
+            carry[propKey] = `${schemaVarName}, // see 'Schema' tab on the left`
             return carry
           }
           carry[propKey] = parseCodeAsString(propValue)

@@ -7,6 +7,7 @@
   "private": true,
   "scripts": {
     "build": "quasar build",
+    "deploy": "quasar build && firebase deploy",
     "dev": "quasar dev",
     "dev:ssr": "quasar dev -m ssr",
     "dev:ios": "quasar dev -m ios",
