@@ -20,13 +20,13 @@
           <EasyForm
             v-model="example.settings.value"
             v-bind="example.settings"
-            @update:mode="log('update:mode', $event)"
+          />
+            <!-- @update:mode="log('update:mode', $event)"
             @field-input="log('@field-input', $event)"
             @cancel="log('@cancel', $event)"
             @save="log('@save', $event)"
             @delete="log('@delete', $event)"
-            @archive="log('@archive', $event)"
-          />
+            @archive="log('@archive', $event)" -->
         </InfoBoxWrapper>
       </InfoCard>
     </div>

@@ -22,8 +22,8 @@ The most important props you can access from \`context\`:
 - \`formDataNested\` This is the *nested* data of all the fields inside an EasyForm.
 - \`formDataFlat\` This is the *flattened* data of all the fields inside an EasyForm.
 - \`id\` An 'id' of the EasyForm. This is only present when manually set.
-- \`mode\` The state of the EasyForm.
-- \`fieldInput\` A method you can access to modify the value of other fields inside your form. Since this is a method it should only be used inside the prop \`onInput\` which is a prop that receives a Function to be triggered @input of that field. See the example below for more details.
+- \`mode\` The state of the EasyForm. (\`'view'\` | \`'edit'\` | \`'add'\`)
+- \`fieldInput\` A method you can access to modify the value of other fields inside your form. See the example below for more details.
 `
 
 export const nestedProps = `todo...`

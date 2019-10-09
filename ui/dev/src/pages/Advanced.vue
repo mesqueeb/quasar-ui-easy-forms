@@ -9,13 +9,13 @@
       <EasyForm
         v-model="settings.value"
         v-bind="settings"
-        @update:mode="log('update:mode', $event)"
+      />
+        <!-- @update:mode="log('update:mode', $event)"
         @field-input="log('@field-input', $event)"
         @cancel="log('@cancel', $event)"
         @save="log('@save', $event)"
         @delete="log('@delete', $event)"
-        @archive="log('@archive', $event)"
-      />
+        @archive="log('@archive', $event)" -->
     </InfoBoxWrapper>
     <InfoCard
       tag="EasyForm"

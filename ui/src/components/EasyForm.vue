@@ -62,10 +62,10 @@
         v-for="field in cSchema"
         :key="field.id"
         v-bind="field"
-        :form-data-nested="innerDataNested"
-        :form-data-flat="innerDataFlat"
+        :form-data-nested="formDataNested"
+        :form-data-flat="formDataFlat"
         :id="id"
-        :value="innerDataFlat[field.id]"
+        :value="formDataFlat[field.id]"
         @input="value => fieldInput({id: field.id, value})"
         :class="field.fieldType === 'title' ? '-title' : ''"
         :style="field.span ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}` : ''"
@@ -205,22 +205,22 @@ You can decide which buttons you want to show/hide by passing them in an array t
   data () {
     const innerMode = this.mode
     const dataFlat = flattenPerSchema(this.value, this.schema)
-    const innerDataFlat = copy(dataFlat)
+    const formDataFlat = copy(dataFlat)
     return {
       innerMode,
       edited: false,
       editedFields: [],
-      innerDataFlat,
-      innerDataFlatBackups: [copy(dataFlat)],
+      formDataFlat,
+      formDataFlatBackups: [copy(dataFlat)],
     }
   },
   watch: {
-    value (newValue) { this.innerDataFlat = copy(newValue) },
+    value (newValue) { this.formDataFlat = copy(newValue) },
     mode (newValue) { this.innerMode = copy(newValue) },
   },
   computed: {
     l () { return this.lang },
-    innerDataNested () { return nestifyObject(this.innerDataFlat) },
+    formDataNested () { return nestifyObject(this.formDataFlat) },
     schemaObject () {
       return this.schema.reduce((carry, blueprint) => {
         carry[blueprint.id] = blueprint
@@ -235,14 +235,11 @@ You can decide which buttons you want to show/hide by passing them in an array t
       },
     },
     cSchema () {
-      const { cMode, schema, innerDataNested, innerDataFlat } = this
+      const { cMode, schema, formDataNested, formDataFlat } = this
       const self = this
       function checkShowCondition ({ id, showCondition }) {
         if (!isFunction(showCondition)) return true
-        return showCondition(innerDataNested[id], merge(self, {
-          formDataNested: innerDataNested,
-          formDataFlat: innerDataFlat,
-        }))
+        return showCondition(formDataFlat[id], self)
       }
       return schema.reduce((carry, blueprint) => {
         // return early when showCondition fails
@@ -256,16 +253,16 @@ You can decide which buttons you want to show/hide by passing them in an array t
       }, [])
     },
     dataBackup () {
-      const { innerDataFlatBackups } = this
-      if (!innerDataFlatBackups.length) return {}
-      const lastBackup = innerDataFlatBackups.slice(-1)[0]
+      const { formDataFlatBackups } = this
+      if (!formDataFlatBackups.length) return {}
+      const lastBackup = formDataFlatBackups.slice(-1)[0]
       const dataNested = nestifyObject(lastBackup)
       return dataNested
     },
     dataEdited () {
-      const { editedFields, innerDataFlat } = this
+      const { editedFields, formDataFlat } = this
       const dataFlat = editedFields.reduce((carry, prop) => {
-        carry[prop] = innerDataFlat[prop]
+        carry[prop] = formDataFlat[prop]
         return carry
       }, {})
       const dataNested = nestifyObject(dataFlat)
@@ -306,19 +303,19 @@ You can decide which buttons you want to show/hide by passing them in an array t
       }
       this.edited = true
       if (!this.editedFields.includes(id)) this.editedFields.push(id)
-      this.innerDataFlat[id] = value
-      this.$emit('input', this.innerDataFlat)
+      this.formDataFlat[id] = value
+      this.$emit('input', this.formDataFlat)
     },
     resetState () {
       this.cMode = 'view'
       this.edited = false
       this.editedFields = []
-      this.innerDataFlatBackups.push(copy(this.innerDataFlat))
+      this.formDataFlatBackups.push(copy(this.formDataFlat))
     },
     restoreBackup () {
-      if (!this.innerDataFlatBackups.length) return
-      const lastBackup = this.innerDataFlatBackups.pop()
-      this.innerDataFlat = lastBackup
+      if (!this.formDataFlatBackups.length) return
+      const lastBackup = this.formDataFlatBackups.pop()
+      this.formDataFlat = lastBackup
     },
     tapCancel () {
       this.restoreBackup()
