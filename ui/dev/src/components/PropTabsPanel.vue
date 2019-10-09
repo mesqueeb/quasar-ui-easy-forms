@@ -38,8 +38,8 @@
           class="q-pa-none q-pt-md"
         >
           <div
-            v-if="tag === 'EasyField'"
-            class="q-pb-md flex flex-center q-gutter-md"
+            v-if="tag === 'EasyField' && panel.name !== 'easyFormProp'"
+            class="q-pa-md flex flex-center q-gutter-md"
           >
             <div class="flex">
               <div class="_box" style="background: white"></div>
@@ -54,6 +54,12 @@
               <div class="_legend q-pl-xs">Quasar prop (regular)</div>
             </div>
           </div>
+          <q-markdown
+            v-if="tag === 'EasyField' && panel.name === 'easyFormProp'"
+            class="q-pa-md"
+          >These props are accessible in the `context` of the Function of any Evaluated Prop.
+When using EasyField as standalone these props don't exist, but you can still pass them manually if you want to use them in Evaluated Props.
+Read more on Evaluated Props on its dedicade page.</q-markdown>
           <EasyForm
             :value="value"
             @field-input="updateSettings"

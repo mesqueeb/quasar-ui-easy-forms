@@ -64,7 +64,8 @@
         v-bind="field"
         :form-data-nested="formDataNested"
         :form-data-flat="formDataFlat"
-        :id="id"
+        :form-mode="formMode"
+        :form-id="formId"
         :value="formDataFlat[field.id]"
         @input="value => fieldInput({id: field.id, value})"
         :class="field.fieldType === 'title' ? '-title' : ''"
@@ -203,11 +204,13 @@ You can decide which buttons you want to show/hide by passing them in an array t
     },
   },
   data () {
-    const innerMode = this.mode
+    const formMode = this.mode
+    const formId = this.id
     const dataFlat = flattenPerSchema(this.value, this.schema)
     const formDataFlat = copy(dataFlat)
     return {
-      innerMode,
+      formMode,
+      formId,
       edited: false,
       editedFields: [],
       formDataFlat,
@@ -216,7 +219,8 @@ You can decide which buttons you want to show/hide by passing them in an array t
   },
   watch: {
     value (newValue) { this.formDataFlat = copy(newValue) },
-    mode (newValue) { this.innerMode = copy(newValue) },
+    mode (newValue) { this.formMode = copy(newValue) },
+    id (newValue) { this.formId = copy(newValue) },
   },
   computed: {
     l () { return this.lang },
@@ -228,26 +232,27 @@ You can decide which buttons you want to show/hide by passing them in an array t
       }, {})
     },
     cMode: {
-      get () { return this.innerMode },
+      get () { return this.formMode },
       set (val) {
-        this.innerMode = val
+        this.formMode = val
         this.$emit('update:mode', val)
       },
     },
     cSchema () {
       const { cMode, schema, formDataNested, formDataFlat } = this
       const self = this
-      function checkShowCondition ({ id, showCondition }) {
+      function checkShowCondition ({ id: fieldId, showCondition }) {
         if (!isFunction(showCondition)) return true
-        return showCondition(formDataFlat[id], self)
+        return showCondition(formDataFlat[fieldId], self)
       }
       return schema.reduce((carry, blueprint) => {
         // return early when showCondition fails
-        if (!checkShowCondition(blueprint)) return carry
         if (cMode === 'view') {
+          if (!checkShowCondition(blueprint)) return carry
           carry.push(merge(blueprint, {readonly: true}))
           return carry
         }
+        if (!checkShowCondition(blueprint)) return carry
         carry.push(blueprint)
         return carry
       }, [])

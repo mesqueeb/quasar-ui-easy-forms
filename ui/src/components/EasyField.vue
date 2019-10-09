@@ -78,27 +78,24 @@ export default {
       examples: ['val => kToThousand(val)' ],
     },
     formDataNested: {
-      category: 'general',
+      category: 'easyFormProp',
       type: Object,
-      desc: `This is the *nested* data of all the fields inside an EasyForm. This prop is accessible in the \`context\` of the Function of any "evaluated prop"*.
-When using EasyField as standalone this prop won't doesn't exist, but you can still pass data to the \`formDataNested\` prop manually.
-
-Read more on Evaluated Props in its dedicade page.`,
+      desc: `This is the *nested* data of all the fields inside an EasyForm.`,
     },
     formDataFlat: {
-      category: 'general',
+      category: 'easyFormProp',
       type: Object,
-      desc: `This is the *flattened* data of all the fields inside an EasyForm. This prop is accessible in the \`context\` of the Function of any "evaluated prop"*.
-When using EasyField as standalone this prop won't doesn't exist, but you can still pass data to the \`formDataFlat\` prop manually.
-
-Read more on Evaluated Props in its dedicade page.`,
+      desc: `This is the *flattened* data of all the fields inside an EasyForm.`,
     },
-    id: {
-      category: 'model',
+    formId: {
+      category: 'easyFormProp',
       type: String,
-      desc: `A manually set 'id' of the EasyForm. This prop is accessible in the \`context\` of the Function of any "evaluated prop"*.
-
-Read more on Evaluated Props in its dedicade page.`,
+      desc: `A manually set 'id' of the EasyForm.`,
+    },
+    formMode: {
+      category: 'easyFormProp',
+      type: String,
+      desc: 'The state of the EasyForm. Can be `view` | `edit` | `add`',
     },
     // Quasar props with modified defaults:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)

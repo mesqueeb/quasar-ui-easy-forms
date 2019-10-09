@@ -55,7 +55,7 @@ export default {
           schema: schema.slice(1),
           value,
           mode: 'edit',
-          actionButtons: [],
+          actionButtons: schema.slice(0, 1)[0].formActionButtons || [],
           columnCount: 2,
         },
         settingsSchema,
