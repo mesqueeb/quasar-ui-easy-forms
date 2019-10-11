@@ -67,7 +67,6 @@ function parseCodeAsString (code) {
     .replace(/'/g, `\\'`)
     .replace(/"/g, `'`)
   const formatedString = stringifiedFns.reduce((str, fnString) => {
-    // const fnStringRegex = new RegExp(`'${fnString}'`)
     const fnStringRegex = `'${fnString.replace(/'/g, `\\'`).replace(/"/g, `'`)}'`
     return str.replace(fnStringRegex, fnString)
   }, cleanedString)
