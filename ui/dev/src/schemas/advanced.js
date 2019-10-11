@@ -36,7 +36,7 @@ export default [
   {
     id: 'roleModel',
     fieldType: 'select',
-    label: 'Role wodel',
+    label: 'Role model',
     subLabel: 'Who do you look up to?',
     options: [
       {label: 'Steve Rogers/Captain America', value: 'captain-america'},
