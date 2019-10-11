@@ -66,6 +66,7 @@
         :form-data-flat="formDataFlat"
         :form-mode="formMode"
         :form-id="formId"
+        :external-labels="externalLabels"
         :value="formDataFlat[field.id]"
         @input="value => fieldInput({id: field.id, value})"
         :class="field.fieldType === 'title' ? '-title' : ''"
@@ -202,6 +203,14 @@ You can decide which buttons you want to show/hide by passing them in an array t
       default: () => lang,
       examples: [`{cancel: 'キャンセル', edit: '編集', save: '保存'}`],
     },
+    externalLabels: {
+      category: 'style',
+      type: Boolean,
+      desc: `By default labels are external to allow similar label styling for any type of field.
+
+When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will use an internal label on 'input' fields and pass the subLabel as 'hint' underneath the input field.`,
+      default: true,
+    },
   },
   data () {
     const formMode = this.mode
@@ -239,7 +248,7 @@ You can decide which buttons you want to show/hide by passing them in an array t
       },
     },
     cSchema () {
-      const { cMode, schema, formDataNested, formDataFlat } = this
+      const { cMode, schema, formDataNested, formDataFlat, externalLabels } = this
       const self = this
       function checkShowCondition ({ id: fieldId, showCondition }) {
         if (!isFunction(showCondition)) return true

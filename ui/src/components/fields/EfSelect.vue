@@ -41,7 +41,7 @@ export default {
     big,
     placeholder: {
       type: String,
-      desc: 'Will be shown when nothing is selected. (Takes the place of the `label` Quasar prop, because with EfSelect the label is external.)'
+      desc: `Will be shown when nothing is selected, but only if 'externalLabels' is not disabled. (Takes the place of the 'label' Quasar prop, because with EfSelect the label is external.)`
     },
     // Quasar props with modified defaults:
     outlined: { quasarProp: 'modified', type: Boolean, default: true },
@@ -49,11 +49,11 @@ export default {
     emitValue: { quasarProp: 'modified', type: Boolean, default: true },
     autogrow: { quasarProp: 'modified', type: Boolean, default: true },
     // Quasar props with modified behavior:
-    label: {
-      quasarProp: 'modified',
-      type: String,
-      desc: 'Hidden when a value is selected, shows the placeholder when nothing is selected.',
-    },
+    // label: {
+    //   quasarProp: 'modified',
+    //   type: String,
+    //   desc: 'Hidden when a value is selected, shows the placeholder when nothing is selected.',
+    // },
     options: {
       quasarProp: true,
       default: () => [],
@@ -121,9 +121,12 @@ export default {
     },
     cLabel () {
       // hidden when a value is selected
-      return this.cValue || this.cValue === 0
+      const { cValue, placeholder } = this
+      const { externalLabels, label } = this.$attrs
+      if (!externalLabels) return label
+      return (cValue || cValue === 0)
         ? undefined
-        : this.placeholder
+        : placeholder
     },
     cOptions () {
       const { options } = this

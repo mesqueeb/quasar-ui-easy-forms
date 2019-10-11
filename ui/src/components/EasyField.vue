@@ -97,6 +97,14 @@ export default {
       type: String,
       desc: 'The state of the EasyForm. Can be `view` | `edit` | `add`',
     },
+    externalLabels: {
+      category: 'style',
+      type: Boolean,
+      desc: `By default labels are external to allow similar label styling for any type of field.
+
+When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will use an internal label on 'input' fields and pass the subLabel as 'hint' underneath the input field.`,
+      default: true,
+    },
     // Quasar props with modified defaults:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
     readonly: {
@@ -123,6 +131,12 @@ export default {
     },
   },
   computed: {
+    internalLabelMode () {
+      const { externalLabels, fieldType } = this
+      return !externalLabels && [
+        'input', 'inputDate', 'select'
+      ].includes(fieldType)
+    },
     componentIdentifier () {
       const { fieldType } = this
       if (!fieldType) return ''
@@ -132,14 +146,17 @@ export default {
     },
     fieldProps () {
       // props only used here: format, parseInput, label
-      const { cValue } = this
+      const { cValue, internalLabelMode, fieldType } = this
       const self = this
       const mergedProps = merge(this.$attrs, {
         // EF props used here, but also to pass:
+        externalLabels: this.externalLabels,
         subLabel: this.cSubLabel,
         fieldType: this.fieldType,
         // Quasar props with modified defaults:
         readonly: this.readonly,
+        label: internalLabelMode ? this.label : undefined ,
+        hint: internalLabelMode ? this.subLabel : this.hint,
         // Quasar props with modified behavior:
         disable: this.cDisable,
       })
@@ -175,14 +192,14 @@ export default {
       set (val) { this.updateValue(val) },
     },
     cLabel () {
-      const { label, cValue } = this
+      const { label, cValue, internalLabelMode } = this
       if (isFunction(label)) return label(cValue, this)
-      return label
+      return internalLabelMode ? undefined : label
     },
     cSubLabel () {
-      const { subLabel, cValue } = this
+      const { subLabel, cValue, internalLabelMode } = this
       if (isFunction(subLabel)) return subLabel(cValue, this)
-      return subLabel
+      return internalLabelMode ? undefined : subLabel
     },
     cDisable () {
       const { readonly } = this.$attrs
