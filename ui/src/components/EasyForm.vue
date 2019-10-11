@@ -1,12 +1,22 @@
 <template>
-  <div class="easy-form">
-    <div class="easy-form__nav-row" v-if="actionButtons.length">
+  <div
+    class="easy-form q-gutter-lg"
+    :style="{flexDirection: ['top', 'bottom'].includes(actionButtonsPosition) ? 'column' : 'row'}"
+  >
+    <div
+      class="easy-form__nav-row"
+      :style="{
+        order: ['top', 'left'].includes(actionButtonsPosition) ? 0 : 1,
+        gridAutoFlow: ['top', 'bottom'].includes(actionButtonsPosition) ? 'column' : 'row',
+      }"
+      v-if="actionButtons.length"
+    >
       <div
         class="easy-form__validation-error text-negative"
-        v-if="isString(validatorMessage)"
+        v-if="isFullString(validatorMessage)"
       >{{ validatorMessage }}</div>
       <EfBtn
-        v-for="btn in actionButtons.filter(b => !isString(b))"
+        v-for="btn in actionButtons.filter(b => !isFullString(b))"
         :key="btn.label"
         :value="btn.label"
         size="md"
@@ -80,7 +90,8 @@
 // $
 @import '../index.sass'
 
-// .easy-form
+.easy-form
+  display: flex
 .easy-form__form
   display: grid
   align-items: stretch
@@ -88,10 +99,10 @@
   > .-title
     grid-column: 1 / -1
 .easy-form__nav-row
-  margin-bottom: $md
   min-height: 42px
   display: grid
   justify-content: end
+  align-content: start
   align-items: center
   grid-auto-flow: column
   grid-gap: $md
@@ -101,7 +112,7 @@
 <script>
 import merge from 'merge-anything'
 import copy from 'copy-anything'
-import { isArray, isFunction, isString } from 'is-what'
+import { isArray, isFunction, isFullString } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
 import flattenPerSchema from '../helpers/flattenPerSchema'
 import lang from '../meta/lang'
@@ -177,6 +188,15 @@ Read more on Evaluated Props in its dedicade page.`,
 
 You can decide which buttons you want to show/hide by passing them in an array to \`:action-buttons="[]"\`. You can also pass custom buttons with a label and handler.`,
       examples: [`[] (no buttons)`, `['delete', 'cancel', 'edit', 'save']`, `[{label: 'log', handler: console.log}]`],
+    },
+    actionButtonsPosition: {
+      category: 'content',
+      type: String,
+      default: 'top',
+      desc: `The position of the action buttons.`,
+      examples: ['top', 'bottom', 'right', 'left'],
+      values: ['top', 'bottom', 'right', 'left'],
+      validator: prop => ['top', 'bottom', 'right', 'left'].includes(prop),
     },
     validator: {
       category: 'behavior',
@@ -289,10 +309,10 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
         merge(dataEdited),
         cSchema
       )
-      if (isString(requiredFieldsError)) errors.push(requiredFieldsError)
+      if (isFullString(requiredFieldsError)) errors.push(requiredFieldsError)
       if (!isFunction(validator)) return errors
       const validatorRes = validator(dataEdited, dataBackup)
-      if (isString(validatorRes)) errors.push(validatorRes)
+      if (isFullString(validatorRes)) errors.push(validatorRes)
       return errors
     },
     validatorMessage () {
@@ -306,7 +326,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     },
   },
   methods: {
-    isString,
+    isFullString,
     fieldInput ({id, value}) {
       // console.log('field id → ', id, '| new value → ', value)
       this.$emit('field-input', {id, value})
