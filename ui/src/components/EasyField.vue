@@ -209,7 +209,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     },
     classFieldLabel () {
       const { fieldType, cSubLabel } = this
-      let classes = '_label text-wrap-all'
+      let classes = 'easy-field__label text-wrap-all'
       if (fieldType === 'title' || fieldType === 'form') {
         classes += ' q-mt-md text-bold'
       } else if (!cSubLabel) {
