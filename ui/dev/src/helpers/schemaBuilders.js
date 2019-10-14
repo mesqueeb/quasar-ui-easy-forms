@@ -51,6 +51,7 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
   if (
     type === Array ||
     type === Object ||
+    type === Function ||
     (isArray(type) && [Array, Object].some(t => type.includes(t)) && type.length === 2)
   ) {
     // events.blur = (e, val) => console.log(stringToJs(val))

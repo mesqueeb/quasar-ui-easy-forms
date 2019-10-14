@@ -20,7 +20,7 @@
 
 <script>
 import merge from 'merge-anything'
-import { isObject, isFullString } from 'is-what'
+import { isObject, isFullString, isFunction } from 'is-what'
 import { QRange } from 'quasar'
 import { getGenericValueType } from './sharedProps.js'
 
@@ -40,10 +40,12 @@ export default {
     valueType: getGenericValueType('object'),
     // EF props:
     prefix: {
+      category: 'labels',
       type: String,
       desc: 'Prefix shown inside the label.',
     },
     suffix: {
+      category: 'labels',
       type: String,
       desc: 'Suffix shown inside the label.',
     },
@@ -52,6 +54,12 @@ export default {
     //   desc: 'Formats the slider label.',
     //   examples: ['val => val / 1000 + \'K\'', 'val => commafy(val)'],
     // },
+    labelValue: {
+      category: 'labels',
+      type: Function,
+      desc: 'A **function** to format the value shown inside the left & right labels. When `undefined` it will default to the value with pre- & suffix (if they are set).',
+      examples: ['val => `${val}.00 USD`'],
+    },
     // Quasar props with modified defaults:
     labelAlways: {
       quasarProp: 'modified',
@@ -72,8 +80,8 @@ export default {
         // Quasar props with modified defaults:
         labelAlways: this.labelAlways,
         // Quasar props with modified behavior:
-        leftLabelValue: this.cFormat(this.cValue.min),
-        rightLabelValue: this.cFormat(this.cValue.max),
+        leftLabelValue: this.cLeftLabelValue,
+        rightLabelValue: this.cRightLabelValue,
         disable: this.cDisable,
       })
     },
@@ -82,15 +90,21 @@ export default {
       set (val) { this.$emit('input', val) },
     },
     cDisable () { return this.$attrs.readonly || this.disable },
-  },
-  methods: {
-    cFormat (val) {
-      const { prefix, suffix } = this
-      // if (isFunction(format)) val = format(val)
-      if (isFullString(prefix)) val = `${prefix}${val}`
-      if (isFullString(suffix)) val = `${val}${suffix}`
-      return val
+    cLeftLabelValue () {
+      const { labelValueFn, value } = this
+      const val = value.min
+      return labelValueFn(val)
     },
-  }
+    cRightLabelValue () {
+      const { labelValueFn, value } = this
+      const val = value.max
+      return labelValueFn(val)
+    },
+    labelValueFn () {
+      const { prefix, suffix, labelValue } = this
+      if (isFunction(labelValue)) return labelValue
+      return val => `${prefix || ''}${val}${suffix || ''}`
+    },
+  },
 }
 </script>

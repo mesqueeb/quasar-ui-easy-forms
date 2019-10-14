@@ -20,7 +20,7 @@
 
 <script>
 import merge from 'merge-anything'
-import { isFullString } from 'is-what'
+import { isFullString, isFunction } from 'is-what'
 import { QSlider } from 'quasar'
 import { getGenericValueType } from './sharedProps.js'
 
@@ -53,8 +53,15 @@ export default {
       quasarProp: 'modified',
       type: Boolean,
       default: true,
+      desc: 'This points to the label of the slider value.',
     },
     // Quasar props with modified behavior:
+    labelValue: {
+      quasarProp: 'modified',
+      type: Function,
+      desc: 'A **function** to format the value shown inside the label. When `undefined` it will default to the value with pre- & suffix (if they are set).',
+      examples: ['val => `${val}.00 USD`'],
+    },
     disable: {
       quasarProp: 'modified',
       type: Boolean,
@@ -68,7 +75,7 @@ export default {
         // Quasar props with modified defaults:
         labelAlways: this.labelAlways,
         // Quasar props with modified behavior:
-        labelValue: this.cFormat(this.cValue),
+        labelValue: this.cLabelValue,
         disable: this.cDisable,
       })
     },
@@ -77,15 +84,11 @@ export default {
       set (val) { this.$emit('input', val) },
     },
     cDisable () { return this.$attrs.readonly || this.disable },
-  },
-  methods: {
-    cFormat (val) {
-      const { prefix, suffix } = this
-      // if (isFunction(format)) val = format(val)
-      if (isFullString(prefix)) val = `${prefix}${val}`
-      if (isFullString(suffix)) val = `${val}${suffix}`
-      return val
+    cLabelValue () {
+      const { value, prefix, suffix, labelValue } = this
+      if (isFunction(labelValue)) return labelValue(value)
+      return `${prefix || ''}${value}${suffix || ''}`
     },
-  }
+  },
 }
 </script>

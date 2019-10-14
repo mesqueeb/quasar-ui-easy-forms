@@ -163,7 +163,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       // quasar props that can accept functions should be ignored:
       const propsToIgnore = [
         // EasyForm:
-        'onInput',
+        'onInput', 'labelValue',
         // QSelect:
         'optionValue', 'optionLabel', 'optionDisable',
         // QUploader:
