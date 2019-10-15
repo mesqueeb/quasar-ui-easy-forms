@@ -7,7 +7,6 @@
       v-bind="quasarProps"
       :class="[
         'ef-btn-toggle', {
-        '-big': big,
         '-readonly': quasarProps.readonly,
       }]"
     />
@@ -15,8 +14,8 @@
       v-if="big"
       :style="style"
       :class="[
-        'ef-btn-toggle', {
-        '-big': big,
+        'ef-btn-toggle',
+        '-big', {
         '-readonly': quasarProps.readonly,
       }]"
     >
@@ -45,27 +44,28 @@
 
 .ef-btn-toggle
   width: 100%
-  grid-template-columns: 1fr 1fr
-  @media screen and (min-width: 600px)
-    grid-template-columns: 1fr 1fr 1fr
-  // ↳ these are hard coded in the style in the template
-  grid-gap: 6vw
-  // start grid--square:
-  display: grid
-  justify-content: center
-  align-content: center
-  > div
-    height: 0
-    width: 100%
-    padding-bottom: 100%
-    position: relative
-    > *
-      position: absolute
-  // end grid--square
-  >.ef-btn-toggle__chosen > *
-    transform: translate3d(0, 3px, 0)
-    border-bottom-width: 0
-    box-shadow: inset 0 0 0 1000px rgba(0,0,0,.2)
+  &.-big
+    grid-template-columns: 1fr 1fr
+    @media screen and (min-width: 600px)
+      grid-template-columns: 1fr 1fr 1fr
+    // ↳ these are hard coded in the style in the template
+    grid-gap: 6vw
+    // start grid--square:
+    display: grid
+    justify-content: center
+    align-content: center
+    > div
+      height: 0
+      width: 100%
+      padding-bottom: 100%
+      position: relative
+      > *
+        position: absolute
+    // end grid--square
+    >.ef-btn-toggle__chosen > *
+      transform: translate3d(0, 3px, 0)
+      border-bottom-width: 0
+      box-shadow: inset 0 0 0 1000px rgba(0,0,0,.2)
 
 </style>
 

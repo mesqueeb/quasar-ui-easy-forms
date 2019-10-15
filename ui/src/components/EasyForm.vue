@@ -72,11 +72,6 @@
         v-for="field in cSchema"
         :key="field.id"
         v-bind="field"
-        :form-data-nested="formDataNested"
-        :form-data-flat="formDataFlat"
-        :form-mode="formMode"
-        :form-id="formId"
-        :external-labels="externalLabels"
         :value="formDataFlat[field.id]"
         @input="value => fieldInput({id: field.id, value})"
         :class="field.fieldType === 'title' ? '-title' : ''"
@@ -148,6 +143,7 @@ function checkRequiredFields (formData, schema) {
 export default {
   name: 'EasyForm',
   components: { EfBtn, EasyField },
+  inheritAttrs: false,
   props: {
     // prop categories: behavior content general model state style
     value: {
@@ -268,15 +264,29 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       },
     },
     cSchema () {
-      const { cMode, schema, formDataNested, formDataFlat, externalLabels } = this
+      const {
+        schema,
+        formDataNested,
+        formDataFlat,
+        formMode,
+        formId,
+        externalLabels
+      } = this
       const self = this
       function checkShowCondition ({ id: fieldId, showCondition }) {
         if (!isFunction(showCondition)) return true
         return showCondition(formDataFlat[fieldId], self)
       }
       return schema.reduce((carry, blueprint) => {
+        blueprint = merge(blueprint, {
+          formDataNested,
+          formDataFlat,
+          formMode,
+          formId,
+          externalLabels,
+        })
         // return early when showCondition fails
-        if (cMode === 'view') {
+        if (formMode === 'view') {
           if (!checkShowCondition(blueprint)) return carry
           carry.push(merge(blueprint, {readonly: true}))
           return carry
