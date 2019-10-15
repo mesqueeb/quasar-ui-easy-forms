@@ -5,7 +5,7 @@
         style="flex: 1"
       >{{ description }}</q-markdown>
     </div>
-    <EasyField v-bind="examplePicker" v-model="selectedExampleIndex" class="q-mb-md" />
+    <EasyField v-bind="examplePicker" v-model="selectedExampleIndex" class="q-mb-md example-picker" />
     <div
       v-for="(example, index) in selectedExamples"
       :key="index"
@@ -34,7 +34,11 @@
   </q-page>
 </template>
 
-<style lang="sass" scoped>
+<style lang="sass">
+
+.example-picker .ef-btn-toggle
+  border: solid 2px $primary
+  border-radius: 6px
 
 </style>
 
@@ -53,12 +57,6 @@ export default {
         return {label: schema[0].label, value: index}
       }),
       noCaps: true,
-      style: 'border: solid thin',
-      unelevated: true,
-      toggleColor: 'primary',
-      color: 'white',
-      textColor: 'black',
-      rounded: true,
     }
     const examples = schemasEvaluatedProps.reduce((carry, schema) => {
       const value = schema.reduce((carry, bp) => ({...carry, [bp.id]: undefined}), {})
