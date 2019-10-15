@@ -24,7 +24,7 @@ import merge from 'merge-anything'
 import copy from 'copy-anything'
 import { isString, isPlainObject, isArray } from 'is-what'
 import { QSelect } from 'quasar'
-import { big } from './sharedProps.js'
+import { big, externalLabels } from './sharedProps.js'
 
 export default {
   components: { QSelect },
@@ -39,6 +39,7 @@ export default {
     // valueType inherited from `easyField`,
     // EF props:
     big,
+    externalLabels,
     placeholder: {
       type: String,
       desc: `Will be shown when nothing is selected, but only if 'externalLabels' is not disabled. (Takes the place of the 'label' Quasar prop, because with EfSelect the label is external.)`
@@ -73,6 +74,11 @@ export default {
   },
   computed: {
     quasarProps () {
+      const overWriteLabelAndHint = (this.externalLabels === false)
+        ? {
+          label: this.$attrs.labelRaw,
+          hint: this.$attrs.subLabelRaw,
+        } : {}
       return merge(this.$attrs, {
         // Quasar props with modified defaults:
         outlined: this.outlined,
@@ -84,7 +90,7 @@ export default {
         options: this.cOptions,
         hideDropdownIcon: this.cHideDropdownIcon,
         useChips: this.cUseChips,
-      })
+      }, overWriteLabelAndHint)
     },
     cValue: {
       get () {
@@ -122,8 +128,6 @@ export default {
     cLabel () {
       // hidden when a value is selected
       const { cValue, placeholder } = this
-      const { externalLabels, label } = this.$attrs
-      if (!externalLabels) return label
       return (cValue || cValue === 0)
         ? undefined
         : placeholder

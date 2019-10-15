@@ -33,7 +33,7 @@
 import merge from 'merge-anything'
 import { isNumber, isString, isArray, isFunction } from 'is-what'
 import { QInput } from 'quasar'
-import { big, getGenericValueType } from './sharedProps.js'
+import { getGenericValueType, big, externalLabels } from './sharedProps.js'
 import { rulesMap } from '../../helpers/inputValidators'
 import focusInput from '../../helpers/focusInput'
 
@@ -51,6 +51,7 @@ export default {
     // EF props:
     fieldType: {type: String}, // defined in EasyField
     big,
+    externalLabels,
     maxValue: {
       category: 'model',
       type: Number,
@@ -96,14 +97,20 @@ export default {
   },
   computed: {
     quasarProps () {
+      const overWriteLabelAndHint = (this.externalLabels === false)
+        ? {
+          label: this.$attrs.labelRaw,
+          hint: this.$attrs.subLabelRaw,
+        } : {}
       return merge(this.$attrs, {
         // Quasar props with modified defaults:
+
         outlined: this.outlined,
         lazyRules: this.lazyRules,
         // Quasar props with modified behavior:
         rules: this.cRules,
         type: this.cType,
-      })
+      }, overWriteLabelAndHint)
     },
     cValue: {
       get () {

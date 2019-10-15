@@ -97,14 +97,6 @@ export default {
       type: String,
       desc: 'The state of the EasyForm. Can be `view` | `edit` | `add`',
     },
-    externalLabels: {
-      category: 'style',
-      type: Boolean,
-      desc: `By default labels are external to allow similar label styling for any type of field.
-
-When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will use an internal label on 'input' fields and pass the subLabel as 'hint' underneath the input field.`,
-      default: true,
-    },
     // Quasar props with modified defaults:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
     readonly: {
@@ -132,8 +124,9 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
   },
   computed: {
     internalLabelMode () {
-      const { externalLabels, fieldType } = this
-      return !externalLabels && [
+      const { fieldType } = this
+      const { externalLabels } = this.$attrs
+      return externalLabels === false && [
         'input', 'inputDate', 'select'
       ].includes(fieldType)
     },
@@ -150,13 +143,11 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       const self = this
       const mergedProps = merge(this.$attrs, {
         // EF props used here, but also to pass:
-        externalLabels: this.externalLabels,
-        subLabel: this.cSubLabel,
         fieldType: this.fieldType,
+        labelRaw: this.label,
+        subLabelRaw: this.subLabel,
         // Quasar props with modified defaults:
         readonly: this.readonly,
-        label: internalLabelMode ? this.label : undefined ,
-        hint: internalLabelMode ? this.subLabel : this.hint,
         // Quasar props with modified behavior:
         disable: this.cDisable,
       })

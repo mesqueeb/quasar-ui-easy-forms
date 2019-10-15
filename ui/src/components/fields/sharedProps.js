@@ -15,6 +15,22 @@ export const big = {
   desc: 'Display as "big" element.',
 }
 
+export const componentStyle = {
+  category: 'style',
+  type: [Object, String, Array],
+  desc: 'Style to be applied to the component (not including the label etc.). Uses `:style="componentStyle"`',
+  examples: ['border: thin solid black'],
+}
+
+export const externalLabels = {
+  category: 'style',
+  type: Boolean,
+  desc: `By default labels are external to allow similar label styling for any type of field.
+
+When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will use an internal label on 'input' fields and pass the subLabel as 'hint' underneath the input field.`,
+  default: true,
+}
+
 export const valueDescImgPdf = `Accepts a single or multiple files as its \`value\`. The downloadURL (or "source" of the files) can be formatted as
 - a \`String\`
 - an object which looks like \`{downloadURL: String}\`
