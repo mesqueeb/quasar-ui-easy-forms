@@ -5,8 +5,9 @@
         style="flex: 1"
       >{{ description }}</q-markdown>
     </div>
+    <EasyField v-bind="examplePicker" v-model="selectedExampleIndex" class="q-mb-md" />
     <div
-      v-for="(example, index) in examples"
+      v-for="(example, index) in selectedExamples"
       :key="index"
       class="q-mb-lg"
     >
@@ -46,10 +47,23 @@ import { descEvaluatedProps as description } from '../helpers/descriptions'
 export default {
   name: 'PageDemo',
   data () {
-    return schemasEvaluatedProps.reduce((carry, schema) => {
+    const examplePicker = {
+      fieldType: 'btn-toggle',
+      options: schemasEvaluatedProps.map((schema, index) => {
+        return {label: schema[0].label, value: index}
+      }),
+      noCaps: true,
+      style: 'border: solid thin',
+      unelevated: true,
+      toggleColor: 'primary',
+      color: 'white',
+      textColor: 'black',
+      rounded: true,
+    }
+    const examples = schemasEvaluatedProps.reduce((carry, schema) => {
       const value = schema.reduce((carry, bp) => ({...carry, [bp.id]: undefined}), {})
       const settingsSchema = getInfoCardSchema('EasyForm')
-      carry.examples.push({
+      carry.push({
         titleField: schema.slice(0, 1),
         settings: {
           schema: schema.slice(1),
@@ -61,10 +75,19 @@ export default {
         settingsSchema,
       })
       return carry
-    }, {
+    }, [])
+    return {
       description,
-      examples: []
-    })
+      examples,
+      examplePicker,
+      selectedExampleIndex: 0,
+    }
+  },
+  computed: {
+    selectedExamples () {
+      const { selectedExampleIndex, examples } = this
+      return [examples[selectedExampleIndex]]
+    }
   },
   methods: {
     log (...args) {
