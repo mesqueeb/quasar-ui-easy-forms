@@ -43,6 +43,7 @@ import merge from 'merge-anything'
 
 export default {
   name: 'EasyField',
+  inheritAttrs: false,
   props: {
     // prop categories: behavior content general model state style
     // EF props used here:
