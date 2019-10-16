@@ -43,8 +43,8 @@
 @import '../../index.sass'
 
 .ef-btn-toggle
-  width: 100%
   &.-big
+    width: 100%
     grid-template-columns: 1fr 1fr
     @media screen and (min-width: 600px)
       grid-template-columns: 1fr 1fr 1fr
