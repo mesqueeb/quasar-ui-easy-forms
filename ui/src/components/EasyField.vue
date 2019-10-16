@@ -140,10 +140,14 @@ export default {
     },
     fieldProps () {
       // props only used here: format, parseInput, label
-      const { cValue, internalLabelMode, fieldType } = this
+      const { cValue, $attrs } = this
       const self = this
-      const mergedProps = merge(this.$attrs, {
+      const mergedProps = merge($attrs, {
         // EF props used here, but also to pass:
+        formDataNested: this.formDataNested,
+        formDataFlat: this.formDataFlat,
+        formMode: this.formMode,
+        formId: this.formId,
         fieldType: this.fieldType,
         labelRaw: this.label,
         subLabelRaw: this.subLabel,

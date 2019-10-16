@@ -78,8 +78,13 @@ export default {
       type: Number,
       desc: 'Allows to limit the max amount of rows.',
     },
+    // props of which to inherit "description" etc. from EasyField:
     disable: {type: Boolean},
     readonly: {type: Boolean},
+    formDataNested: {type: Object},
+    formDataFlat: {type: Object},
+    formId: {type: String},
+    formMode: {type: String},
   },
   computed: {
     cValue: {
