@@ -3,6 +3,9 @@ export const btn = {
   id: 'btn',
   fieldType: 'btn',
   value: 'Touch me',
+  events: {
+    click: (val, context) => console.log('@CLICK\nval → ', val, '\ncontext → ', context),
+  },
 }
 export const btnToggle = {
   id: 'btnToggle',
@@ -29,6 +32,11 @@ export const img = {
 export const input = {
   id: 'input',
   fieldType: 'input',
+  events: {
+    focus: (val, context) => console.log('@FOCUS\nval → ', val, '\ncontext → ', context),
+    input: (val, context) => console.log('@INPUT\nval → ', val, '\ncontext → ', context),
+    click: (val, context) => console.log('@CLICK\nval → ', val, '\ncontext → ', context),
+  },
 }
 export const inputDate = {
   id: 'inputDate',

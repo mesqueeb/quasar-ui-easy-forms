@@ -16,6 +16,7 @@
         :is="componentIdentifier"
         v-model="cValue"
         v-bind="fieldProps"
+        v-on="cEvents"
       />
       <!-- <pre
         v-if="fieldType === 'q-markdown'"
@@ -77,6 +78,13 @@ export default {
       type: Function,
       desc: 'You can change how the value is parsed before it\'s updated. You must return the parsed value.',
       examples: ['val => kToThousand(val)' ],
+    },
+    events: {
+      category: 'behavior',
+      type: Object,
+      desc: 'An Object with an event name as key and the handler function as value. The function you pass will receive the native event payload as first parameter and the EasyField context (the component instance) as second: ($event, context) => {}',
+      default: () => ({}),
+      examples: ['{click: (val, {$router}) => $router.push(\'/\')}', '{focus: console.log}'],
     },
     formDataNested: {
       category: 'easyFormProp',
@@ -185,6 +193,7 @@ export default {
         if (isFunction(format)) return format(value, this)
         return value
       },
+      // todo: why is cValue set twice?
       set (val) { this.updateValue(val) },
     },
     cLabel () {
@@ -196,6 +205,15 @@ export default {
       const { subLabel, cValue, internalLabelMode } = this
       if (isFunction(subLabel)) return subLabel(cValue, this)
       return internalLabelMode ? undefined : subLabel
+    },
+    cEvents () {
+      return Object.entries(this.events)
+        .reduce((carry, [eventName, eventFn]) => {
+          // input is handled differently down below
+          if (eventName === 'input') return carry
+          carry[eventName] = val => eventFn(val, this)
+          return carry
+        }, {})
     },
     cDisable () {
       const { readonly } = this.$attrs
@@ -216,8 +234,9 @@ export default {
   },
   methods: {
     updateValue (val) {
-      const { parseInput } = this
+      const { parseInput, events } = this
       if (isFunction(parseInput)) val = parseInput(val, this)
+      if (isFunction(events.input)) events.input(val, this)
       this.$emit('input', val)
     },
   }

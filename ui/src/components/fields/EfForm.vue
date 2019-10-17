@@ -81,10 +81,6 @@ export default {
     // props of which to inherit "description" etc. from EasyField:
     disable: {type: Boolean},
     readonly: {type: Boolean},
-    formDataNested: {type: Object},
-    formDataFlat: {type: Object},
-    formId: {type: String},
-    formMode: {type: String},
   },
   computed: {
     cValue: {
@@ -105,15 +101,15 @@ export default {
       },
     },
     cSchema () {
-      const { schema, disable, readonly } = this
+      const { schema, $attrs, disable, readonly } = this
       return schema.map(subfield => {
-        return merge({disable, readonly}, subfield, {label: '', subLabel: ''})
+        return merge($attrs, {disable, readonly}, subfield, {label: '', subLabel: ''})
       })
     },
     schemaLabels () {
-      const { schema } = this
+      const { schema, $attrs } = this
       return schema.map(subfield => {
-        return merge(subfield, {fieldType: 'none'})
+        return merge($attrs, subfield, {fieldType: 'none'})
       })
     },
     columnCountSubForm () {
