@@ -5,7 +5,7 @@ notifyInputFn.prototype.stringifiedFn = `(val, {$q}) => $q.notify(val)`
 const notifyFocusFn = (val, {id, label, $q}) => $q.notify(`focussed: 「${label}」 (id: ${id})`)
 notifyFocusFn.prototype.stringifiedFn = '(val, {id, label, $q}) => $q.notify(`focussed: 「${label}」 (id: ${id})`)'
 
-const telFn = (val, {fieldInput, formDataNested}) => {console.log('formDataNested.tel → ', formDataNested.tel); fieldInput({id: 'telClean', value: !val ? '' : val.replace(/[^\d]/g, '').trim()})}
+const telFn = (val, {fieldInput, formDataNested}) => fieldInput({id: 'telClean', value: !val ? '' : val.replace(/[^\d]/g, '').trim()})
 telFn.prototype.stringifiedFn = `(val, {fieldInput}) => fieldInput({id: 'telClean', value: !val ? '' : val.replace(/[^\d]/g, '').trim()})`
 
 export default [
