@@ -11,9 +11,6 @@ carTypeFn.prototype.stringifiedFn = `(val, {formDataNested}) => formDataNested.c
 const carNrPlateFn = (val, {formDataNested, formMode}) => formDataNested.car && formMode === 'edit'
 carNrPlateFn.prototype.stringifiedFn = `(val, {formDataNested, formMode}) => formDataNested.car && formMode === 'edit'`
 
-const telFn = (val, {fieldInput}) => fieldInput({id: 'telClean', value: !val ? '' : val.replace(/[^\d]/g, '').trim()})
-telFn.prototype.stringifiedFn = `(val, {fieldInput}) => fieldInput({id: 'telClean', value: !val ? '' : val.replace(/[^\d]/g, '').trim()})`
-
 export default [
   [
     {
@@ -80,32 +77,4 @@ Eg. \`showCondition: ${carTypeFn.prototype.stringifiedFn}\`
       showCondition: carNrPlateFn,
     },
   ],
-  [
-    {
-      label: 'Programatically update other fields on user input',
-      subLabel: `
-Eg. \`onInput: ${telFn.prototype.stringifiedFn}\`
-
-\`onInput\` is a prop that can receive a function that will be triggered every time the field is updated. It will receives the updated value as first param and the EasyForm context as the second. \`(val, context)\`
-
-\`fieldInput\` is a method available on 'context'. It can be executed to update other fields inside your form. It receives a single param which should be an object that looks like \`{id, value}\` with the \`id\` of the field you want to update and a \`value\` you want to update it with.
-`.trim(),
-      fieldType: 'title',
-    },
-    {
-      id: 'tel',
-      fieldType: 'input',
-      label: 'Phone nr (hyphenated)',
-      subLabel: 'Type any number with `-` or `(  )`',
-      onInput: telFn,
-    },
-    {
-      id: 'telClean',
-      fieldType: 'input',
-      label: 'Phone nr (only numbers)',
-      subLabel: 'This field is automatically updated when you type in a phone nr on the left.',
-      disable: true,
-    },
-  ],
-
 ]

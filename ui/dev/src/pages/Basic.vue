@@ -32,15 +32,14 @@
 
 <script>
 import EasyForms from 'ui'
-import schemaBasic from '../schemas/basic'
+import schema from '../schemas/basic'
 import { getInfoCardSchema } from '../helpers/schemaBuilders'
-import { descBasic as description } from '../helpers/descriptions'
+import { basic as description } from '../helpers/descriptions'
 
 export default {
   name: 'PageDemo',
   data () {
-    const schema = schemaBasic
-    const value = schemaBasic.reduce((carry, bp) => ({...carry, [bp.id]: undefined}), {})
+    const value = schema.reduce((carry, bp) => ({...carry, [bp.id]: undefined}), {})
     const settingsSchema = getInfoCardSchema('EasyForm')
     return {
       description,

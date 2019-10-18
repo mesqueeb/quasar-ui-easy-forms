@@ -44,9 +44,9 @@
 
 <script>
 import EasyForms from 'ui'
-import schemas from '../schemas/evaluatedProps'
+import schemas from '../schemas/events'
 import { getInfoCardSchema } from '../helpers/schemaBuilders'
-import { evaluatedProps as description } from '../helpers/descriptions'
+import { events as description } from '../helpers/descriptions'
 
 export default {
   name: 'PageDemo',

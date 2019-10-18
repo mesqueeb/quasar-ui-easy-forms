@@ -65,8 +65,9 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
   }
   // Don't allow editing props that accept functions.
   if (type === Function) disable = true
-  // If it's the prop called 'schema', span the entire form and add extra info
+  // If it's the prop called 'schema', span the entire form, add extra info and don't return any input field
   if (propKey === 'schema') {
+    fieldType = 'none'
     span = true
     subLabel += '\n\n> 👀 Check「Source tab」→「Schema」to see the following code in color and with indentation.'
   }

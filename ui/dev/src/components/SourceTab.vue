@@ -86,8 +86,11 @@ export default {
     settingsSchema: Object,
   },
   data () {
+    const tabControl = (this.tag === 'EasyForm')
+      ? 'schema'
+      : 'script'
     return {
-      tabControl: 'schema',
+      tabControl,
       splitterModel: 12,
     }
   },
