@@ -151,25 +151,22 @@ export default {
     },
     cEvents () {
       const { onClick, onKeydown, $listeners } = this
-      function pipeFunctions (originVal, newVal) {
-        if (isFunction(originVal)) {
-          if (!isFunction(newVal)) return originVal
-          // concat logic
-          return (...args) => {
-            originVal(...args)
-            newVal(...args)
+      return Object.entries($listeners)
+        .reduce((carry, [eventName, eventFn]) => {
+          // input event is handled in cValue
+          if (eventName === 'input') return carry
+          if (eventName === 'click') {
+            carry[eventName] = (...args) => { onClick(...args); eventFn(...args) }
+          } else if (eventName === 'keydown') {
+            carry[eventName] = (...args) => { onKeydown(...args); eventFn(...args) }
+          } else {
+            carry[eventName] = eventFn
           }
-        }
-        return newVal // always return newVal as fallback!!
-      }
-      const pipeFunctionsExt = {extensions: [pipeFunctions]}
-      return merge(
-        pipeFunctionsExt, {
+          return carry
+        }, {
           click: onClick,
           keydown: onKeydown,
-        },
-        $listeners,
-      )
+        })
     },
   },
   methods: {

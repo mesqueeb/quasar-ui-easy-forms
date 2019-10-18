@@ -156,9 +156,9 @@ export default {
     id: {
       category: 'model',
       type: String,
-      desc: `A manually set 'id' of the EasyForm. This prop is accessible in the \`context\` of the Function of any "evaluated prop"*.
+      desc: `A manually set 'id' of the EasyForm. This prop is accessible in the \`context\` (as \`formId\`) of any "evaluated prop" and event*.
 
-Read more on Evaluated Props in its dedicade page.`,
+Read more on Evaluated Props in its dedicated page.`,
     },
     schema: {
       category: 'model',
@@ -270,7 +270,8 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
         formDataFlat,
         formMode,
         formId,
-        externalLabels
+        externalLabels,
+        fieldInput,
       } = this
       const self = this
       function checkShowCondition ({ id: fieldId, showCondition }) {
@@ -284,6 +285,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
           formMode,
           formId,
           externalLabels,
+          fieldInput,
         })
         // return early when showCondition fails
         if (formMode === 'view') {
@@ -338,16 +340,10 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
   methods: {
     isFullString,
     fieldInput ({id, value}) {
-      // console.log('field id → ', id, '| new value → ', value)
-      this.$emit('field-input', {id, value})
-      const blueprint = this.schemaObject[id]
-      if (blueprint && isFunction(blueprint.onInput)) {
-        const formRef = this
-        blueprint.onInput(value, formRef, this.$store)
-      }
       this.edited = true
       if (!this.editedFields.includes(id)) this.editedFields.push(id)
       this.formDataFlat[id] = value
+      this.$emit('field-input', {id, value})
       this.$emit('input', this.formDataFlat)
     },
     resetState () {

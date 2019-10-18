@@ -56,6 +56,11 @@ export default {
       category: 'model',
       type: undefined,
     },
+    id: {
+      category: 'model',
+      type: String,
+      desc: 'An \'id\' is required for an `<EasyForm />` to be able to know which fields have which value. When using `<EasyField />` on its own, it is not required.',
+    },
     subLabel: {
       category: 'content',
       type: [String, Function],
@@ -105,6 +110,11 @@ export default {
       category: 'easyFormProp',
       type: String,
       desc: 'The state of the EasyForm. Can be `view` | `edit` | `add`',
+    },
+    fieldInput: {
+      category: 'easyFormProp',
+      type: Function,
+      desc: 'The `fieldInput` function of EasyForm. Is passed so it can be used in the input event: `events: {input: (value, {fieldInput} => fieldInput({id: \'otherField\', value}))}`',
     },
     // Quasar props with modified defaults:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
@@ -167,7 +177,7 @@ export default {
       // quasar props that can accept functions should be ignored:
       const propsToIgnore = [
         // EasyForm:
-        'onInput', 'labelValue',
+        'labelValue', 'fieldInput',
         // QSelect:
         'optionValue', 'optionLabel', 'optionDisable',
         // QUploader:
@@ -193,7 +203,6 @@ export default {
         if (isFunction(format)) return format(value, this)
         return value
       },
-      // todo: why is cValue set twice?
       set (val) { this.updateValue(val) },
     },
     cLabel () {
@@ -209,7 +218,7 @@ export default {
     cEvents () {
       return Object.entries(this.events)
         .reduce((carry, [eventName, eventFn]) => {
-          // input is handled differently down below
+          // input event is handled in cValue
           if (eventName === 'input') return carry
           carry[eventName] = val => eventFn(val, this)
           return carry
@@ -234,7 +243,8 @@ export default {
   },
   methods: {
     updateValue (val) {
-      const { parseInput, events } = this
+      const { parseInput, events, $attrs } = this
+      const { fieldInput } = $attrs
       if (isFunction(parseInput)) val = parseInput(val, this)
       if (isFunction(events.input)) events.input(val, this)
       this.$emit('input', val)
