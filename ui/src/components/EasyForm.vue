@@ -1,5 +1,6 @@
 <template>
-  <div
+  <q-form
+    ref="refEasyForm"
     class="easy-form q-gutter-lg"
     :style="{flexDirection: ['top', 'bottom'].includes(actionButtonsPosition) ? 'column' : 'row'}"
   >
@@ -9,59 +10,21 @@
         order: ['top', 'left'].includes(actionButtonsPosition) ? 0 : 1,
         gridAutoFlow: ['top', 'bottom'].includes(actionButtonsPosition) ? 'column' : 'row',
       }"
-      v-if="actionButtons.length"
+      v-if="isFullString(errorMsg) || cActionButtons.length"
     >
       <div
         class="easy-form__validation-error text-negative"
-        v-if="isFullString(validatorMessage)"
-      >{{ validatorMessage }}</div>
+        v-if="isFullString(errorMsg)"
+      >{{ errorMsg }}</div>
       <EfBtn
-        v-for="btn in actionButtons.filter(b => !isFullString(b))"
+        v-for="btn in cActionButtons"
         :key="btn.label"
         :value="btn.label"
-        size="md"
-        push
+        :size="btn.size || 'md'"
+        :push="btn.push"
+        :flat="btn.flat"
         :color="btn.color || 'primary'"
         @click="e => tapCustomBtn(e, btn.handler)"
-      />
-      <EfBtn
-        v-if="actionButtons.includes('delete')"
-        :value="l.delete"
-        size="md"
-        flat
-        color="negative"
-        @click="tapDelete"
-      />
-      <EfBtn
-        v-if="actionButtons.includes('archive')"
-        :value="l.archive"
-        size="md"
-        flat
-        color="negative"
-        @click="tapArchive"
-      />
-      <EfBtn
-        v-if="(cMode === 'edit' || cMode === 'add') && actionButtons.includes('cancel')"
-        :value="l.cancel"
-        size="md"
-        color="primary"
-        flat
-        @click="tapCancel"
-      />
-      <EfBtn
-        v-if="cMode === 'view' && actionButtons.includes('edit')"
-        :value="l.edit"
-        size="md"
-        push
-        @click="cMode = 'edit'"
-      />
-      <EfBtn
-        v-if="(cMode === 'edit' || cMode === 'add') && actionButtons.includes('save')"
-        :value="l.save"
-        size="md"
-        push
-        :disable="!validated"
-        @click="tapSave"
       />
     </div>
     <div
@@ -78,7 +41,7 @@
         :style="field.span ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}` : ''"
       />
     </div>
-  </div>
+  </q-form>
 </template>
 
 <style lang="sass" scoped>
@@ -105,44 +68,19 @@
 </style>
 
 <script>
+import { QForm } from 'quasar'
 import merge from 'merge-anything'
 import copy from 'copy-anything'
-import { isArray, isFunction, isFullString } from 'is-what'
+import { isArray, isFunction, isFullString, isString } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
 import flattenPerSchema from '../helpers/flattenPerSchema'
-import lang from '../meta/lang'
+import defaultLang from '../meta/lang'
 import EfBtn from './fields/EfBtn.vue'
 import EasyField from './EasyField.vue'
 
-function requiredValuePasses (value, blueprint = {}) {
-  if (!blueprint.required) return true
-  if (blueprint.fieldType === 'select' && blueprint.multiple) {
-    return Object.values(value).some(v => v)
-  }
-  return value || value === 0
-}
-function checkRequiredFields (formData, schema) {
-  const schemaAsObject = !isArray(schema)
-    ? schema
-    : schema.reduce((carry, blueprint) => {
-      return {[blueprint.id]: blueprint, ...carry}
-    }, {})
-  const fieldsRequired = Object.entries(formData)
-    .reduce((carry, [fieldId, value]) => {
-      const blueprint = schemaAsObject[fieldId]
-      const ok = requiredValuePasses(value, blueprint)
-      if (!ok) carry.push(blueprint.label)
-      return carry
-    }, [])
-  const labelsRequired = fieldsRequired.join('、')
-  return labelsRequired
-    ? `未記入：${labelsRequired}`
-    : true
-}
-
 export default {
   name: 'EasyForm',
-  components: { EfBtn, EasyField },
+  components: { EfBtn, EasyField, QForm },
   inheritAttrs: false,
   props: {
     // prop categories: behavior content general model state style
@@ -216,7 +154,7 @@ You can decide which buttons you want to show/hide by passing them in an array t
       category: 'content',
       type: Object,
       desc: `The text used in the UI, eg. edit/save buttons etc... Pass an object with keys: archive, delete, cancel, edit, save.`,
-      default: () => lang,
+      default: () => defaultLang,
       examples: [`{cancel: 'キャンセル', edit: '編集', save: '保存'}`],
     },
     externalLabels: {
@@ -246,6 +184,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       editedFields: [],
       formDataFlat,
       formDataFlatBackups: [copy(formDataFlat)],
+      errorMsg: '',
     }
   },
   watch: {
@@ -277,6 +216,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
         formMode,
         formId,
         externalLabels,
+        lang,
         fieldInput,
       } = this
       const self = this
@@ -291,6 +231,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
           formMode,
           formId,
           externalLabels,
+          lang,
           fieldInput,
         })
         // return early when showCondition fails
@@ -303,6 +244,27 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
         carry.push(blueprint)
         return carry
       }, [])
+    },
+    cActionButtons () {
+      const { actionButtons, lang, cMode, tapDelete, tapArchive, tapCancel, tapSave } = this
+      return actionButtons.map(btn => {
+        if (btn === 'delete') {
+          return {label: lang['delete'], flat: true, color: 'negative', handler: tapDelete}
+        }
+        if (btn === 'archive') {
+          return {label: lang['archive'], flat: true, color: 'negative', handler: tapArchive}
+        }
+        if (btn === 'cancel' && (cMode === 'edit' || cMode === 'add')) {
+          return {label: lang['cancel'], flat: true, handler: tapCancel}
+        }
+        if (btn === 'edit' && (cMode === 'view')) {
+          return {label: lang['edit'], push: true, handler: () => {this.cMode = 'edit'}}
+        }
+        if (btn === 'save' && (cMode === 'edit' || cMode === 'add')) {
+          return {label: lang['save'], push: true, handler: tapSave}
+        }
+        return btn
+      }).filter(btn => !isString(btn))
     },
     dataBackup () {
       const { formDataFlatBackups } = this
@@ -320,28 +282,6 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       const dataNested = nestifyObject(dataFlat)
       return dataNested
     },
-    validatorErrors () {
-      const { cSchema, validator, dataEdited, dataBackup } = this
-      const errors = []
-      const requiredFieldsError = checkRequiredFields(
-        merge(dataEdited),
-        cSchema
-      )
-      if (isFullString(requiredFieldsError)) errors.push(requiredFieldsError)
-      if (!isFunction(validator)) return errors
-      const validatorRes = validator(dataEdited, dataBackup)
-      if (isFullString(validatorRes)) errors.push(validatorRes)
-      return errors
-    },
-    validatorMessage () {
-      return this.validatorErrors.join('、\n')
-    },
-    validated () {
-      const { validatorMessage, cMode, edited } = this
-      const hasErrors = validatorMessage.length
-      if (cMode === 'add') return !hasErrors
-      return edited && !hasErrors
-    },
   },
   methods: {
     isFullString,
@@ -357,6 +297,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       this.edited = false
       this.editedFields = []
       this.formDataFlatBackups.push(copy(this.formDataFlat))
+      this.errorMsg = ''
     },
     restoreBackup () {
       if (!this.formDataFlatBackups.length) return
@@ -368,11 +309,29 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       this.resetState()
       this.$emit('cancel')
     },
+    validate () {
+      const { $refs, lang, validator, dataEdited, dataBackup } = this
+      return new Promise((resolve, reject) => {
+        if (isFunction(validator)) {
+          const validatorRes = validator(dataEdited, dataBackup)
+          if (isFullString(validatorRes)) reject(validatorRes)
+        }
+        $refs.refEasyForm.validate().then(success => {
+          if (success) return resolve()
+          reject(lang['formValidationError'])
+        })
+      })
+    },
     tapSave () {
-      const newData = copy(this.dataEdited)
-      const oldData = copy(this.dataBackup)
-      this.$emit('save', {newData, oldData})
-      this.resetState()
+      const { validate, dataEdited, dataBackup, resetState } = this
+      validate().then(() => {
+        const newData = copy(dataEdited)
+        const oldData = copy(dataBackup)
+        this.$emit('save', {newData, oldData})
+        resetState()
+      }).catch(errorMsg => {
+        this.errorMsg = errorMsg
+      })
     },
     tapDelete () { this.$emit('delete') },
     tapArchive () { this.$emit('archive') },

@@ -39,7 +39,7 @@
 </style>
 
 <script>
-import { isFunction, isPlainObject } from 'is-what'
+import { isFunction, isPlainObject, isArray } from 'is-what'
 import merge from 'merge-anything'
 
 export default {
@@ -60,6 +60,16 @@ export default {
       category: 'model',
       type: undefined,
       desc: 'A default value.',
+    },
+    required: {
+      category: 'behavior',
+      type: Boolean,
+      desc: `Wether or not the field is required or not. If a field is marked 'required' it will add a default rule like so: \`[val => !!val || 'Field is required']\`. The default message can be set in the \`lang\` prop as \`requiredField\`.
+Eg.
+\`\`\`js
+:lang="{requiredField: 'Don\'t forget this field!'}"
+\`\`\`
+`,
     },
     id: {
       category: 'model',
@@ -121,6 +131,15 @@ export default {
       type: Function,
       desc: 'The `fieldInput` function of EasyForm. Is passed so it can be used in the input event: `events: {input: (value, {fieldInput} => fieldInput({id: \'otherField\', value}))}`',
     },
+    lang: {
+      category: 'content',
+      type: Object,
+      desc: `The text used in the UI, eg. for required fields, etc.`,
+      default: () => ({
+        requiredField: 'Field is required',
+      }),
+      examples: [`{requiredField: 'Don\'t forget this field!'}`],
+    },
     // Quasar props with modified defaults:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
     readonly: {
@@ -171,8 +190,14 @@ export default {
     },
     fieldProps () {
       // props only used here: format, parseInput, label
-      const { cValue, $attrs } = this
+      const { cValue, $attrs, required, lang } = this
       const self = this
+      // add default "required" rule
+      const requiredRule = val => !!val || lang.requiredField
+      const requiredRules = (required && isArray($attrs.rules) && $attrs.rules.length)
+        ? {rules: $attrs.rules.concat([requiredRule])}
+        : required ? {rules: [requiredRule]} : {}
+
       const mergedProps = merge($attrs, {
         // EF props used here, but also to pass:
         formDataNested: this.formDataNested,
@@ -186,7 +211,7 @@ export default {
         readonly: this.readonly,
         // Quasar props with modified behavior:
         disable: this.cDisable,
-      })
+      }, requiredRules)
       // quasar props that can accept functions should be ignored:
       const propsToIgnore = [
         // EasyForm:
