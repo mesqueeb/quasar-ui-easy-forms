@@ -59,13 +59,12 @@ export default {
       noCaps: true,
     }
     const examples = schemas.reduce((carry, schema) => {
-      const value = schema.reduce((carry, bp) => ({...carry, [bp.id]: undefined}), {})
       const settingsSchema = getInfoCardSchema('EasyForm')
       carry.push({
         titleField: schema.slice(0, 1),
         settings: {
           schema: schema.slice(1),
-          value,
+          value: {},
           mode: 'edit',
           actionButtons: schema.slice(0, 1)[0].formActionButtons || [],
           columnCount: 2,

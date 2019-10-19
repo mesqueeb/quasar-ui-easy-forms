@@ -5,7 +5,8 @@ export default [
     fieldType: 'input',
     valueType: 'string',
     label: 'Superhero name',
-    subLabel: 'Think of something cool.'
+    subLabel: 'Think of something cool.',
+    required: true,
   },
   {
     id: 'powerOrigin',
@@ -25,13 +26,14 @@ export default [
     label: 'Stamina',
     min: 0,
     max: 100,
+    default: 50,
   },
   {
     id: 'power',
     fieldType: 'input',
     valueType: 'number',
     label: 'Power',
-    subLabel: 'Fill in a number.'
+    subLabel: 'Fill in a number.',
   },
   {
     id: 'roleModel',

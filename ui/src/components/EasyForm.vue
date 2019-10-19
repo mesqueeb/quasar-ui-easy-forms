@@ -229,23 +229,29 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     },
   },
   data () {
-    const formMode = this.mode
-    const formId = this.id
-    const dataFlat = flattenPerSchema(this.value, this.schema)
-    const formDataFlat = copy(dataFlat)
+    const { mode, id, value, schema } = this
+    const formMode = mode
+    const formId = id
+    const dataFlat = flattenPerSchema(value, schema)
+    const schemaArray = isArray(schema) ? schema : Object.values(schema)
+    const initialDataFlat = schemaArray.reduce((carry, blueprint) => {
+      carry[blueprint.id] = blueprint.default
+      return carry
+    }, {})
+    const formDataFlat = merge(initialDataFlat, copy(dataFlat))
     return {
       formMode,
       formId,
       edited: false,
       editedFields: [],
       formDataFlat,
-      formDataFlatBackups: [copy(dataFlat)],
+      formDataFlatBackups: [copy(formDataFlat)],
     }
   },
   watch: {
-    value (newValue) { this.formDataFlat = copy(newValue) },
-    mode (newValue) { this.formMode = copy(newValue) },
-    id (newValue) { this.formId = copy(newValue) },
+    value (newValue) { this.formDataFlat = newValue },
+    mode (newValue) { this.formMode = newValue },
+    id (newValue) { this.formId = newValue },
   },
   computed: {
     l () { return this.lang },

@@ -39,13 +39,12 @@ import { advanced as description } from '../helpers/descriptions'
 export default {
   name: 'PageDemo',
   data () {
-    const value = schema.reduce((carry, bp) => ({...carry, [bp.id]: undefined}), {})
     const settingsSchema = getInfoCardSchema('EasyForm')
     return {
       description,
       settings: {
         schema,
-        value,
+        value: {},
         mode: 'view',
       },
       settingsSchema,

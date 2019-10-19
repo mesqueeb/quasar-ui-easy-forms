@@ -56,6 +56,11 @@ export default {
       category: 'model',
       type: undefined,
     },
+    default: {
+      category: 'model',
+      type: undefined,
+      desc: 'A default value.',
+    },
     id: {
       category: 'model',
       type: String,
@@ -141,6 +146,14 @@ export default {
       desc: '`disable` is ignored when `readonly` is true',
     },
   },
+  data () {
+    return {
+      innerValue: this.value || this.default
+    }
+  },
+  watch: {
+    value (newValue) { this.innerValue = newValue },
+  },
   computed: {
     internalLabelMode () {
       const { fieldType } = this
@@ -199,9 +212,9 @@ export default {
     },
     cValue: {
       get () {
-        const { format, value } = this
-        if (isFunction(format)) return format(value, this)
-        return value
+        const { format, innerValue } = this
+        if (isFunction(format)) return format(innerValue, this)
+        return innerValue
       },
       set (val) { this.updateValue(val) },
     },
