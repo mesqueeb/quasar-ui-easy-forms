@@ -41,6 +41,7 @@
 <script>
 import { isFunction, isPlainObject, isArray } from 'is-what'
 import merge from 'merge-anything'
+import defaultLang from '../meta/lang'
 
 export default {
   name: 'EasyField',
@@ -135,9 +136,7 @@ Eg.
       category: 'content',
       type: Object,
       desc: `The text used in the UI, eg. for required fields, etc.`,
-      default: () => ({
-        requiredField: 'Field is required',
-      }),
+      default: () => defaultLang,
       examples: [`{requiredField: 'Don\'t forget this field!'}`],
     },
     // Quasar props with modified defaults:
@@ -166,12 +165,18 @@ Eg.
     },
   },
   data () {
+    const { value, default: df, lang } = this
+    const innerValue = value || df
+    // merge user provided lang onto defaults
+    const innerLang = merge(defaultLang, lang)
     return {
-      innerValue: this.value || this.default
+      innerLang,
+      innerValue,
     }
   },
   watch: {
     value (newValue) { this.innerValue = newValue },
+    lang (newValue) { this.innerLang = merge(defaultLang, newValue) },
   },
   computed: {
     internalLabelMode () {
@@ -190,10 +195,10 @@ Eg.
     },
     fieldProps () {
       // props only used here: format, parseInput, label
-      const { cValue, $attrs, required, lang } = this
+      const { cValue, $attrs, required, innerLang } = this
       const self = this
       // add default "required" rule
-      const requiredRule = val => !!val || lang.requiredField
+      const requiredRule = val => !!val || innerLang['requiredField']
       const requiredRules = (required && isArray($attrs.rules) && $attrs.rules.length)
         ? {rules: $attrs.rules.concat([requiredRule])}
         : required ? {rules: [requiredRule]} : {}

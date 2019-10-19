@@ -167,7 +167,9 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     },
   },
   data () {
-    const { mode, id, value, schema } = this
+    const { mode, id, value, schema, lang } = this
+    // merge user provided lang onto defaults
+    const innerLang = merge(defaultLang, lang)
     const formMode = mode
     const formId = id
     const dataFlat = flattenPerSchema(value, schema)
@@ -178,6 +180,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     }, {})
     const formDataFlat = merge(initialDataFlat, copy(dataFlat))
     return {
+      innerLang,
       formMode,
       formId,
       edited: false,
@@ -191,9 +194,9 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     value (newValue) { this.formDataFlat = newValue },
     mode (newValue) { this.formMode = newValue },
     id (newValue) { this.formId = newValue },
+    lang (newValue) { this.innerLang = merge(defaultLang, newValue) },
   },
   computed: {
-    l () { return this.lang },
     formDataNested () { return nestifyObject(this.formDataFlat) },
     schemaObject () {
       return this.schema.reduce((carry, blueprint) => {
@@ -216,7 +219,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
         formMode,
         formId,
         externalLabels,
-        lang,
+        innerLang,
         fieldInput,
       } = this
       const self = this
@@ -231,7 +234,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
           formMode,
           formId,
           externalLabels,
-          lang,
+          lang: innerLang,
           fieldInput,
         })
         // return early when showCondition fails
@@ -246,22 +249,22 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       }, [])
     },
     cActionButtons () {
-      const { actionButtons, lang, cMode, tapDelete, tapArchive, tapCancel, tapSave } = this
+      const { actionButtons, innerLang, cMode, tapDelete, tapArchive, tapCancel, tapSave } = this
       return actionButtons.map(btn => {
         if (btn === 'delete') {
-          return {label: lang['delete'], flat: true, color: 'negative', handler: tapDelete}
+          return {label: innerLang['delete'], flat: true, color: 'negative', handler: tapDelete}
         }
         if (btn === 'archive') {
-          return {label: lang['archive'], flat: true, color: 'negative', handler: tapArchive}
+          return {label: innerLang['archive'], flat: true, color: 'negative', handler: tapArchive}
         }
         if (btn === 'cancel' && (cMode === 'edit' || cMode === 'add')) {
-          return {label: lang['cancel'], flat: true, handler: tapCancel}
+          return {label: innerLang['cancel'], flat: true, handler: tapCancel}
         }
         if (btn === 'edit' && (cMode === 'view')) {
-          return {label: lang['edit'], push: true, handler: () => {this.cMode = 'edit'}}
+          return {label: innerLang['edit'], push: true, handler: () => {this.cMode = 'edit'}}
         }
         if (btn === 'save' && (cMode === 'edit' || cMode === 'add')) {
-          return {label: lang['save'], push: true, handler: tapSave}
+          return {label: innerLang['save'], push: true, handler: tapSave}
         }
         return btn
       }).filter(btn => !isString(btn))
@@ -310,7 +313,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       this.$emit('cancel')
     },
     validate () {
-      const { $refs, lang, validator, dataEdited, dataBackup } = this
+      const { $refs, innerLang, validator, dataEdited, dataBackup } = this
       return new Promise((resolve, reject) => {
         if (isFunction(validator)) {
           const validatorRes = validator(dataEdited, dataBackup)
@@ -318,7 +321,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
         }
         $refs.refEasyForm.validate().then(success => {
           if (success) return resolve()
-          reject(lang['formValidationError'])
+          reject(innerLang['formValidationError'])
         })
       })
     },
