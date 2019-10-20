@@ -2,7 +2,7 @@
   <q-splitter
     v-model="splitterModel"
     style="height: 400px"
-    class="api-card"
+    class="tabs-panel-source"
   >
     <template v-slot:before>
       <q-tabs
@@ -74,7 +74,7 @@ function parseCodeAsString (code) {
 }
 
 export default {
-  name: 'SourceTab',
+  name: pascalCase('tabs-panel-source'),
   props: {
     tag: {
       type: String,

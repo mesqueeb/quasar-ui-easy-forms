@@ -7,6 +7,7 @@
     </div>
     <InfoBoxWrapper color="accent" label="interactive preview" class="q-mb-md">
       <EasyForm
+        class="full-width"
         v-model="settings.value"
         v-bind="settings"
       />

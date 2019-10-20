@@ -2,7 +2,7 @@
   <q-splitter
     v-model="splitterModel"
     style="height: 400px"
-    class="api-card"
+    class="tabs-panel-props"
   >
     <template v-slot:before>
       <q-tabs
@@ -19,7 +19,7 @@
           :key="panel.name"
           :name="panel.name"
           :label="panel.name[0].toUpperCase() + panel.name.slice(1)"
-          class="api-card__left-tab"
+          class="tabs-panel-props__left-tab"
         />
       </q-tabs>
     </template>
@@ -78,7 +78,7 @@ Read more on Evaluated Props on its dedicade page.</q-markdown>
 
 <style lang="sass">
 
-.api-card
+.tabs-panel-props
   ._box
     border: thin solid lightgrey
     width: 30px
@@ -91,9 +91,10 @@ import { isArray } from 'is-what'
 import merge from 'merge-anything'
 import copy from 'copy-anything'
 import sort from 'sort-anything'
+import { pascalCase } from 'case-anything'
 
 export default {
-  name: 'PropTabsPanel',
+  name: pascalCase('tabs-panel-props'),
   props: {
     tag: {
       type: String,

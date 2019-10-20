@@ -1,15 +1,10 @@
 <template>
   <q-form
     ref="refEasyForm"
-    class="easy-form q-gutter-lg"
-    :style="{flexDirection: ['top', 'bottom'].includes(actionButtonsPosition) ? 'column' : 'row'}"
+    :class="`easy-form easy-form--nav-${actionButtonsPosition}`"
   >
     <div
-      class="easy-form__nav-row"
-      :style="{
-        order: ['top', 'left'].includes(actionButtonsPosition) ? 0 : 1,
-        gridAutoFlow: ['top', 'bottom'].includes(actionButtonsPosition) ? 'column' : 'row',
-      }"
+      :class="`easy-form__nav-row easy-form__nav-row--${actionButtonsPosition}`"
       v-if="isFullString(errorMsg) || cActionButtons.length"
     >
       <div
@@ -50,7 +45,14 @@
 
 .easy-form
   display: flex
+  &--nav-top,
+  &--nav-bottom
+    flex-direction: column
+  &--nav-left
+  &--nav-right
+    flex-direction: row
 .easy-form__form
+  flex: 1
   display: grid
   align-items: stretch
   justify-items: stretch
@@ -62,8 +64,23 @@
   justify-content: end
   align-content: start
   align-items: center
-  grid-auto-flow: column
   grid-gap: $md
+  &--top
+    order: 0
+    grid-auto-flow: column
+    margin-bottom: $md
+  &--bottom
+    order: 1
+    grid-auto-flow: column
+    margin-top: $md
+  &--right
+    order: 1
+    grid-auto-flow: row
+    margin-left: $md
+  &--left
+    order: 0
+    grid-auto-flow: row
+    margin-right: $md
 
 </style>
 
@@ -77,6 +94,41 @@ import flattenPerSchema from '../helpers/flattenPerSchema'
 import defaultLang from '../meta/lang'
 import EfBtn from './fields/EfBtn.vue'
 import EasyField from './EasyField.vue'
+
+export const EVENTS = {
+  'update:mode': {
+    name: 'update:mode',
+    desc: '',
+  },
+  'field-input': {
+    name: 'field-input',
+    desc: '',
+  },
+  'input': {
+    name: 'input',
+    desc: '',
+  },
+  'edit': {
+    name: 'edit',
+    desc: '(no payload) The edit-button was tapped and the form was put into "edit" mode',
+  },
+  'cancel': {
+    name: 'cancel',
+    desc: '(no payload) The cancel-button was tapped and the form was put back into "view" mode & reverted to its original state',
+  },
+  'save': {
+    name: 'save',
+    desc: '(payload: {newData, oldData}) The save-button was tapped and the form was put back into "view" mode & kept the modified content',
+  },
+  'delete': {
+    name: 'delete',
+    desc: '(no payload) The delete-button was tapped (you must implement your own logic)',
+  },
+  'archive': {
+    name: 'archive',
+    desc: '(no payload) The archive-button was tapped (you must implement your own logic)',
+  },
+}
 
 export default {
   name: 'EasyForm',
@@ -208,7 +260,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       get () { return this.formMode },
       set (val) {
         this.formMode = val
-        this.$emit('update:mode', val)
+        this.$emit(EVENTS['update:mode'].name, val)
       },
     },
     cSchema () {
@@ -249,7 +301,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       }, [])
     },
     cActionButtons () {
-      const { actionButtons, innerLang, cMode, tapDelete, tapArchive, tapCancel, tapSave } = this
+      const { actionButtons, innerLang, cMode, tapDelete, tapEdit, tapArchive, tapCancel, tapSave } = this
       return actionButtons.map(btn => {
         if (btn === 'delete') {
           return {label: innerLang['delete'], flat: true, color: 'negative', handler: tapDelete}
@@ -261,7 +313,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
           return {label: innerLang['cancel'], flat: true, handler: tapCancel}
         }
         if (btn === 'edit' && (cMode === 'view')) {
-          return {label: innerLang['edit'], push: true, handler: () => {this.cMode = 'edit'}}
+          return {label: innerLang['edit'], push: true, handler: tapEdit}
         }
         if (btn === 'save' && (cMode === 'edit' || cMode === 'add')) {
           return {label: innerLang['save'], push: true, handler: tapSave}
@@ -292,8 +344,8 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       this.edited = true
       if (!this.editedFields.includes(id)) this.editedFields.push(id)
       this.formDataFlat[id] = value
-      this.$emit('field-input', {id, value})
-      this.$emit('input', this.formDataFlat)
+      this.$emit(EVENTS['field-input'].name, {id, value})
+      this.$emit(EVENTS['input'].name, this.formDataFlat)
     },
     resetState () {
       this.cMode = 'view'
@@ -310,7 +362,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     tapCancel () {
       this.restoreBackup()
       this.resetState()
-      this.$emit('cancel')
+      this.$emit(EVENTS['cancel'].name)
     },
     validate () {
       const { $refs, innerLang, validator, dataEdited, dataBackup } = this
@@ -325,19 +377,23 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
         })
       })
     },
+    tapEdit () {
+      this.cMode = 'edit'
+      this.$emit(EVENTS['edit'].name)
+    },
     tapSave () {
       const { validate, dataEdited, dataBackup, resetState } = this
       validate().then(() => {
         const newData = copy(dataEdited)
         const oldData = copy(dataBackup)
-        this.$emit('save', {newData, oldData})
+        this.$emit(EVENTS['save'].name, {newData, oldData})
         resetState()
       }).catch(errorMsg => {
         this.errorMsg = errorMsg
       })
     },
-    tapDelete () { this.$emit('delete') },
-    tapArchive () { this.$emit('archive') },
+    tapDelete () { this.$emit(EVENTS['delete'].name) },
+    tapArchive () { this.$emit(EVENTS['archive'].name) },
     tapCustomBtn (event, btnHandler) {
       if (!isFunction(btnHandler)) throw new Error('button handler must be a function')
       btnHandler(this, event)

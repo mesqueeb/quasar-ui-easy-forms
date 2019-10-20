@@ -47,4 +47,19 @@ Phew. That was a bit of a lot of information all at once. 😅 Let's tackle thes
 
 `
 
-export const nestedProps = `todo...`
+export const nestedProps = `todo... write this`
+
+export const formNavigation = `todo... write this MOAR
+
+EasyForm has by default the following action buttons:
+
+- edit: Puts the form in "edit" mode
+- cancel: Puts the form back into "view" mode & reverts the content to its original state
+- save: Puts the form back into "view" mode & keeps the modified content
+- delete & archive: emits a delete or archive event (you must implement your own logic)
+
+The buttons above emits the events: @edit, @cancel, @save, @delete, @archive
+
+Only @save receives a payload with the new and old form data:
+- \`@save="({newData, oldData}) => { /* do something */ }"\`
+`
