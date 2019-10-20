@@ -48,7 +48,7 @@
   &--nav-top,
   &--nav-bottom
     flex-direction: column
-  &--nav-left
+  &--nav-left,
   &--nav-right
     flex-direction: row
 .easy-form__form
