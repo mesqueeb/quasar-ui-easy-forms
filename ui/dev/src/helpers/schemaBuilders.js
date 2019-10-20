@@ -32,11 +32,11 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
   let fieldType = 'input'
   let subLabel = desc
   let options, outlined, standout, disable, parseInput, format, autogrow, debounce, span
-  let contentStyle = 'padding: 1em;'
+  let fieldClasses = []
   // If it's a quasarProp, add a specific indentifier
-  if (quasarProp) contentStyle += (quasarProp === true)
-    ? 'background: whitesmoke'
-    : 'background: lavender'
+  if (quasarProp) {
+    fieldClasses.push(quasarProp === true ? 'quasar-prop' : 'quasar-prop-modified')
+  }
   // If it has a default, write it in the description
   if (!isUndefined(_df)) subLabel += `\n\nDefault: \`${isFunction(_df) ? JSON.stringify(_df()) : _df}\``
   // if the prop is a Boolean, show this as a 'toggle' EasyField
@@ -89,7 +89,7 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
     format,
     autogrow,
     category,
-    contentStyle,
+    fieldClasses,
     debounce,
     events,
     span,

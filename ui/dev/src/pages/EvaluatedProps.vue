@@ -17,7 +17,11 @@
         :settingsSchema="example.settingsSchema"
       >
         <EasyField v-bind="example.titleField" style="margin: -1em 0 1.6em" />
-        <InfoBoxWrapper color="accent" label="interactive preview" class="q-mb-md">
+        <InfoBoxWrapper
+          color="accent"
+          label="interactive preview"
+          class="q-mb-md js-interactive-preview"
+        >
           <EasyForm
             v-model="example.settings.value"
             v-bind="example.settings"

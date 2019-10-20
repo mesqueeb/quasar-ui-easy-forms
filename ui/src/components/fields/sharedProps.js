@@ -12,7 +12,7 @@ import { isArray } from 'is-what'
 export const big = {
   category: 'style',
   type: Boolean,
-  desc: 'Display as "big" element.',
+  desc: 'DO NOT USE! Will be deprecated soon!!',
 }
 
 export const componentStyle = {

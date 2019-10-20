@@ -5,7 +5,11 @@
         style="flex: 1"
       >{{ description }}</q-markdown>
     </div>
-    <InfoBoxWrapper color="accent" label="interactive preview" class="q-mb-md">
+    <InfoBoxWrapper
+      color="accent"
+      label="interactive preview"
+      class="q-mb-md js-interactive-preview"
+    >
       <EasyForm
         v-model="settings.value"
         v-bind="settings"

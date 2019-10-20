@@ -47,7 +47,9 @@
         />
         <TabsPanelCss
           v-if="tab === 'Modify css'"
-          :classes="TabsPanelCssClasses"
+          :defaultClasses="TabsPanelCssClasses"
+          :defaultStyle="TabsPanelCssStyle"
+          targetWrapperElementSelector=".js-interactive-preview"
         />
       </q-tab-panel>
     </q-tab-panels>
@@ -89,6 +91,7 @@ export default {
       const { tag } = this
       const classesEasyField = [
         '.easy-field',
+        '.easy-field__label',
         '.easy-field__sub-label',
         '.easy-field__field',
       ]
@@ -98,8 +101,13 @@ export default {
         '.easy-form__nav-row',
         '.easy-form__validation-error',
         '.easy-form__form',
-        '', // this creates an extra new line to separate easy-form from easy-field
       ].concat(classesEasyField)
+    },
+    TabsPanelCssStyle () {
+      return {
+        '.easy-form': {padding: '1em'},
+        '.easy-field': {padding: '1em'},
+      }
     },
   },
   methods: {},

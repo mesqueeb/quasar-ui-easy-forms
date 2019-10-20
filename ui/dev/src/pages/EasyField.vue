@@ -1,6 +1,10 @@
 <template>
   <q-page padding>
-    <InfoBoxWrapper color="accent" label="interactive preview" class="q-mb-md">
+    <InfoBoxWrapper
+      color="accent"
+      label="interactive preview"
+      class="q-mb-md js-interactive-preview"
+    >
       <EasyField
         v-model="model"
         v-bind="field"
@@ -14,8 +18,8 @@
     >
       <div class="row no-wrap items-start q-gutter-md">
         <EasyField v-model="selectedField" v-bind="fieldPicker" />
-        <InfoBoxWrapper color="primary" label="v-model" style="flex: 2">
-          <q-markdown :src="modelShownAsBadge" />
+        <InfoBoxWrapper color="primary" label="v-model" style="flex: 2;">
+          <q-markdown class="q-py-md q-px-sm" :src="modelShownAsBadge" />
         </InfoBoxWrapper>
         <q-markdown
           style="flex: 1"

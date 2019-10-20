@@ -16,7 +16,6 @@
     min-height: 70px
     min-width: 170px
     margin-top: -10px
-    padding: 1em
     // display: flex
     > *
       width: 100%
