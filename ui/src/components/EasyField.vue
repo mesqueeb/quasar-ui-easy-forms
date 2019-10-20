@@ -1,8 +1,16 @@
 <template>
-  <div class="easy-field" :style="contentStyle">
+  <div
+    :class="['easy-field', ...cFieldClassesArray]"
+    :style="fieldStyle"
+  >
     <div
       v-if="cLabel"
-      :class="classFieldLabel"
+      :class="[
+        'easy-field__label',
+        'text-wrap-all', {
+        'easy-field__label--title': fieldType === 'title' || fieldType === 'form',
+        'easy-field__label--no-sublabel': !cSubLabel,
+      }]"
     >{{ cLabel }}</div>
     <div
       v-if="cSubLabel"
@@ -32,6 +40,12 @@
 
 .easy-field
   max-width: 100%
+  .easy-field__label
+    &--title
+      margin-top: $md
+      font-weight: 500
+    &--no-sublabel
+      margin-bottom: $sm
   .easy-field__sub-label
     opacity: 0.8
     font-weight: 300
@@ -39,9 +53,25 @@
 </style>
 
 <script>
-import { isFunction, isPlainObject, isArray } from 'is-what'
+import { isFunction, isPlainObject, isArray, isString } from 'is-what'
 import merge from 'merge-anything'
 import defaultLang from '../meta/lang'
+
+function formatProp (propKey, propValue, componentValue, component) {
+  // quasar props that can accept functions should be ignored:
+  const propsToIgnore = [
+    // EasyForm:
+    'labelValue', 'fieldInput',
+    // QSelect:
+    'optionValue', 'optionLabel', 'optionDisable',
+    // QUploader:
+    'filter', 'factory', 'url', 'method', 'headers','fieldName','formFields','withCredentials','sendRaw','batch',
+  ]
+  if (propsToIgnore.includes(propKey)) return propValue
+  return (isFunction(propValue))
+    ? propValue(componentValue, component)
+    : propValue
+}
 
 export default {
   name: 'EasyField',
@@ -82,11 +112,17 @@ Eg.
       type: [String, Function],
       desc: 'A smaller label for extra info.',
     },
-    contentStyle: {
+    fieldStyle: {
       category: 'style',
       type: [Object, Array, String, Function],
-      desc: 'Custom styling to be applied to the EasyField. Applied like so `:style="contentStyle"`',
+      desc: 'Custom styling to be applied to the EasyField. Applied like so `:style="fieldStyle"`',
       examples: [`'padding: 1em;'`],
+    },
+    fieldClasses: {
+      category: 'style',
+      type: [Object, Array, String, Function],
+      desc: 'Custom classes to be applied to the EasyField. Applied like so `:class="fieldClasses"`',
+      examples: [`['dark-theme']`],
     },
     format: {
       category: 'model',
@@ -179,6 +215,17 @@ Eg.
     lang (newValue) { this.innerLang = merge(defaultLang, newValue) },
   },
   computed: {
+    cFieldStyle () {
+      const { fieldStyle, cValue } = this
+      return formatProp('fieldStyle', fieldStyle, cValue, this)
+    },
+    cFieldClassesArray () {
+      const { fieldClasses, cValue } = this
+      const classes = formatProp('fieldClasses', fieldClasses, cValue, this)
+      if (isString(classes)) return classes.split(' ')
+      if (isPlainObject(classes)) return [classes]
+      return classes
+    },
     internalLabelMode () {
       const { fieldType } = this
       const { externalLabels } = this.$attrs
@@ -217,26 +264,9 @@ Eg.
         // Quasar props with modified behavior:
         disable: this.cDisable,
       }, requiredRules)
-      // quasar props that can accept functions should be ignored:
-      const propsToIgnore = [
-        // EasyForm:
-        'labelValue', 'fieldInput',
-        // QSelect:
-        'optionValue', 'optionLabel', 'optionDisable',
-        // QUploader:
-        'filter', 'factory', 'url', 'method', 'headers','fieldName','formFields','withCredentials','sendRaw','batch',
-      ]
-      function formatProp (propKey, propValue) {
-        if (propsToIgnore.includes(propKey)) {
-          return propValue
-        }
-        return (isFunction(propValue))
-          ? propValue(cValue, self)
-          : propValue
-      }
       return Object.entries(mergedProps)
         .reduce((carry, [propKey, propValue]) => {
-          carry[propKey] = formatProp(propKey, propValue)
+          carry[propKey] = formatProp(propKey, propValue, cValue, self)
           return carry
         }, {})
     },
@@ -272,16 +302,6 @@ Eg.
       if (readonly) return false
       const { disable } = this
       return disable
-    },
-    classFieldLabel () {
-      const { fieldType, cSubLabel } = this
-      let classes = 'easy-field__label text-wrap-all'
-      if (fieldType === 'title' || fieldType === 'form') {
-        classes += ' q-mt-md text-bold'
-      } else if (!cSubLabel) {
-        classes += ' q-mb-sm'
-      }
-      return classes
     },
   },
   methods: {
