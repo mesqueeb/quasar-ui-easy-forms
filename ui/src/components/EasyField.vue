@@ -53,7 +53,7 @@
 </style>
 
 <script>
-import { isFunction, isPlainObject, isArray, isString } from 'is-what'
+import { isFunction, isPlainObject, isArray, isString, isUndefined } from 'is-what'
 import merge from 'merge-anything'
 import defaultLang from '../meta/lang'
 
@@ -202,7 +202,7 @@ Eg.
   },
   data () {
     const { value, default: df, lang } = this
-    const innerValue = value || df
+    const innerValue = isUndefined(value) ? df : value
     // merge user provided lang onto defaults
     const innerLang = merge(defaultLang, lang)
     return {
@@ -273,6 +273,8 @@ Eg.
     cValue: {
       get () {
         const { format, innerValue } = this
+        console.log('format → ', format)
+        console.log('innerValue → ', innerValue)
         if (isFunction(format)) return format(innerValue, this)
         return innerValue
       },
