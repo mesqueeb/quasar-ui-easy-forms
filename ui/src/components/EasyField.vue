@@ -273,8 +273,6 @@ Eg.
     cValue: {
       get () {
         const { format, innerValue } = this
-        console.log('format → ', format)
-        console.log('innerValue → ', innerValue)
         if (isFunction(format)) return format(innerValue, this)
         return innerValue
       },
