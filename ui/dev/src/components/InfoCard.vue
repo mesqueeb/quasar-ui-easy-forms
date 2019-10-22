@@ -29,6 +29,7 @@
     <q-tab-panels v-model="tabControl" animated>
       <q-tab-panel
         v-for="tab in tabs"
+        :key="tab"
         :name="tab"
         class="q-pa-none"
       >

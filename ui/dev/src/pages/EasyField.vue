@@ -13,6 +13,7 @@
     </InfoBoxWrapper>
     <InfoCard
       tag="EasyField"
+      :key="selectedField"
       v-model="settings"
       :settingsSchema="settingsSchema"
     >
@@ -79,11 +80,12 @@ export default {
     },
     selectedField: {
       handler (newValue, oldValue) {
-        const { componentDemoFieldSettings, addTestOptions } = this
+        const { addTestOptions } = this
         this.model = undefined
         this.settings.valueType = undefined
         if (newValue === oldValue) return
-        addTestOptions()
+        const ops = copy(demoOptions[newValue])
+        addTestOptions(ops)
         this.settings.label = `My awesome "${newValue}" field`
       },
       immediate: true,
@@ -106,23 +108,19 @@ export default {
     },
   },
   methods: {
-    addTestOptions () {
-      const { selectedField, updateAllSettings } = this
-      const ops = copy(demoOptions[selectedField])
+    addTestOptions (ops = {}) {
       if (!ops) return
       const { value } = ops
       if (value !== undefined) {
         this.model = value
       }
-      updateAllSettings(ops)
+      this.settings = {}
+      Object.entries(ops).forEach(([key, value]) => {
+        this.$set(this.settings, key, value)
+      })
     },
     log(...args) {
       console.log(...args)
-    },
-    updateAllSettings (newSettings = {}) {
-      Object.entries(newSettings).forEach(([key, value]) => {
-        this.$set(this.settings, key, value)
-      })
     },
   },
 }
