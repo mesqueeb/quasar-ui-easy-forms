@@ -101,15 +101,15 @@ export default {
       },
     },
     cSchema () {
-      const { schema, $attrs, disable, readonly } = this
+      const { schema, disable, readonly } = this
       return schema.map(subfield => {
-        return merge($attrs, {disable, readonly}, subfield, {label: '', subLabel: ''})
+        return merge({disable, readonly}, subfield, {label: '', subLabel: ''})
       })
     },
     schemaLabels () {
-      const { schema, $attrs } = this
+      const { schema } = this
       return schema.map(subfield => {
-        return merge($attrs, subfield, {fieldType: 'none'})
+        return merge(subfield, {fieldType: 'none'})
       })
     },
     columnCountSubForm () {
