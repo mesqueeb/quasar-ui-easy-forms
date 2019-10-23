@@ -5,7 +5,11 @@
       v-for="(img, imgIndex) in cValue"
       :key="img.downloadURL"
     >
-      <q-img :src="img.downloadURL" v-bind="quasarProps" />
+      <q-img
+        :src="img.downloadURL"
+        v-bind="quasarProps"
+        v-on="$listeners"
+      />
       <div class="ef-img__nav">
         <EfBtn
           v-if="cDeletable"
