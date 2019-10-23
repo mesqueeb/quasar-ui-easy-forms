@@ -28,6 +28,7 @@ export const img = {
   id: 'img',
   fieldType: 'img',
   value: 'https://www.dailydot.com/wp-content/uploads/146/6e/6d78ec0c8c8eaf31.png',
+  // events: { click: (...args) => console.log('on input', ...args) },
 }
 export const input = {
   id: 'input',
@@ -59,7 +60,8 @@ export const select = {
   id: 'select',
   fieldType: 'select',
   placeholder: 'please select one',
-  options: [{label: 'one', value: 1}, {label: 'two', value: 2}],
+  options: [{label: 'one', value: '1'}, {label: 'two', value: '2'}],
+  // events: { focus: (...args) => console.log('on input', ...args) },
 }
 export const slider = {
   id: 'slider',

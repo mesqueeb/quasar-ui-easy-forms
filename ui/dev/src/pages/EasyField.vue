@@ -1,5 +1,9 @@
 <template>
   <q-page padding>
+    <q-markdown
+      v-if="rawComponent.desc"
+      :src="rawComponent.desc"
+    />
     <InfoBoxWrapper
       color="accent"
       label="interactive preview"
@@ -22,11 +26,6 @@
         <InfoBoxWrapper color="primary" label="v-model" style="flex: 2;">
           <q-markdown class="q-py-md q-px-sm" :src="modelShownAsBadge" />
         </InfoBoxWrapper>
-        <q-markdown
-          style="flex: 1"
-          v-if="rawComponent.desc"
-          :src="rawComponent.desc"
-        />
       </div>
     </InfoCard>
   </q-page>
@@ -59,6 +58,7 @@ export default {
     const fieldPicker = {
       label: 'Pick a field',
       fieldType: 'select',
+      emitValue: true,
       options: selectableFields,
     }
     return {

@@ -31,7 +31,7 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
   const events = {}
   let fieldType = 'input'
   let subLabel = desc
-  let options, outlined, standout, disable, parseInput, format, autogrow, debounce, span
+  let options, outlined, standout, disable, parseInput, format, autogrow, debounce, span, emitValue
   let fieldClasses = []
   // If it's a quasarProp, add a specific indentifier
   if (quasarProp) {
@@ -45,6 +45,7 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
   const propHasValues = isArray(values) && values.length
   if (propHasValues) {
     fieldType = 'select'
+    emitValue = true
     options = values.map(v => ({label: v, value: v}))
   }
   // Create a special input for defining arrays and/or objects
@@ -93,6 +94,7 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
     debounce,
     events,
     span,
+    emitValue,
     // if the prop is `true` by default, set to true
     default: _df === true || undefined,
   }
