@@ -100,16 +100,20 @@ export default {
         this.$emit('input', val)
       },
     },
+    attrsToPass () {
+      const { formDataNested, formDataFlat, formId, formMode, fieldInput } = this.$attrs
+      return { formDataNested, formDataFlat, formId, formMode, fieldInput }
+    },
     cSchema () {
-      const { schema, disable, readonly } = this
+      const { schema, disable, readonly, attrsToPass } = this
       return schema.map(subfield => {
-        return merge({disable, readonly}, subfield, {label: '', subLabel: ''})
+        return merge(attrsToPass, {disable, readonly}, subfield, {label: '', subLabel: ''})
       })
     },
     schemaLabels () {
-      const { schema } = this
+      const { schema, attrsToPass } = this
       return schema.map(subfield => {
-        return merge(subfield, {fieldType: 'none'})
+        return merge(attrsToPass, subfield, {fieldType: 'none'})
       })
     },
     columnCountSubForm () {
