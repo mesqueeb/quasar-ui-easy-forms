@@ -1,6 +1,6 @@
 {
   "name": "quasar-app-extension-easy-forms",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Easily generate forms by only defining a \"fields scheme\" as an object.",
   "author": "Luca Ban - Mesqueeb",
   "license": "MIT",

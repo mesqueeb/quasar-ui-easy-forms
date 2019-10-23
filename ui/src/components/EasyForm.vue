@@ -343,7 +343,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     fieldInput ({id, value}) {
       this.edited = true
       if (!this.editedFields.includes(id)) this.editedFields.push(id)
-      this.formDataFlat[id] = value
+      this.$set(this.formDataFlat, id, value)
       this.$emit(EVENTS['field-input'].name, {id, value})
       this.$emit(EVENTS['input'].name, this.formDataFlat)
     },
