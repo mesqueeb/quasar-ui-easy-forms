@@ -136,7 +136,7 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
           const base = Object.keys(originalValue)
             .reduce((carry, key) => ({...carry, [key]: null}), {})
           const cleanValue = val.reduce((carry, option) => {
-            if (isString(option)) return {...carry, [option]: option}
+            if (isString(option)) return merge(carry, {[option]: option})
             return merge(carry, {[option.value]: option.label})
           }, base)
           this.$emit('input', cleanValue)
