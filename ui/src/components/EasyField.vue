@@ -57,7 +57,7 @@ import { isFunction, isPlainObject, isArray, isString, isUndefined } from 'is-wh
 import merge from 'merge-anything'
 import defaultLang from '../meta/lang'
 
-function formatProp (propKey, propValue, componentValue, component) {
+function resolveEasyFieldProp (propKey, propValue, componentValue, component) {
   // quasar props that can accept functions should be ignored:
   const propsToIgnore = [
     // EasyForm:
@@ -217,11 +217,11 @@ Eg.
   computed: {
     cFieldStyle () {
       const { fieldStyle, cValue } = this
-      return formatProp('fieldStyle', fieldStyle, cValue, this)
+      return resolveEasyFieldProp('fieldStyle', fieldStyle, cValue, this)
     },
     cFieldClassesArray () {
       const { fieldClasses, cValue } = this
-      const classes = formatProp('fieldClasses', fieldClasses, cValue, this)
+      const classes = resolveEasyFieldProp('fieldClasses', fieldClasses, cValue, this)
       if (isString(classes)) return classes.split(' ')
       if (isPlainObject(classes)) return [classes]
       return classes
@@ -267,7 +267,7 @@ Eg.
       }, requiredRules)
       return Object.entries(mergedProps)
         .reduce((carry, [propKey, propValue]) => {
-          carry[propKey] = formatProp(propKey, propValue, cValue, self)
+          carry[propKey] = resolveEasyFieldProp(propKey, propValue, cValue, self)
           return carry
         }, {})
     },
@@ -307,8 +307,7 @@ Eg.
   },
   methods: {
     updateValue (val) {
-      const { parseInput, events, $attrs } = this
-      const { fieldInput } = $attrs
+      const { parseInput, events } = this
       if (isFunction(parseInput)) val = parseInput(val, this)
       if (isFunction(events.input)) events.input(val, this)
       this.$emit('input', val)
