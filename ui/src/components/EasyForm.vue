@@ -243,7 +243,6 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     }
   },
   watch: {
-    value (newValue) { this.formDataFlat = newValue },
     mode (newValue) { this.formMode = newValue },
     id (newValue) { this.formId = newValue },
     lang (newValue) { this.innerLang = merge(defaultLang, newValue) },
