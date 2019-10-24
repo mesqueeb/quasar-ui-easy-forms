@@ -2,7 +2,8 @@
   <q-input
     :class="[
       'ef-input',
-      `-align-${cAlign}`, {
+      `-align-${cAlign}`,
+      `ef-input--align-${cAlign}`, {
       '-big': big,
     }]"
     v-model="cValue"
@@ -21,6 +22,9 @@
 
 .ef-input
   width: 100%
+.ef-input--align-right
+  .q-field__native
+    text-align: right
 
 </style>
 
