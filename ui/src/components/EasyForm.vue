@@ -396,10 +396,6 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     },
     tapDelete () { this.$emit(EVENTS['delete'].name) },
     tapArchive () { this.$emit(EVENTS['archive'].name) },
-    tapCustomBtn (event, btnHandler) {
-      if (!isFunction(btnHandler)) throw new Error('button handler must be a function')
-      btnHandler(this, event)
-    },
   }
 }
 </script>
