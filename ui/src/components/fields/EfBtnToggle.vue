@@ -25,12 +25,11 @@
         :class="{'ef-btn-toggle__chosen': value === option.value}"
       >
         <EfBtn
-          :value="option.label"
           @click.native="$emit('input', option.value)"
           class="ef-btn -square"
           v-bind="merge(option, {
-            label: undefined,
-            disable: option.disable || quasarProps.disable
+            btnLabel: option.label,
+            disable: option.disable || quasarProps.disable,
           })"
         />
       </div>

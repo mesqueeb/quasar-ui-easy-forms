@@ -259,6 +259,7 @@ Eg.
         fieldType: this.fieldType,
         labelRaw: this.label,
         subLabelRaw: this.subLabel,
+        lang: this.innerLang,
         events: this.cEvents,
         // Quasar props with modified defaults:
         readonly: this.readonly,

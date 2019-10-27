@@ -14,7 +14,7 @@
               v-if="cDeletable"
               :disable="quasarProps.disable"
               @click.stop="tapDelete(pdfIndex)"
-              value="削除"
+              :btnLabel="lang.delete"
               :flat="true"
               color="negative"
             />
@@ -66,6 +66,13 @@ quasar ext add @quasar/qpdfviewer
       type: Boolean,
       default: true,
       desc: 'Wether or not uploaded files are deletable (deleting would update the `value`). `true` by default but `false` when `readonly: true`',
+    },
+    lang: {
+      category: 'content',
+      type: Object,
+      desc: `The text used in the UI, eg. for required fields, etc.`,
+      default: () => ({delete: 'Delete'}),
+      examples: [`{delete: '削除'}`],
     },
     // Quasar props with modified defaults:
     // Quasar props with modified behavior:

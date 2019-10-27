@@ -14,7 +14,7 @@
         <EfBtn
           v-if="cDeletable"
           :disable="quasarProps.disable"
-          value="削除"
+          :btnLabel="lang.delete"
           :push="true"
           @click.stop="tapDelete(imgIndex)"
         />
@@ -64,6 +64,13 @@ export default {
       type: Boolean,
       default: true,
       desc: 'Wether or not uploaded files are deletable (deleting would update the `value`). `true` by default but `false` when `readonly: true`',
+    },
+    lang: {
+      category: 'content',
+      type: Object,
+      desc: `The text used in the UI, eg. for required fields, etc.`,
+      default: () => ({delete: 'Delete'}),
+      examples: [`{delete: '削除'}`],
     },
     // Quasar props with modified defaults:
     // Quasar props with modified behavior:
