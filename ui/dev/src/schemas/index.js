@@ -2,7 +2,7 @@
 export const btn = {
   id: 'btn',
   fieldType: 'btn',
-  value: 'Touch me',
+  btnLabel: 'Touch me',
   events: {
     click: (val, context) => console.log('@CLICK\nval → ', val, '\ncontext → ', context),
   },

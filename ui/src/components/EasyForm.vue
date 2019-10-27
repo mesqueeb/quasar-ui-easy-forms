@@ -14,12 +14,8 @@
       <EfBtn
         v-for="btn in cActionButtons"
         :key="btn.label"
-        :value="btn.label"
-        :size="btn.size || 'md'"
-        :push="btn.push"
-        :flat="btn.flat"
-        :color="btn.color || 'primary'"
-        @click="e => tapCustomBtn(e, btn.handler)"
+        v-bind="btn"
+        v-on="btn.events"
       />
     </div>
     <div
@@ -88,7 +84,7 @@
 import { QForm } from 'quasar'
 import merge from 'merge-anything'
 import copy from 'copy-anything'
-import { isArray, isFunction, isFullString, isString } from 'is-what'
+import { isArray, isFunction, isFullString, isPlainObject } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
 import flattenPerSchema from '../helpers/flattenPerSchema'
 import defaultLang from '../meta/lang'
@@ -169,11 +165,12 @@ Read more on Evaluated Props in its dedicated page.`,
     actionButtons: {
       category: 'content',
       type: Array,
-      default: () => ['cancel', 'archive', 'edit', 'save'],
+      default: () => ['archive', 'cancel', 'edit', 'save'],
       desc: `Buttons on top of the form that control the 'mode' of the form; clicking them will $emit the following events: 'cancel', 'save', 'delete', 'archive'.
+You can decide which buttons you want to show/hide by passing them in an array to \`:action-buttons="[]"\`. You can also pass custom buttons with a schema just like an EasyField button.
 
-You can decide which buttons you want to show/hide by passing them in an array to \`:action-buttons="[]"\`. You can also pass custom buttons with a label and handler.`,
-      examples: [`[] (no buttons)`, `['delete', 'cancel', 'edit', 'save']`, `[{label: 'log', handler: console.log}]`],
+See the documentation on "Action Buttons" for more info.`,
+      examples: [`[] (no buttons)`, `['delete', 'cancel', 'edit', 'save']`, `[{btnLabel: 'log', events: {click: console.log}}]`],
     },
     actionButtonsPosition: {
       category: 'content',
@@ -301,24 +298,30 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     },
     cActionButtons () {
       const { actionButtons, innerLang, cMode, tapDelete, tapEdit, tapArchive, tapCancel, tapSave } = this
+      const easyFormContext = this
       return actionButtons.map(btn => {
         if (btn === 'delete') {
-          return {label: innerLang['delete'], flat: true, color: 'negative', handler: tapDelete}
+          return {btnLabel: innerLang['delete'], flat: true, color: 'negative', events: {click: tapDelete}}
         }
         if (btn === 'archive') {
-          return {label: innerLang['archive'], flat: true, color: 'negative', handler: tapArchive}
+          return {btnLabel: innerLang['archive'], flat: true, color: 'negative', events: {click: tapArchive}}
         }
         if (btn === 'cancel' && (cMode === 'edit' || cMode === 'add')) {
-          return {label: innerLang['cancel'], flat: true, handler: tapCancel}
+          return {btnLabel: innerLang['cancel'], flat: true, events: {click: tapCancel}}
         }
         if (btn === 'edit' && (cMode === 'view')) {
-          return {label: innerLang['edit'], push: true, handler: tapEdit}
+          return {btnLabel: innerLang['edit'], push: true, events: {click: tapEdit}}
         }
         if (btn === 'save' && (cMode === 'edit' || cMode === 'add')) {
-          return {label: innerLang['save'], push: true, handler: tapSave}
+          return {btnLabel: innerLang['save'], push: true, events: {click: tapSave}}
         }
-        return btn
-      }).filter(btn => !isString(btn))
+        if (isPlainObject(btn)) {
+          if (!isPlainObject(btn.events)) return btn
+          const { click } = btn.events
+          if (isFunction(click)) btn.events.click = val => click(val, easyFormContext)
+          return btn
+        }
+      }).filter(btn => isPlainObject(btn))
     },
     dataBackup () {
       const { formDataFlatBackups } = this

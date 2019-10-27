@@ -139,7 +139,7 @@ Eg.
     events: {
       category: 'behavior',
       type: Object,
-      desc: 'An Object with an event name as key and the handler function as value. The function you pass will receive the native event payload as first parameter and the EasyField context (the component instance) as second: ($event, context) => {}',
+      desc: 'An Object with an event name as key and the handler function as value. The function you pass will receive the native event payload as first parameter and the EasyField context (the component instance) as second: \`($event, context) => {}\`',
       default: () => ({}),
       examples: ['{click: (val, {$router}) => $router.push(\'/\')}', '{focus: console.log}'],
     },
