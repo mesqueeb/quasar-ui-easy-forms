@@ -13,7 +13,7 @@
       >{{ errorMsg }}</div>
       <EfBtn
         v-for="btn in cActionButtons"
-        :key="btn.label"
+        :key="btn.btnLabel"
         v-bind="btn"
         v-on="btn.events"
       />
