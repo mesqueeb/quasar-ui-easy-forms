@@ -30,12 +30,11 @@ export default {
   props: {
     // prop categories: behavior content general model state style
     // EF props:
-    value: {
-      category: 'model|content',
+    btnLabel: {
+      category: 'content',
       type: String,
-      desc: '`value` is the button\'s "label". (`label` on the other hand is used for the external label of `<EfField />`)',
+      desc: '`btnLabel` is the button\'s "label". (`label` on the other hand is used for the external label of `<EfField />`)',
     },
-    valueType: getGenericValueType('string'),
     // Quasar props with modified defaults:
     color: {
       quasarProp: 'modified',
@@ -50,7 +49,7 @@ export default {
         // Quasar props with modified defaults:
         color: this.color,
         // Quasar props with modified behavior:
-        label: this.value,
+        label: this.btnLabel || this.$attrs.label,
       })
     },
   },
