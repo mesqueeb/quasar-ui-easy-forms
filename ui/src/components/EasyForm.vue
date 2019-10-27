@@ -224,7 +224,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     const dataFlat = flattenPerSchema(value, schema)
     const schemaArray = isArray(schema) ? schema : Object.values(schema)
     const dataFlatDefaults = schemaArray.reduce((carry, blueprint) => {
-      carry[blueprint.id] = isFunction(blueprint.default) ? blueprint.default() : blueprint.default
+      carry[blueprint.id] = isFunction(blueprint.default) ? blueprint.default(value) : blueprint.default
       return carry
     }, {})
     const formDataFlat = merge(dataFlatDefaults, copy(dataFlat))
