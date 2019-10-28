@@ -19,8 +19,19 @@ Some buttons are already set up for you and can be included by just passing the 
 
 The buttons above emits the events: \`@edit\`, \`@cancel\`, \`@save\`, \`@delete\`, \`@archive\`
 
-Only \`@save\` receives a payload with the new and old form data:
-- \`@save="({newData, oldData}) => { /* do something */ }"\`
+Only \`@save\` receives a payload with the new and old form data.
+- \`@save="onSave"\`
+\`\`\`js
+import merge from 'merge-anything' // my merge util 😉
+{
+  onSave ({newData, oldData}) {
+    console.log(newData) // an object with only the updated fields
+    console.log(oldData) // the original object with all the field values
+    // if you need a combination of both:
+    const newFormData = merge(oldData, newData)
+  }
+}
+\`\`\`
 
 When you don't specify the action buttons it will default to:
 - \`:action-buttons="['archive', 'cancel', 'edit', 'save']"\`
