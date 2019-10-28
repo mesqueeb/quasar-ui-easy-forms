@@ -12,10 +12,10 @@ export const advanced = `This is a more advanced example so you can see the full
 export const actionButtons = `EasyForm has a prop called 'actionButtons' with which you can specify which buttons you want your EasyForm to include.
 Some buttons are already set up for you and can be included by just passing the string of the button you want:
 
-- \`'edit'\`: Puts the form in "edit" mode
-- \`'cancel'\`: Puts the form back into "view" mode & reverts the content to its original state
-- \`'save'\`: Puts the form back into "view" mode & keeps the modified content
-- \`'delete'\` & \`'archive'\`: emits a delete or archive event (you must implement your own logic)
+- \`'edit'\`: Adds a button that puts the form in "edit" mode
+- \`'cancel'\`: Adds a button that puts the form back into "view" mode & reverts the content to its original state
+- \`'save'\`: Adds a button that puts the form back into "view" mode & keeps the modified content
+- \`'delete'\` & \`'archive'\`: Adds a button that emits a delete or archive event (you must implement your own logic)
 
 The buttons above emits the events: \`@edit\`, \`@cancel\`, \`@save\`, \`@delete\`, \`@archive\`
 
@@ -39,6 +39,8 @@ actionButtons: [{
     click: (event, {formDataNested}) => console.log(formDataNested),
   },
 }]
+
+For more information on the \`context\` prop passed to a click event see the "Evaluated Props" and "Events" documentation.
 \`\`\`
 `
 
@@ -51,11 +53,13 @@ Evaluated props will receive 2 params: \`(val, context)\`.
 - \`context\` is the Vue component reference of the \`<EasyField />\`, you can deconstruct this to access any other properties/values.
 
 The most important props you can access from \`context\`:
-- \`$store\` Your Vuex store, if you have one.
 - \`formDataNested\` This is the *nested* data of all the fields inside an EasyForm.
 - \`formDataFlat\` This is the *flattened* data of all the fields inside an EasyForm.
 - \`formMode\` The current state of the EasyForm. Can be \`'view'\` | \`'edit'\` | \`'add'\`
 - \`formId\` An 'id' of the EasyForm. This is only present when manually set.
+- Other common Vue props like: \`$store\`, \`$router\`, \`$q\` (for Quasar apps) etc.
+
+Try to refrain from accessing props other than the ones listed above, because these are mainly used internal and could have behaviour changes that could break your app.
 `
 
 export const events = `Each \`<EasyField />\` can be passed an prop called \`events\`. This prop can be passed like so: \`:events="events"\` and will set all the event listeners on the field like so: \`v-on="events"\`.
@@ -72,12 +76,11 @@ events: {
 The benefits of passing your event listeners via the \`events\` prop are:
 - Besides the typical \`$event\` parameter they receive as first parameter, they will receive a second \`context\` parameter.
 - \`context\` is the Vue component reference of the \`<EasyField />\`, you can deconstruct this to access any other properties/values.
-- \`context\` has useful props like: \`$store\`, \`$router\`, \`formDataNested\`, \`formDataFlat\`, \`formMode\`, \`formId\`, ... All of these are already explained in the "Evaluated Props" documentation, so be sure to check that.
+- \`context\` has useful props like: \`$store\`, \`$router\`, \`formDataNested\`, \`formDataFlat\`, \`formMode\`, \`formId\`, ... All of these are explained in the *"Evaluated Props" documentation*, so be sure to check that.
 - \`context\` has a special function called \`fieldInput\` which can be used to modify other fields programatically.
 - And all this can be set from inside an \`<EasyForm />\`'s \`schema\` so you don't need add anything manually inside your templates.
 
 Phew. That was a bit of a lot of information all at once. 😅 Let's tackle these one by one.
-
 `
 
 export const nestedProps = `todo... write this`
