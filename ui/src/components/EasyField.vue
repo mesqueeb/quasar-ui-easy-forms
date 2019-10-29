@@ -90,17 +90,16 @@ export default {
     default: {
       category: 'model',
       type: undefined,
-      desc: 'A default value.',
+      desc: `A default value to be used when the 'value' is \`undefined\`.
+
+You can also pass a function that will receive two params you can work with: \`(formDataNested, context)\`
+- \`formDataNested\` is the value object of your EasyForm. This will be undefined when EasyField is used as stand-alone (without EasyForm) unless you manually pass it.
+- \`context\` is either your EasyForm or EasyField context with many usefull props. See the documentation on "Evaluated Props" for more info.`,
     },
     required: {
       category: 'behavior',
       type: Boolean,
-      desc: `Wether or not the field is required or not. If a field is marked 'required' it will add a default rule like so: \`[val => !!val || 'Field is required']\`. The default message can be set in the \`lang\` prop as \`requiredField\`.
-Eg.
-\`\`\`js
-:lang="{requiredField: 'Don\'t forget this field!'}"
-\`\`\`
-`,
+      desc: `Wether or not the field is required or not. If a field is marked 'required' it will add a default rule like so: \`[val => !!val || 'Field is required']\`. The default message can be set in the \`lang\` prop as \`requiredField\`.`,
     },
     id: {
       category: 'model',
@@ -201,8 +200,10 @@ Eg.
     },
   },
   data () {
-    const { value, default: df, lang } = this
-    const innerValue = isUndefined(value) ? df : value
+    const { value, default: df, lang, formDataNested } = this
+    const innerValue = !isUndefined(value)
+      ? value
+      : isFunction(df) ? df(formDataNested, this) : df
     // merge user provided lang onto defaults
     const innerLang = merge(defaultLang, lang)
     return {

@@ -25,7 +25,7 @@ export function getAllComponentProps (selectedField) {
 }
 
 export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) {
-  const { desc, type, quasarProp, examples, default: _df, values, category } = propInfo
+  const { desc, type, quasarProp, examples, default: df, values, category } = propInfo
   // make the raw prop info from the components into an EasyForm:
   // whatever the prop is, default to an 'input' EasyField
   const events = {}
@@ -38,7 +38,7 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
     fieldClasses.push(quasarProp === true ? 'quasar-prop' : 'quasar-prop-modified')
   }
   // If it has a default, write it in the description
-  if (!isUndefined(_df)) subLabel += `\n\nDefault: \`${isFunction(_df) ? JSON.stringify(_df()) : _df}\``
+  if (!isUndefined(df)) subLabel += `\n\nDefault: \`${isFunction(df) ? JSON.stringify(df()) : df}\``
   // if the prop is a Boolean, show this as a 'toggle' EasyField
   if (type === Boolean || ['readonly', 'disable'].includes(propKey)) fieldType = 'toggle'
   // if the prop has a fixed set of possible values, show this as an 'option' EasyField
@@ -96,7 +96,7 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
     span,
     emitValue,
     // if the prop is `true` by default, set to true
-    default: _df === true || undefined,
+    default: df === true || undefined,
   }
 }
 
