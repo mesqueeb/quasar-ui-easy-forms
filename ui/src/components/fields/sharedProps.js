@@ -44,8 +44,7 @@ export function getGenericValueType(types = [], extraDescription = '') {
   return merge(defaultType, {
     category: 'model',
     type: String,
-    validator: prop => types.includes(prop),
-    desc: `valueType is the type of the model of the field. For this fieldType it can only be: ${types.join(' | ')}.${ extraDescription ? '\n\n' + extraDescription : '' }`,
+    desc: `valueType is the type of the model of the field. For this fieldType it can only be: ${types.join(' | ')}. If your actual underlying valueType is different, you must provide a 'format' function (see prop: 'format') to make sure your value becomes the correct valueType.${ extraDescription ? '\n\n' + extraDescription : '' }`,
     examples: types,
     values: types,
   })
