@@ -288,7 +288,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
         // return early when showCondition fails
         if (formMode === 'view') {
           if (!checkShowCondition(blueprint)) return carry
-          carry.push(merge(blueprint, {readonly: true}))
+          carry.push(merge({readonly: true}, blueprint))
           return carry
         }
         if (!checkShowCondition(blueprint)) return carry
