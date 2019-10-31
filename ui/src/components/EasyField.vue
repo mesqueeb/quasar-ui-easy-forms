@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="['easy-field', ...cFieldClassesArray]"
+    :class="['easy-field', `easy-field--${fieldType}`, ...cFieldClassesArray]"
     :style="fieldStyle"
   >
     <div

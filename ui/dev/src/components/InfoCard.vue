@@ -89,14 +89,17 @@ export default {
       return copy(this.value)
     },
     TabsPanelCssClasses () {
-      const { tag } = this
+      const { tag, settings } = this
       const classesEasyField = [
         '.easy-field',
         '.easy-field__label',
         '.easy-field__sub-label',
         '.easy-field__field',
       ]
-      if (tag === 'EasyField') return classesEasyField
+      if (tag === 'EasyField') {
+        classesEasyField.splice(1, 0, `.easy-field--${settings.fieldType}`)
+        return classesEasyField
+      }
       return [
         '.easy-form',
         '.easy-form__nav-row',
