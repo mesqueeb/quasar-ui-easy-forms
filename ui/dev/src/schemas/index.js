@@ -27,7 +27,14 @@ export const form = {
 export const img = {
   id: 'img',
   fieldType: 'img',
-  value: 'https://www.dailydot.com/wp-content/uploads/146/6e/6d78ec0c8c8eaf31.png',
+  value: [
+    'https://www.dailydot.com/wp-content/uploads/146/6e/6d78ec0c8c8eaf31.png',
+    {
+      downloadURL: 'https://media1.tenor.com/images/14d16e998fc898010f4bf7db2a81e74c/tenor.gif',
+      caption: `You're breathtaking!`,
+      captionClasses: 'text-bold',
+    },
+  ],
   // events: { click: (...args) => console.log('on input', ...args) },
 }
 export const input = {

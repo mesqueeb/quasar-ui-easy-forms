@@ -9,7 +9,13 @@
         :src="img.downloadURL"
         v-bind="quasarProps"
         v-on="$listeners"
-      />
+      >
+        <div
+          v-if="img.caption"
+          :class="img.captionClasses"
+          :style="img.captionStyle"
+        >{{ img.caption }}</div>
+      </q-img>
       <div class="ef-img__nav">
         <EfBtn
           v-if="cDeletable"
@@ -41,12 +47,16 @@
 <script>
 import merge from 'merge-anything'
 import copy from 'copy-anything'
-import { isFullString, isString, isPlainObject } from 'is-what'
+import { isFullString, isString, isPlainObject, isNumber, isArray } from 'is-what'
 import { QImg } from 'quasar'
 import EfBtn from './EfBtn.vue'
 import { valueDescImgPdf, getGenericValueType } from './sharedProps.js'
 
 export default {
+  desc: `The useful thing about EasyField image is that you can pass one _or_ multiple images. You can then limit the amout you want to show via the \'limit\' prop.
+
+Captions can be passed via the model as well, and each image can have its own caption: Eg. \`v-model="[{downloadURL, caption}]"\`
+Classes and/or style can be applied to the captions as well via \`captionStyle\` and \`captionClasses\`.`,
   components: { EfBtn, QImg },
   name: 'EfImg',
   inheritAttrs: false,
@@ -58,6 +68,11 @@ export default {
       desc: valueDescImgPdf,
     },
     valueType: getGenericValueType(['string', 'object', 'array']),
+    limit: {
+      category: 'content|model',
+      type: Number,
+      desc: 'Limit the number of images shown when there are multiple',
+    },
     // EF props:
     deletable: {
       category: 'behavior',
@@ -84,11 +99,15 @@ export default {
     },
     cValue: {
       get () {
-        const { value } = this
+        const { value, limit } = this
         if (!value) return []
-        if (isPlainObject(value)) return [value]
-        if (isFullString(value)) return [{downloadURL: value}]
-        return value.filter(v => isPlainObject(v))
+        const valueArray = isArray(value) ? value : [value]
+        const result = valueArray.map(v => {
+          if (isFullString(v)) return {downloadURL: v}
+          return v
+        })
+        if (isNumber(limit)) return result.slice(0, limit)
+        return result
       },
       set (val) { this.$emit('input', val) },
     },

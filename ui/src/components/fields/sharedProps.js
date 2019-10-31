@@ -34,7 +34,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
 export const valueDescImgPdf = `Accepts a single or multiple files as its \`value\`. The downloadURL (or "source" of the files) can be formatted as
 - a \`String\`
 - an object which looks like \`{downloadURL: String}\`
-- an array of \`{downloadURL: String}\``
+- an array of several images; formatted as one of the above.`
 
 export function getGenericValueType(types = [], extraDescription = '') {
   if (!isArray(types)) types = [types]
