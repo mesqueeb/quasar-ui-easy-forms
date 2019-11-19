@@ -20,7 +20,7 @@
     </q-header>
 
     <q-page-container class="column flex-center">
-      <router-view style="max-width: 900px" />
+      <router-view class="full-width" style="max-width: 900px;" />
     </q-page-container>
   </q-layout>
 </template>
