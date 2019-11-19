@@ -181,6 +181,14 @@ See the documentation on "Action Buttons" for more info.`,
       values: ['top', 'bottom', 'right', 'left'],
       validator: prop => ['top', 'bottom', 'right', 'left'].includes(prop),
     },
+    labelPosition: {
+      category: 'style',
+      type: [String, Function],
+      default: 'top',
+      desc: 'The position of the labels.',
+      values: ['top', 'left'],
+      examples: ['top', 'left'],
+    },
     validator: {
       category: 'behavior',
       type: Function,
@@ -269,6 +277,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
         externalLabels,
         innerLang,
         fieldInput,
+        labelPosition,
       } = this
       const self = this
       function checkShowCondition ({ id: fieldId, showCondition }) {
@@ -284,6 +293,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
           externalLabels,
           lang: innerLang,
           fieldInput,
+          labelPosition,
         })
         // return early when showCondition fails
         if (formMode === 'view') {

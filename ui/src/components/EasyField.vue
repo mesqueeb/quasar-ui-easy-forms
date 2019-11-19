@@ -1,6 +1,11 @@
 <template>
   <div
-    :class="['easy-field', `easy-field--${fieldType}`, ...cFieldClassesArray]"
+    :class="[
+      'easy-field',
+      `easy-field--${fieldType}`,
+      `easy-field--label-${labelPosition}`,
+      ...cFieldClassesArray
+    ]"
     :style="cFieldStyle"
   >
     <div
@@ -14,7 +19,10 @@
     >{{ cLabel }}</div>
     <div
       v-if="cSubLabel"
-      :class="`easy-field__sub-label q-mb-sm text-wrap-all`"
+      :class="[
+        'easy-field__sub-label',
+        'text-wrap-all'
+      ]"
     >{{ cSubLabel }}</div>
     <div
       class="easy-field__field"
@@ -40,8 +48,25 @@
 // $
 @import '../index.sass'
 
+// layout
 .easy-field
   max-width: 100%
+  display: grid
+  align-content: start
+  &--label-top
+    grid-template-areas: "label" "sub-label" "field"
+  &--label-left
+    grid-template-areas: "label field" "sub-label field"
+    grid-template-columns: auto 1fr
+    grid-gap: 0 $md
+  .easy-field__label
+    grid-area: label
+  .easy-field__sub-label
+    grid-area: sub-label
+  .easy-field__field
+    grid-area: field
+// style
+.easy-field
   .easy-field__label
     &--title
       margin-top: $md
@@ -49,6 +74,7 @@
     &--no-sublabel
       margin-bottom: $sm
   .easy-field__sub-label
+    margin-bottom: $sm
     opacity: 0.8
     font-weight: 300
 
@@ -112,6 +138,14 @@ You can also pass a function that will receive two params you can work with: \`(
       category: 'content',
       type: [String, Function],
       desc: 'A smaller label for extra info.',
+    },
+    labelPosition: {
+      category: 'style',
+      type: [String, Function],
+      default: 'top',
+      desc: 'The position of the label.',
+      values: ['top', 'left'],
+      examples: ['top', 'left'],
     },
     fieldStyle: {
       category: 'style',
