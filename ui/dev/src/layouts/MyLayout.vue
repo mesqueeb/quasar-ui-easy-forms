@@ -3,6 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
+          v-if="$route.fullPath !== '/'"
           flat
           dense
           round
@@ -18,8 +19,8 @@
       </q-toolbar>
     </q-header>
 
-    <q-page-container>
-      <router-view />
+    <q-page-container class="column flex-center">
+      <router-view style="max-width: 900px" />
     </q-page-container>
   </q-layout>
 </template>
