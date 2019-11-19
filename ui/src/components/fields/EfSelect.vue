@@ -48,6 +48,9 @@ Benefits of this data model:
 - EfForm formats your model for you just by passing \`multiple: true, valueType: 'object'\`
 - (The only downside is that your array of options may only have strings for its values)
 
+Problems with this data model:
+- You cannot retain a specific "order"
+
 A note on events: \`<EfSelect />\` requires the native modifier when applying events directly in the template.`,
   props: {
     // prop categories: behavior content general model state style
