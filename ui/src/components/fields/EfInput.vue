@@ -34,7 +34,7 @@ import { isNumber, isString, isArray, isFunction } from 'is-what'
 import { QInput } from 'quasar'
 import { getGenericValueType, big, externalLabels } from './sharedProps.js'
 import { rulesMap } from '../../helpers/inputValidators'
-import focusInput from '../../helpers/focusInput'
+import focusIfInputEl from '../../helpers/focusIfInputEl'
 
 export default {
   components: { QInput },
@@ -175,7 +175,7 @@ export default {
   },
   methods: {
     onClick (event) {
-      focusInput(event)
+      focusIfInputEl(event)
     },
     onKeydown (event) {
       const { isMaxValue } = this
