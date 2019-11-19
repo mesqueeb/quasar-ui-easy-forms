@@ -25,6 +25,8 @@
         v-model="cValue"
         v-bind="fieldProps"
         v-on="cEvents"
+        :class="cInnerClassesArray"
+        :style="cInnerStyle"
       />
       <!-- <pre
         v-if="fieldType === 'q-markdown'"
@@ -114,13 +116,25 @@ You can also pass a function that will receive two params you can work with: \`(
     fieldStyle: {
       category: 'style',
       type: [Object, Array, String, Function],
-      desc: 'Custom styling to be applied to the EasyField. Applied like so `:style="fieldStyle"`',
+      desc: 'Custom styling to be applied to the EasyField. Applied like so `:style="fieldStyle"`. Can be an Evaluated Prop (this is why I opted to have a different name from `style`).',
       examples: [`'padding: 1em;'`],
     },
     fieldClasses: {
       category: 'style',
       type: [Object, Array, String, Function],
-      desc: 'Custom classes to be applied to the EasyField. Applied like so `:class="fieldClasses"`',
+      desc: 'Custom classes to be applied to the EasyField. Applied like so `:class="fieldClasses"`. Can be an Evaluated Prop (this is why I opted to have a different name from `class`).',
+      examples: [`['dark-theme']`],
+    },
+    innerStyle: {
+      category: 'style',
+      type: [Object, Array, String, Function],
+      desc: 'Custom styling to be applied to the inner component of EasyField. Applied like so `:style="innerStyle"`. Can be an Evaluated Prop.',
+      examples: [`'padding: 1em;'`],
+    },
+    innerClasses: {
+      category: 'style',
+      type: [Object, Array, String, Function],
+      desc: 'Custom classes to be applied to the inner component of EasyField. Applied like so `:class="innerClasses"`. Can be an Evaluated Prop.',
       examples: [`['dark-theme']`],
     },
     format: {
@@ -220,9 +234,20 @@ You can also pass a function that will receive two params you can work with: \`(
       const { fieldStyle, cValue } = this
       return resolveEasyFieldProp('fieldStyle', fieldStyle, cValue, this)
     },
+    cInnerStyle () {
+      const { innerStyle, cValue } = this
+      return resolveEasyFieldProp('innerStyle', innerStyle, cValue, this)
+    },
     cFieldClassesArray () {
       const { fieldClasses, cValue } = this
       const classes = resolveEasyFieldProp('fieldClasses', fieldClasses, cValue, this)
+      if (isString(classes)) return classes.split(' ')
+      if (isPlainObject(classes)) return [classes]
+      return classes
+    },
+    cInnerClassesArray () {
+      const { innerClasses, cValue } = this
+      const classes = resolveEasyFieldProp('innerClasses', innerClasses, cValue, this)
       if (isString(classes)) return classes.split(' ')
       if (isPlainObject(classes)) return [classes]
       return classes
