@@ -1,7 +1,7 @@
 <template>
   <div
     :class="['easy-field', `easy-field--${fieldType}`, ...cFieldClassesArray]"
-    :style="fieldStyle"
+    :style="cFieldStyle"
   >
     <div
       v-if="cLabel"
