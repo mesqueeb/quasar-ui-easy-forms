@@ -37,7 +37,7 @@
 
 <script>
 import EasyForms from 'ui'
-import schema from '../schemas/basic'
+import settings from '../schemas/basic'
 import { getInfoCardSchema } from '../helpers/schemaBuilders'
 import { basic as description } from '../helpers/descriptions'
 
@@ -47,11 +47,7 @@ export default {
     const settingsSchema = getInfoCardSchema('EasyForm')
     return {
       description,
-      settings: {
-        schema,
-        value: {},
-        mode: 'view',
-      },
+      settings,
       settingsSchema,
     }
   },

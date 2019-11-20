@@ -24,4 +24,11 @@ export default {
   schema,
   value: {},
   mode: 'view',
+  actionButtons: ['delete', 'archive', 'cancel', 'edit', 'save', {
+    btnLabel: 'log the data',
+    push: true,
+    events: {
+      click: (event, {formDataNested}) => console.log(formDataNested),
+    },
+  }],
 }

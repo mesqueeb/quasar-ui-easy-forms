@@ -37,7 +37,7 @@
 
 <script>
 import EasyForms from 'ui'
-import schema from '../schemas/basic'
+import settings from '../schemas/actionButtons'
 import { getInfoCardSchema } from '../helpers/schemaBuilders'
 import { actionButtons as description } from '../helpers/descriptions'
 
@@ -47,18 +47,7 @@ export default {
     const settingsSchema = getInfoCardSchema('EasyForm')
     return {
       description,
-      settings: {
-        schema,
-        value: {},
-        mode: 'view',
-        actionButtons: ['delete', 'archive', 'cancel', 'edit', 'save', {
-          btnLabel: 'log the data',
-          push: true,
-          events: {
-            click: (event, {formDataNested}) => console.log(formDataNested),
-          },
-        }],
-      },
+      settings,
       settingsSchema,
     }
   },

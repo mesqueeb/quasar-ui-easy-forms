@@ -48,7 +48,7 @@
 
 <script>
 import EasyForms from 'ui'
-import schemas from '../schemas/events'
+import forms from '../schemas/events'
 import { getInfoCardSchema } from '../helpers/schemaBuilders'
 import { events as description } from '../helpers/descriptions'
 
@@ -57,22 +57,16 @@ export default {
   data () {
     const examplePicker = {
       fieldType: 'btn-toggle',
-      options: schemas.map((schema, index) => {
-        return {label: schema[0].label, value: index}
+      options: forms.map((form, index) => {
+        return {label: form.titleField.label, value: index}
       }),
       noCaps: true,
     }
-    const examples = schemas.reduce((carry, schema) => {
+    const examples = forms.reduce((carry, form) => {
       const settingsSchema = getInfoCardSchema('EasyForm')
       carry.push({
-        titleField: schema.slice(0, 1),
-        settings: {
-          schema: schema.slice(1),
-          value: {},
-          mode: 'edit',
-          actionButtons: schema.slice(0, 1)[0].formActionButtons || [],
-          columnCount: 2,
-        },
+        titleField: form.titleField,
+        settings: form,
         settingsSchema,
       })
       return carry

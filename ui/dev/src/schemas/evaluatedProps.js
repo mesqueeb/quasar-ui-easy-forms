@@ -12,42 +12,58 @@ const carNrPlateFn = (val, {formDataNested, formMode}) => formDataNested.car && 
 carNrPlateFn.prototype.stringifiedFn = `(val, {formDataNested, formMode}) => formDataNested.car && formMode === 'edit'`
 
 export default [
-  [
-    {
+  {
+    value: {},
+    mode: 'edit',
+    actionButtons: [],
+    columnCount: 2,
+    titleField: {
       label: 'Dynamic prop based on the value of the field',
       subLabel: `Eg. \`subLabel: val => val === 'purple' ? 'nice!' : 'choose a color'\``,
       fieldType: 'title',
     },
-    {
-      id: 'color',
-      span: true,
-      fieldType: 'btn-toggle',
-      label: 'What is your favorite color?',
-      options: [{label: 'red', value: 'red'}, {label: 'blue', value: 'blue'}, {label: 'green', value: 'green'}, {label: 'other', value: 'other'}],
-      subLabel: colorFn,
-    },
-  ],
-  [
-    {
+    schema: [
+      {
+        id: 'color',
+        span: true,
+        fieldType: 'btn-toggle',
+        label: 'What is your favorite color?',
+        options: [{label: 'red', value: 'red'}, {label: 'blue', value: 'blue'}, {label: 'green', value: 'green'}, {label: 'other', value: 'other'}],
+        subLabel: colorFn,
+      },
+    ],
+  },
+  {
+    value: {},
+    mode: 'edit',
+    actionButtons: [],
+    columnCount: 2,
+    titleField: {
       label: 'Dynamic prop based on the value of another field',
       subLabel: `Eg. \`disable: ${parentalConsentFn.prototype.stringifiedFn}\``,
       fieldType: 'title',
     },
-    {
-      id: 'over18',
-      fieldType: 'toggle',
-      label: 'Are you over 18?',
-    },
-    {
-      id: 'parentalConsent',
-      fieldType: 'toggle',
-      label: 'Do you have parental consent?',
-      subLabel: 'This will be disabled when the first question is `true`.',
-      disable: parentalConsentFn,
-    },
-  ],
-  [
-    {
+    schema: [
+      {
+        id: 'over18',
+        fieldType: 'toggle',
+        label: 'Are you over 18?',
+      },
+      {
+        id: 'parentalConsent',
+        fieldType: 'toggle',
+        label: 'Do you have parental consent?',
+        subLabel: 'This will be disabled when the first question is `true`.',
+        disable: parentalConsentFn,
+      },
+    ],
+  },
+  {
+    value: {},
+    mode: 'edit',
+    actionButtons: [],
+    columnCount: 2,
+    titleField: {
       label: 'Dynamic "conditional rendering" of a field',
       subLabel: `
 Eg. \`showCondition: ${carTypeFn.prototype.stringifiedFn}\`
@@ -57,24 +73,26 @@ Eg. \`showCondition: ${carTypeFn.prototype.stringifiedFn}\`
       fieldType: 'title',
       formActionButtons: ['edit', 'save'],
     },
-    {
-      id: 'car',
-      fieldType: 'toggle',
-      label: 'Do you have a car?',
-    },
-    {
-      id: 'carType',
-      fieldType: 'input',
-      label: 'What is the brand?',
-      subLabel: 'This is only shown when the first question is `true`.',
-      showCondition: carTypeFn,
-    },
-    {
-      id: 'carNrPlate',
-      fieldType: 'input',
-      label: 'Enter your license plate brand?',
-      subLabel: 'This is hidden when the form is set to \'view\' mode. Try clicking \'save\'.',
-      showCondition: carNrPlateFn,
-    },
-  ],
+    schema: [
+      {
+        id: 'car',
+        fieldType: 'toggle',
+        label: 'Do you have a car?',
+      },
+      {
+        id: 'carType',
+        fieldType: 'input',
+        label: 'What is the brand?',
+        subLabel: 'This is only shown when the first question is `true`.',
+        showCondition: carTypeFn,
+      },
+      {
+        id: 'carNrPlate',
+        fieldType: 'input',
+        label: 'Enter your license plate brand?',
+        subLabel: 'This is hidden when the form is set to \'view\' mode. Try clicking \'save\'.',
+        showCondition: carNrPlateFn,
+      },
+    ],
+  },
 ]

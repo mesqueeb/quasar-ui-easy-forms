@@ -50,9 +50,9 @@ actionButtons: [{
     click: (event, {formDataNested}) => console.log(formDataNested),
   },
 }]
+\`\`\`
 
 For more information on the \`context\` prop passed to a click event see the "Evaluated Props" and "Events" documentation.
-\`\`\`
 `
 
 export const evaluatedProps = `As you know, \`<EasyForm />\` needs a 'schema' with information on each field you want to show. However, when using an EasyForm you can replace the value of any prop in any field with a function instead of the value directly. This function will be executed any time the data of any field changes. This allows you to have "dynamic" props, based on the data of the form.
