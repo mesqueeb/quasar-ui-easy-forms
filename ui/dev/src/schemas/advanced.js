@@ -1,7 +1,19 @@
 
-export default [
+const schema = [
+  {
+    fieldType: 'space',
+    span: 3,
+    fieldStyle: 'margin-bottom: -3em',
+  },
+  {
+    fieldType: 'none',
+    span: 1,
+    fieldStyle: 'margin-bottom: -3em',
+    label: 'Example of fields:',
+  },
   {
     id: 'name',
+    span: 3,
     fieldType: 'input',
     valueType: 'string',
     label: 'Superhero name',
@@ -9,7 +21,13 @@ export default [
     required: true,
   },
   {
+    fieldType: 'none',
+    span: 1,
+    subLabel: '```js\n{fieldType: \'input\'}\n```',
+  },
+  {
     id: 'powerOrigin',
+    span: 3,
     fieldType: 'btn-toggle',
     label: 'Power origin',
     subLabel: 'Where does your power come from?',
@@ -20,7 +38,13 @@ export default [
     ],
   },
   {
+    fieldType: 'none',
+    span: 1,
+    subLabel: '```js\n{fieldType: \'btn-toggle\'}\n```',
+  },
+  {
     id: 'stamina',
+    span: 3,
     fieldType: 'slider',
     valueType: 'number',
     label: 'Stamina',
@@ -29,14 +53,26 @@ export default [
     default: 50,
   },
   {
+    fieldType: 'none',
+    span: 1,
+    subLabel: '```js\n{fieldType: \'slider\'}\n```',
+  },
+  {
     id: 'power',
+    span: 3,
     fieldType: 'input',
     valueType: 'number',
     label: 'Power',
     subLabel: 'Fill in a number.',
   },
   {
+    fieldType: 'none',
+    span: 1,
+    subLabel: '```js\n{fieldType: \'input\'}\n```',
+  },
+  {
     id: 'roleModel',
+    span: 3,
     fieldType: 'select',
     label: 'Role model',
     subLabel: 'Who do you look up to?',
@@ -72,4 +108,40 @@ export default [
       {label: 'Frank Castle/The Punisher', value: 'the-punisher'},
     ],
   },
+  {
+    fieldType: 'none',
+    span: 1,
+    subLabel: '```js\n{fieldType: \'select\'}\n```',
+  },
+  {
+    id: 'consent',
+    span: 3,
+    label: 'Do you agree with our terms.',
+    fieldType: 'toggle',
+    valueType: 'boolean',
+  },
+  {
+    fieldType: 'none',
+    span: 1,
+    subLabel: '```js\n{fieldType: \'toggle\'}\n```',
+  },
+  {
+    id: 'submissionDate',
+    span: 3,
+    label: 'Date of submission',
+    fieldType: 'input-date',
+    valueType: 'date',
+  },
+  {
+    fieldType: 'none',
+    span: 1,
+    subLabel: '```js\n{fieldType: \'input-date\'}\n```',
+  },
 ]
+
+export default {
+  schema,
+  value: {},
+  mode: 'view',
+  columnCount: 4,
+}
