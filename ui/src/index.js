@@ -10,6 +10,7 @@ import EfImg from './components/fields/EfImg.vue'
 import EfInputDate from './components/fields/EfInputDate.vue'
 import EfInput from './components/fields/EfInput.vue'
 import EfLink from './components/fields/EfLink.vue'
+import EfMarkdown from './components/fields/EfMarkdown.vue'
 import EfPdf from './components/fields/EfPdf.vue'
 import EfRange from './components/fields/EfRange.vue'
 import EfSelect from './components/fields/EfSelect.vue'
@@ -33,6 +34,7 @@ export {
   EfInput,
   EfInputDate,
   EfLink,
+  EfMarkdown,
   EfPdf,
   EfRange,
   EfSelect,
@@ -57,6 +59,7 @@ export default {
   EfInput,
   EfInputDate,
   EfLink,
+  EfMarkdown,
   EfPdf,
   EfRange,
   EfSelect,
@@ -78,6 +81,7 @@ export default {
     Vue.component(EfInput.name, EfInput)
     Vue.component(EfInputDate.name, EfInputDate)
     Vue.component(EfLink.name, EfLink)
+    Vue.component(EfMarkdown.name, EfMarkdown)
     Vue.component(EfPdf.name, EfPdf)
     Vue.component(EfRange.name, EfRange)
     Vue.component(EfSelect.name, EfSelect)
