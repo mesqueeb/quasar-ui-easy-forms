@@ -2,7 +2,7 @@
   "name": "quasar-ui-easy-forms",
   "version": "0.9.0",
   "author": "Luca Ban - Mesqueeb",
-  "description": "A Vue plugin (that uses Quasar components) to easily generate forms by only defining an object.",
+  "description": "A Vue plugin (that uses Quasar components) to easily generate forms by only defining a \"schema\" object.",
   "license": "MIT",
   "module": "dist/index.esm.js",
   "main": "dist/index.common.js",
@@ -48,10 +48,11 @@
   ],
   "dependencies": {
     "case-anything": "0.0.1",
-    "copy-anything": "^1.5.0",
+    "commafy-anything": "^1.1.1",
+    "copy-anything": "^1.5.1",
     "flatten-anything": "^1.4.1",
     "is-what": "^3.3.1",
-    "merge-anything": "^2.4.1",
+    "merge-anything": "^2.4.2",
     "nestify-anything": "0.0.0"
   }
 }
