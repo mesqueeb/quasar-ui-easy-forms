@@ -33,7 +33,7 @@
 </style>
 
 <script>
-import demoSchemas from '../schemas/index'
+import * as demoSchemas from '../schemas/index'
 import { getInfoCardSchema } from '../helpers/schemaBuilders'
 
 export default {
