@@ -48,6 +48,11 @@ export const dependencyMap = {
     fieldType: 'link',
     passedProps: {  },
   },
+  markdown: {
+    componentName: 'EfMarkdown',
+    fieldType: 'markdown',
+    passedProps: {  },
+  },
   pdf: {
     componentName: 'EfPdf',
     fieldType: 'pdf',

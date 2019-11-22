@@ -23,7 +23,9 @@ export default {
 - Install \`q-markdown\` like so:
 \`\`\`bash
 quasar ext add @quasar/qmarkdown
-\`\`\``,
+\`\`\`
+
+The q-markdown prop called 'src' should be passed as 'value' instead.`,
   props: {
     // prop categories: behavior content general model state style
     value: {

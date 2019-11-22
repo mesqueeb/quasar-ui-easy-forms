@@ -3,7 +3,8 @@
     <div class="row no-wrap items-start q-gutter-md q-mb-lg">
       <EasyField v-model="selectedField" v-bind="fieldPicker" />
       <InfoBoxWrapper color="primary" label="v-model" style="flex: 2;">
-        <q-markdown class="q-py-md q-px-sm" :src="modelShownAsBadge" />
+        <q-markdown v-if="selectedField !== 'markdown'" class="q-py-md q-px-sm" :src="modelShownAsBadge" />
+        <div v-else class="q-ma-sm q-py-sm q-px-xs text-wrap-all bg-grey-2" style="width: 97%; border-radius: 0.3em">{{ modelShownAsBadge }}</div>
       </InfoBoxWrapper>
     </div>
     <q-markdown

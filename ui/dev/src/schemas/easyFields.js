@@ -56,6 +56,18 @@ export const pdf = {
   fieldType: 'pdf',
   value: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
 }
+export const markdown = {
+  id: 'markdown',
+  fieldType: 'markdown',
+  valueType: 'string',
+  value: `# Markdowny Junior
+
+**bold**, _italic_, all the \`bling\`!
+
+\`\`\`js
+jarvis.execute(9000)
+\`\`\``,
+}
 export const range = {
   id: 'range',
   fieldType: 'range',
@@ -100,6 +112,7 @@ export default {
   input,
   inputDate,
   link,
+  markdown,
   pdf,
   range,
   select,

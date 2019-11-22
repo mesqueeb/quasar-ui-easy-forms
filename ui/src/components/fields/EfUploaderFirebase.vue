@@ -31,19 +31,20 @@ export default {
     },
     // EF props:
     firebaseDependency: {
-      category: 'model',
+      category: 'upload',
       type: Object,
       desc: `Since this is an uploader specific for Firebase, a Firebase dependency must be passed. If none is passed it will search for Firebase at \`window.firebase\`. If no firebase instance can be found, an error will be thrown.
-        Don't forget to also import Firebase storage like so: \`import 'firebase/storage'\``,
+
+Don't forget to also import Firebase storage like so: \`import 'firebase/storage'\``,
     },
     path: {
-      category: 'model',
+      category: 'upload',
       type: String,
       desc: 'This should be the Firebase storage path where files should be uploaded to.',
       required: true,
     },
     fileType: {
-      category: 'model',
+      category: 'behavior',
       type: String,
       desc: 'The file type the uploader can accept. Currently limited to \'image\' or \'pdf\'. This will automatically limit the uploader to those file types via Quasar\'s `accept` prop.',
       values: ['image', 'pdf'],
