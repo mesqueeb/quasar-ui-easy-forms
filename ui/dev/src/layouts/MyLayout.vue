@@ -1,6 +1,6 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="lhh Lpr lFf">
+    <q-header>
       <q-toolbar>
         <q-btn
           v-if="$route.fullPath !== '/'"

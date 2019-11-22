@@ -1,5 +1,5 @@
 <template>
-  <q-card>
+  <q-card class="info-card">
     <div v-if="!!$slots.default" class="q-pa-md">
       <slot />
     </div>

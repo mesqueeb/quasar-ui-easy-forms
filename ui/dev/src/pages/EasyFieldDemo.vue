@@ -1,32 +1,32 @@
 <template>
   <q-page padding>
+    <div class="row no-wrap items-start q-gutter-md q-mb-lg">
+      <EasyField v-model="selectedField" v-bind="fieldPicker" />
+      <InfoBoxWrapper color="primary" label="v-model" style="flex: 2;">
+        <q-markdown class="q-py-md q-px-sm" :src="modelShownAsBadge" />
+      </InfoBoxWrapper>
+    </div>
     <q-markdown
       v-if="rawComponent.desc"
       :src="rawComponent.desc"
     />
-    <InfoBoxWrapper
-      color="accent"
-      label="interactive preview"
-      class="q-mb-md js-interactive-preview"
-    >
-      <EasyField
-        v-model="model"
-        v-bind="field"
-        style="width: 95%"
-      />
-    </InfoBoxWrapper>
     <InfoCard
       tag="EasyField"
       :key="selectedField"
       v-model="settings"
       :settingsSchema="settingsSchema"
     >
-      <div class="row no-wrap items-start q-gutter-md">
-        <EasyField v-model="selectedField" v-bind="fieldPicker" />
-        <InfoBoxWrapper color="primary" label="v-model" style="flex: 2;">
-          <q-markdown class="q-py-md q-px-sm" :src="modelShownAsBadge" />
-        </InfoBoxWrapper>
-      </div>
+      <InfoBoxWrapper
+        color="accent"
+        label="interactive preview"
+        class="q-mb-md js-interactive-preview"
+      >
+        <EasyField
+          v-model="model"
+          v-bind="field"
+          style="width: 95%"
+        />
+      </InfoBoxWrapper>
     </InfoCard>
   </q-page>
 </template>
@@ -39,7 +39,7 @@ import { isString, isUndefined, isArray, isPlainObject } from 'is-what'
 import copy from 'copy-anything'
 import merge from 'merge-anything'
 import EasyForms from 'ui'
-import demoOptions from '../schemas/index'
+import demoOptions from '../schemas/easyFields'
 import { getInfoCardSchema, getRawComponent } from '../helpers/schemaBuilders'
 
 const selectableFields = require
@@ -52,7 +52,7 @@ const selectableFields = require
   .sort()
 
 export default {
-  name: 'PageDemoField',
+  name: 'EasyFieldDemo',
   data () {
     const selectedField = 'input'
     const fieldPicker = {

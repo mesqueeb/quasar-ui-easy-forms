@@ -81,21 +81,17 @@
 </template>
 
 <script>
-import pages from '../router/pages'
-
-const orderEasyFormPages = [
-  'Basic',
-  'Advanced',
-  'Action Buttons',
-  'Evaluated Props',
-  'Events',
+const pagesEasyForm = [
+  {title: 'Basic', path: '/basic'},
+  {title: 'Advanced', path: '/advanced'},
+  {title: 'Action Buttons', path: '/actionButtons'},
+  {title: 'Evaluated Props', path: '/evaluatedProps'},
+  {title: 'Events', path: '/events'},
 ]
-const pagesEasyForm = orderEasyFormPages
-  .map(name => pages.find(p => p.title === name))
 
-const orderEasyFieldPages = ['Easy Field']
-const pagesEasyField = orderEasyFieldPages
-  .map(name => pages.find(p => p.title === name))
+const pagesEasyField = [
+  {title: 'Easy Field', path: '/EasyFieldDemo'}
+]
 
 export default {
   name: 'PageIndex',
