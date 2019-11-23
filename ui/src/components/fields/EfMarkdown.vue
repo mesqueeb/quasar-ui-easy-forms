@@ -25,15 +25,25 @@ export default {
 quasar ext add @quasar/qmarkdown
 \`\`\`
 
-The q-markdown prop called 'src' should be passed as 'value' instead.`,
+There are two ways to pass the actual markdown content:
+- via the native q-markdown 'src' prop
+- via the 'value' prop
+
+When passed as 'value' it will be included in the formData if the form is editable.`,
   props: {
     // prop categories: behavior content general model state style
     value: {
       category: 'model',
       type: String,
+      default: '',
     },
     // EF props:
     // Quasar props with modified defaults:
+    src: {
+      category: 'model',
+      type: String,
+      default: '',
+    },
     // Quasar props with modified behavior:
   },
   computed: {
@@ -41,7 +51,7 @@ The q-markdown prop called 'src' should be passed as 'value' instead.`,
       return merge(this.$attrs, {
         // Quasar props with modified defaults:
         // Quasar props with modified behavior:
-        src: this.value
+        src: this.value || this.src
       })
     },
   },

@@ -72,7 +72,7 @@ export const pageForm = {
   schema: Object.values({
     _1: {
       fieldType: 'markdown',
-      default: description,
+      src: description,
     },
     get _2() {
       return {

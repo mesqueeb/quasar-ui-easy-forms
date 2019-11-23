@@ -29,7 +29,7 @@ export const exampleForms = [
         id: 'md-input',
         fieldType: 'markdown',
         span: 1,
-        default: '```js\n{fieldType: \'input\'}\n```',
+        src: '```js\n{fieldType: \'input\'}\n```',
       },
       {
         id: 'powerOrigin',
@@ -47,7 +47,7 @@ export const exampleForms = [
         id: 'md-btn-toggle',
         fieldType: 'markdown',
         span: 1,
-        default: '```js\n{fieldType: \'btn-toggle\'}\n```',
+        src: '```js\n{fieldType: \'btn-toggle\'}\n```',
       },
       {
         id: 'stamina',
@@ -63,7 +63,7 @@ export const exampleForms = [
         id: 'md-slider',
         fieldType: 'markdown',
         span: 1,
-        default: '```js\n{fieldType: \'slider\'}\n```',
+        src: '```js\n{fieldType: \'slider\'}\n```',
       },
       {
         id: 'power',
@@ -77,7 +77,7 @@ export const exampleForms = [
         id: 'md-input-nr',
         fieldType: 'markdown',
         span: 1,
-        default: '```js\n{fieldType: \'input\'}\n```\n↳ But the input is saved as a number instead of a string.',
+        src: '```js\n{fieldType: \'input\'}\n```\n↳ But the input is saved as a number instead of a string.',
       },
       {
         id: 'roleModel',
@@ -121,7 +121,7 @@ export const exampleForms = [
         id: 'md-select',
         fieldType: 'markdown',
         span: 1,
-        default: '```js\n{fieldType: \'select\'}\n```',
+        src: '```js\n{fieldType: \'select\'}\n```',
       },
       {
         id: 'consent',
@@ -134,7 +134,7 @@ export const exampleForms = [
         id: 'md-toggle',
         fieldType: 'markdown',
         span: 1,
-        default: '```js\n{fieldType: \'toggle\'}\n```',
+        src: '```js\n{fieldType: \'toggle\'}\n```',
       },
       {
         id: 'submissionDate',
@@ -147,7 +147,7 @@ export const exampleForms = [
         id: 'md-input-date',
         fieldType: 'markdown',
         span: 1,
-        default: '```js\n{fieldType: \'input-date\'}\n```',
+        src: '```js\n{fieldType: \'input-date\'}\n```',
       },
     ]
   }
@@ -159,7 +159,7 @@ export const pageForm = {
   schema: [
     {
       fieldType: 'markdown',
-      default: description,
+      src: description,
     },
   ]
 }

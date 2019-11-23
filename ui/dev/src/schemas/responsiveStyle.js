@@ -9,7 +9,7 @@ export const pageForm = {
   schema: [
     {
       fieldType: 'markdown',
-      default: description,
+      src: description,
     },
   ]
 }
