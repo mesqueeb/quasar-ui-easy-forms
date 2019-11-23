@@ -13,7 +13,7 @@
 
 If this helped you in any way, you can contribute to the package's long term survival by supporting me:
 
-[💜 Support my open-source work on GitHub](https://github.com/sponsors/mesqueeb)
+### [💜 Support my open-source work on GitHub](https://github.com/sponsors/mesqueeb)
 
 Be sure to check out my sponsor page, I have a lot of open-source packages that might help you!
 
