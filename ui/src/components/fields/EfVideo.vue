@@ -7,8 +7,8 @@
       v-bind="quasarProps"
     />
     <q-video
-      v-if="value && readonly"
-      :src="value"
+      v-if="readonly"
+      v-bind="quasarProps"
     />
   </div>
 </template>
@@ -24,20 +24,28 @@
 import merge from 'merge-anything'
 import { QVideo } from 'quasar'
 import EfInput from './EfInput.vue'
-import { getGenericValueType } from './sharedProps.js'
+import { getGenericValueType, passContentViaValueOrSrc } from './sharedProps.js'
 
 export default {
   components: { EfInput, QVideo },
   name: 'EfVideo',
   inheritAttrs: false,
-  desc: 'Try toggling readonly mode with a YouTube url for its model.',
+  desc: `- When \`readonly: false\` it shows an input field in which a user can paste a YouTube url.
+- When \`readonly: true\` it shows the embedded video via the QVideo component.
+
+Currently it only works with YouTube urls.
+
+${passContentViaValueOrSrc}
+However, in case you will also use \`readonly: false\` (to show the "input") you _must_ use 'value' and not 'src'.`,
   props: merge(EfInput.props, {
     // prop categories: behavior content general model state style
     value: {
       category: 'model',
       type: String,
-      desc: 'Requires a YouTube url to be pasted. Will automatically re-format itself to an "embed" url after.',
+      default: '',
+      desc: 'Requires a YouTube url to be pasted. Will automatically re-format itself to an "embed" url after. (use \'value\' OR \'src\' prop)',
     },
+    get src () { return this.value },
     valueType: getGenericValueType('string'),
     // EF props:
     // Quasar props with modified defaults:
@@ -47,7 +55,7 @@ export default {
       quasarProp: 'modified',
       type: Boolean,
       default: false,
-      desc: '`readonly` is used for \'view\' mode of an EasyForm. It will show this field\'s embedded YouTube video in this case. Powered by QVideo.',
+      desc: 'Setting this field to `readonly` will show this field\'s embedded YouTube video.',
     },
   }),
   computed: {
@@ -58,6 +66,7 @@ export default {
           return carry
         }, {})
       return merge(inheritedProps, this.$attrs, {
+        src: this.value || this.src
         // Quasar props with modified defaults:
         // Quasar props with modified behavior:
       })

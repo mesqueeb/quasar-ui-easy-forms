@@ -50,13 +50,15 @@ import copy from 'copy-anything'
 import { isFullString, isString, isPlainObject, isNumber, isArray } from 'is-what'
 import { QImg } from 'quasar'
 import EfBtn from './EfBtn.vue'
-import { valueDescImgPdf, getGenericValueType } from './sharedProps.js'
+import { valueDescImgPdf, getGenericValueType, passContentViaValueOrSrc } from './sharedProps.js'
 
 export default {
   desc: `The useful thing about EasyField image is that you can pass one _or_ multiple images. You can then limit the amout you want to show via the \'limit\' prop.
 
 Captions can be passed via the model as well, and each image can have its own caption: Eg. \`v-model="[{downloadURL, caption}]"\`
-Classes and/or style can be applied to the captions as well via \`captionStyle\` and \`captionClasses\`.`,
+Classes and/or style can be applied to the captions as well via \`captionStyle\` and \`captionClasses\`.
+
+${passContentViaValueOrSrc}`,
   components: { EfBtn, QImg },
   name: 'EfImg',
   inheritAttrs: false,
@@ -67,6 +69,7 @@ Classes and/or style can be applied to the captions as well via \`captionStyle\`
       type: [Array, String, Object],
       desc: valueDescImgPdf,
     },
+    get src () { return this.value },
     valueType: getGenericValueType(['string', 'object', 'array']),
     limit: {
       category: 'content|model',
@@ -99,10 +102,11 @@ Classes and/or style can be applied to the captions as well via \`captionStyle\`
     },
     cValue: {
       get () {
-        const { value, limit } = this
-        if (!value) return []
-        const valueArray = isArray(value) ? value : [value]
-        const result = valueArray.map(v => {
+        const { value, limit, src } = this
+        const val = value || src
+        if (!val) return []
+        const valArray = isArray(val) ? val : [val]
+        const result = valArray.map(v => {
           if (isFullString(v)) return {downloadURL: v}
           return v
         })

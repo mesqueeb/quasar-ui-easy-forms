@@ -14,6 +14,7 @@
 
 <script>
 import merge from 'merge-anything'
+import { passContentViaValueOrSrc } from './sharedProps.js'
 
 export default {
   name: 'EfMarkdown',
@@ -25,11 +26,7 @@ export default {
 quasar ext add @quasar/qmarkdown
 \`\`\`
 
-There are two ways to pass the actual markdown content:
-- via the native q-markdown 'src' prop
-- via the 'value' prop
-
-When passed as 'value' it will be included in the formData if the form is editable.`,
+${passContentViaValueOrSrc}`,
   props: {
     // prop categories: behavior content general model state style
     value: {
@@ -37,13 +34,9 @@ When passed as 'value' it will be included in the formData if the form is editab
       type: String,
       default: '',
     },
+    get src () { return this.value },
     // EF props:
     // Quasar props with modified defaults:
-    src: {
-      category: 'model',
-      type: String,
-      default: '',
-    },
     // Quasar props with modified behavior:
   },
   computed: {

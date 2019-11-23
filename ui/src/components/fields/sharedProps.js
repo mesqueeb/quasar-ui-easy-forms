@@ -34,7 +34,8 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
 export const valueDescImgPdf = `Accepts a single or multiple files as its \`value\`. The downloadURL (or "source" of the files) can be formatted as
 - a \`String\`
 - an object which looks like \`{downloadURL: String}\`
-- an array of several images; formatted as one of the above.`
+- an array of several images; formatted as one of the above.
+(use 'value' OR 'src' prop)`
 
 export function getGenericValueType(types = [], extraDescription = '') {
   if (!isArray(types)) types = [types]
@@ -49,3 +50,10 @@ export function getGenericValueType(types = [], extraDescription = '') {
     values: types,
   })
 }
+
+export const passContentViaValueOrSrc = `There are two ways to pass the actual content:
+- via the 'value' prop
+  In which case it will be included in your \`formData\` in case you use an EasyForm.
+- via the 'src' prop
+  In which case it won't show up in your \`formData\`. This can be useful if you want to show the content as part of the form, but not have it included in the actual data of the form.
+  In this case be sure to also set \`readonly: true\` for this field.`

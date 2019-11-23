@@ -40,7 +40,7 @@ import { isString, isPlainObject, isFullString } from 'is-what'
 import { QDialog, Dialog } from 'quasar'
 import EfBtn from './EfBtn.vue'
 import PdfDialog from '../dialogs/DPdf.vue'
-import { valueDescImgPdf, getGenericValueType } from './sharedProps.js'
+import { valueDescImgPdf, getGenericValueType, passContentViaValueOrSrc } from './sharedProps.js'
 
 export default {
   components: { QDialog, EfBtn },
@@ -52,7 +52,9 @@ export default {
 2. Install \`q-pdf-viewer\` like so:
 \`\`\`bash
 quasar ext add @quasar/qpdfviewer
-\`\`\``,
+\`\`\`
+
+${passContentViaValueOrSrc}`,
   props: {
     // prop categories: behavior content general model state style
     value: {
@@ -60,6 +62,7 @@ quasar ext add @quasar/qpdfviewer
       type: [String, Array, Object],
       desc: valueDescImgPdf,
     },
+    get src () { return this.value },
     valueType: getGenericValueType(['string', 'object', 'array']),
     // EF props:
     deletable: {
@@ -86,14 +89,15 @@ quasar ext add @quasar/qpdfviewer
     },
     cValue: {
       get () {
-        const { value } = this
-        if (!value) return []
-        if (isPlainObject(value)) return [value]
-        if (isFullString(value)) {
-          const fileName = value.split('/').slice(-1)[0].split('.pdf')[0] + '.pdf'
-          return [{downloadURL: value, fileName}]
+        const { value, src } = this
+        const val = value || src
+        if (!val) return []
+        if (isPlainObject(val)) return [val]
+        if (isFullString(val)) {
+          const fileName = val.split('/').slice(-1)[0].split('.pdf')[0] + '.pdf'
+          return [{downloadURL: val, fileName}]
         }
-        return value.filter(v => isPlainObject(v))
+        return val.filter(v => isPlainObject(v))
       },
       set (val) { this.$emit('input', val) },
     },
