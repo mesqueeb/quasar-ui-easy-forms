@@ -3,8 +3,10 @@
 
 # Quasar Easy Forms 📮
 
+- Demo: [quasar-easy-forms.web.app](http://quasar-easy-forms.web.app)
+
 # Structure
-* [/ui](ui) - standalone npm package
+* [/ui](ui) - standalone npm package (vue plugin)
 * [/app-extension](app-extension) - Quasar app extension
 
 # Support
