@@ -208,7 +208,10 @@ You can also pass a function that will receive two params you can work with: \`(
     formMode: {
       category: 'easyFormProp',
       type: String,
-      desc: 'The state of the EasyForm. Can be `view` | `edit` | `add`',
+      validator: prop => ['edit', 'add', 'view', 'raw'].includes(prop),
+      desc: 'The state of the EasyForm. Has no effect on the EasyField, because EasyField only looks at `readonly` and `rawValue` props. Is passed so the `formMode` can be accessed by Evaluated Props.',
+      examples: [`'edit'`, `'add'`, `'view'`, `'raw'`],
+      values: ['edit', 'add', 'view', 'raw'],
     },
     fieldInput: {
       category: 'easyFormProp',
@@ -221,6 +224,12 @@ You can also pass a function that will receive two params you can work with: \`(
       desc: `The text used in the UI, eg. for required fields, etc.`,
       default: () => defaultLang,
       examples: [`{requiredField: 'Don\'t forget this field!'}`],
+    },
+    rawValue: {
+      category: 'state',
+      type: [Boolean, Function],
+      default: false,
+      desc: 'An EasyField with `rawValue: true` will just generate the raw value wrapped in a div, without generating the dedicated field UI.'
     },
     // Quasar props with modified defaults:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
@@ -237,7 +246,7 @@ You can also pass a function that will receive two params you can work with: \`(
       category: 'content',
       quasarProp: 'modified',
       type: [String, Function],
-      desc: 'An EasyField label is always "external" to the field. (It replaces the Quasar label)',
+      desc: 'An EasyField label is always "external" to the field. (It replaces the Quasar label if the underlying Quasar component uses one.)',
     },
     disable: {
       category: 'state',
@@ -294,9 +303,10 @@ You can also pass a function that will receive two params you can work with: \`(
       ].includes(fieldType)
     },
     componentIdentifier () {
-      const { fieldType } = this
-      if (!fieldType) return ''
+      const { fieldType, rawValue } = this
       if (isPlainObject(fieldType)) return fieldType
+      if (rawValue === true) return 'EfDiv'
+      if (!fieldType) return ''
       if (fieldType.slice(0, 2) === 'q-') return fieldType
       return 'Ef' + fieldType[0].toUpperCase() + fieldType.slice(1)
     },
