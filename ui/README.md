@@ -119,8 +119,17 @@ $ yarn dev:electron
 $ yarn build
 ```
 
-# Donate
-If you appreciate the work that went into this, please consider [donating to Quasar](https://donate.quasar.dev).
+# Support
+
+If this helped you in any way, you can contribute to the package's long term survival by supporting me:
+
+[💜 Support my open-source work on GitHub](https://github.com/sponsors/mesqueeb)
+
+Be sure to check out my sponsor page, I have a lot of open-source packages that might help you!
+
+(GitHub currently **doubles your support**! So if you support me with $10/mo, I will $20 instead!)
+
+Thank you so much!!!
 
 # License
 MIT (c) Luca Ban - Mesqueeb
