@@ -12,6 +12,16 @@ export const btnToggle = {
   fieldType: 'btnToggle',
   options: [{label: 'one', value: 1}, {label: 'two', value: 2}],
 }
+export const div = {
+  id: 'myRank',
+  fieldType: 'div',
+  options: [
+    {value: '1', label: 'one'},
+    {value: '2', label: 'two'},
+  ],
+  prefix: 'Rank ',
+  value: '1',
+}
 export const form = {
   id: 'form',
   fieldType: 'form',
@@ -107,6 +117,7 @@ export const video = {
 export default {
   btn,
   btnToggle,
+  div,
   form,
   img,
   input,

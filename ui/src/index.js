@@ -5,6 +5,7 @@ import EasyField from './components/EasyField.vue'
 
 import EfBtn from './components/fields/EfBtn.vue'
 import EfBtnToggle from './components/fields/EfBtnToggle.vue'
+import EfDiv from './components/fields/EfDiv.vue'
 import EfForm from './components/fields/EfForm.vue'
 import EfImg from './components/fields/EfImg.vue'
 import EfInputDate from './components/fields/EfInputDate.vue'
@@ -29,6 +30,7 @@ export {
 
   EfBtn,
   EfBtnToggle,
+  EfDiv,
   EfForm,
   EfImg,
   EfInput,
@@ -54,6 +56,7 @@ export default {
 
   EfBtn,
   EfBtnToggle,
+  EfDiv,
   EfForm,
   EfImg,
   EfInput,
@@ -76,6 +79,7 @@ export default {
 
     Vue.component(EfBtn.name, EfBtn)
     Vue.component(EfBtnToggle.name, EfBtnToggle)
+    Vue.component(EfDiv.name, EfDiv)
     Vue.component(EfForm.name, EfForm)
     Vue.component(EfImg.name, EfImg)
     Vue.component(EfInput.name, EfInput)

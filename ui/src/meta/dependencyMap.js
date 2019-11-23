@@ -23,6 +23,11 @@ export const dependencyMap = {
     fieldType: 'btnToggle',
     passedProps: { QBtnToggle },
   },
+  div: {
+    componentName: 'EfDiv',
+    fieldType: 'div',
+    passedProps: {  },
+  },
   form: {
     componentName: 'EfForm',
     fieldType: 'form',
