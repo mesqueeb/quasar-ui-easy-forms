@@ -157,9 +157,9 @@ Read more on Evaluated Props in its dedicated page.`,
       category: 'state',
       type: String,
       default: 'view',
-      validator: prop => ['edit', 'add', 'view'].includes(prop),
-      values: ['edit', 'add', 'view'],
-      examples: [`'edit'`, `'add'`, `'view'`],
+      validator: prop => ['edit', 'add', 'view', 'raw'].includes(prop),
+      values: ['edit', 'add', 'view', 'raw'],
+      examples: [`'edit'`, `'add'`, `'view'`, `'raw'`],
       desc: 'The state of the EasyForm.',
     },
     actionButtons: {
@@ -296,13 +296,14 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
           labelPosition,
         })
         // return early when showCondition fails
-        if (formMode === 'view') {
-          if (!checkShowCondition(blueprint)) return carry
-          carry.push(merge({readonly: true}, blueprint))
-          return carry
-        }
         if (!checkShowCondition(blueprint)) return carry
-        carry.push(blueprint)
+        if (formMode === 'view') {
+          carry.push(merge({readonly: true}, blueprint))
+        } else if (formMode === 'raw') {
+          carry.push(merge({rawValue: true}, blueprint))
+        } else {
+          carry.push(blueprint)
+        }
         return carry
       }, [])
     },
