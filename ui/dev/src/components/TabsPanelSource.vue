@@ -182,7 +182,7 @@ const ${schemaVarName} = ${parseCodeAsString(schema)}
 {
   data () {
     return {
-      ${camelCase(tag)}Value: ${settings.value}, // this is in sync with the data when used with v-model
+      ${camelCase(tag)}Value: ${parseCodeAsString(settings.value)}, // this is in sync with the data when used with v-model
       ${camelCase(tag)}Props: {${props}
       }
     }
