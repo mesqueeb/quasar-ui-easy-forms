@@ -83,6 +83,7 @@ export const exampleForms = [
         id: 'roleModel',
         span: 3,
         fieldType: 'select',
+        valueType: 'object',
         label: 'Role model',
         subLabel: 'Who do you look up to?',
         options: [

@@ -37,11 +37,13 @@ export function dateStamp (date) {
  */
 export function formatEasyFieldValue (value, blueprint, component) {
   if (!blueprint) return value
-  const { valueType, options, suffix, prefix, format } = blueprint
+  const { valueType, options, multiple, suffix, prefix, format } = blueprint
   let newValue = value
   if (isArray(options)) {
     if (valueType === 'object' && isPlainObject(value)) {
-      newValue = Object.values(value).filter(v => v).join(', ')
+      newValue = (multiple)
+        ? Object.values(value).filter(v => v).join(', ')
+        : value.label
     } else {
       const valueArray = !isArray(value) ? [value] : value
       newValue = valueArray.map(selectedValue => {
@@ -69,10 +71,11 @@ When you pass no label or sublabel only the div will be shown.
 
 One benefit of the "div" field over a regular div, is that it will format your value as per your field's schema. It will parse your value based on the following schema props:
 - \`valueType\`: shows numbers with thousands separator and dates as YYYY/MM/DD
-- \`options\`: shows the "label" of the option which has the value when passed
 - \`suffix\`: value + suffix
 - \`prefix\`: prefix + value
 - \`format\`: this custom format function is executed
+- \`options\`: shows the "label" of the option which has the value when passed
+- \`multiple\`: checked when options are passed
 `,
   props: {
     // prop categories: behavior content general model state style
@@ -83,10 +86,11 @@ One benefit of the "div" field over a regular div, is that it will format your v
       type: String,
       desc: `valueType can be any type.`,
     },
-    options: {category: 'model|content', type: Array},
     suffix: {category: 'model|content', type: String},
     prefix: {category: 'model|content', type: String},
     format: {category: 'model', type: Function},
+    options: {category: 'model|content', type: Array},
+    multiple: {category: 'model|content', type: Array},
     // Quasar props with modified defaults:
     // Quasar props with modified behavior:
   },
