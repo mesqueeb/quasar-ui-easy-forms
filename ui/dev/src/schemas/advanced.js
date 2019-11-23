@@ -26,6 +26,7 @@ export const exampleForms = [
         required: true,
       },
       {
+        id: 'md-input',
         fieldType: 'markdown',
         span: 1,
         default: '```js\n{fieldType: \'input\'}\n```',
@@ -43,6 +44,7 @@ export const exampleForms = [
         ],
       },
       {
+        id: 'md-btn-toggle',
         fieldType: 'markdown',
         span: 1,
         default: '```js\n{fieldType: \'btn-toggle\'}\n```',
@@ -58,6 +60,7 @@ export const exampleForms = [
         default: 50,
       },
       {
+        id: 'md-slider',
         fieldType: 'markdown',
         span: 1,
         default: '```js\n{fieldType: \'slider\'}\n```',
@@ -71,9 +74,10 @@ export const exampleForms = [
         subLabel: 'Fill in a number.',
       },
       {
+        id: 'md-input-nr',
         fieldType: 'markdown',
         span: 1,
-        default: '```js\n{fieldType: \'input\'}\n```',
+        default: '```js\n{fieldType: \'input\'}\n```\n↳ But the input is saved as a number instead of a string.',
       },
       {
         id: 'roleModel',
@@ -114,6 +118,7 @@ export const exampleForms = [
         ],
       },
       {
+        id: 'md-select',
         fieldType: 'markdown',
         span: 1,
         default: '```js\n{fieldType: \'select\'}\n```',
@@ -126,6 +131,7 @@ export const exampleForms = [
         valueType: 'boolean',
       },
       {
+        id: 'md-toggle',
         fieldType: 'markdown',
         span: 1,
         default: '```js\n{fieldType: \'toggle\'}\n```',
@@ -138,6 +144,7 @@ export const exampleForms = [
         valueType: 'date',
       },
       {
+        id: 'md-input-date',
         fieldType: 'markdown',
         span: 1,
         default: '```js\n{fieldType: \'input-date\'}\n```',

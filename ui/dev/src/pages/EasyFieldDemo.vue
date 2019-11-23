@@ -25,6 +25,7 @@
         <EasyField
           v-model="model"
           v-bind="field"
+          :key="selectedField"
           style="width: 95%"
         />
       </InfoBoxWrapper>
@@ -115,7 +116,7 @@ export default {
       if (value !== undefined) {
         this.model = value
       }
-      this.settings = {}
+      this.settings = { value }
       Object.entries(ops).forEach(([key, value]) => {
         this.$set(this.settings, key, value)
       })

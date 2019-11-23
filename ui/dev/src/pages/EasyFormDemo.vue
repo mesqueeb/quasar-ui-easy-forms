@@ -5,6 +5,9 @@
       v-model="pageValue"
       v-bind="pageForm"
     />
+    <InfoBoxWrapper color="primary" label="v-model" style="flex: 2;">
+      <q-markdown class="q-py-md q-px-sm" :src="modelShownAsBadge" />
+    </InfoBoxWrapper>
     <InfoCard
       class="q-mb-lg"
       tag="EasyForm"
@@ -17,6 +20,8 @@
         class="q-mb-md js-interactive-preview"
       >
         <EasyForm
+          :key="pageValue.chosenExample"
+          v-model="exampleForms[pageValue.chosenExample].value"
           v-bind="exampleForms[pageValue.chosenExample]"
         />
       </InfoBoxWrapper>
@@ -33,6 +38,8 @@
 </style>
 
 <script>
+import { isString, isArray, isPlainObject } from 'is-what'
+import merge from 'merge-anything'
 import * as demoSchemas from '../schemas/index'
 import { getInfoCardSchema } from '../helpers/schemaBuilders'
 
@@ -47,11 +54,29 @@ export default {
     return {
       pageValue: { chosenExample: 0 },
       pageForm,
-      exampleForms,
+      exampleForms: exampleForms.map(f => merge({value: {}}, f)),
       settingsSchema,
     }
   },
-  computed: {},
+  watch: {
+    'pageValue.chosenExample' (newValue, oldValue) {
+      if (newValue === oldValue) return
+      console.log('this.exampleForms[this.pageValue.chosenExample].value → ', this.exampleForms[this.pageValue.chosenExample].value)
+      this.$set(this.exampleForms[this.pageValue.chosenExample], 'value', {})
+    },
+  },
+  computed: {
+    modelShownAsBadge () {
+      const { model } = this
+      const { value } = this.exampleForms[this.pageValue.chosenExample]
+      const parsedValue = isString(value)
+        ? `"${value}"`
+        : (isArray(value) || isPlainObject(value))
+          ? JSON.stringify(value)
+          : value
+      return `\`${parsedValue}\``
+    },
+  },
   methods: {
     log (...args) {
       console.log(...args)

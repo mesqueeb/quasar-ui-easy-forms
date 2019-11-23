@@ -171,7 +171,7 @@ const ${schemaVarName} = ${parseCodeAsString(schema)}
       return content.trim()
     },
     scriptRegular () {
-      const { settingsFormattedForSource, tag } = this
+      const { settings, settingsFormattedForSource, tag } = this
       const props = Object.entries(settingsFormattedForSource)
         .reduce((carry, [key, value]) => {
           carry += `\n        ${key}: ${value},`
@@ -182,7 +182,7 @@ const ${schemaVarName} = ${parseCodeAsString(schema)}
 {
   data () {
     return {
-      ${camelCase(tag)}Value: {}, // this is in sync with the data when used with v-model
+      ${camelCase(tag)}Value: ${settings.value}, // this is in sync with the data when used with v-model
       ${camelCase(tag)}Props: {${props}
       }
     }
