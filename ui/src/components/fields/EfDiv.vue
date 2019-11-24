@@ -90,7 +90,7 @@ One benefit of the "div" field over a regular div, is that it will format your v
     prefix: {category: 'model|content', type: String},
     format: {category: 'model', type: Function},
     options: {category: 'model|content', type: Array},
-    multiple: {category: 'model|content', type: Array},
+    multiple: {category: 'model|content', type: Boolean},
     // Quasar props with modified defaults:
     // Quasar props with modified behavior:
   },
