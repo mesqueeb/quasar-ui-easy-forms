@@ -65,7 +65,6 @@ export default {
       values: ['right', 'left', null],
       examples: [`'right'`, `'left'`, null],
     },
-    // format: {type: Function}, // fix the "commafy" problem first
     // Quasar props with modified defaults:
     lazyRules: { quasarProp: 'modified', type: Boolean, default: true },
     outlined: { quasarProp: 'modified', type: Boolean, default: true },

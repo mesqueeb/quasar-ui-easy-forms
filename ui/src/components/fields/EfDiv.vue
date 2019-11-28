@@ -30,14 +30,15 @@ export function dateStamp (date) {
  * @export
  * @param {*} value any value. In our example blueprint `1` should be returned as `'one'`
  * @param {Object} blueprint a blueprint like eg.
- *     `{options: [{value: 1, label: 'one'}]}`
- *     Besides `options` you can also have `prefix` and `suffix` or
- *     a function passed as `format`, in which case other settings are ignored.
+ *     `{options: [{value: 1, label: 'one'}]}` out of which the "label" will be retrieved.
+ *     Besides `options` you can also have `prefix` and `suffix`.
+ *     When `valueType: 'date'` it will be printed as short date.
+ *     When `valueType: 'number'` it will receive thousand separators.
  * @returns {*} the parsed value
  */
-export function formatEasyFieldValue (value, blueprint, component) {
+export function parseEasyFieldValue (value, blueprint) {
   if (!blueprint) return value
-  const { valueType, options, multiple, suffix, prefix, format } = blueprint
+  const { valueType, options, multiple, suffix, prefix } = blueprint
   let newValue = value
   if (isArray(options)) {
     if (valueType === 'object' && isPlainObject(value)) {
@@ -52,10 +53,8 @@ export function formatEasyFieldValue (value, blueprint, component) {
       }).join(', ')
     }
   }
-  if (isFunction(format)) newValue = format(newValue, component)
-  // prevent conflicts when a custom format function is passed:
-  if (valueType === 'date' && !isFunction(format)) newValue = dateStamp(newValue)
-  if (valueType === 'number' && !isFunction(format)) newValue = commafy(newValue)
+  if (valueType === 'date') newValue = dateStamp(newValue)
+  if (valueType === 'number') newValue = commafy(newValue)
   if (suffix) newValue = `${newValue}${suffix}`
   if (prefix) newValue = `${prefix}${newValue}`
   return newValue
@@ -97,7 +96,7 @@ One benefit of the "div" field over a regular div, is that it will format your v
   computed: {
     cValue () {
       const { value, valueType, options, suffix, prefix, format } = this
-      return formatEasyFieldValue(
+      return parseEasyFieldValue(
         value,
         { valueType, options, suffix, prefix, format },
         this

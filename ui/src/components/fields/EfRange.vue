@@ -49,11 +49,6 @@ export default {
       type: String,
       desc: 'Suffix shown inside the label.',
     },
-    // format: {
-    //   type: Function,
-    //   desc: 'Formats the slider label.',
-    //   examples: ['val => val / 1000 + \'K\'', 'val => commafy(val)'],
-    // },
     labelValue: {
       category: 'labels',
       type: Function,

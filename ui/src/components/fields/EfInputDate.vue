@@ -95,17 +95,17 @@ export default {
         const { value, mask } = this
         // value input has to be a string
         if (isString(value)) return value
-        const format = mask
-        if (isDate(value)) return dateStamp(value, format)
+        const dateFormat = mask
+        if (isDate(value)) return dateStamp(value, dateFormat)
         return ''
       },
       set (val) {
         const { valueType, mask } = this
         // @input will always return a string
         if (valueType !== 'date') return this.$emit('input', val)
-        // if the value is shorter than the format, return value as is
-        const format = mask
-        if (val.length < format.length) return this.$emit('input', val)
+        // if the value is shorter than the dateFormat, return value as is
+        const dateFormat = mask
+        if (val.length < dateFormat.length) return this.$emit('input', val)
         // if valueType is a date, try returning a date only if it's a valid date
         const dateVal = new Date(val)
         const newVal = !isDate(dateVal) ? val : dateVal
@@ -115,7 +115,7 @@ export default {
     maskForInput () {
       // When no mask is defined, return default mask
       if (!isFullString(this.mask)) return defaultMask.replace(/\w/g, '#')
-      // Convert the mask in "date" format to a mask in "input" format.
+      // Convert the "date"-mask to an "input"-mask
       // Eg. 'YYYY-MM-DD' → '####-##-##'
       // Don't pass masks with '[' because there's no clear way to create a mask from this.
       if (this.mask.includes('[')) return undefined
@@ -124,12 +124,12 @@ export default {
     maskForQDate () { return this.mask },
     cRules () {
       const { value, valueType, mask, rules, validDateErrorMessage } = this
-      const format = mask
+      const dateFormat = mask
       function defaultRule () {
         const validDate = (
           !value ||
           (valueType === 'date' && isDate(value)) ||
-          (valueType === 'string' && value.length >= format.length)
+          (valueType === 'string' && value.length >= dateFormat.length)
         )
         return validDate || validDateErrorMessage
       }
