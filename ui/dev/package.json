@@ -17,10 +17,10 @@
   "dependencies": {
     "@quasar/extras": "^1.3.1",
     "case-anything": "^0.1.0",
-    "copy-anything": "^1.5.0",
-    "firebase": "^7.1.0",
-    "is-what": "^3.3.1",
-    "merge-anything": "^2.4.1",
+    "copy-anything": "^1.5.1",
+    "firebase": "^7.5.0",
+    "is-what": "^3.4.0",
+    "merge-anything": "^2.4.2",
     "sort-anything": "0.0.1"
   },
   "devDependencies": {
