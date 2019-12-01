@@ -6,27 +6,18 @@
   />
 </template>
 
-<style lang="sass">
-// $
-@import '../../index.sass'
-
-</style>
+<style src="@quasar/quasar-ui-qmarkdown/dist/index.css"></style>
 
 <script>
 import merge from 'merge-anything'
 import { passContentViaValueOrSrc } from './sharedProps.js'
+import { QMarkdown } from '@quasar/quasar-ui-qmarkdown'
 
 export default {
   name: 'EfMarkdown',
   inheritAttrs: false,
-  desc: `For the time being you need to **manually** add the quasar extension 'QMarkdown':
-
-- Install \`q-markdown\` like so:
-\`\`\`bash
-quasar ext add @quasar/qmarkdown
-\`\`\`
-
-${passContentViaValueOrSrc}`,
+  components: { QMarkdown },
+  desc: `${passContentViaValueOrSrc}`,
   props: {
     // prop categories: behavior content general model state style
     value: {

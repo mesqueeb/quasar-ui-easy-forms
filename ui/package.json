@@ -47,6 +47,7 @@
     "last 1 version, not dead, ie >= 11"
   ],
   "dependencies": {
+    "@quasar/quasar-ui-qmarkdown": "^1.0.6",
     "case-anything": "0.0.1",
     "commafy-anything": "^1.1.1",
     "copy-anything": "^1.5.1",

@@ -1,4 +1,7 @@
 {
-  "@quasar/qmarkdown": {},
-  "@quasar/qpdfviewer": {}
+  "@quasar/qpdfviewer": {},
+  "@quasar/qmarkdown": {
+    "import_md": false,
+    "import_vmd": false
+  }
 }
