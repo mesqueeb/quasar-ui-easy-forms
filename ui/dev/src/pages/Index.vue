@@ -105,7 +105,9 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+
 .list
   width: 700px
   max-width: 100%
+
 </style>
