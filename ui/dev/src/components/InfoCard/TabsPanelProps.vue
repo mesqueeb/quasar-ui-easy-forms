@@ -65,10 +65,10 @@ Read more on Evaluated Props on its dedicade page.</q-markdown>
             @field-input="updateSettings"
             grid-gap="0"
             :action-buttons="[]"
-            :column-count="2"
+            :column-count="1"
             mode="edit"
             :schema="panel.schema"
-            class="q-mb-lg"
+            class="q-pb-lg"
           />
         </q-tab-panel>
       </q-tab-panels>
@@ -83,6 +83,20 @@ Read more on Evaluated Props on its dedicade page.</q-markdown>
     border: thin solid lightgrey
     width: 30px
     height: 20px
+  .easy-field
+    grid-template-areas: "label sub-label" "label field"
+    grid-template-columns: 150px 1fr
+    grid-gap: 6px
+  .easy-field__label
+    background: $accent
+    color: white
+    justify-self: start
+    align-self: start
+    padding: 1px 4px
+    border-radius: 4px
+    margin-bottom: 4px
+  .q-markdown p
+    margin: 0 !important
 
 </style>
 

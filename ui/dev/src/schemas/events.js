@@ -88,6 +88,7 @@ export const pageForm = {
       showCondition: (value, {formDataNested}) => formDataNested.chosenExample === 0,
       fieldType: 'title',
       label: 'Notify on events',
+      hasMarkdown: true,
       subLabel: `
   Eg.
   \`\`\`js
@@ -101,6 +102,7 @@ export const pageForm = {
       showCondition: (value, {formDataNested}) => formDataNested.chosenExample === 1,
       fieldType: 'title',
       label: 'Update other fields on \'input\'',
+      hasMarkdown: true,
       subLabel: `
   Eg.
   \`\`\`js

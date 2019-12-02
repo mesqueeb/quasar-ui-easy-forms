@@ -40,7 +40,10 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
   // If it has a default, write it in the description
   if (!isUndefined(df)) subLabel += `\n\nDefault: \`${isFunction(df) ? JSON.stringify(df()) : df}\``
   // if the prop is a Boolean, show this as a 'toggle' EasyField
-  if (type === Boolean || ['readonly', 'disable'].includes(propKey)) fieldType = 'toggle'
+  if (
+    type === Boolean ||
+    (isArray(type) && [Boolean, Function].every(t => type.includes(t)) && type.length === 2)
+  ) { fieldType = 'toggle' }
   // if the prop has a fixed set of possible values, show this as an 'option' EasyField
   const propHasValues = isArray(values) && values.length
   if (propHasValues) {
@@ -62,7 +65,7 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
     parseInput = stringToJs
     format = JSON.stringify
     autogrow = true
-    if (isArray(examples)) subLabel += `\nExamples:\n\`${examples.join('` | `')}\``
+    if (isArray(examples)) subLabel += `\nExamples: \`${examples.join('` | `')}\``
   }
   // Don't allow editing props that accept functions.
   if (type === Function) disable = true
@@ -97,6 +100,8 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
     emitValue,
     // if the prop is `true` by default, set to true
     default: df === true || undefined,
+    // defaults
+    hasMarkdown: true,
   }
 }
 

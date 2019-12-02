@@ -117,18 +117,21 @@ export const pageForm = {
       showCondition: (value, {formDataNested}) => formDataNested.chosenExample === 0,
       fieldType: 'title',
       label: 'Dynamic prop based on the value of the field',
+      hasMarkdown: true,
       subLabel: `Eg. \`subLabel: val => val === 'purple' ? 'nice!' : 'choose a color'\``,
     },
     _4: {
       showCondition: (value, {formDataNested}) => formDataNested.chosenExample === 1,
       fieldType: 'title',
       label: 'Dynamic prop based on the value of another field',
+      hasMarkdown: true,
       subLabel: `Eg. \`disable: ${parentalConsentFn.prototype.stringifiedFn}\``,
     },
     _5: {
       showCondition: (value, {formDataNested}) => formDataNested.chosenExample === 2,
       fieldType: 'title',
       label: 'Dynamic "conditional rendering" of a field',
+      hasMarkdown: true,
       subLabel: `
 Eg. \`showCondition: ${carTypeFn.prototype.stringifiedFn}\`
 

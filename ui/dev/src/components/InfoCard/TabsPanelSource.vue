@@ -96,7 +96,7 @@ export default {
   },
   computed: {
     codePerCategory () {
-      const { templateVBind, templateRegular, scriptVBind, scriptRegular, propSchema } = this
+      const { templateVBind, templateRegular, scriptRegular, propSchema } = this
       return [
         propSchema ? {
           name: 'schema',

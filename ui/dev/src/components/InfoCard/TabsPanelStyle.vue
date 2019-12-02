@@ -1,5 +1,5 @@
 <template>
-  <div class="tabs-panel-css q-pa-md">
+  <div class="tabs-panel-style q-pa-md">
     <EasyForm
       :schema="schema"
       :action-buttons="['edit', 'cancel', 'save']"
@@ -11,7 +11,7 @@
 <style lang="stylus" scoped>
 // $
 
-// .tabs-panel-css
+// .tabs-panel-style
 
 </style>
 
@@ -22,7 +22,7 @@ import { dom } from 'quasar'
 const { css: applyCss } = dom
 
 export default {
-  name: pascalCase('tabs-panel-css'),
+  name: pascalCase('tabs-panel-style'),
   props: {
     defaultClasses: {
       type: Array,

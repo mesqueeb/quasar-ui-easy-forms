@@ -9,36 +9,38 @@
       <q-markdown class="q-py-md q-px-sm" :src="modelShownAsBadge" />
     </InfoBoxWrapper>
     <InfoCard
-      class="q-mb-lg"
+      class="q-mt-lg"
       tag="EasyForm"
+      :title="infoCardTitle"
       v-model="exampleForms[pageValue.chosenExample]"
       :settingsSchema="settingsSchema"
     >
-      <InfoBoxWrapper
-        color="accent"
-        label="interactive preview"
-        class="q-mb-md js-interactive-preview"
-      >
-        <EasyForm
-          :key="pageValue.chosenExample"
-          v-model="exampleForms[pageValue.chosenExample].value"
-          v-bind="exampleForms[pageValue.chosenExample]"
-        />
-      </InfoBoxWrapper>
+      <EasyForm
+        :key="pageValue.chosenExample"
+        v-model="exampleForms[pageValue.chosenExample].value"
+        v-bind="exampleForms[pageValue.chosenExample]"
+      />
     </InfoCard>
   </q-page>
 </template>
 
 <style lang="sass">
 
-.page-form .ef-btn-toggle
-  border: solid 2px $primary
-  border-radius: 6px
-
+.page-form
+  .ef-btn-toggle
+    border: solid 2px $primary
+    border-radius: 6px
+  .q-markdown p
+    margin: 0 !important
+    margin-block-start: 0
+    margin-block-end: 0
+  .q-markdown--code
+    margin: 0 !important
 </style>
 
 <script>
 import { isString, isArray, isPlainObject } from 'is-what'
+import { spaceCase, pascalCase } from 'case-anything'
 import merge from 'merge-anything'
 import * as demoSchemas from '../schemas/index'
 import { getInfoCardSchema } from '../helpers/schemaBuilders'
@@ -61,11 +63,13 @@ export default {
   watch: {
     'pageValue.chosenExample' (newValue, oldValue) {
       if (newValue === oldValue) return
-      console.log('this.exampleForms[this.pageValue.chosenExample].value → ', this.exampleForms[this.pageValue.chosenExample].value)
       this.$set(this.exampleForms[this.pageValue.chosenExample], 'value', {})
     },
   },
   computed: {
+    infoCardTitle () {
+      return spaceCase(pascalCase(this.schemaId))
+    },
     modelShownAsBadge () {
       const { model } = this
       const { value } = this.exampleForms[this.pageValue.chosenExample]
