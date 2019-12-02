@@ -2,12 +2,13 @@ import { isArray, isUndefined, isFunction } from 'is-what'
 import copy from 'copy-anything'
 import merge from 'merge-anything'
 import EasyForms from 'ui'
-import { slugify, kebabCase, capitalize, stringToJs } from './conversion'
+import { pascalCase } from 'case-anything'
+import { stringToJs } from './conversion'
 const { dependencyMap } = EasyForms
 const { getPassedProps } = dependencyMap
 
 export function getRawComponent (selectedField) {
-  return EasyForms[`Ef${capitalize(selectedField)}`] || {}
+  return EasyForms[`Ef${pascalCase(selectedField)}`] || {}
 }
 
 export function getAllComponentProps (selectedField) {
