@@ -23,7 +23,10 @@
         'easy-field__sub-label',
         'text-wrap-all'
       ]"
-    >{{ cSubLabel }}</div>
+    >
+      <q-markdown v-if="hasMarkdown" no-line-numbers>{{ cSubLabel }}</q-markdown>
+      <template v-else>{{ cSubLabel }}</template>
+    </div>
     <div
       class="easy-field__field"
       v-if="!['title', 'space', 'none', undefined].includes(fieldType)"
@@ -77,6 +80,8 @@
     margin-bottom: $sm
     opacity: 0.8
     font-weight: 300
+    .q-markdown--token
+      white-space: pre-wrap
 
 </style>
 
@@ -230,6 +235,12 @@ You can also pass a function that will receive two params you can work with: \`(
       type: [Boolean, Function],
       default: false,
       desc: 'An EasyField with `rawValue: true` will just generate the raw value wrapped in a div, without generating the dedicated field UI.'
+    },
+    hasMarkdown: {
+      category: 'state',
+      type: [Boolean, Function],
+      default: false,
+      desc: 'An EasyField with `hasMarkdown: true` can have markdown in its sub-label.'
     },
     // Quasar props with modified defaults:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)

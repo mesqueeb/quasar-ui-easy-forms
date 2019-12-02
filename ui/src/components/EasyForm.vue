@@ -189,6 +189,12 @@ See the documentation on "Action Buttons" for more info.`,
       values: ['top', 'left'],
       examples: ['top', 'left'],
     },
+    hasMarkdown: {
+      category: 'state',
+      type: [Boolean, Function],
+      default: false,
+      desc: 'An EasyForm with `hasMarkdown: true` can have markdown in its field sub-labels.'
+    },
     validator: {
       category: 'behavior',
       type: Function,
