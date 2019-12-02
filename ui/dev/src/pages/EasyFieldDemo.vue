@@ -19,7 +19,7 @@
       :props-schema="propsSchema"
       :style-classes="styleClasses"
       :style-classes-data="styleClassesData"
-      :hide-schema="true"
+      :props-separate-tab="[]"
     >
       <EasyField
         v-model="model"

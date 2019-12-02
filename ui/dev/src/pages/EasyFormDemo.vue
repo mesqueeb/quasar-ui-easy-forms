@@ -16,6 +16,7 @@
       :props-schema="propsSchema"
       :style-classes="styleClasses"
       :style-classes-data="styleClassesData"
+      :props-separate-tab="['schema']"
     >
       <EasyForm
         v-model="exampleForms[pageValue.chosenExample].value"

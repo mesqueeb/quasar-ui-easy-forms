@@ -21,6 +21,7 @@
     "firebase": "^7.5.0",
     "is-what": "^3.4.0",
     "merge-anything": "^2.4.2",
+    "quasar-ui-component-info-card": "0.0.1",
     "sort-anything": "0.0.1"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import InfoCard from '../components/InfoCard/index.vue'
+import { InfoCard } from 'quasar-ui-component-info-card'
 import InfoBoxWrapper from '../components/InfoBoxWrapper'
 
 export default ({ Vue }) => {
