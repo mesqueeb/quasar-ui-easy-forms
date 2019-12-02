@@ -24,7 +24,7 @@
         'text-wrap-all': !hasMarkdown
       }]"
     >
-      <q-markdown v-if="hasMarkdown" no-line-numbers>{{ cSubLabel }}</q-markdown>
+      <q-markdown v-if="hasMarkdown" no-line-numbers no-containers>{{ cSubLabel }}</q-markdown>
       <template v-else>{{ cSubLabel }}</template>
     </div>
     <div
@@ -39,10 +39,6 @@
         :class="cInnerClassesArray"
         :style="cInnerStyle"
       />
-      <!-- <pre
-        v-if="fieldType === 'q-markdown'"
-        v-bind="fieldProps"
-      >{{ cValue }}</pre> -->
     </div>
   </div>
 </template>
@@ -87,6 +83,7 @@
 </style>
 
 <script>
+import { QMarkdown } from '@quasar/quasar-ui-qmarkdown'
 import { isFunction, isPlainObject, isArray, isString, isUndefined } from 'is-what'
 import merge from 'merge-anything'
 import defaultLang from '../meta/lang'
@@ -110,6 +107,7 @@ function resolveEasyFieldProp (propKey, propValue, componentValue, component) {
 export default {
   name: 'EasyField',
   inheritAttrs: false,
+  components: { QMarkdown },
   props: {
     // prop categories: behavior content general model state style
     // EF props used here:

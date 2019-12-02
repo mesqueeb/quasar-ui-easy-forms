@@ -16,9 +16,9 @@ export function getAllComponentProps (selectedField) {
   const componentProps = component.props || {}
   const EasyField = EasyForms['EasyField'] || {}
   const EasyFieldProps = EasyField.props || {}
-  const quasarComponentProps = getPassedProps(selectedField) || {}
+  const inheritedComponentProps = getPassedProps(selectedField) || {}
   const result = copy(merge(
-    quasarComponentProps,
+    inheritedComponentProps,
     EasyFieldProps,
     componentProps,
   ))
