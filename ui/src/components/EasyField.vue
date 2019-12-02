@@ -24,7 +24,11 @@
         'text-wrap-all': !hasMarkdown
       }]"
     >
-      <q-markdown v-if="hasMarkdown" no-line-numbers no-containers>{{ cSubLabel }}</q-markdown>
+      <q-markdown
+        v-if="hasMarkdown"
+        no-line-numbers
+        no-container
+      >{{ cSubLabel }}</q-markdown>
       <template v-else>{{ cSubLabel }}</template>
     </div>
     <div
