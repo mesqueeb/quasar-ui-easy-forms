@@ -28,14 +28,20 @@ export default {
     get src () { return this.value },
     // EF props:
     // Quasar props with modified defaults:
+    noLineNumbers: {
+      quasarProp: 'modified',
+      type: Boolean,
+      default: true,
+    },
     // Quasar props with modified behavior:
   },
   computed: {
     quasarProps () {
       return merge(this.$attrs, {
         // Quasar props with modified defaults:
+        noLineNumbers: this.noLineNumbers,
         // Quasar props with modified behavior:
-        src: this.value || this.src
+        src: this.value || this.src,
       })
     },
   },
