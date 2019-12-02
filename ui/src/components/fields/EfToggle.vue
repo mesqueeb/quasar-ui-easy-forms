@@ -35,7 +35,7 @@ export default {
     // Quasar props with modified defaults:
     // Quasar props with modified behavior:
     disable: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: Boolean,
       default: false,
       desc: 'Disables the ability to interact with the field. Is `true` when `readonly: true`'

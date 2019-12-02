@@ -21,6 +21,8 @@
       width: 100%
       height: 100%
       // justify-self: stretch
+  .easy-form
+    padding: 1em
   // if markdown is used in slot:
   .q-markdown--token
     white-space: pre-line

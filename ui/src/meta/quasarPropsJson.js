@@ -30,7 +30,7 @@ function jsonToPropFormat ({props}) {
   return Object.entries(props)
     .reduce((carry, [key, value]) => {
       value = copy(value)
-      value.quasarProp = true
+      value.inheritedProp = true
       value.type = isArray(value.type)
         ? value.type.map(stringToTypeFn)
         : stringToTypeFn(value.type)

@@ -91,11 +91,11 @@ export default {
     // EF props:
     big,
     // Quasar props with modified defaults:
-    unelevated: {type: Boolean, default: true, quasarProp: 'modified'},
-    toggleColor: {type: String, default: 'primary', quasarProp: 'modified'},
+    unelevated: {type: Boolean, default: true, inheritedProp: 'modified'},
+    toggleColor: {type: String, default: 'primary', inheritedProp: 'modified'},
     // Quasar props with modified behavior:
     options: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: Array,
       desc: 'An array of options. The options can be anything you can pass to EfBtn.',
       examples: ['`[{label: \'One\', value: 1}, {label: \'Two\', value: 2}]`'],

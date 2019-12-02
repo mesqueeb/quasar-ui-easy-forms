@@ -52,7 +52,7 @@ However, in case you will also use \`readonly: false\` (to show the "input") you
     // Quasar props with modified behavior:
     readonly: {
       category: 'state',
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: Boolean,
       default: false,
       desc: 'Setting this field to `readonly` will show this field\'s embedded YouTube video.',

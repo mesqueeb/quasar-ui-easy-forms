@@ -24,8 +24,8 @@ export function getAllComponentProps (selectedField) {
   return result
 }
 
-export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) {
-  const { desc, type, quasarProp, examples, default: df, values, category } = propInfo
+export function propToPropSchema (propKey, propInfo) {
+  const { desc, type, inheritedProp, examples, default: df, values, category } = propInfo
   // make the raw prop info from the components into an EasyForm:
   // whatever the prop is, default to an 'input' EasyField
   const events = {}
@@ -33,10 +33,6 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
   let subLabel = desc
   let options, outlined, standout, disable, parseInput, format, autogrow, debounce, span, emitValue
   let fieldClasses = []
-  // If it's a quasarProp, add a specific indentifier
-  if (quasarProp) {
-    fieldClasses.push(quasarProp === true ? 'quasar-prop' : 'quasar-prop-modified')
-  }
   // If it has a default, write it in the description
   if (!isUndefined(df)) subLabel += `\n\nDefault: \`${isFunction(df) ? JSON.stringify(df()) : df}\``
   // if the prop is a Boolean, show this as a 'toggle' EasyField
@@ -84,7 +80,7 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
     label: propKey,
     subLabel,
     placeholder: !isArray(examples) ? '' : examples.join(', '),
-    quasarProp,
+    inheritedProp,
     options,
     outlined,
     standout,
@@ -105,7 +101,7 @@ export function createInfoCardSchemaFromProp (propKey, propInfo, selectedField) 
   }
 }
 
-export function getInfoCardSchema (selectedField) {
+export function getInfoCardPropsSchema (selectedField) {
   const allComponentProps = selectedField === 'EasyForm'
     ? copy(EasyForms['EasyForm'].props)
     : getAllComponentProps(selectedField)
@@ -117,7 +113,7 @@ export function getInfoCardSchema (selectedField) {
       ) {
         return carry
       }
-      carry[propKey] = createInfoCardSchemaFromProp(propKey, propInfo, selectedField)
+      carry[propKey] = propToPropSchema(propKey, propInfo)
       return carry
     }, {})
 }

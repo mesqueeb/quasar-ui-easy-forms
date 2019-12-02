@@ -52,7 +52,7 @@
 import { pascalCase, camelCase } from 'case-anything'
 import { isFunction } from 'is-what'
 
-function parseCodeAsString (code) {
+function parseCodeForPrint (code) {
   const stringifiedFns = []
   function replacer (key, value) {
     if (isFunction(value) && value.prototype.stringifiedFn) {
@@ -126,7 +126,7 @@ export default {
       if (!schema) return false
       return `
 \`\`\`js
-const ${schemaVarName} = ${parseCodeAsString(schema)}
+const ${schemaVarName} = ${parseCodeForPrint(schema)}
 \`\`\``.trim()
     },
     settingsFormattedForSource () {
@@ -140,7 +140,7 @@ const ${schemaVarName} = ${parseCodeAsString(schema)}
             carry[propKey] = `${schemaVarName}, // see 'Schema' tab on the left`
             return carry
           }
-          carry[propKey] = parseCodeAsString(propValue)
+          carry[propKey] = parseCodeForPrint(propValue)
           return carry
         }, {})
     },
@@ -172,7 +172,7 @@ const ${schemaVarName} = ${parseCodeAsString(schema)}
     },
     scriptRegular () {
       const { settings, settingsFormattedForSource, tag } = this
-      const value = !settings.value ? settings.value : parseCodeAsString(settings.value)
+      const value = !settings.value ? settings.value : parseCodeForPrint(settings.value)
       const props = Object.entries(settingsFormattedForSource)
         .reduce((carry, [key, value]) => {
           carry += `\n        ${key}: ${value},`

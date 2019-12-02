@@ -67,27 +67,27 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
       desc: `Will be shown when nothing is selected, but only if 'externalLabels' is not disabled. (Takes the place of the 'label' Quasar prop, because with EfSelect the label is external.)`
     },
     // Quasar props with modified defaults:
-    outlined: { quasarProp: 'modified', type: Boolean, default: true },
-    autogrow: { quasarProp: 'modified', type: Boolean, default: true },
+    outlined: { inheritedProp: 'modified', type: Boolean, default: true },
+    autogrow: { inheritedProp: 'modified', type: Boolean, default: true },
     // Quasar props with modified behavior:
     // label: {
-    //   quasarProp: 'modified',
+    //   inheritedProp: 'modified',
     //   type: String,
     //   desc: 'Hidden when a value is selected, shows the placeholder when nothing is selected.',
     // },
     options: {
-      quasarProp: true,
+      inheritedProp: true,
       default: () => [],
       desc: 'The options to select from. Should be an array of strings or objects (`{label, value}`).\n\nFor best performance freeze the list of options with `Object.freeze`.',
       examples: [`[{label: 'JPY', value: 'jpy'}, {label: 'USD', value: 'usd'}]`, `['jpy', 'usd']`],
     },
     hideDropdownIcon: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: Boolean,
       desc: 'Defaults to `true` when `readonly: true`',
     },
     useChips: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: Boolean,
       desc: 'Defaults to `true` when `multiple: true`',
     },

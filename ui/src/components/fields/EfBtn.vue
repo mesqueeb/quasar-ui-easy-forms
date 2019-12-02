@@ -37,7 +37,7 @@ export default {
     },
     // Quasar props with modified defaults:
     color: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: String,
       default: 'primary',
     },

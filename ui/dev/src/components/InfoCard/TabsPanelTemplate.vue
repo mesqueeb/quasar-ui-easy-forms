@@ -1,77 +1,58 @@
 <template>
   <div class="tabs-panel-template q-pa-md">
-    <h6 class="q-my-sm">dynamic prop binding with v-bind</h6>
+    <div class="text-bold q-my-sm">dynamic prop binding with v-bind</div>
     <q-markdown no-line-numbers :src="codeVBind" />
-    <h6 class="q-my-sm">regular prop binding</h6>
+    <div class="text-bold q-my-sm">regular prop binding</div>
     <q-markdown no-line-numbers :src="codeRegular" />
   </div>
 </template>
 
 <script>
-import { pascalCase, camelCase } from 'case-anything'
-import parseCodeAsString from '../../helpers/parseCodeAsString.js'
-
 export default {
-  name: pascalCase('tabs-panel-template'),
+  name: 'TabsPanelTemplate',
   props: {
-    tag: {
+    tagName: {
+      desc: 'The tag name for the template component. Eg. `EasyForm` will render `<EasyForm />`',
       type: String,
-      validator: prop => ['EasyField', 'EasyForm'].includes(prop),
-      values: ['EasyField', 'EasyForm'],
-      examples: [`'EasyField'`, `'EasyForm'`],
     },
-    settings: Object,
-    settingsSchema: Object,
+    varNameProps: { type: String },
+    varNameValue: { type: String },
+    varNameSchema: { type: String },
+    propDataPrintReady: Object,
   },
   data () { return {} },
   computed: {
-    schemaVarName () {
-      const { tag, settings } = this
-      const { fieldType } = settings
-      return (tag === 'EasyField')
-        ? `schema${pascalCase(tag) + pascalCase(fieldType)}`
-        : `schema${pascalCase(tag)}`
-    },
-    settingsFormattedForSource () {
-      const { settings, settingsSchema, schemaVarName } = this
-      return Object.entries(settings)
-        .reduce((carry, [propKey, propValue]) => {
-          if (propValue === undefined || propValue === '' || propKey === 'value') {
-            return carry
-          }
-          if (propKey === 'schema') {
-            carry[propKey] = `${schemaVarName}, // see 'Schema' tab on the left`
-            return carry
-          }
-          carry[propKey] = parseCodeAsString(propValue)
-          return carry
-        }, {})
-    },
     codeRegular () {
-      const { settingsFormattedForSource, tag } = this
-      const props = Object.entries(settingsFormattedForSource)
+      const { tagName, varNameValue, propDataPrintReady } = this
+      const props = Object.entries(propDataPrintReady)
         .reduce((carry, [key, value]) => {
-          carry += `\n  :${key}="${camelCase(tag)}Props.${key}"`
+          if (value.startsWith('\'') && value.endsWith('\'')) {
+            carry += `\n    ${key}="${value.slice(1, -1)}"`
+            return carry
+          }
+          carry += `\n    :${key}="${value}"`
           return carry
-        }, `v-model="${camelCase(tag)}value"`)
-      const content = `
+        }, `v-model="${varNameValue}"`)
+      return `
 \`\`\`html
-<${tag}
-  ${props}
-/>
-\`\`\``
-      return content.trim()
+<template>
+  <${tagName}
+    ${props}
+  />
+<\/template>
+\`\`\``.trim()
     },
     codeVBind () {
-      const { tag } = this
-      const content = `
+      const { tagName, varNameValue, varNameProps } = this
+      return `
 \`\`\`html
-<${tag}
-  v-model="${camelCase(tag)}Value"
-  v-bind="${camelCase(tag)}Props"
-/>
-\`\`\``
-      return content.trim()
+<template>
+  <${tagName}
+    v-model="${varNameValue}"
+    v-bind="${varNameProps}"
+  />
+<\/template>
+\`\`\``.trim()
     },
   },
 }

@@ -44,35 +44,33 @@
               :name="tab"
               class="q-pa-none _source-code-panel"
             >
-              <TabsPanelSchema
-                v-if="tab === 'Schema'"
-                :tag="tag"
-                :settings="settings"
-                :value="settings"
-                @input="val => $emit('input', val)"
-                :settingsSchema="settingsSchema"
+              <MarkdownCode
+                v-if="tab === 'Schema' && !hideSchema"
+                :src="propData.schema"
+                :prefix="`const ${varNameSchema} = `"
               />
               <TabsPanelTemplate
                 v-if="tab === 'Template'"
-                :tag="tag"
-                :settings="settings"
-                :value="settings"
-                @input="val => $emit('input', val)"
-                :settingsSchema="settingsSchema"
+                :tag-name="tagName"
+                :var-name-props="varNameProps"
+                :var-name-value="varNameValue"
+                :var-name-schema="varNameSchema"
+                :prop-data-print-ready="propDataPrintReady"
               />
               <TabsPanelScript
                 v-if="tab === 'Script'"
-                :tag="tag"
-                :settings="settings"
-                :value="settings"
-                @input="val => $emit('input', val)"
-                :settingsSchema="settingsSchema"
+                :tag-name="tagName"
+                :var-name-props="varNameProps"
+                :var-name-value="varNameValue"
+                :var-name-schema="varNameSchema"
+                :prop-data-print-ready="propDataPrintReady"
+                :value-print-ready="valuePrintReady"
               />
               <TabsPanelStyle
                 v-if="tab === 'Style'"
-                :defaultClasses="TabsPanelStyleClasses"
-                :defaultStyle="TabsPanelStyleStyle"
-                targetWrapperElementSelector=".js-interactive-preview"
+                :classes="styleClasses"
+                :classes-data="styleClassesData"
+                target-wrapper-element-selector=".js-interactive-preview"
               />
             </q-tab-panel>
           </q-tab-panels>
@@ -80,17 +78,15 @@
         </q-tab-panel>
         <q-tab-panel class="q-pa-none _props-panel" name="Props">
           <TabsPanelProps
-            :tag="tag"
-            :settings="settings"
-            :value="settings"
-            @input="val => $emit('input', val)"
-            :settingsSchema="settingsSchema"
+            :value="propData"
+            @input="val => $emit('update:prop-data', val)"
+            :props-schema="propsSchema"
           />
           <q-separator />
         </q-tab-panel>
       </q-tab-panels>
     </q-slide-transition>
-    <div class="q-pa-md">
+    <div class="q-pa-md js-interactive-preview">
       <slot />
     </div>
   </q-card>
@@ -106,78 +102,91 @@
 </style>
 
 <script>
+import { pascalCase, camelCase } from 'case-anything'
 import { isArray } from 'is-what'
 import merge from 'merge-anything'
 import copy from 'copy-anything'
+import parseCodeForPrint from '../../helpers/parseCodeForPrint.js'
 import InfoCardTitle from './InfoCardTitle.vue'
-import TabsPanelSchema from './TabsPanelSchema.vue'
 import TabsPanelTemplate from './TabsPanelTemplate.vue'
 import TabsPanelScript from './TabsPanelScript.vue'
 import TabsPanelStyle from './TabsPanelStyle.vue'
 import TabsPanelProps from './TabsPanelProps.vue'
+import MarkdownCode from './MarkdownCode.vue'
 
 export default {
   name: 'InfoCard',
   components: {
     InfoCardTitle,
-    TabsPanelSchema,
     TabsPanelTemplate,
     TabsPanelScript,
     TabsPanelStyle,
     TabsPanelProps,
+    MarkdownCode,
   },
   props: {
-    title: String,
-    tag: {
-      type: String,
-      validator: prop => ['EasyField', 'EasyForm'].includes(prop),
-      values: ['EasyField', 'EasyForm'],
-      examples: [`'EasyField'`, `'EasyForm'`],
+    hideSchema: {
+      desc: 'True to not show a Schema tab.',
+      type: Boolean,
+      default: false,
     },
-    value: Object, // settings data object
-    settingsSchema: {type: [Array, Object], default: () => []},
+    title: {
+      desc: `The info card's title`,
+      type: String,
+    },
+    tagName: {
+      type: String,
+    },
+    propData: {
+      desc: 'The object with the selected values per interactive prop: `{[propKey]: selectedValue}`',
+      type: Object,
+    },
+    propsSchema: {
+      desc: 'The EasyForm schema to generate the prop info.',
+      type: [Array, Object],
+      default: () => [],
+    },
+    styleClasses: {
+      type: Array,
+      desc: 'An array of classes to show in the textarea. These classes will be targeted in the dom to apply the custom css typed in the textarea.',
+      default: () => ([]),
+    },
+    styleClassesData: {
+      type: Object,
+      desc: 'An object with classes as keys and an object as value that has the default styles to add to this class',
+      default: () => ({}),
+    },
   },
   data () {
+    const tabs = this.hideSchema
+      ? ['Template', 'Script', 'Style']
+      : ['Schema', 'Template', 'Script', 'Style']
     return {
       isExpanded: false,
-      tabControl: 'Schema',
+      tabControl: tabs[0],
       navControl: 'Source',
-      tabs: [
-        'Schema',
-        'Template',
-        'Script',
-        'Style',
-      ],
+      tabs,
     }
   },
   computed: {
-    settings () {
-      return copy(this.value)
-    },
-    TabsPanelStyleClasses () {
-      const { tag, settings } = this
-      const classesEasyField = [
-        '.easy-field',
-        '.easy-field__label',
-        '.easy-field__sub-label',
-        '.easy-field__field',
-      ]
-      if (tag === 'EasyField') {
-        classesEasyField.splice(1, 0, `.easy-field--${settings.fieldType}`)
-        return classesEasyField
-      }
-      return [
-        '.easy-form',
-        '.easy-form__nav-row',
-        '.easy-form__validation-error',
-        '.easy-form__form',
-      ].concat(classesEasyField)
-    },
-    TabsPanelStyleStyle () {
-      return {
-        '.easy-form': {padding: '1em'},
-        '.easy-field': {padding: '1em'},
-      }
+    varNameProps () { return `${camelCase(this.tagName)}Props` },
+    varNameValue () { return `${camelCase(this.tagName)}Value` },
+    varNameSchema () { return `schema${pascalCase(this.tagName)}` },
+    valuePrintReady () { return parseCodeForPrint(this.propData.value) },
+    propDataPrintReady () {
+      const { propData, varNameSchema } = this
+      return Object.entries(propData)
+        .reduce((carry, [propKey, propValue]) => {
+          if (propValue === undefined || propValue === '' || propKey === 'value') {
+            return carry
+          }
+          if (propKey === 'schema') {
+            carry[propKey] = varNameSchema
+            return carry
+          }
+          carry[propKey] = parseCodeForPrint(propValue)
+          return carry
+        }, {})
     },
   },
   methods: {

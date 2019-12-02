@@ -57,17 +57,17 @@ export default {
       default: 'Please enter a valid date.',
     },
     // Quasar props with modified defaults:
-    fillMask: {quasarProp: 'modified', type: Boolean, default: false},
+    fillMask: {inheritedProp: 'modified', type: Boolean, default: false},
     // Quasar props with modified behavior:
     mask: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: String,
       default: defaultMask,
       desc: `Is shown as placeholder. Will be passed as 'input' field mask as well (and converted like so: 'YYYY/MM/DD' → '####/##/##').`,
       examples: [`'YYYY-MM-DD'`, `'MMMM Do, YYYY'`, `'YYYY-MM-DD HH:mm:ss'`],
     },
     rules: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: Array,
       desc: `When \`valueType: 'date'\`, the default rule will check if the model results to a valid date.`,
       examples: [`[ val => val.length <= 10 || 'Please use maximum 10 characters' ]`],

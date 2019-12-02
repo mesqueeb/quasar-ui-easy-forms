@@ -53,16 +53,16 @@ Don't forget to also import Firebase storage like so: \`import 'firebase/storage
     autoUpload: {
       type: Boolean,
       default: true,
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
     },
     hideUploadBtn: {
       type: Boolean,
       default: true,
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
     },
     // Quasar props with modified behavior:
     accept: {
-      quasarProp: true,
+      inheritedProp: true,
     },
   },
   data () {

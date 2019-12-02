@@ -45,20 +45,20 @@ export default {
     },
     // Quasar props with modified defaults:
     labelAlways: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: Boolean,
       default: true,
       desc: 'This points to the label of the slider value.',
     },
     // Quasar props with modified behavior:
     labelValue: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: Function,
       desc: 'A **function** to format the value shown inside the label. When `undefined` it will default to the value with pre- & suffix (if they are set).',
       examples: ['val => `${val}.00 USD`'],
     },
     disable: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: Boolean,
       default: false,
       desc: 'Disables the ability to interact with the field. Is `true` when `readonly: true`'

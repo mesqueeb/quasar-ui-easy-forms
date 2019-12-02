@@ -20,9 +20,9 @@
     <div
       v-if="cSubLabel"
       :class="[
-        'easy-field__sub-label',
-        'text-wrap-all'
-      ]"
+        'easy-field__sub-label', {
+        'text-wrap-all': !hasMarkdown
+      }]"
     >
       <q-markdown v-if="hasMarkdown" no-line-numbers>{{ cSubLabel }}</q-markdown>
       <template v-else>{{ cSubLabel }}</template>
@@ -82,6 +82,7 @@
     font-weight: 300
     .q-markdown--token
       white-space: pre-wrap
+      word-break: break-word
 
 </style>
 
@@ -246,7 +247,7 @@ You can also pass a function that will receive two params you can work with: \`(
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
     readonly: {
       category: 'state',
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: [Boolean, Function],
       default: false,
       desc: '`readonly` is used for \'view\' mode of an EasyForm.',
@@ -255,13 +256,13 @@ You can also pass a function that will receive two params you can work with: \`(
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
     label: {
       category: 'content',
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: [String, Function],
       desc: 'An EasyField label is always "external" to the field. (It replaces the Quasar label if the underlying Quasar component uses one.)',
     },
     disable: {
       category: 'state',
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: [Boolean, Function],
       default: false,
       desc: '`disable` is ignored when `readonly` is true',

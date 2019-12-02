@@ -12,23 +12,20 @@
       :src="rawComponent.desc"
     />
     <InfoCard
-      tag="EasyField"
+      tag-name="EasyField"
       :key="selectedField"
-      v-model="settings"
-      :settingsSchema="settingsSchema"
+      :title="infoCardTitle"
+      :prop-data.sync="propData"
+      :props-schema="propsSchema"
+      :style-classes="styleClasses"
+      :style-classes-data="styleClassesData"
+      :hide-schema="true"
     >
-      <InfoBoxWrapper
-        color="accent"
-        label="interactive preview"
-        class="q-mb-md js-interactive-preview"
-      >
-        <EasyField
-          v-model="model"
-          v-bind="field"
-          :key="selectedField"
-          style="width: 95%"
-        />
-      </InfoBoxWrapper>
+      <EasyField
+        v-model="model"
+        v-bind="field"
+        :key="selectedField"
+      />
     </InfoCard>
   </q-page>
 </template>
@@ -38,11 +35,12 @@
 
 <script>
 import { isString, isUndefined, isArray, isPlainObject } from 'is-what'
+import { capitalCase } from 'case-anything'
 import copy from 'copy-anything'
 import merge from 'merge-anything'
 import EasyForms from 'ui'
 import demoOptions from '../schemas/easyFields'
-import { getInfoCardSchema, getRawComponent } from '../helpers/schemaBuilders'
+import { getInfoCardPropsSchema, getRawComponent } from '../helpers/schemaBuilders'
 
 const selectableFields = require
   .context('../../../src/components/fields', true, /^\.\/.*\.vue$/)
@@ -68,15 +66,15 @@ export default {
       selectableFields,
       fieldPicker,
       model: '',
-      settings: {},
+      propData: {},
     }
   },
   watch: {
     model (newValue, oldValue) {
-      if (isUndefined(this.settings.value)) return
-      this.settings.value = newValue
+      if (isUndefined(this.propData.value)) return
+      this.propData.value = newValue
     },
-    settings (newSettings, oldSettings) {
+    propData (newSettings, oldSettings) {
       if (!newSettings.value || newSettings.value === oldSettings.value) return
       this.model = newSettings.value
     },
@@ -84,21 +82,22 @@ export default {
       handler (newValue, oldValue) {
         const { addTestOptions } = this
         this.model = undefined
-        this.settings.valueType = undefined
+        this.propData.valueType = undefined
         if (newValue === oldValue) return
         const ops = copy(demoOptions[newValue])
         addTestOptions(ops)
-        this.settings.label = `My awesome "${newValue}" field`
+        this.propData.label = `My awesome "${newValue}" field`
       },
       immediate: true,
     },
   },
   computed: {
     field () {
-      return this.settings
+      return this.propData
     },
+    infoCardTitle () { return capitalCase(this.selectedField) },
     rawComponent () { return getRawComponent(this.selectedField) },
-    settingsSchema () { return getInfoCardSchema(this.selectedField) },
+    propsSchema () { return getInfoCardPropsSchema(this.selectedField) },
     modelShownAsBadge () {
       const { model } = this
       const parsedModel = isString(model)
@@ -108,6 +107,21 @@ export default {
           : model
       return `\`${parsedModel}\``
     },
+    styleClasses () {
+      const classesEasyField = [
+        '.easy-field',
+        `.easy-field--${this.selectedField}`,
+        '.easy-field__label',
+        '.easy-field__sub-label',
+        '.easy-field__field',
+      ]
+      return classesEasyField
+    },
+    styleClassesData () {
+      return {
+        '.easy-field': {padding: '1em'},
+      }
+    },
   },
   methods: {
     addTestOptions (ops = {}) {
@@ -116,9 +130,9 @@ export default {
       if (value !== undefined) {
         this.model = value
       }
-      this.settings = { value }
+      this.propData = { value }
       Object.entries(ops).forEach(([key, value]) => {
-        this.$set(this.settings, key, value)
+        this.$set(this.propData, key, value)
       })
     },
     log(...args) {

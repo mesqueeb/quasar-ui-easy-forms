@@ -29,7 +29,7 @@ export default {
     // EF props:
     // Quasar props with modified defaults:
     noLineNumbers: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: Boolean,
       default: true,
     },

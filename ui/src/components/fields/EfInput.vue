@@ -66,17 +66,17 @@ export default {
       examples: [`'right'`, `'left'`, null],
     },
     // Quasar props with modified defaults:
-    lazyRules: { quasarProp: 'modified', type: Boolean, default: true },
-    outlined: { quasarProp: 'modified', type: Boolean, default: true },
+    lazyRules: { inheritedProp: 'modified', type: Boolean, default: true },
+    outlined: { inheritedProp: 'modified', type: Boolean, default: true },
     // Quasar props with modified behavior:
     rules: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: Array,
       desc: 'Same as Quasar, but with added pre-defined rules for \'telJA\' and \'email\'',
       examples: [`['telJA']`, `['email']`, `[ val => val.length <= 3 || 'Please use maximum 3 characters' ]`],
     },
     type: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: String,
       descripton: `The html tag input type. Defaults to 'number' if \`valueType: 'number'\`, otherwise defaults to 'text'.`,
       default: 'text',

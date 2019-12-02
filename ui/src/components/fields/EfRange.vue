@@ -32,7 +32,7 @@ export default {
     // prop categories: behavior content general model state style
     value: {
       category: 'model',
-      quasarProp: true,
+      inheritedProp: true,
       type: Object,
       validator: val => isObject(val) && ('min' in val) && ('max' in val),
       default: {min: 0, max: 0},
@@ -57,13 +57,13 @@ export default {
     },
     // Quasar props with modified defaults:
     labelAlways: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: Boolean,
       default: true,
     },
     // Quasar props with modified behavior:
     disable: {
-      quasarProp: 'modified',
+      inheritedProp: 'modified',
       type: Boolean,
       default: false,
       desc: 'Disables the ability to interact with the field. Is `true` when `readonly: true`'

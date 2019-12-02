@@ -10,15 +10,17 @@
     </InfoBoxWrapper>
     <InfoCard
       class="q-mt-lg"
-      tag="EasyForm"
+      tag-name="EasyForm"
       :title="infoCardTitle"
-      v-model="exampleForms[pageValue.chosenExample]"
-      :settingsSchema="settingsSchema"
+      :prop-data.sync="exampleForms[pageValue.chosenExample]"
+      :props-schema="propsSchema"
+      :style-classes="styleClasses"
+      :style-classes-data="styleClassesData"
     >
       <EasyForm
-        :key="pageValue.chosenExample"
         v-model="exampleForms[pageValue.chosenExample].value"
         v-bind="exampleForms[pageValue.chosenExample]"
+        :key="pageValue.chosenExample"
       />
     </InfoCard>
   </q-page>
@@ -30,20 +32,19 @@
   .ef-btn-toggle
     border: solid 2px $primary
     border-radius: 6px
-  .q-markdown p
-    margin: 0 !important
-    margin-block-start: 0
-    margin-block-end: 0
+  // .q-markdown p
+  //   margin: 0 !important
   .q-markdown--code
-    margin: 0 !important
+    margin: $sm !important
+
 </style>
 
 <script>
 import { isString, isArray, isPlainObject } from 'is-what'
-import { spaceCase, pascalCase } from 'case-anything'
+import { capitalCase } from 'case-anything'
 import merge from 'merge-anything'
 import * as demoSchemas from '../schemas/index'
-import { getInfoCardSchema } from '../helpers/schemaBuilders'
+import { getInfoCardPropsSchema } from '../helpers/schemaBuilders'
 
 export default {
   name: 'EasyFormDemo',
@@ -52,12 +53,12 @@ export default {
   },
   data () {
     const { pageForm, exampleForms } = demoSchemas[this.schemaId]
-    const settingsSchema = getInfoCardSchema('EasyForm')
+    const propsSchema = getInfoCardPropsSchema('EasyForm')
     return {
       pageValue: { chosenExample: 0 },
       pageForm,
       exampleForms: exampleForms.map(f => merge({value: {}}, f)),
-      settingsSchema,
+      propsSchema,
     }
   },
   watch: {
@@ -68,7 +69,10 @@ export default {
   },
   computed: {
     infoCardTitle () {
-      return spaceCase(pascalCase(this.schemaId))
+      const { pageForm, pageValue, exampleForms, schemaId } = this
+      if (exampleForms.length === 1) return capitalCase(schemaId)
+      const { label } = pageForm.schema[1].options[pageValue.chosenExample]
+      return capitalCase(label)
     },
     modelShownAsBadge () {
       const { model } = this
@@ -79,6 +83,24 @@ export default {
           ? JSON.stringify(value)
           : value
       return `\`${parsedValue}\``
+    },
+    styleClasses () {
+      return [
+        '.easy-form',
+        '.easy-form__nav-row',
+        '.easy-form__validation-error',
+        '.easy-form__form',
+        '.easy-field',
+        '.easy-field__label',
+        '.easy-field__sub-label',
+        '.easy-field__field',
+      ]
+    },
+    styleClassesData () {
+      return {
+        '.easy-form': {padding: '1em'},
+        '.easy-field': {padding: '1em'},
+      }
     },
   },
   methods: {

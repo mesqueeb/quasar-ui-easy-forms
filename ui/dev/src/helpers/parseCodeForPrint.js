@@ -1,7 +1,9 @@
 
 import { isFunction } from 'is-what'
 
-export default function parseCodeAsString (code) {
+export default function parseCodeForPrint (code) {
+  // return early on 0, undefined, null, etc.
+  if (!code) return code
   const stringifiedFns = []
   function replacer (key, value) {
     if (isFunction(value) && value.prototype.stringifiedFn) {
