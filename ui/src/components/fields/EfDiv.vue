@@ -48,6 +48,7 @@ export function parseEasyFieldValue (value, blueprint) {
     } else {
       const valueArray = !isArray(value) ? [value] : value
       newValue = valueArray.map(selectedValue => {
+        if (isPlainObject(selectedValue)) return selectedValue.label
         const option = options.find(o => o.value === selectedValue) || {}
         return option.label || selectedValue
       }).join(', ')
@@ -93,10 +94,10 @@ One benefit of the "div" field over a regular div, is that it will parse your va
   },
   computed: {
     cValue () {
-      const { value, valueType, options, suffix, prefix } = this
+      const { value, valueType, options, suffix, prefix, multiple } = this
       return parseEasyFieldValue(
         value,
-        { valueType, options, suffix, prefix },
+        { valueType, options, suffix, prefix, multiple },
         this
       )
     },

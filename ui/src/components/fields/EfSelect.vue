@@ -150,8 +150,10 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
           // where all keys are null to comply by our description
           // of how `multiple: true, valueType: 'object'` works
           const originalValue = value
-          const base = Object.keys(originalValue)
-            .reduce((carry, key) => ({...carry, [key]: null}), {})
+          const base = isPlainObject(originalValue)
+            ? Object.keys(originalValue)
+              .reduce((carry, key) => ({...carry, [key]: null}), {})
+            : {}
           const cleanValue = val.reduce((carry, option) => {
             if (isString(option)) return merge(carry, {[option]: option})
             return merge(carry, {[option.value]: option.label})
