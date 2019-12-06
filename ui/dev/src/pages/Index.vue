@@ -90,7 +90,8 @@ const pagesEasyForm = [
 ]
 
 const pagesEasyField = [
-  {title: 'Easy Field', path: '/EasyFieldDemo'}
+  {title: 'Easy Field', path: '/EasyFieldDemo'},
+  {title: 'fieldType: \'select\' models', path: '/selectModel'},
 ]
 
 export default {

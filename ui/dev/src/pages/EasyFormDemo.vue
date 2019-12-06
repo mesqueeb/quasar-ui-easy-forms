@@ -38,6 +38,9 @@
   .q-markdown--code
     margin: $sm !important
 
+.q-markdown--code
+  word-break: break-word !important
+
 </style>
 
 <script>

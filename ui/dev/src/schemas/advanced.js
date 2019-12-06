@@ -8,12 +8,10 @@ export const exampleForms = [
       {
         fieldType: 'space',
         span: 3,
-        fieldStyle: 'margin-bottom: -3em',
       },
       {
         fieldType: 'title',
         span: 1,
-        fieldStyle: 'margin-bottom: -3em',
         label: 'Example fieldType:',
       },
       {
