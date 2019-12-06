@@ -65,7 +65,8 @@ export default {
       default: () => [],
     },
     valueType: getGenericValueType('array'),
-    // EF props used here:
+    // EF props:
+    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     schema: {
       category: 'model',
       type: Array,
@@ -101,8 +102,8 @@ export default {
       },
     },
     attrsToPass () {
-      const { formDataNested, formDataFlat, formId, formMode, fieldInput } = this.$attrs
-      return { formDataNested, formDataFlat, formId, formMode, fieldInput }
+      const { formDataNested, formDataFlat, formId, formMode, fieldInput, rawValue } = this.$attrs
+      return { formDataNested, formDataFlat, formId, formMode, fieldInput, rawValue }
     },
     cSchema () {
       const { schema, disable, readonly, attrsToPass } = this

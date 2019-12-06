@@ -65,6 +65,7 @@ ${passContentViaValueOrSrc}`,
     get src () { return this.value },
     valueType: getGenericValueType(['string', 'object', 'array']),
     // EF props:
+    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     deletable: {
       type: Boolean,
       default: true,
@@ -102,8 +103,8 @@ ${passContentViaValueOrSrc}`,
       set (val) { this.$emit('input', val) },
     },
     cDeletable () {
-      const { deletable, quasarProps } = this
-      if (quasarProps.readonly) return false
+      const { deletable, quasarProps, rawValue } = this
+      if (quasarProps.readonly || rawValue) return false
       return deletable
     },
   },

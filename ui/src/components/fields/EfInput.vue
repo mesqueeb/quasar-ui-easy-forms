@@ -1,5 +1,11 @@
 <template>
+  <EfDiv
+    v-if="rawValue"
+    class="ef-input"
+    v-bind="divProps"
+  />
   <q-input
+    v-else
     :class="[
       'ef-input',
       `-align-${cAlign}`,
@@ -48,6 +54,7 @@ export default {
     },
     valueType: getGenericValueType(['string', 'number'], `When \`valueType: 'number'\` it will make sure the model is formatted as Number.`),
     // EF props:
+    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     fieldType: {type: String}, // defined in EasyField
     big,
     externalLabels,
@@ -95,13 +102,18 @@ export default {
         } : {}
       return merge(this.$attrs, {
         // Quasar props with modified defaults:
-
         outlined: this.outlined,
         lazyRules: this.lazyRules,
         // Quasar props with modified behavior:
         rules: this.cRules,
         type: this.cType,
       }, overWriteLabelAndHint)
+    },
+    divProps () {
+      return merge(this.$attrs, {
+        value: this.value,
+        valueType: this.valueType,
+      })
     },
     cValue: {
       get () {

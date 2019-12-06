@@ -1,38 +1,41 @@
 <template>
-  <div>
-    <q-btn-toggle
-      v-if="!big"
-      :value="value"
-      @input="val => $emit('input', val)"
-      v-bind="quasarProps"
-      :class="[
-        'ef-btn-toggle', {
-        '-readonly': quasarProps.readonly,
-      }]"
-    />
+  <EfDiv
+    v-if="rawValue"
+    class="ef-btn-toggle"
+    v-bind="divProps"
+  />
+  <q-btn-toggle
+    v-else-if="!big"
+    :value="value"
+    @input="val => $emit('input', val)"
+    v-bind="quasarProps"
+    :class="[
+      'ef-btn-toggle', {
+      '-readonly': quasarProps.readonly,
+    }]"
+  />
+  <div
+    v-else="big"
+    :style="style"
+    :class="[
+      'ef-btn-toggle',
+      '-big', {
+      '-readonly': quasarProps.readonly,
+    }]"
+  >
     <div
-      v-if="big"
-      :style="style"
-      :class="[
-        'ef-btn-toggle',
-        '-big', {
-        '-readonly': quasarProps.readonly,
-      }]"
+      v-for="option in options"
+      :key="option.label"
+      :class="{'ef-btn-toggle__chosen': value === option.value}"
     >
-      <div
-        v-for="option in options"
-        :key="option.label"
-        :class="{'ef-btn-toggle__chosen': value === option.value}"
-      >
-        <EfBtn
-          @click.native="$emit('input', option.value)"
-          class="ef-btn -square"
-          v-bind="merge(option, {
-            btnLabel: option.label,
-            disable: option.disable || quasarProps.disable,
-          })"
-        />
-      </div>
+      <EfBtn
+        @click.native="$emit('input', option.value)"
+        class="ef-btn -square"
+        v-bind="merge(option, {
+          btnLabel: option.label,
+          disable: option.disable || quasarProps.disable,
+        })"
+      />
     </div>
   </div>
 </template>
@@ -73,10 +76,11 @@ import merge from 'merge-anything'
 import { isOdd } from '../../helpers/intHelpers'
 import { QBtnToggle } from 'quasar'
 import EfBtn from './EfBtn.vue'
+import EfDiv from './EfDiv.vue'
 import { big, getGenericValueType } from './sharedProps.js'
 
 export default {
-  components: { QBtnToggle, EfBtn },
+  components: { QBtnToggle, EfBtn, EfDiv },
   name: 'EfBtnToggle',
   desc: 'EfBtnToggle has a very different view when `big: true`',
   inheritAttrs: false,
@@ -90,6 +94,7 @@ export default {
     valueType: getGenericValueType(['string', 'boolean', 'number', 'array', 'object', 'date', 'null', 'undefined']),
     // EF props:
     big,
+    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     // Quasar props with modified defaults:
     unelevated: {type: Boolean, default: true, inheritedProp: 'modified'},
     toggleColor: {type: String, default: 'primary', inheritedProp: 'modified'},
@@ -109,6 +114,13 @@ export default {
         unelevated: this.unelevated,
         toggleColor: this.toggleColor,
         // Quasar props with modified behavior:
+        options: this.options,
+      })
+    },
+    divProps () {
+      return merge(this.$attrs, {
+        value: this.value,
+        valueType: this.valueType,
         options: this.options,
       })
     },

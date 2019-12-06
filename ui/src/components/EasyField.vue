@@ -317,9 +317,8 @@ You can also pass a function that will receive two params you can work with: \`(
       ].includes(fieldType)
     },
     componentIdentifier () {
-      const { fieldType, rawValue } = this
+      const { fieldType } = this
       if (isPlainObject(fieldType)) return fieldType
-      if (rawValue === true) return 'EfDiv'
       if (!fieldType) return ''
       if (fieldType.slice(0, 2) === 'q-') return fieldType
       return 'Ef' + fieldType[0].toUpperCase() + fieldType.slice(1)
@@ -345,6 +344,7 @@ You can also pass a function that will receive two params you can work with: \`(
         subLabelRaw: this.subLabel,
         lang: this.innerLang,
         events: this.cEvents,
+        rawValue: this.rawValue,
         // Quasar props with modified defaults:
         readonly: this.readonly,
         // Quasar props with modified behavior:

@@ -284,6 +284,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
         innerLang,
         fieldInput,
         labelPosition,
+        hasMarkdown,
       } = this
       const self = this
       function checkShowCondition ({ id: fieldId, showCondition }) {
@@ -300,6 +301,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
           lang: innerLang,
           fieldInput,
           labelPosition,
+          hasMarkdown,
         })
         // return early when showCondition fails
         if (!checkShowCondition(blueprint)) return carry

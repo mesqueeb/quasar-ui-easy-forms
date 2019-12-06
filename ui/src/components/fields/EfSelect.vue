@@ -1,5 +1,11 @@
 <template>
+  <EfDiv
+    v-if="rawValue"
+    class="ef-select"
+    v-bind="divProps"
+  />
   <q-select
+    v-else
     :class="[
       'ef-select', {
       '-big': big,
@@ -60,6 +66,7 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
     },
     valueType: getGenericValueType(['object', 'string', 'boolean', 'number', 'array', 'date', 'null', 'undefined']),
     // EF props:
+    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     big,
     externalLabels,
     placeholder: {
@@ -109,6 +116,13 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
         hideDropdownIcon: this.cHideDropdownIcon,
         useChips: this.cUseChips,
       }, overWriteLabelAndHint)
+    },
+    divProps () {
+      return merge(this.$attrs, {
+        value: this.value,
+        valueType: this.valueType,
+        options: this.options,
+      })
     },
     cValue: {
       get () {

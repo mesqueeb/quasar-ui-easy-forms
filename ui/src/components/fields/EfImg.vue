@@ -77,6 +77,7 @@ ${passContentViaValueOrSrc}`,
       desc: 'Limit the number of images shown when there are multiple',
     },
     // EF props:
+    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     deletable: {
       category: 'behavior',
       type: Boolean,
@@ -116,8 +117,8 @@ ${passContentViaValueOrSrc}`,
       set (val) { this.$emit('input', val) },
     },
     cDeletable () {
-      const { deletable, quasarProps } = this
-      if (quasarProps.readonly) return false
+      const { deletable, quasarProps, rawValue } = this
+      if (quasarProps.readonly || rawValue) return false
       return deletable
     },
   },

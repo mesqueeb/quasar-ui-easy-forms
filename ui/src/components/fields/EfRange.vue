@@ -1,5 +1,10 @@
 <template>
-  <div class="ef-range">
+  <EfDiv
+    v-if="rawValue"
+    class="ef-range ef-range--raw"
+    v-bind="divProps"
+  />
+  <div v-else class="ef-range">
     <q-range
       v-model="cValue"
       v-bind="quasarProps"
@@ -11,7 +16,7 @@
 // $
 @import '../../index.sass'
 
-.ef-range
+.ef-range:not(.ef-range--raw)
   padding-top: 30px
   padding-left: $md
   padding-right: $md
@@ -39,6 +44,7 @@ export default {
     },
     valueType: getGenericValueType('object'),
     // EF props:
+    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     prefix: {
       category: 'labels',
       type: String,
@@ -78,6 +84,14 @@ export default {
         leftLabelValue: this.cLeftLabelValue,
         rightLabelValue: this.cRightLabelValue,
         disable: this.cDisable,
+      })
+    },
+    divProps () {
+      return merge(this.$attrs, {
+        value: this.value,
+        valueType: this.valueType,
+        suffix: this.suffix,
+        prefix: this.prefix,
       })
     },
     cValue: {
