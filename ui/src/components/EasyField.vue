@@ -3,8 +3,9 @@
     :class="[
       'easy-field',
       `easy-field--${fieldType}`,
-      `easy-field--label-${labelPosition}`,
-      ...cFieldClassesArray
+      `easy-field--label-${labelPosition}`, {
+      'easy-field--no-sublabel': !cSubLabel,
+      }, ...cFieldClassesArray,
     ]"
     :style="cFieldStyle"
   >
@@ -14,7 +15,6 @@
         'easy-field__label',
         'text-wrap-all', {
         'easy-field__label--title': fieldType === 'title' || fieldType === 'form',
-        'easy-field__label--no-sublabel': !cSubLabel,
       }]"
     >{{ cLabel }}</div>
     <div
@@ -56,12 +56,16 @@
   max-width: 100%
   display: grid
   align-content: start
+  grid-gap: $sm $md
   &--label-top
     grid-template-areas: "label" "sub-label" "field"
+    &.easy-field--no-sublabel
+      grid-template-areas: "label" "field"
   &--label-left
     grid-template-areas: "label field" "sub-label field"
     grid-template-columns: auto 1fr
-    grid-gap: 0 $md
+    &.easy-field--no-sublabel
+      grid-template-areas: "label field"
   .easy-field__label
     grid-area: label
   .easy-field__sub-label
@@ -70,14 +74,9 @@
     grid-area: field
 // style
 .easy-field
-  .easy-field__label
-    &--title
-      margin-top: $md
-      font-weight: 500
-    &--no-sublabel
-      margin-bottom: $sm
+  .easy-field__label--title
+    font-weight: 500
   .easy-field__sub-label
-    margin-bottom: $sm
     opacity: 0.8
     font-weight: 300
     .q-markdown--token
