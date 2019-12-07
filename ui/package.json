@@ -27,8 +27,6 @@
   "homepage": "https://quasar-easy-forms.web.app",
   "devDependencies": {
     "@babel/register": "^7.7.4",
-    "@rollup/plugin-json": "^4.0.0",
-    "@rollup/plugin-node-resolve": "^6.0.0",
     "autoprefixer": "^9.6.1",
     "ava": "^2.4.0",
     "chalk": "^2.4.2",
