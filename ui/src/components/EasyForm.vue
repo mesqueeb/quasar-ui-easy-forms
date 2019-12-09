@@ -307,13 +307,11 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
         return showCondition(formDataFlat[fieldId], self)
       }
       return schema.reduce((carry, blueprint) => {
-        console.log('blueprint → ', blueprint)
         const blueprintCleaned = merge(
           overwritableDefaults,
           blueprint,
           forcedDefaults,
         )
-        console.log('blueprintCleaned → ', blueprintCleaned)
         // return early when showCondition fails
         if (!checkShowCondition(blueprintCleaned)) return carry
         carry.push(blueprintCleaned)
