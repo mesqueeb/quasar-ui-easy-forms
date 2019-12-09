@@ -45,7 +45,6 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-vue": "^5.0.1",
     "uglify-es": "^3.3.9",
-    "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10",
     "zlib": "^1.0.5"
   },
