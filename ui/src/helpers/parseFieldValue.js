@@ -36,7 +36,7 @@ export default function parseFieldValue (value, blueprint) {
   }
   if (valueType === 'date') newValue = dateStamp(newValue, dateFormat)
   if (valueType === 'number') newValue = commafy(newValue)
-  if (suffix) newValue = `${newValue}${suffix}`
-  if (prefix) newValue = `${prefix}${newValue}`
+  if (suffix) newValue = `${newValue} ${suffix}`
+  if (prefix) newValue = `${prefix} ${newValue}`
   return newValue
 }
