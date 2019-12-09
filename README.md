@@ -1,7 +1,7 @@
+# Quasar Easy Forms 📮
+
 <img src="https://img.shields.io/npm/v/quasar-ui-easy-forms.svg?label=quasar-ui-easy-forms">
 <img src="https://img.shields.io/npm/v/quasar-app-extension-easy-forms.svg?label=quasar-app-extension-easy-forms">
-
-# Quasar Easy Forms 📮
 
 - Demo: [quasar-easy-forms.web.app](http://quasar-easy-forms.web.app)
 
@@ -17,7 +17,7 @@ If this helped you in any way, you can contribute to the package's long term sur
 
 Be sure to check out my sponsor page, I have a lot of open-source packages that might help you!
 
-(GitHub currently **doubles your support**! So if you support me with $10/mo, I will $20 instead!)
+(GitHub currently **doubles your support**! So if you support me with $10/mo, I will $20 instead! They're alchemists 🦾😉)
 
 Thank you so much!!!
 

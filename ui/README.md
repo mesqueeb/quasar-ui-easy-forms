@@ -1,21 +1,24 @@
-# Component EasyForm
+# Quasar Easy Forms 📮
 
 [![npm](https://img.shields.io/npm/v/quasar-ui-easy-forms.svg?label=quasar-ui-easy-forms)](https://www.npmjs.com/package/quasar-ui-easy-forms)
 [![npm](https://img.shields.io/npm/dt/quasar-ui-easy-forms.svg)](https://www.npmjs.com/package/quasar-ui-easy-forms)
 
-
-# Quasar Easy Forms 📮
-
 - Demo: [quasar-easy-forms.web.app](http://quasar-easy-forms.web.app)
 - Support: [jump to support ↓](#support)
 
-# Usage
+# Installation
+
+## Vue project
+
+```bash
+npm i quasar-ui-easy-forms
+```
 
 ## Quasar CLI project
 
 Install the [App Extension](../app-extension).
 
-## Vue CLI project
+# Usage
 
 Create and register a boot file:
 
@@ -74,7 +77,7 @@ If this helped you in any way, you can contribute to the package's long term sur
 
 Be sure to check out my sponsor page, I have a lot of open-source packages that might help you!
 
-(GitHub currently **doubles your support**! So if you support me with $10/mo, I will $20 instead!)
+(GitHub currently **doubles your support**! So if you support me with $10/mo, I will $20 instead! They're alchemists 🦾😉)
 
 Thank you so much!!!
 
