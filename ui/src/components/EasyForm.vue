@@ -328,13 +328,13 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
         if (btn === 'archive') {
           return {btnLabel: innerLang['archive'], flat: true, color: 'negative', events: {click: tapArchive}}
         }
-        if (btn === 'cancel' && (cMode === 'edit' || cMode === 'add')) {
-          return {btnLabel: innerLang['cancel'], flat: true, events: {click: tapCancel}}
-        }
-        if (btn === 'edit' && (cMode === 'view')) {
+        if (btn === 'edit' && ['view', 'raw'].includes(cMode)) {
           return {btnLabel: innerLang['edit'], push: true, events: {click: tapEdit}}
         }
-        if (btn === 'save' && (cMode === 'edit' || cMode === 'add')) {
+        if (btn === 'cancel' && ['edit', 'add'].includes(cMode)) {
+          return {btnLabel: innerLang['cancel'], flat: true, events: {click: tapCancel}}
+        }
+        if (btn === 'save' && ['edit', 'add'].includes(cMode)) {
           return {btnLabel: innerLang['save'], push: true, events: {click: tapSave}}
         }
         if (isPlainObject(btn)) {
