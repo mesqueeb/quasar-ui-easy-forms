@@ -1,13 +1,13 @@
 {
   "name": "quasar-ui-easy-forms",
-  "version": "0.10.12",
+  "version": "0.10.13",
   "author": "Luca Ban - Mesqueeb",
   "description": "A Vue plugin (that uses Quasar components) to easily generate forms by only defining a \"schema\" object.",
   "license": "MIT",
   "module": "dist/index.esm.js",
   "main": "dist/index.common.js",
   "scripts": {
-    "deploy": "npm run build && cd dev && npm run deploy && cd .. && npm publish && cd ../app-extension && npm publish",
+    "deploy": "npm run build && cd dev && npm run deploy && cd .. && npm publish -otp $OTP && cd ../app-extension && npm publish -otp $OTP",
     "dev": "cd dev; yarn dev; cd ..",
     "dev:umd": "yarn build && node build/script.open-umd.js",
     "dev:ssr": "cd dev; yarn 'dev:ssr'; cd ..",
