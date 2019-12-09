@@ -4,6 +4,7 @@
       'easy-field',
       `easy-field--${fieldType}`,
       `easy-field--label-${labelPosition}`, {
+      'easy-field--no-label': !cLabel,
       'easy-field--no-sublabel': !cSubLabel,
       }, ...cFieldClassesArray,
     ]"
@@ -61,11 +62,19 @@
     grid-template-areas: "label" "sub-label" "field"
     &.easy-field--no-sublabel
       grid-template-areas: "label" "field"
+    &.easy-field--no-label
+      grid-template-areas: "sub-label" "field"
+    &.easy-field--no-sublabel.easy-field--no-label
+      grid-template-areas: "field"
   &--label-left
     grid-template-areas: "label field" "sub-label field"
     grid-template-columns: auto 1fr
     &.easy-field--no-sublabel
       grid-template-areas: "label field"
+    &.easy-field--no-label
+      grid-template-areas: "sub-label field"
+    &.easy-field--no-sublabel.easy-field--no-label
+      grid-template-areas: "field field"
   .easy-field__label
     grid-area: label
   .easy-field__sub-label
