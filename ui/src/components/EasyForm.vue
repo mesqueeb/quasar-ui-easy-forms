@@ -274,6 +274,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       },
     },
     cSchema () {
+      const self = this
       const {
         schema,
         formDataNested,
@@ -286,32 +287,34 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
         labelPosition,
         hasMarkdown,
       } = this
-      const self = this
+      const overwritableDefaults = {
+        readonly: formMode === 'view',
+        rawValue: formMode === 'raw',
+        externalLabels,
+        lang: innerLang,
+        fieldInput,
+        labelPosition,
+        hasMarkdown,
+      }
+      const forcedDefaults = {
+        formDataNested,
+        formDataFlat,
+        formMode,
+        formId,
+      }
       function checkShowCondition ({ id: fieldId, showCondition }) {
         if (!isFunction(showCondition)) return true
         return showCondition(formDataFlat[fieldId], self)
       }
       return schema.reduce((carry, blueprint) => {
-        blueprint = merge(blueprint, {
-          formDataNested,
-          formDataFlat,
-          formMode,
-          formId,
-          externalLabels,
-          lang: innerLang,
-          fieldInput,
-          labelPosition,
-          hasMarkdown,
-        })
+        const blueprintCleaned = merge(
+          overwritableDefaults,
+          blueprint,
+          forcedDefaults,
+        )
         // return early when showCondition fails
-        if (!checkShowCondition(blueprint)) return carry
-        if (formMode === 'view') {
-          carry.push(merge({readonly: true}, blueprint))
-        } else if (formMode === 'raw') {
-          carry.push(merge({rawValue: true}, blueprint))
-        } else {
-          carry.push(blueprint)
-        }
+        if (!checkShowCondition(blueprintCleaned)) return carry
+        carry.push(blueprintCleaned)
         return carry
       }, [])
     },
