@@ -6,10 +6,7 @@
   />
   <q-select
     v-else
-    :class="[
-      'ef-select', {
-      '-big': big,
-    }]"
+    class="ef-select"
     v-model="cValue"
     v-bind="quasarProps"
     v-on="$attrs.events"
@@ -29,7 +26,7 @@
 import merge from 'merge-anything'
 import { isString, isPlainObject, isArray } from 'is-what'
 import { QSelect } from 'quasar'
-import { getGenericValueType, big, externalLabels } from './sharedProps.js'
+import { getGenericValueType, externalLabels } from './sharedProps.js'
 
 export default {
   components: { QSelect },
@@ -67,7 +64,6 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
     valueType: getGenericValueType(['object', 'string', 'boolean', 'number', 'array', 'date', 'null', 'undefined']),
     // EF props:
     rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
-    big,
     externalLabels,
     placeholder: {
       type: String,

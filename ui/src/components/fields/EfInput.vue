@@ -9,9 +9,8 @@
     :class="[
       'ef-input',
       `-align-${cAlign}`,
-      `ef-input--align-${cAlign}`, {
-      '-big': big,
-    }]"
+      `ef-input--align-${cAlign}`
+    ]"
     v-model="cValue"
     v-bind="quasarProps"
     v-on="cEvents"
@@ -38,7 +37,7 @@
 import merge from 'merge-anything'
 import { isNumber, isString, isArray, isFunction } from 'is-what'
 import { QInput } from 'quasar'
-import { getGenericValueType, big, externalLabels } from './sharedProps.js'
+import { getGenericValueType, externalLabels } from './sharedProps.js'
 import { rulesMap } from '../../helpers/inputValidators'
 import focusIfInputEl from '../../helpers/focusIfInputEl'
 
@@ -56,7 +55,6 @@ export default {
     // EF props:
     rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     fieldType: {type: String}, // defined in EasyField
-    big,
     externalLabels,
     maxValue: {
       category: 'model',

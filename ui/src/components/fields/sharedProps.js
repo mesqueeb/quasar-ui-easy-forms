@@ -9,12 +9,6 @@ import { isArray } from 'is-what'
 //   state
 //   style
 
-export const big = {
-  category: 'style',
-  type: Boolean,
-  desc: 'DO NOT USE! Will be deprecated soon!!',
-}
-
 export const componentStyle = {
   category: 'style',
   type: [Object, String, Array],
