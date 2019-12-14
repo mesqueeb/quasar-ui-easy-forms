@@ -3,10 +3,12 @@
     :class="[
       'easy-field',
       `easy-field--${fieldType}`,
-      `easy-field--label-${labelPosition}`, {
-      'easy-field--no-label': !cLabel,
-      'easy-field--no-sublabel': !cSubLabel,
-      }, ...cFieldClassesArray,
+      `easy-field--label-${labelPosition}`,
+      {
+        'easy-field--no-label': !cLabel,
+        'easy-field--no-sublabel': !cSubLabel,
+      },
+      ...cFieldClassesArray,
     ]"
     :style="cFieldStyle"
   >
@@ -14,22 +16,24 @@
       v-if="cLabel"
       :class="[
         'easy-field__label',
-        'text-wrap-all', {
-        'easy-field__label--title': fieldType === 'title' || fieldType === 'form',
-      }]"
-    >{{ cLabel }}</div>
+        'text-wrap-all',
+        {
+          'easy-field__label--title': fieldType === 'title' || fieldType === 'form',
+        },
+      ]"
+    >
+      {{ cLabel }}
+    </div>
     <div
       v-if="cSubLabel"
       :class="[
-        'easy-field__sub-label', {
-        'text-wrap-all': !hasMarkdown
-      }]"
+        'easy-field__sub-label',
+        {
+          'text-wrap-all': !hasMarkdown,
+        },
+      ]"
     >
-      <q-markdown
-        v-if="hasMarkdown"
-        no-line-numbers
-        no-container
-      >{{ cSubLabel }}</q-markdown>
+      <q-markdown v-if="hasMarkdown" no-line-numbers no-container>{{ cSubLabel }}</q-markdown>
       <template v-else>{{ cSubLabel }}</template>
     </div>
     <div
@@ -91,7 +95,6 @@
     .q-markdown--token
       white-space: pre-wrap
       word-break: break-word
-
 </style>
 
 <script>
@@ -104,16 +107,26 @@ function resolveEasyFieldProp (propKey, propValue, componentValue, component) {
   // quasar props that can accept functions should be ignored:
   const propsToIgnore = [
     // EasyForm:
-    'labelValue', 'fieldInput',
+    'labelValue',
+    'fieldInput',
     // QSelect:
-    'optionValue', 'optionLabel', 'optionDisable',
+    'optionValue',
+    'optionLabel',
+    'optionDisable',
     // QUploader:
-    'filter', 'factory', 'url', 'method', 'headers','fieldName','formFields','withCredentials','sendRaw','batch',
+    'filter',
+    'factory',
+    'url',
+    'method',
+    'headers',
+    'fieldName',
+    'formFields',
+    'withCredentials',
+    'sendRaw',
+    'batch',
   ]
   if (propsToIgnore.includes(propKey)) return propValue
-  return (isFunction(propValue))
-    ? propValue(componentValue, component)
-    : propValue
+  return isFunction(propValue) ? propValue(componentValue, component) : propValue
 }
 
 export default {
@@ -148,7 +161,8 @@ You can also pass a function that will receive two params you can work with: \`(
     id: {
       category: 'model',
       type: String,
-      desc: 'An \'id\' is required for an `<EasyForm />` to be able to know which fields have which value. When using `<EasyField />` on its own, it is not required.',
+      desc:
+        "An 'id' is required for an `<EasyForm />` to be able to know which fields have which value. When using `<EasyField />` on its own, it is not required.",
     },
     subLabel: {
       category: 'content',
@@ -166,45 +180,52 @@ You can also pass a function that will receive two params you can work with: \`(
     fieldStyle: {
       category: 'style',
       type: [Object, Array, String, Function],
-      desc: 'Custom styling to be applied to the EasyField. Applied like so `:style="fieldStyle"`. Can be an Evaluated Prop (this is why I opted to have a different name from `style`).',
+      desc:
+        'Custom styling to be applied to the EasyField. Applied like so `:style="fieldStyle"`. Can be an Evaluated Prop (this is why I opted to have a different name from `style`).',
       examples: [`'padding: 1em;'`],
     },
     fieldClasses: {
       category: 'style',
       type: [Object, Array, String, Function],
-      desc: 'Custom classes to be applied to the EasyField. Applied like so `:class="fieldClasses"`. Can be an Evaluated Prop (this is why I opted to have a different name from `class`).',
+      desc:
+        'Custom classes to be applied to the EasyField. Applied like so `:class="fieldClasses"`. Can be an Evaluated Prop (this is why I opted to have a different name from `class`).',
       examples: [`['dark-theme']`],
     },
     innerStyle: {
       category: 'style',
       type: [Object, Array, String, Function],
-      desc: 'Custom styling to be applied to the inner component of EasyField. Applied like so `:style="innerStyle"`. Can be an Evaluated Prop.',
+      desc:
+        'Custom styling to be applied to the inner component of EasyField. Applied like so `:style="innerStyle"`. Can be an Evaluated Prop.',
       examples: [`'padding: 1em;'`],
     },
     innerClasses: {
       category: 'style',
       type: [Object, Array, String, Function],
-      desc: 'Custom classes to be applied to the inner component of EasyField. Applied like so `:class="innerClasses"`. Can be an Evaluated Prop.',
+      desc:
+        'Custom classes to be applied to the inner component of EasyField. Applied like so `:class="innerClasses"`. Can be an Evaluated Prop.',
       examples: [`['dark-theme']`],
     },
     format: {
       category: 'model',
       type: Function,
-      desc: 'You can change how the value is formatted even though the underlying data might be different. Depending on the `fieldType`, you will also need to provide a `parseInput` function to reverse the effect.',
-      examples: ['val => thousandToK(val)' ],
+      desc:
+        'You can change how the value is formatted even though the underlying data might be different. Depending on the `fieldType`, you will also need to provide a `parseInput` function to reverse the effect.',
+      examples: ['val => thousandToK(val)'],
     },
     parseInput: {
       category: 'model',
       type: Function,
-      desc: 'You can change how the value is parsed before it\'s updated. You must return the parsed value.',
-      examples: ['val => kToThousand(val)' ],
+      desc:
+        "You can change how the value is parsed before it's updated. You must return the parsed value.",
+      examples: ['val => kToThousand(val)'],
     },
     events: {
       category: 'behavior',
       type: Object,
-      desc: 'An Object with an event name as key and the handler function as value. The function you pass will receive the native event payload as first parameter and the EasyField context (the component instance) as second: \`($event, context) => {}\`',
+      desc:
+        'An Object with an event name as key and the handler function as value. The function you pass will receive the native event payload as first parameter and the EasyField context (the component instance) as second: \`($event, context) => {}\`',
       default: () => ({}),
-      examples: ['{click: (val, {$router}) => $router.push(\'/\')}', '{focus: console.log}'],
+      examples: ["{click: (val, {$router}) => $router.push('/')}", '{focus: console.log}'],
     },
     formDataNested: {
       category: 'easyFormProp',
@@ -225,14 +246,16 @@ You can also pass a function that will receive two params you can work with: \`(
       category: 'easyFormProp',
       type: String,
       validator: prop => ['edit', 'add', 'view', 'raw'].includes(prop),
-      desc: 'The state of the EasyForm. Has no effect on the EasyField, because EasyField only looks at `readonly` and `rawValue` props. Is passed so the `formMode` can be accessed by Evaluated Props.',
+      desc:
+        'The state of the EasyForm. Has no effect on the EasyField, because EasyField only looks at `readonly` and `rawValue` props. Is passed so the `formMode` can be accessed by Evaluated Props.',
       examples: [`'edit'`, `'add'`, `'view'`, `'raw'`],
       values: ['edit', 'add', 'view', 'raw'],
     },
     fieldInput: {
       category: 'easyFormProp',
       type: Function,
-      desc: 'The `fieldInput` function of EasyForm. Is passed so it can be used in the input event: `events: {input: (value, {fieldInput} => fieldInput({id: \'otherField\', value}))}`',
+      desc:
+        "The `fieldInput` function of EasyForm. Is passed so it can be used in the input event: `events: {input: (value, {fieldInput} => fieldInput({id: 'otherField', value}))}`",
     },
     lang: {
       category: 'content',
@@ -245,13 +268,14 @@ You can also pass a function that will receive two params you can work with: \`(
       category: 'state',
       type: [Boolean, Function],
       default: false,
-      desc: 'An EasyField with `rawValue: true` will just generate the raw value wrapped in a div, without generating the dedicated field UI.'
+      desc:
+        'An EasyField with `rawValue: true` will just generate the raw value wrapped in a div, without generating the dedicated field UI.',
     },
     hasMarkdown: {
       category: 'state',
       type: [Boolean, Function],
       default: false,
-      desc: 'An EasyField with `hasMarkdown: true` can have markdown in its sub-label.'
+      desc: 'An EasyField with `hasMarkdown: true` can have markdown in its sub-label.',
     },
     // Quasar props with modified defaults:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
@@ -260,7 +284,7 @@ You can also pass a function that will receive two params you can work with: \`(
       inheritedProp: 'modified',
       type: [Boolean, Function],
       default: false,
-      desc: '`readonly` is used for \'view\' mode of an EasyForm.',
+      desc: "`readonly` is used for 'view' mode of an EasyForm.",
     },
     // Quasar props with modified behavior:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
@@ -268,7 +292,8 @@ You can also pass a function that will receive two params you can work with: \`(
       category: 'content',
       inheritedProp: 'modified',
       type: [String, Function],
-      desc: 'An EasyField label is always "external" to the field. (It replaces the Quasar label if the underlying Quasar component uses one.)',
+      desc:
+        'An EasyField label is always "external" to the field. (It replaces the Quasar label if the underlying Quasar component uses one.)',
     },
     disable: {
       category: 'state',
@@ -280,9 +305,7 @@ You can also pass a function that will receive two params you can work with: \`(
   },
   data () {
     const { value, default: df, lang, formDataNested } = this
-    const innerValue = !isUndefined(value)
-      ? value
-      : isFunction(df) ? df(formDataNested, this) : df
+    const innerValue = !isUndefined(value) ? value : isFunction(df) ? df(formDataNested, this) : df
     // merge user provided lang onto defaults
     const innerLang = merge(defaultLang, lang)
     return {
@@ -291,8 +314,12 @@ You can also pass a function that will receive two params you can work with: \`(
     }
   },
   watch: {
-    value (newValue) { this.innerValue = newValue },
-    lang (newValue) { this.innerLang = merge(defaultLang, newValue) },
+    value (newValue) {
+      this.innerValue = newValue
+    },
+    lang (newValue) {
+      this.innerLang = merge(defaultLang, newValue)
+    },
   },
   computed: {
     cFieldStyle () {
@@ -320,9 +347,7 @@ You can also pass a function that will receive two params you can work with: \`(
     internalLabelMode () {
       const { fieldType } = this
       const { externalLabels } = this.$attrs
-      return externalLabels === false && [
-        'input', 'inputDate', 'select'
-      ].includes(fieldType)
+      return externalLabels === false && ['input', 'inputDate', 'select'].includes(fieldType)
     },
     componentIdentifier () {
       const { fieldType } = this
@@ -337,32 +362,38 @@ You can also pass a function that will receive two params you can work with: \`(
       const self = this
       // add default "required" rule
       const requiredRule = val => !!val || innerLang['requiredField']
-      const requiredRules = (required && isArray($attrs.rules) && $attrs.rules.length)
-        ? {rules: $attrs.rules.concat([requiredRule])}
-        : required ? {rules: [requiredRule]} : {}
+      const requiredRules =
+        required && isArray($attrs.rules) && $attrs.rules.length
+          ? { rules: $attrs.rules.concat([requiredRule]) }
+          : required
+          ? { rules: [requiredRule] }
+          : {}
 
-      const mergedProps = merge($attrs, {
-        // EF props used here, but also to pass:
-        formDataNested: this.formDataNested,
-        formDataFlat: this.formDataFlat,
-        formMode: this.formMode,
-        formId: this.formId,
-        fieldType: this.fieldType,
-        labelRaw: this.label,
-        subLabelRaw: this.subLabel,
-        lang: this.innerLang,
-        events: this.cEvents,
-        rawValue: this.rawValue,
-        // Quasar props with modified defaults:
-        readonly: this.readonly,
-        // Quasar props with modified behavior:
-        disable: this.cDisable,
-      }, requiredRules)
-      return Object.entries(mergedProps)
-        .reduce((carry, [propKey, propValue]) => {
-          carry[propKey] = resolveEasyFieldProp(propKey, propValue, cValue, self)
-          return carry
-        }, {})
+      const mergedProps = merge(
+        $attrs,
+        {
+          // EF props used here, but also to pass:
+          formDataNested: this.formDataNested,
+          formDataFlat: this.formDataFlat,
+          formMode: this.formMode,
+          formId: this.formId,
+          fieldType: this.fieldType,
+          labelRaw: this.label,
+          subLabelRaw: this.subLabel,
+          lang: this.innerLang,
+          events: this.cEvents,
+          rawValue: this.rawValue,
+          // Quasar props with modified defaults:
+          readonly: this.readonly,
+          // Quasar props with modified behavior:
+          disable: this.cDisable,
+        },
+        requiredRules
+      )
+      return Object.entries(mergedProps).reduce((carry, [propKey, propValue]) => {
+        carry[propKey] = resolveEasyFieldProp(propKey, propValue, cValue, self)
+        return carry
+      }, {})
     },
     cValue: {
       get () {
@@ -370,7 +401,9 @@ You can also pass a function that will receive two params you can work with: \`(
         if (isFunction(format)) return format(innerValue, this)
         return innerValue
       },
-      set (val) { this.updateValue(val) },
+      set (val) {
+        this.updateValue(val)
+      },
     },
     cLabel () {
       const { label, cValue, internalLabelMode } = this
@@ -383,13 +416,12 @@ You can also pass a function that will receive two params you can work with: \`(
       return internalLabelMode ? undefined : subLabel
     },
     cEvents () {
-      return Object.entries(this.events)
-        .reduce((carry, [eventName, eventFn]) => {
-          // input event is handled in cValue
-          if (eventName === 'input') return carry
-          carry[eventName] = val => eventFn(val, this)
-          return carry
-        }, {})
+      return Object.entries(this.events).reduce((carry, [eventName, eventFn]) => {
+        // input event is handled in cValue
+        if (eventName === 'input') return carry
+        carry[eventName] = val => eventFn(val, this)
+        return carry
+      }, {})
     },
     cDisable () {
       const { readonly } = this.$attrs
@@ -405,6 +437,6 @@ You can also pass a function that will receive two params you can work with: \`(
       if (isFunction(events.input)) events.input(val, this)
       this.$emit('input', val)
     },
-  }
+  },
 }
 </script>

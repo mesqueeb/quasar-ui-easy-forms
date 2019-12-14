@@ -1,22 +1,13 @@
 <template>
-  <q-form
-    ref="refEasyForm"
-    :class="`easy-form easy-form--nav-${actionButtonsPosition}`"
-  >
+  <q-form ref="refEasyForm" :class="`easy-form easy-form--nav-${actionButtonsPosition}`">
     <div
       :class="`easy-form__nav-row easy-form__nav-row--${actionButtonsPosition}`"
       v-if="isFullString(errorMsg) || cActionButtons.length"
     >
-      <div
-        class="easy-form__validation-error text-negative"
-        v-if="isFullString(errorMsg)"
-      >{{ errorMsg }}</div>
-      <EfBtn
-        v-for="btn in cActionButtons"
-        :key="btn.btnLabel"
-        v-bind="btn"
-        v-on="btn.events"
-      />
+      <div class="easy-form__validation-error text-negative" v-if="isFullString(errorMsg)">
+        {{ errorMsg }}
+      </div>
+      <EfBtn v-for="btn in cActionButtons" :key="btn.btnLabel" v-bind="btn" v-on="btn.events" />
     </div>
     <div
       class="easy-form__form"
@@ -27,9 +18,11 @@
         :key="field.id"
         v-bind="field"
         :value="formDataFlat[field.id]"
-        @input="value => fieldInput({id: field.id, value})"
+        @input="value => fieldInput({ id: field.id, value })"
         :class="field.fieldType === 'title' ? '-title' : ''"
-        :style="field.span ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}` : ''"
+        :style="
+          field.span ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}` : ''
+        "
       />
     </div>
   </q-form>
@@ -77,7 +70,6 @@
     order: 0
     grid-auto-flow: row
     margin-right: $md
-
 </style>
 
 <script>
@@ -110,11 +102,13 @@ export const EVENTS = {
   },
   'cancel': {
     name: 'cancel',
-    desc: '(no payload) The cancel-button was tapped and the form was put back into "view" mode & reverted to its original state',
+    desc:
+      '(no payload) The cancel-button was tapped and the form was put back into "view" mode & reverted to its original state',
   },
   'save': {
     name: 'save',
-    desc: '(payload: {newData, oldData}) The save-button was tapped and the form was put back into "view" mode & kept the modified content',
+    desc:
+      '(payload: {newData, oldData}) The save-button was tapped and the form was put back into "view" mode & kept the modified content',
   },
   'delete': {
     name: 'delete',
@@ -170,7 +164,11 @@ Read more on Evaluated Props in its dedicated page.`,
 You can decide which buttons you want to show/hide by passing them in an array to \`:action-buttons="[]"\`. You can also pass custom buttons with a schema just like an EasyField button.
 
 See the documentation on "Action Buttons" for more info.`,
-      examples: [`[] (no buttons)`, `['delete', 'cancel', 'edit', 'save']`, `[{btnLabel: 'log', events: {click: console.log}}]`],
+      examples: [
+        `[] (no buttons)`,
+        `['delete', 'cancel', 'edit', 'save']`,
+        `[{btnLabel: 'log', events: {click: console.log}}]`,
+      ],
     },
     actionButtonsPosition: {
       category: 'content',
@@ -193,13 +191,15 @@ See the documentation on "Action Buttons" for more info.`,
       category: 'state',
       type: [Boolean, Function],
       default: false,
-      desc: 'An EasyForm with `hasMarkdown: true` can have markdown in its field sub-labels.'
+      desc: 'An EasyForm with `hasMarkdown: true` can have markdown in its field sub-labels.',
     },
     validator: {
       category: 'behavior',
       type: Function,
       desc: `A function which serves as global validator for your form. It will receive the edited data as first param and the original data (before user edits) as second. It should return true if all is OK or a string with error message.`,
-      examples: [`(newData, oldData) => newData.pass1 === newData.pass2 || 'passwords don't match'`],
+      examples: [
+        `(newData, oldData) => newData.pass1 === newData.pass2 || 'passwords don't match'`,
+      ],
     },
     columnCount: {
       category: 'style',
@@ -237,7 +237,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     const formId = id
     const dataFlat = flattenPerSchema(value, schema)
     const schemaArray = isArray(schema) ? schema : Object.values(schema)
-    const dataFlatDefaults = schemaArray.reduce((carry, {id, default: df}) => {
+    const dataFlatDefaults = schemaArray.reduce((carry, { id, default: df }) => {
       carry[id] = isFunction(df) ? df(value, this) : df
       return carry
     }, {})
@@ -254,12 +254,20 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     }
   },
   watch: {
-    mode (newValue) { this.formMode = newValue },
-    id (newValue) { this.formId = newValue },
-    lang (newValue) { this.innerLang = merge(defaultLang, newValue) },
+    mode (newValue) {
+      this.formMode = newValue
+    },
+    id (newValue) {
+      this.formId = newValue
+    },
+    lang (newValue) {
+      this.innerLang = merge(defaultLang, newValue)
+    },
   },
   computed: {
-    formDataNested () { return nestifyObject(this.formDataFlat) },
+    formDataNested () {
+      return nestifyObject(this.formDataFlat)
+    },
     schemaObject () {
       return this.schema.reduce((carry, blueprint) => {
         carry[blueprint.id] = blueprint
@@ -267,7 +275,9 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       }, {})
     },
     cMode: {
-      get () { return this.formMode },
+      get () {
+        return this.formMode
+      },
       set (val) {
         this.formMode = val
         this.$emit(EVENTS['update:mode'].name, val)
@@ -307,11 +317,7 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
         return showCondition(formDataFlat[fieldId], self)
       }
       return schema.reduce((carry, blueprint) => {
-        const blueprintCleaned = merge(
-          overwritableDefaults,
-          blueprint,
-          forcedDefaults,
-        )
+        const blueprintCleaned = merge(overwritableDefaults, blueprint, forcedDefaults)
         // return early when showCondition fails
         if (!checkShowCondition(blueprintCleaned)) return carry
         carry.push(blueprintCleaned)
@@ -319,31 +325,64 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       }, [])
     },
     cActionButtons () {
-      const { actionButtons, innerLang, cMode, tapDelete, tapEdit, tapArchive, tapCancel, tapSave } = this
+      const {
+        actionButtons,
+        innerLang,
+        cMode,
+        tapDelete,
+        tapEdit,
+        tapArchive,
+        tapCancel,
+        tapSave,
+      } = this
       const easyFormContext = this
-      return actionButtons.map(btn => {
-        if (btn === 'delete') {
-          return {btnLabel: innerLang['delete'], flat: true, color: 'negative', events: {click: tapDelete}}
-        }
-        if (btn === 'archive') {
-          return {btnLabel: innerLang['archive'], flat: true, color: 'negative', events: {click: tapArchive}}
-        }
-        if (btn === 'edit' && ['view', 'raw'].includes(cMode)) {
-          return {btnLabel: innerLang['edit'], push: true, events: {click: tapEdit}}
-        }
-        if (btn === 'cancel' && ['edit', 'add'].includes(cMode)) {
-          return {btnLabel: innerLang['cancel'], flat: true, events: {click: tapCancel}}
-        }
-        if (btn === 'save' && ['edit', 'add'].includes(cMode)) {
-          return {btnLabel: innerLang['save'], push: true, events: {click: tapSave}}
-        }
-        if (isPlainObject(btn)) {
-          if (!isPlainObject(btn.events)) return btn
-          const { click } = btn.events
-          if (isFunction(click)) btn.events.click = val => click(val, easyFormContext)
-          return btn
-        }
-      }).filter(btn => isPlainObject(btn))
+      return actionButtons
+        .map(btn => {
+          if (btn === 'delete') {
+            return {
+              btnLabel: innerLang['delete'],
+              flat: true,
+              color: 'negative',
+              events: { click: tapDelete },
+            }
+          }
+          if (btn === 'archive') {
+            return {
+              btnLabel: innerLang['archive'],
+              flat: true,
+              color: 'negative',
+              events: { click: tapArchive },
+            }
+          }
+          if (btn === 'edit' && ['view', 'raw'].includes(cMode)) {
+            return {
+              btnLabel: innerLang['edit'],
+              push: true,
+              events: { click: tapEdit },
+            }
+          }
+          if (btn === 'cancel' && ['edit', 'add'].includes(cMode)) {
+            return {
+              btnLabel: innerLang['cancel'],
+              flat: true,
+              events: { click: tapCancel },
+            }
+          }
+          if (btn === 'save' && ['edit', 'add'].includes(cMode)) {
+            return {
+              btnLabel: innerLang['save'],
+              push: true,
+              events: { click: tapSave },
+            }
+          }
+          if (isPlainObject(btn)) {
+            if (!isPlainObject(btn.events)) return btn
+            const { click } = btn.events
+            if (isFunction(click)) btn.events.click = val => click(val, easyFormContext)
+            return btn
+          }
+        })
+        .filter(btn => isPlainObject(btn))
     },
     dataBackup () {
       const { formDataFlatBackups } = this
@@ -364,12 +403,12 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
   },
   methods: {
     isFullString,
-    fieldInput ({id, value}) {
+    fieldInput ({ id, value }) {
       this.edited = true
       if (!this.editedFields.includes(id)) this.editedFields.push(id)
       this.$set(this.formDataFlat, id, value)
-      this.$emit(EVENTS['field-input'].name, {id, value})
-      this.$emit(EVENTS['input'].name, this.formDataFlat)
+      this.$emit(EVENTS['field-input'].name, { id, value })
+      this.$emit(EVENTS['input'].name, this.formDataNested)
     },
     resetState () {
       this.cMode = 'view'
@@ -407,17 +446,23 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
     },
     tapSave () {
       const { validate, dataEdited, dataBackup, resetState } = this
-      validate().then(() => {
-        const newData = copy(dataEdited)
-        const oldData = copy(dataBackup)
-        this.$emit(EVENTS['save'].name, {newData, oldData})
-        resetState()
-      }).catch(errorMsg => {
-        this.errorMsg = errorMsg
-      })
+      validate()
+        .then(() => {
+          const newData = copy(dataEdited)
+          const oldData = copy(dataBackup)
+          this.$emit(EVENTS['save'].name, { newData, oldData })
+          resetState()
+        })
+        .catch(errorMsg => {
+          this.errorMsg = errorMsg
+        })
     },
-    tapDelete () { this.$emit(EVENTS['delete'].name) },
-    tapArchive () { this.$emit(EVENTS['archive'].name) },
-  }
+    tapDelete () {
+      this.$emit(EVENTS['delete'].name)
+    },
+    tapArchive () {
+      this.$emit(EVENTS['archive'].name)
+    },
+  },
 }
 </script>
