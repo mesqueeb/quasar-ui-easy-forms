@@ -29,7 +29,6 @@ import merge from 'merge-anything'
 import { isNumber, isString, isArray, isFunction } from 'is-what'
 import { QInput } from 'quasar'
 import { getGenericValueType, externalLabels } from './sharedProps.js'
-import { rulesMap } from '../../helpers/inputValidators'
 import focusIfInputEl from '../../helpers/focusIfInputEl'
 
 export default {
@@ -69,16 +68,6 @@ export default {
     lazyRules: { inheritedProp: 'modified', type: Boolean, default: true },
     outlined: { inheritedProp: 'modified', type: Boolean, default: true },
     // Quasar props with modified behavior:
-    rules: {
-      inheritedProp: 'modified',
-      type: Array,
-      desc: "Same as Quasar, but with added pre-defined rules for 'telJA' and 'email'",
-      examples: [
-        `['telJA']`,
-        `['email']`,
-        `[ val => val.length <= 3 || 'Please use maximum 3 characters' ]`,
-      ],
-    },
     type: {
       inheritedProp: 'modified',
       type: String,
@@ -118,7 +107,6 @@ export default {
           outlined: this.outlined,
           lazyRules: this.lazyRules,
           // Quasar props with modified behavior:
-          rules: this.cRules,
           type: this.cType,
         },
         overWriteLabelAndHint
@@ -168,14 +156,6 @@ export default {
     isMaxValue () {
       const { value, maxValue } = this
       return isNumber(maxValue) && value === maxValue
-    },
-    cRules () {
-      const { rules } = this
-      if (!isArray(rules)) return undefined
-      return rules.map(rule => {
-        if (isString(rule) && rulesMap[rule]) return rulesMap[rule]
-        return rule
-      })
     },
     cEvents () {
       const { onClick, onKeydown, $listeners } = this
