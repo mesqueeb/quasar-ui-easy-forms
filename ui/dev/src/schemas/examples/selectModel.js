@@ -1,8 +1,6 @@
 import merge from 'merge-anything'
 import serialize from 'serialize-javascript'
 
-const description = `This is an example of all the possible models for \`fieldType: select\`.`
-
 const exampleSelect = {
   fieldType: 'select',
   options: [
@@ -46,7 +44,7 @@ const exampleConfigs = [
   { valueType: 'object', multiple: true, emitValue: true },
 ]
 
-export const exampleForms = [
+export default [
   {
     actionButtons: [],
     mode: 'edit',
@@ -77,19 +75,3 @@ export const exampleForms = [
     ],
   },
 ]
-
-export const pageForm = {
-  mode: 'edit',
-  actionButtons: [],
-  schema: [
-    {
-      fieldType: 'markdown',
-      src: description,
-    },
-  ],
-}
-
-export default {
-  exampleForms,
-  pageForm,
-}

@@ -1,8 +1,6 @@
 const description = ``
 
-export const exampleForms = []
-
-export const pageForm = {
+export default {
   mode: 'edit',
   actionButtons: [],
   schema: [
@@ -11,9 +9,4 @@ export const pageForm = {
       src: description,
     },
   ],
-}
-
-export default {
-  exampleForms,
-  pageForm,
 }

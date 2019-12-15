@@ -1,23 +1,3 @@
-const description = `## Evaluated Props
-
-As you know, \`<EasyForm />\` needs a 'schema' with information on each field you want to show. However, when using an EasyForm you can replace the value of any prop in any field with a function instead of the value directly. This function will be executed any time the data of any field changes. This allows you to have "dynamic" props, based on the data of the form.
-
-For example, when you pass \`disable: true\` to a certain field, it will appear as disabled inside the form. You can instead also pass \`disable: (val, context) => context.formDataNested.myCheckBox\` to be able to only disable that field when \`myCheckBox\` is truthy.
-
-Evaluated props will receive 2 params: \`(val, context)\`.
-- \`val\` is the current value of the field
-- \`context\` is the Vue component reference of the \`<EasyField />\`, you can deconstruct this to access any other properties/values.
-
-The most important props you can access from \`context\`:
-- \`formDataNested\` This is the *nested* data of all the fields inside an EasyForm.
-- \`formDataFlat\` This is the *flattened* data of all the fields inside an EasyForm.
-- \`formMode\` The current state of the EasyForm. Can be \`'view'\` | \`'edit'\` | \`'add'\`
-- \`formId\` An 'id' of the EasyForm. This is only present when manually set.
-- Other common Vue props like: \`$store\`, \`$router\`, \`$q\` (for Quasar apps) etc.
-
-Try to refrain from accessing props other than the ones listed above, because these are mainly used internal and could have behaviour changes that could break your app.
-`
-
 const colorFn = val =>
   val === 'red'
     ? 'like the sun'
@@ -139,7 +119,7 @@ const carData = [
   },
 ]
 
-export const exampleForms = [
+export default [
   {
     mode: 'edit',
     actionButtons: [],
@@ -262,62 +242,3 @@ export const exampleForms = [
     ],
   },
 ]
-
-export const pageForm = {
-  mode: 'edit',
-  actionButtons: [],
-  schema: Object.values({
-    _1: {
-      fieldType: 'markdown',
-      src: description,
-    },
-    get _2 () {
-      return {
-        id: 'chosenExample',
-        fieldType: 'btn-toggle',
-        noCaps: true,
-        options: [this._3, this._4, this._5, this._6].map((field, index) => {
-          return { label: field.label, value: index }
-        }),
-      }
-    },
-    _3: {
-      showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 0,
-      fieldType: 'title',
-      label: 'Dynamic prop based on the value of the field',
-      hasMarkdown: true,
-      subLabel: `Eg. \`subLabel: val => val === 'purple' ? 'nice!' : 'choose a color'\``,
-    },
-    _4: {
-      showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 1,
-      fieldType: 'title',
-      label: 'Dynamic prop based on the value of "another" field',
-      hasMarkdown: true,
-      subLabel: `Eg. \`disable: ${parentalConsentFn.prototype.stringifiedFn}\``,
-    },
-    _5: {
-      showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 2,
-      fieldType: 'title',
-      label: 'Dynamic "conditional rendering" of a field',
-      hasMarkdown: true,
-      subLabel: `
-Eg. \`showCondition: ${carTypeFn.prototype.stringifiedFn}\`
-
-\`showCondition\` is a special prop that can only be used inside the schema of an EasyForm.
-      `.trim(),
-    },
-    _6: {
-      showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 3,
-      fieldType: 'title',
-      label: 'Dynamic "options" of a select-field',
-      hasMarkdown: true,
-      subLabel: `
-      `.trim(),
-    },
-  }),
-}
-
-export default {
-  exampleForms,
-  pageForm,
-}

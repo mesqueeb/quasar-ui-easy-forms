@@ -17,6 +17,7 @@
       <EasyForm
         v-model="exampleForms[pageValue.chosenExample].value"
         v-bind="exampleForms[pageValue.chosenExample]"
+        v-on="exampleForms[pageValue.chosenExample].events"
         :key="pageValue.chosenExample"
       />
     </InfoCard>
@@ -42,8 +43,11 @@
 import { isString, isArray, isPlainObject } from 'is-what'
 import { capitalCase } from 'case-anything'
 import merge from 'merge-anything'
-import * as demoSchemas from '../schemas/index'
+import * as demoSchemas from '../schemas/examples/index'
+import * as pageForms from '../schemas/pages/index'
 import { getInfoCardPropsSchema } from '../helpers/schemaBuilders'
+import ja from '!!raw-loader!../schemas/examples/basics'
+console.log('ja → ', ja)
 
 export default {
   name: 'EasyFormDemo',
@@ -51,7 +55,10 @@ export default {
     schemaId: String,
   },
   data () {
-    const { pageForm, exampleForms } = demoSchemas[this.schemaId]
+    console.log('pageForms → ', pageForms)
+    const pageForm = pageForms[this.schemaId]
+    console.log('demoSchemas → ', demoSchemas)
+    const exampleForms = demoSchemas[this.schemaId]
     const propsSchema = getInfoCardPropsSchema('EasyForm')
     return {
       pageValue: { chosenExample: 0 },

@@ -29,10 +29,10 @@ There are several ways to work with the data of an EasyForm.
 #### **Mode**
 
 EasyForm has four modes:
-- \`view\`: Show fields based on the schema; but make each field \`readonly\`.
-- \`edit\`: Show editable fields based on the schema
-- \`add\`: The same as 'edit'
-- \`raw\`: Used to show raw data of your form. No fields are generated, just divs with the labels and values. This mode is powerful because it will automatically map values to the schema provided (eg. adding pre-/suffix; mapping to options of a select; etc.)
+- \`'view'\`: Show fields based on the schema; but make each field \`readonly: true\`.
+- \`'edit'\`: Show editable fields based on the schema
+- \`'add'\`: The same as 'edit'
+- \`'raw'\`: Used to show raw data of your form. No fields are generated, just divs with the labels and values. This mode is powerful because it will automatically map values to the schema provided (eg. adding pre-/suffix; mapping to options of a select; etc.)
 
 When in 'view' mode, EasyForm can be used to just show data. These buttons can also be disabled and by providing a custom mode you can keep the form in a certain mode forever.
 
@@ -42,32 +42,7 @@ Be sure to check out all the other pages for more functionality, but first...
 
 Try filling in the form below and play around with the props via the **interactive preview**. You can click "props" to update any props used in the <EasyForm /> and see how the how the preview and source code changes.`
 
-export const exampleForms = [
-  {
-    schema: [
-      {
-        id: 'name',
-        fieldType: 'input',
-        valueType: 'string',
-        label: 'Superhero name',
-        subLabel: 'Think of something cool.',
-      },
-      {
-        id: 'powerOrigin',
-        fieldType: 'btn-toggle',
-        label: 'Power origin',
-        subLabel: 'Where does your power come from?',
-        options: [
-          { label: 'Mutation', value: 'mutation' },
-          { label: 'Self taught', value: 'self' },
-          { label: 'By item', value: 'item' },
-        ],
-      },
-    ],
-  },
-]
-
-export const pageForm = {
+export default {
   mode: 'edit',
   actionButtons: [],
   schema: [
@@ -76,9 +51,4 @@ export const pageForm = {
       src: description,
     },
   ],
-}
-
-export default {
-  exampleForms,
-  pageForm,
 }

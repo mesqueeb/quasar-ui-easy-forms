@@ -41,7 +41,7 @@ import { capitalCase } from 'case-anything'
 import copy from 'copy-anything'
 import merge from 'merge-anything'
 import EasyForms from 'ui'
-import demoOptions from '../schemas/easyFields'
+import demoOptions from '../schemas/examples/easyFields'
 import { getInfoCardPropsSchema, getRawComponent } from '../helpers/schemaBuilders'
 
 const selectableFields = require

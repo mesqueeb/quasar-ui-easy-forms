@@ -55,6 +55,11 @@ module.exports = function (ctx) {
         chain.resolve.alias.merge({
           ui: path.resolve(__dirname, '../src/index.js'),
         })
+        chain.module
+          .rule('md')
+          .test(/\.md$/i)
+          .use('raw-loader')
+          .loader('raw-loader')
       },
     },
 

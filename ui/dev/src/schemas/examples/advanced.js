@@ -1,6 +1,4 @@
-const description = `This is a more advanced example so you can see the full power of EasyForms.`
-
-export const exampleForms = [
+export default [
   {
     columnCount: 4,
     schema: [
@@ -152,18 +150,4 @@ export const exampleForms = [
   },
 ]
 
-export const pageForm = {
-  mode: 'edit',
-  actionButtons: [],
-  schema: [
-    {
-      fieldType: 'markdown',
-      src: description,
-    },
-  ],
-}
 
-export default {
-  exampleForms,
-  pageForm,
-}
