@@ -1,4 +1,3 @@
-
 import { camelCase } from 'case-anything'
 
 export function copyToClipboard (text) {
@@ -24,7 +23,7 @@ export function copyHeading (id) {
     color: 'white',
     textColor: 'primary',
     position: 'top',
-    actions: [ { icon: 'close', color: 'primary' } ],
-    timeout: 2000
+    actions: [{ icon: 'close', color: 'primary' }],
+    timeout: 2000,
   })
 }

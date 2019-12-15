@@ -1,4 +1,3 @@
-
 export const btn = {
   id: 'btn',
   fieldType: 'btn',
@@ -10,14 +9,17 @@ export const btn = {
 export const btnToggle = {
   id: 'btnToggle',
   fieldType: 'btnToggle',
-  options: [{label: 'one', value: 1}, {label: 'two', value: 2}],
+  options: [
+    { label: 'one', value: 1 },
+    { label: 'two', value: 2 },
+  ],
 }
 export const div = {
   id: 'myRank',
   fieldType: 'div',
   options: [
-    {value: '1', label: 'one'},
-    {value: '2', label: 'two'},
+    { value: '1', label: 'one' },
+    { value: '2', label: 'two' },
   ],
   prefix: 'Rank ',
   value: '1',
@@ -26,11 +28,19 @@ export const form = {
   id: 'form',
   fieldType: 'form',
   label: 'Expenses',
-  subLabel: 'fill in this month\'s expenses',
+  subLabel: "fill in this month's expenses",
   schema: [
-    {fieldType: 'select', label: 'Type', id: 'type', options: [{label: 'Home', value: 'home'}, {label: 'Work', value: 'work'}]},
-    {fieldType: 'input', label: 'Amount', id: 'amount', valueType: 'number', prefix: '€'},
-    {fieldType: 'toggle', label: 'Notify', id: 'notify', default: true},
+    {
+      fieldType: 'select',
+      label: 'Type',
+      id: 'type',
+      options: [
+        { label: 'Home', value: 'home' },
+        { label: 'Work', value: 'work' },
+      ],
+    },
+    { fieldType: 'input', label: 'Amount', id: 'amount', valueType: 'number', prefix: '€' },
+    { fieldType: 'toggle', label: 'Notify', id: 'notify', default: true },
   ],
   value: [],
 }
@@ -83,13 +93,16 @@ export const range = {
   fieldType: 'range',
   min: 0,
   max: 100,
-  value: {min: 25, max: 50},
+  value: { min: 25, max: 50 },
 }
 export const select = {
   id: 'select',
   fieldType: 'select',
   placeholder: 'please select one',
-  options: [{label: 'one', value: '1'}, {label: 'two', value: '2'}],
+  options: [
+    { label: 'one', value: '1' },
+    { label: 'two', value: '2' },
+  ],
   // events: { focus: (...args) => console.log('on input', ...args) },
 }
 export const slider = {

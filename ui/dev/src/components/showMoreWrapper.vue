@@ -1,8 +1,12 @@
 <template>
-  <div :class="[
-    'show-more-wrapper', {
-    '-overlayed': overlayed,
-  }]">
+  <div
+    :class="[
+      'show-more-wrapper',
+      {
+        '-overlayed': overlayed,
+      },
+    ]"
+  >
     <div class="q-py-sm">
       <slot name="shown-content" />
       <div class="_inner-wrapper">
@@ -27,7 +31,6 @@
 </template>
 
 <script>
-
 export default {
   props: {
     showMore: {
@@ -39,21 +42,23 @@ export default {
       type: String,
     },
   },
-  data() {
+  data () {
     return {
       showingMore: false,
     }
   },
   computed: {
-    overlayed() {
+    overlayed () {
       return !this.showingMore
     },
   },
   methods: {
-    emitHeight() {
-      this.$nextTick(() => { this.$emit('change-height') })
+    emitHeight () {
+      this.$nextTick(() => {
+        this.$emit('change-height')
+      })
     },
-    toggleShowMore() {
+    toggleShowMore () {
       this.showingMore = !this.showingMore
       setTimeout(this.emitHeight, 400)
     },
@@ -89,5 +94,4 @@ export default {
       height: 100%
       background: transparent
       background: linear-gradient(to bottom, rgba(white, 0) 0%, rgba(white, 0) 66%, white 100%)
-
 </style>

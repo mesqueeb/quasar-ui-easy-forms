@@ -17,11 +17,7 @@ export function getAllComponentProps (selectedField) {
   const EasyField = EasyForms['EasyField'] || {}
   const EasyFieldProps = EasyField.props || {}
   const inheritedComponentProps = getPassedProps(selectedField) || {}
-  const result = copy(merge(
-    inheritedComponentProps,
-    EasyFieldProps,
-    componentProps,
-  ))
+  const result = copy(merge(inheritedComponentProps, EasyFieldProps, componentProps))
   return result
 }
 
@@ -40,13 +36,15 @@ export function propToPropSchema (propKey, propInfo) {
   if (
     type === Boolean ||
     (isArray(type) && [Boolean, Function].every(t => type.includes(t)) && type.length === 2)
-  ) { fieldType = 'toggle' }
+  ) {
+    fieldType = 'toggle'
+  }
   // if the prop has a fixed set of possible values, show this as an 'option' EasyField
   const propHasValues = isArray(values) && values.length
   if (propHasValues) {
     fieldType = 'select'
     emitValue = true
-    options = values.map(v => ({label: v, value: v}))
+    options = values.map(v => ({ label: v, value: v }))
   }
   // Create a special input for defining arrays and/or objects
   if (
@@ -70,7 +68,8 @@ export function propToPropSchema (propKey, propInfo) {
   if (propKey === 'schema') {
     fieldType = 'none'
     span = true
-    subLabel += '\n\n> 👀 Check「Source tab」→「Schema」to see the following code in color and with indentation.'
+    subLabel +=
+      '\n\n> 👀 Check「Source tab」→「Schema」to see the following code in color and with indentation.'
   }
   // Create the EfField schema for the prop
   return {
@@ -103,18 +102,16 @@ export function propToPropSchema (propKey, propInfo) {
 }
 
 export function getInfoCardPropsSchema (selectedField) {
-  const allComponentProps = selectedField === 'EasyForm'
-    ? copy(EasyForms['EasyForm'].props)
-    : getAllComponentProps(selectedField)
-  return Object.entries(allComponentProps)
-    .reduce((carry, [propKey, propInfo]) => {
-      // fields to not include in the InfoCard settings:
-      if (
-        propKey === 'fieldType'
-      ) {
-        return carry
-      }
-      carry[propKey] = propToPropSchema(propKey, propInfo)
+  const allComponentProps =
+    selectedField === 'EasyForm'
+      ? copy(EasyForms['EasyForm'].props)
+      : getAllComponentProps(selectedField)
+  return Object.entries(allComponentProps).reduce((carry, [propKey, propInfo]) => {
+    // fields to not include in the InfoCard settings:
+    if (propKey === 'fieldType') {
       return carry
-    }, {})
+    }
+    carry[propKey] = propToPropSchema(propKey, propInfo)
+    return carry
+  }, {})
 }

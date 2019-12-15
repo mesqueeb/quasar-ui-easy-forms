@@ -22,16 +22,20 @@ export default function parseFieldValue (value, blueprint) {
   let newValue = value
   if (isArray(options)) {
     if (valueType === 'object' && isPlainObject(value)) {
-      newValue = (multiple)
-        ? Object.values(value).filter(v => v).join(', ')
+      newValue = multiple
+        ? Object.values(value)
+            .filter(v => v)
+            .join(', ')
         : value.label
     } else {
       const valueArray = !isArray(value) ? [value] : value
-      newValue = valueArray.map(selectedValue => {
-        if (isPlainObject(selectedValue)) return selectedValue.label
-        const option = options.find(o => o.value === selectedValue) || {}
-        return option.label || selectedValue
-      }).join(', ')
+      newValue = valueArray
+        .map(selectedValue => {
+          if (isPlainObject(selectedValue)) return selectedValue.label
+          const option = options.find(o => o.value === selectedValue) || {}
+          return option.label || selectedValue
+        })
+        .join(', ')
     }
   }
   if (valueType === 'date') newValue = dateStamp(newValue, dateFormat)

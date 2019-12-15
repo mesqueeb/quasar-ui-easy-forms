@@ -1,9 +1,5 @@
 <template>
-  <q-markdown
-    class="ef-markdown"
-    v-bind="quasarProps"
-    v-on="$listeners"
-  />
+  <q-markdown class="ef-markdown" v-bind="quasarProps" v-on="$listeners" />
 </template>
 
 <style src="@quasar/quasar-ui-qmarkdown/dist/index.css"></style>
@@ -25,7 +21,9 @@ export default {
       type: String,
       default: '',
     },
-    get src () { return this.value },
+    get src () {
+      return this.value
+    },
     // EF props:
     // Quasar props with modified defaults:
     noLineNumbers: {
@@ -45,6 +43,6 @@ export default {
       })
     },
   },
-  methods: {}
+  methods: {},
 }
 </script>

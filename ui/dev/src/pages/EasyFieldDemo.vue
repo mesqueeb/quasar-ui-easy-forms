@@ -3,14 +3,21 @@
     <div class="row no-wrap items-start q-gutter-md q-mb-lg">
       <EasyField v-model="selectedField" v-bind="fieldPicker" />
       <InfoBoxWrapper color="primary" label="v-model" style="flex: 2;">
-        <q-markdown v-if="selectedField !== 'markdown'" class="q-py-md q-px-sm" :src="modelShownAsBadge" />
-        <div v-else class="q-ma-sm q-py-sm q-px-xs text-wrap-all bg-grey-2" style="width: 97%; border-radius: 0.3em">{{ modelShownAsBadge }}</div>
+        <q-markdown
+          v-if="selectedField !== 'markdown'"
+          class="q-py-md q-px-sm"
+          :src="modelShownAsBadge"
+        />
+        <div
+          v-else
+          class="q-ma-sm q-py-sm q-px-xs text-wrap-all bg-grey-2"
+          style="width: 97%; border-radius: 0.3em"
+        >
+          {{ modelShownAsBadge }}
+        </div>
       </InfoBoxWrapper>
     </div>
-    <q-markdown
-      v-if="rawComponent.desc"
-      :src="rawComponent.desc"
-    />
+    <q-markdown v-if="rawComponent.desc" :src="rawComponent.desc" />
     <InfoCard
       tag-name="EasyField"
       :key="selectedField"
@@ -21,17 +28,12 @@
       :style-classes-data="styleClassesData"
       :props-separate-tab="[]"
     >
-      <EasyField
-        v-model="model"
-        v-bind="field"
-        :key="selectedField"
-      />
+      <EasyField v-model="model" v-bind="field" :key="selectedField" />
     </InfoCard>
   </q-page>
 </template>
 
-<style lang="sass">
-</style>
+<style lang="sass"></style>
 
 <script>
 import { isString, isUndefined, isArray, isPlainObject } from 'is-what'
@@ -95,16 +97,22 @@ export default {
     field () {
       return this.propData
     },
-    infoCardTitle () { return capitalCase(this.selectedField) },
-    rawComponent () { return getRawComponent(this.selectedField) },
-    propsSchema () { return getInfoCardPropsSchema(this.selectedField) },
+    infoCardTitle () {
+      return capitalCase(this.selectedField)
+    },
+    rawComponent () {
+      return getRawComponent(this.selectedField)
+    },
+    propsSchema () {
+      return getInfoCardPropsSchema(this.selectedField)
+    },
     modelShownAsBadge () {
       const { model } = this
       const parsedModel = isString(model)
         ? `"${model}"`
-        : (isArray(model) || isPlainObject(model))
-          ? JSON.stringify(model)
-          : model
+        : isArray(model) || isPlainObject(model)
+        ? JSON.stringify(model)
+        : model
       return `\`${parsedModel}\``
     },
     styleClasses () {
@@ -119,7 +127,7 @@ export default {
     },
     styleClassesData () {
       return {
-        '.easy-field': {padding: '1em'},
+        '.easy-field': { padding: '1em' },
       }
     },
   },
@@ -135,7 +143,7 @@ export default {
         this.$set(this.propData, key, value)
       })
     },
-    log(...args) {
+    log (...args) {
       console.log(...args)
     },
   },

@@ -35,15 +35,13 @@ export function makeDateFromStamps (dateStamp, timeStamp) {
   if (!isString(timeStamp)) return date
   const hours = Number(timeStamp.split(':')[0])
   const minutes = Number(timeStamp.split(':')[1])
-  return adjustDate(date, {hours, minutes})
+  return adjustDate(date, { hours, minutes })
 }
 
 export function numberToHourTimestamp (number) {
   if (number < 0) {
     number = 24 + number
   }
-  const numberAsString = number < 10
-    ? `0${String(number)}`
-    : String(number)
+  const numberAsString = number < 10 ? `0${String(number)}` : String(number)
   return `${numberAsString}:00`
 }

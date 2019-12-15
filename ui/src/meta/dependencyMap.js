@@ -26,12 +26,12 @@ export const dependencyMap = {
   div: {
     componentName: 'EfDiv',
     fieldType: 'div',
-    passedProps: {  },
+    passedProps: {},
   },
   form: {
     componentName: 'EfForm',
     fieldType: 'form',
-    passedProps: {  },
+    passedProps: {},
   },
   img: {
     componentName: 'EfImg',
@@ -51,17 +51,17 @@ export const dependencyMap = {
   link: {
     componentName: 'EfLink',
     fieldType: 'link',
-    passedProps: {  },
+    passedProps: {},
   },
   markdown: {
     componentName: 'EfMarkdown',
     fieldType: 'markdown',
-    passedProps: {  },
+    passedProps: {},
   },
   pdf: {
     componentName: 'EfPdf',
     fieldType: 'pdf',
-    passedProps: {  },
+    passedProps: {},
   },
   range: {
     componentName: 'EfRange',
@@ -101,4 +101,4 @@ export function getPassedProps (fieldType) {
   return merge(...Object.values(passedProps))
 }
 
-export default {...dependencyMap, getPassedProps}
+export default { ...dependencyMap, getPassedProps }

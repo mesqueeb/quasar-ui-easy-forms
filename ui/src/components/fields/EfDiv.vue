@@ -1,15 +1,10 @@
 <template>
-  <div
-    class="ef-div"
-    v-bind="$attrs"
-    v-on="$listeners"
-  >{{ cValue }}</div>
+  <div class="ef-div" v-bind="$attrs" v-on="$listeners">{{ cValue }}</div>
 </template>
 
 <style lang="sass">
 // $
 @import '../../index.sass'
-
 </style>
 
 <script>
@@ -39,23 +34,19 @@ One benefit of the "div" field over a regular div, is that it will parse your va
       type: String,
       desc: `valueType can be any type.`,
     },
-    suffix: {category: 'model|content', type: String},
-    prefix: {category: 'model|content', type: String},
-    options: {category: 'model|content', type: Array},
-    multiple: {category: 'model|content', type: Boolean},
+    suffix: { category: 'model|content', type: String },
+    prefix: { category: 'model|content', type: String },
+    options: { category: 'model|content', type: Array },
+    multiple: { category: 'model|content', type: Boolean },
     // Quasar props with modified defaults:
     // Quasar props with modified behavior:
   },
   computed: {
     cValue () {
       const { value, valueType, options, suffix, prefix, multiple } = this
-      return parseEasyFieldValue(
-        value,
-        { valueType, options, suffix, prefix, multiple },
-        this
-      )
+      return parseEasyFieldValue(value, { valueType, options, suffix, prefix, multiple }, this)
     },
   },
-  methods: {}
+  methods: {},
 }
 </script>

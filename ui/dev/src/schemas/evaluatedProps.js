@@ -1,4 +1,3 @@
-
 const description = `## Evaluated Props
 
 As you know, \`<EasyForm />\` needs a 'schema' with information on each field you want to show. However, when using an EasyForm you can replace the value of any prop in any field with a function instead of the value directly. This function will be executed any time the data of any field changes. This allows you to have "dynamic" props, based on the data of the form.
@@ -19,16 +18,26 @@ The most important props you can access from \`context\`:
 Try to refrain from accessing props other than the ones listed above, because these are mainly used internal and could have behaviour changes that could break your app.
 `
 
-const colorFn = val => (val === 'red') ? 'like the sun' : (val === 'blue') ? 'like the sky' : (val === 'green') ? 'green is not a creative color' : (val === 'other') ? 'oh, come on, just pick one' : 'pick a color!'
+const colorFn = val =>
+  val === 'red'
+    ? 'like the sun'
+    : val === 'blue'
+    ? 'like the sky'
+    : val === 'green'
+    ? 'green is not a creative color'
+    : val === 'other'
+    ? 'oh, come on, just pick one'
+    : 'pick a color!'
 colorFn.prototype.stringifiedFn = `val => (val === 'red') ? 'like the sun' : (val === 'blue') ? 'like the sky' : (val === 'green') ? 'green is not a creative color' : (val === 'other') ? 'oh, come on, just pick one' : 'pick a color!'`
 
-const parentalConsentFn = (val, {formDataNested}) => formDataNested.over18
+const parentalConsentFn = (val, { formDataNested }) => formDataNested.over18
 parentalConsentFn.prototype.stringifiedFn = `(val, {formDataNested}) => formDataNested.over18`
 
-const carTypeFn = (val, {formDataNested}) => formDataNested.car
+const carTypeFn = (val, { formDataNested }) => formDataNested.car
 carTypeFn.prototype.stringifiedFn = `(val, {formDataNested}) => formDataNested.car`
 
-const carNrPlateFn = (val, {formDataNested, formMode}) => formDataNested.car && formMode === 'edit'
+const carNrPlateFn = (val, { formDataNested, formMode }) =>
+  formDataNested.car && formMode === 'edit'
 carNrPlateFn.prototype.stringifiedFn = `(val, {formDataNested, formMode}) => formDataNested.car && formMode === 'edit'`
 
 const carData = [
@@ -141,7 +150,12 @@ export const exampleForms = [
         span: true,
         fieldType: 'btn-toggle',
         label: 'What is your favorite color?',
-        options: [{label: 'red', value: 'red'}, {label: 'blue', value: 'blue'}, {label: 'green', value: 'green'}, {label: 'other', value: 'other'}],
+        options: [
+          { label: 'red', value: 'red' },
+          { label: 'blue', value: 'blue' },
+          { label: 'green', value: 'green' },
+          { label: 'other', value: 'other' },
+        ],
         subLabel: colorFn,
       },
     ],
@@ -186,7 +200,7 @@ export const exampleForms = [
         id: 'carNrPlate',
         fieldType: 'input',
         label: 'Enter your license plate brand?',
-        subLabel: 'This is hidden when the form is set to \'view\' mode. Try clicking \'save\'.',
+        subLabel: "This is hidden when the form is set to 'view' mode. Try clicking 'save'.",
         showCondition: carNrPlateFn,
       },
     ],
@@ -201,20 +215,18 @@ export const exampleForms = [
         label: 'Year',
         fieldType: 'select',
         emitValue: true,
-        options: [
-          ...new Set(carData.map(d => d.year))
-        ].map(value => ({value, label: value})),
+        options: [...new Set(carData.map(d => d.year))].map(value => ({ value, label: value })),
       },
       {
         id: 'make',
         label: 'Make',
         fieldType: 'select',
         emitValue: true,
-        options: (val, {formDataNested}) => {
+        options: (val, { formDataNested }) => {
           const { year } = formDataNested || {}
-          return [
-            ...new Set(carData.filter(car => car.year === year).map(d => d.make))
-          ].map(value => ({value, label: value}))
+          return [...new Set(carData.filter(car => car.year === year).map(d => d.make))].map(
+            value => ({ value, label: value })
+          )
         },
       },
       {
@@ -222,11 +234,13 @@ export const exampleForms = [
         label: 'Model',
         fieldType: 'select',
         emitValue: true,
-        options: (val, {formDataNested}) => {
+        options: (val, { formDataNested }) => {
           const { year, make } = formDataNested || {}
           return [
-            ...new Set(carData.filter(car => (car.year === year && car.make === make)).map(d => d.model))
-          ].map(value => ({value, label: value}))
+            ...new Set(
+              carData.filter(car => car.year === year && car.make === make).map(d => d.model)
+            ),
+          ].map(value => ({ value, label: value }))
         },
       },
       {
@@ -234,13 +248,15 @@ export const exampleForms = [
         label: 'Trim',
         fieldType: 'select',
         emitValue: true,
-        options: (val, {formDataNested}) => {
+        options: (val, { formDataNested }) => {
           const { year, make, model } = formDataNested || {}
           return [
-            ...new Set(carData.filter(car => (
-              car.year === year && car.make === make && car.model === model
-            )).map(d => d.trim))
-          ].map(value => ({value, label: value}))
+            ...new Set(
+              carData
+                .filter(car => car.year === year && car.make === make && car.model === model)
+                .map(d => d.trim)
+            ),
+          ].map(value => ({ value, label: value }))
         },
       },
     ],
@@ -260,28 +276,27 @@ export const pageForm = {
         id: 'chosenExample',
         fieldType: 'btn-toggle',
         noCaps: true,
-        options: [this._3, this._4, this._5, this._6]
-          .map((field, index) => {
-            return {label: field.label, value: index}
-          }),
+        options: [this._3, this._4, this._5, this._6].map((field, index) => {
+          return { label: field.label, value: index }
+        }),
       }
     },
     _3: {
-      showCondition: (value, {formDataNested}) => formDataNested.chosenExample === 0,
+      showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 0,
       fieldType: 'title',
       label: 'Dynamic prop based on the value of the field',
       hasMarkdown: true,
       subLabel: `Eg. \`subLabel: val => val === 'purple' ? 'nice!' : 'choose a color'\``,
     },
     _4: {
-      showCondition: (value, {formDataNested}) => formDataNested.chosenExample === 1,
+      showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 1,
       fieldType: 'title',
       label: 'Dynamic prop based on the value of "another" field',
       hasMarkdown: true,
       subLabel: `Eg. \`disable: ${parentalConsentFn.prototype.stringifiedFn}\``,
     },
     _5: {
-      showCondition: (value, {formDataNested}) => formDataNested.chosenExample === 2,
+      showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 2,
       fieldType: 'title',
       label: 'Dynamic "conditional rendering" of a field',
       hasMarkdown: true,
@@ -292,7 +307,7 @@ Eg. \`showCondition: ${carTypeFn.prototype.stringifiedFn}\`
       `.trim(),
     },
     _6: {
-      showCondition: (value, {formDataNested}) => formDataNested.chosenExample === 3,
+      showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 3,
       fieldType: 'title',
       label: 'Dynamic "options" of a select-field',
       hasMarkdown: true,

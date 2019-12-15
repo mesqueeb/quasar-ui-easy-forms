@@ -1,8 +1,5 @@
 <template>
-  <a
-    class="ef-link"
-    v-bind="attributes"
-  >
+  <a class="ef-link" v-bind="attributes">
     {{ cValue }}
     <q-icon v-if="newWindow" name="open_in_new" />
   </a>
@@ -14,7 +11,6 @@
 
 .ef-link
   text-decoration: none
-
 </style>
 <script>
 import merge from 'merge-anything'
@@ -31,7 +27,8 @@ export default {
     value: {
       category: 'model',
       type: String,
-      desc: '`value` is the link "label". When no `value` is defined it will default to the base url extracted from href. (eg. \'https://www.github.com\' will be \'github.com\')\n(`label` on the other hand is used for the external label of `<EfField />`)',
+      desc:
+        "`value` is the link \"label\". When no `value` is defined it will default to the base url extracted from href. (eg. 'https://www.github.com' will be 'github.com')\n(`label` on the other hand is used for the external label of `<EfField />`)",
     },
     valueType: getGenericValueType('string'),
     href: {
@@ -42,7 +39,8 @@ export default {
     newWindow: {
       type: Boolean,
       default: false,
-      desc: 'When this is true it will open link in a new window; add an icon; `rel="noreferrer"` is added for security reasons.',
+      desc:
+        'When this is true it will open link in a new window; add an icon; `rel="noreferrer"` is added for security reasons.',
     },
     // Quasar props with modified defaults:
     // Quasar props with modified behavior:
@@ -50,13 +48,13 @@ export default {
   computed: {
     attributes () {
       const { href, newWindow } = this
-      const newWindowAttrs = (!newWindow) ? {} : {
-        target: '_blank',
-        rel: 'noreferrer',
-      }
-      return merge(
-        this.$attrs,
-        newWindowAttrs, {
+      const newWindowAttrs = !newWindow
+        ? {}
+        : {
+            target: '_blank',
+            rel: 'noreferrer',
+          }
+      return merge(this.$attrs, newWindowAttrs, {
         href,
       })
     },

@@ -1,9 +1,5 @@
 <template>
-  <EfDiv
-    v-if="rawValue"
-    class="ef-btn-toggle"
-    v-bind="divProps"
-  />
+  <EfDiv v-if="rawValue" class="ef-btn-toggle" v-bind="divProps" />
   <q-btn-toggle
     v-else-if="!separateButtons"
     :value="value"
@@ -11,22 +7,21 @@
     v-bind="quasarProps"
     class="ef-btn-toggle"
   />
-  <div
-    v-else
-    class="ef-btn-toggle ef-btn-toggle--separate-buttons"
-  >
+  <div v-else class="ef-btn-toggle ef-btn-toggle--separate-buttons">
     <div
       v-for="option in options"
       :key="option.label"
-      :class="{'ef-btn-toggle__chosen': value === option.value}"
+      :class="{ 'ef-btn-toggle__chosen': value === option.value }"
     >
       <EfBtn
         @click.native="$emit('input', option.value)"
         class="ef-btn -square"
-        v-bind="merge(option, {
-          btnLabel: option.label,
-          disable: option.disable || quasarProps.disable,
-        })"
+        v-bind="
+          merge(option, {
+            btnLabel: option.label,
+            disable: option.disable || quasarProps.disable,
+          })
+        "
       />
     </div>
   </div>
@@ -35,7 +30,6 @@
 <style lang="sass">
 // $
 @import '../../index.sass'
-
 </style>
 
 <script>
@@ -57,23 +51,32 @@ export default {
       type: undefined,
       desc: '`value` is the selected button\'s "value".',
     },
-    valueType: getGenericValueType(['string', 'boolean', 'number', 'array', 'object', 'date', 'null', 'undefined']),
+    valueType: getGenericValueType([
+      'string',
+      'boolean',
+      'number',
+      'array',
+      'object',
+      'date',
+      'null',
+      'undefined',
+    ]),
     // EF props:
     separateButtons: {
       desc: 'Tell the component to use separate buttons instead.',
       type: Boolean,
       default: false,
     },
-    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
+    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     // Quasar props with modified defaults:
-    unelevated: {type: Boolean, default: true, inheritedProp: 'modified'},
-    toggleColor: {type: String, default: 'primary', inheritedProp: 'modified'},
+    unelevated: { type: Boolean, default: true, inheritedProp: 'modified' },
+    toggleColor: { type: String, default: 'primary', inheritedProp: 'modified' },
     // Quasar props with modified behavior:
     options: {
       inheritedProp: 'modified',
       type: Array,
       desc: 'An array of options. The options can be anything you can pass to EfBtn.',
-      examples: ['`[{label: \'One\', value: 1}, {label: \'Two\', value: 2}]`'],
+      examples: ["`[{label: 'One', value: 1}, {label: 'Two', value: 2}]`"],
       default: () => [],
     },
   },
@@ -97,6 +100,6 @@ export default {
   },
   methods: {
     merge,
-  }
+  },
 }
 </script>

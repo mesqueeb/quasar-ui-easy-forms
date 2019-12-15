@@ -1,10 +1,6 @@
 <template>
   <q-page padding>
-    <EasyForm
-      class="page-form"
-      v-model="pageValue"
-      v-bind="pageForm"
-    />
+    <EasyForm class="page-form" v-model="pageValue" v-bind="pageForm" />
     <InfoBoxWrapper color="primary" label="v-model" style="flex: 2;">
       <q-markdown class="q-py-md q-px-sm" :src="modelShownAsBadge" />
     </InfoBoxWrapper>
@@ -40,7 +36,6 @@
 
 .q-markdown--code
   word-break: break-word !important
-
 </style>
 
 <script>
@@ -53,7 +48,7 @@ import { getInfoCardPropsSchema } from '../helpers/schemaBuilders'
 export default {
   name: 'EasyFormDemo',
   props: {
-    schemaId: String
+    schemaId: String,
   },
   data () {
     const { pageForm, exampleForms } = demoSchemas[this.schemaId]
@@ -61,7 +56,7 @@ export default {
     return {
       pageValue: { chosenExample: 0 },
       pageForm,
-      exampleForms: exampleForms.map(f => merge({value: {}}, f)),
+      exampleForms: exampleForms.map(f => merge({ value: {} }, f)),
       propsSchema,
     }
   },
@@ -83,9 +78,9 @@ export default {
       const { value } = this.exampleForms[this.pageValue.chosenExample]
       const parsedValue = isString(value)
         ? `"${value}"`
-        : (isArray(value) || isPlainObject(value))
-          ? JSON.stringify(value)
-          : value
+        : isArray(value) || isPlainObject(value)
+        ? JSON.stringify(value)
+        : value
       return `\`${parsedValue}\``
     },
     styleClasses () {
@@ -102,8 +97,8 @@ export default {
     },
     styleClassesData () {
       return {
-        '.easy-form': {padding: '1em'},
-        '.easy-field': {padding: '1em'},
+        '.easy-form': { padding: '1em' },
+        '.easy-field': { padding: '1em' },
       }
     },
   },

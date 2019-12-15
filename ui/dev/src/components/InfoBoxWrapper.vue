@@ -1,7 +1,7 @@
 <template>
   <div class="info-box-wrapper">
     <q-badge :color="color">{{ label }}</q-badge>
-    <div class="_inner-wrapper" :style="{borderColor: colorAsHex}">
+    <div class="_inner-wrapper" :style="{ borderColor: colorAsHex }">
       <slot />
     </div>
   </div>
@@ -27,7 +27,6 @@
   .q-markdown--token
     white-space: pre-line
     word-break: break-word
-
 </style>
 
 <script>
@@ -39,7 +38,8 @@ export default {
   props: {
     color: {
       type: String,
-      validator: val => ['primary', 'secondary', 'accent', 'positive', 'negative', 'info', 'warning'].includes(val),
+      validator: val =>
+        ['primary', 'secondary', 'accent', 'positive', 'negative', 'info', 'warning'].includes(val),
     },
     label: String,
   },

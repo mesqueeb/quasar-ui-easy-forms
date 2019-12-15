@@ -6,9 +6,9 @@ const description = `This is an example of all the possible models for \`fieldTy
 const exampleSelect = {
   fieldType: 'select',
   options: [
-    {label: 'Self taught', value: 'self'},
-    {label: 'By item', value: 'item'},
-    {label: 'Mutation', value: 'mutation'},
+    { label: 'Self taught', value: 'self' },
+    { label: 'By item', value: 'item' },
+    { label: 'Mutation', value: 'mutation' },
   ],
 }
 
@@ -16,12 +16,12 @@ const serializeForMarkdown = code => `\`\`\`js
 ${serialize(code)}
 \`\`\``
 
-const createExample = (config, i) => ([
-  merge(exampleSelect, config, {id: `example${i}`}),
+const createExample = (config, i) => [
+  merge(exampleSelect, config, { id: `example${i}` }),
   {
     id: `example${i}-m`,
     fieldType: 'markdown',
-    src: (val, {formDataNested}) => serializeForMarkdown(formDataNested[`example${i}`]),
+    src: (val, { formDataNested }) => serializeForMarkdown(formDataNested[`example${i}`]),
   },
   {
     id: `example${i}-o`,
@@ -29,21 +29,21 @@ const createExample = (config, i) => ([
     fieldClass: 'text-break-all',
     src: serializeForMarkdown(config),
   },
-])
+]
 
 const exampleConfigs = [
-  {fieldType: 'title', label: 'Single select'},
-  {valueType: 'object'},
-  {valueType: 'string', emitValue: true},
-  {valueType: 'string', emitValue: true, mapOptions: true},
-  {fieldType: 'title', label: 'Multiple select', subLabel: 'Recommended model'},
-  {valueType: 'object', multiple: true},
-  {fieldType: 'title', subLabel: 'Other models'},
-  {valueType: 'array', multiple: true},
-  {valueType: 'array', multiple: true, emitValue: true},
-  {valueType: 'array', multiple: true, emitValue: true, mapOptions: true},
-  {fieldType: 'title', label: 'Do not do this', subLabel: 'Select something and see why 😉'},
-  {valueType: 'object', multiple: true, emitValue: true},
+  { fieldType: 'title', label: 'Single select' },
+  { valueType: 'object' },
+  { valueType: 'string', emitValue: true },
+  { valueType: 'string', emitValue: true, mapOptions: true },
+  { fieldType: 'title', label: 'Multiple select', subLabel: 'Recommended model' },
+  { valueType: 'object', multiple: true },
+  { fieldType: 'title', subLabel: 'Other models' },
+  { valueType: 'array', multiple: true },
+  { valueType: 'array', multiple: true, emitValue: true },
+  { valueType: 'array', multiple: true, emitValue: true, mapOptions: true },
+  { fieldType: 'title', label: 'Do not do this', subLabel: 'Select something and see why 😉' },
+  { valueType: 'object', multiple: true, emitValue: true },
 ]
 
 export const exampleForms = [
@@ -73,9 +73,9 @@ export const exampleForms = [
         }
         carry.push(...createExample(config, i))
         return carry
-      }, [])
-    ]
-  }
+      }, []),
+    ],
+  },
 ]
 
 export const pageForm = {
@@ -86,7 +86,7 @@ export const pageForm = {
       fieldType: 'markdown',
       src: description,
     },
-  ]
+  ],
 }
 
 export default {

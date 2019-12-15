@@ -1,4 +1,3 @@
-
 const description = `Each \`<EasyField />\` can be passed an prop called \`events\`. This prop can be passed like so: \`:events="events"\` and will set all the event listeners on the field like so: \`v-on="events"\`.
 
 An \`events\` prop would look like so:
@@ -20,13 +19,15 @@ The benefits of passing your event listeners via the \`events\` prop are:
 Phew. That was a bit of a lot of information all at once. 😅 Let's tackle these one by one.
 `
 
-const notifyInputFn = (val, {$q}) => $q.notify(val)
+const notifyInputFn = (val, { $q }) => $q.notify(val)
 notifyInputFn.prototype.stringifiedFn = `(val, {$q}) => $q.notify(val)`
 
-const notifyFocusFn = (val, {id, label, $q}) => $q.notify(`focussed: 「${label}」 (id: ${id})`)
-notifyFocusFn.prototype.stringifiedFn = '(val, {id, label, $q}) => $q.notify(`focussed: 「${label}」 (id: ${id})`)'
+const notifyFocusFn = (val, { id, label, $q }) => $q.notify(`focussed: 「${label}」 (id: ${id})`)
+notifyFocusFn.prototype.stringifiedFn =
+  '(val, {id, label, $q}) => $q.notify(`focussed: 「${label}」 (id: ${id})`)'
 
-const telFn = (val, {fieldInput, formDataNested}) => fieldInput({id: 'telClean', value: !val ? '' : val.replace(/[^\d]/g, '').trim()})
+const telFn = (val, { fieldInput, formDataNested }) =>
+  fieldInput({ id: 'telClean', value: !val ? '' : val.replace(/[^\d]/g, '').trim() })
 telFn.prototype.stringifiedFn = `(val, {fieldInput}) => fieldInput({id: 'telClean', value: !val ? '' : val.replace(/[^\d]/g, '').trim()})`
 
 export const exampleForms = [
@@ -39,7 +40,7 @@ export const exampleForms = [
         id: 'testField',
         fieldType: 'input',
         label: 'Type something',
-        events: {input: notifyInputFn, focus: notifyFocusFn},
+        events: { input: notifyInputFn, focus: notifyFocusFn },
       },
     ],
   },
@@ -53,7 +54,7 @@ export const exampleForms = [
         fieldType: 'input',
         label: 'Phone nr (hyphenated)',
         subLabel: 'Type any number with `-` or `(  )`',
-        events: {input: telFn},
+        events: { input: telFn },
       },
       {
         id: 'telClean',
@@ -74,18 +75,18 @@ export const pageForm = {
       fieldType: 'markdown',
       src: description,
     },
-    get _2() {
+    get _2 () {
       return {
         id: 'chosenExample',
         fieldType: 'btn-toggle',
         noCaps: true,
         options: [this._3, this._4].map((field, index) => {
-          return {label: field.label, value: index}
+          return { label: field.label, value: index }
         }),
       }
     },
     _3: {
-      showCondition: (value, {formDataNested}) => formDataNested.chosenExample === 0,
+      showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 0,
       fieldType: 'title',
       label: 'Notify on events',
       hasMarkdown: true,
@@ -99,9 +100,9 @@ export const pageForm = {
   \`\`\``.trim(),
     },
     _4: {
-      showCondition: (value, {formDataNested}) => formDataNested.chosenExample === 1,
+      showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 1,
       fieldType: 'title',
-      label: 'Update other fields on \'input\'',
+      label: "Update other fields on 'input'",
       hasMarkdown: true,
       subLabel: `
   Eg.

@@ -1,15 +1,18 @@
 <template>
   <div class="ef-form">
-    <div
-      class="ef-form__row"
-      :style="`grid-template-columns:${' 1fr'.repeat(columnCountSubForm)}`"
-    >
+    <div class="ef-form__row" :style="`grid-template-columns:${' 1fr'.repeat(columnCountSubForm)}`">
       <EasyField
         v-for="(subfield, fieldIndex) in schemaLabels"
         :key="fieldIndex"
         class="ef-form__sub-field"
         v-bind="subfield"
-        :style="subfield.span === true ? 'grid-column: 1 / -1' : subfield.span ? `grid-column: span ${subfield.span}` : ''"
+        :style="
+          subfield.span === true
+            ? 'grid-column: 1 / -1'
+            : subfield.span
+            ? `grid-column: span ${subfield.span}`
+            : ''
+        "
       />
     </div>
     <div
@@ -23,7 +26,13 @@
         :key="fieldIndex"
         class="ef-form__sub-field"
         v-bind="subfield"
-        :style="subfield.span === true ? 'grid-column: 1 / -1' : subfield.span ? `grid-column: span ${subfield.span}` : ''"
+        :style="
+          subfield.span === true
+            ? 'grid-column: 1 / -1'
+            : subfield.span
+            ? `grid-column: span ${subfield.span}`
+            : ''
+        "
         :value="cValue[rowIndex][subfield.id]"
         @input="val => setSubFieldValue(val, rowIndex, subfield.id)"
         @keyup.native.delete="onDeleteKey(rowIndex, subfield.id)"
@@ -44,7 +53,6 @@
     align-items: flex-end
     grid-gap: $sm
     margin-bottom: $sm
-
 </style>
 
 <script>
@@ -66,13 +74,16 @@ export default {
     },
     valueType: getGenericValueType('array'),
     // EF props:
-    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
+    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     schema: {
       category: 'model',
       type: Array,
-      desc: 'This is the information on the columns you want to be shown. An array of objects just like an EasyForm.',
-      default: () => [{fieldType: 'input'}],
-      examples: ['[{label: \'Amount\', id: \'amount\', fieldType: \'input\', valueType: \'number\'}, {label: \'Currency\', id: \'curr\', fieldType: \'select\', options: [{label: \'USD\', value: \'usd\'}]}]'],
+      desc:
+        'This is the information on the columns you want to be shown. An array of objects just like an EasyForm.',
+      default: () => [{ fieldType: 'input' }],
+      examples: [
+        "[{label: 'Amount', id: 'amount', fieldType: 'input', valueType: 'number'}, {label: 'Currency', id: 'curr', fieldType: 'select', options: [{label: 'USD', value: 'usd'}]}]",
+      ],
     },
     maxRows: {
       category: 'model',
@@ -80,19 +91,18 @@ export default {
       desc: 'Allows to limit the max amount of rows.',
     },
     // props of which to inherit "description" etc. from EasyField:
-    disable: {type: Boolean},
-    readonly: {type: Boolean},
+    disable: { type: Boolean },
+    readonly: { type: Boolean },
   },
   computed: {
     cValue: {
       get () {
         const { value, schema, disable, readonly, maxRows } = this
-        const emptyRow = schema.reduce((carry, {id, fieldType}) => ({...carry, [id]: undefined}), {})
-        if (
-          !disable &&
-          !readonly &&
-          (!isNumber(maxRows) || maxRows < value.length)
-        ) {
+        const emptyRow = schema.reduce(
+          (carry, { id, fieldType }) => ({ ...carry, [id]: undefined }),
+          {}
+        )
+        if (!disable && !readonly && (!isNumber(maxRows) || maxRows < value.length)) {
           return value.concat([emptyRow])
         }
         return value
@@ -108,13 +118,13 @@ export default {
     cSchema () {
       const { schema, disable, readonly, attrsToPass } = this
       return schema.map(subfield => {
-        return merge(attrsToPass, {disable, readonly}, subfield, {label: '', subLabel: ''})
+        return merge(attrsToPass, { disable, readonly }, subfield, { label: '', subLabel: '' })
       })
     },
     schemaLabels () {
       const { schema, attrsToPass } = this
       return schema.map(subfield => {
-        return merge(attrsToPass, subfield, {fieldType: 'none'})
+        return merge(attrsToPass, subfield, { fieldType: 'none' })
       })
     },
     columnCountSubForm () {
@@ -149,7 +159,7 @@ export default {
       if (Object.keys(row).every(key => row[key] === '' || row[key] === 0)) {
         deleteRow(rowIndex)
       }
-    }
-  }
+    },
+  },
 }
 </script>

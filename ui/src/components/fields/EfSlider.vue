@@ -1,14 +1,7 @@
 <template>
-  <EfDiv
-    v-if="rawValue"
-    class="ef-slider ef-slider--raw"
-    v-bind="divProps"
-  />
+  <EfDiv v-if="rawValue" class="ef-slider ef-slider--raw" v-bind="divProps" />
   <div v-else class="ef-slider">
-    <q-slider
-      v-model="cValue"
-      v-bind="quasarProps"
-    />
+    <q-slider v-model="cValue" v-bind="quasarProps" />
   </div>
 </template>
 
@@ -20,7 +13,6 @@
   padding-top: 30px
   padding-left: $md
   padding-right: $md
-
 </style>
 
 <script>
@@ -37,10 +29,11 @@ export default {
     // prop categories: behavior content general model state style
     value: {
       category: 'model',
-      type: Number},
+      type: Number,
+    },
     valueType: getGenericValueType('number'),
     // EF props:
-    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
+    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     prefix: {
       type: String,
       desc: 'Prefix shown inside the label.',
@@ -60,14 +53,15 @@ export default {
     labelValue: {
       inheritedProp: 'modified',
       type: Function,
-      desc: 'A **function** to format the value shown inside the label. When `undefined` it will default to the value with pre- & suffix (if they are set).',
+      desc:
+        'A **function** to format the value shown inside the label. When `undefined` it will default to the value with pre- & suffix (if they are set).',
       examples: ['val => `${val}.00 USD`'],
     },
     disable: {
       inheritedProp: 'modified',
       type: Boolean,
       default: false,
-      desc: 'Disables the ability to interact with the field. Is `true` when `readonly: true`'
+      desc: 'Disables the ability to interact with the field. Is `true` when `readonly: true`',
     },
   },
   computed: {
@@ -89,10 +83,16 @@ export default {
       })
     },
     cValue: {
-      get () { return this.value },
-      set (val) { this.$emit('input', val) },
+      get () {
+        return this.value
+      },
+      set (val) {
+        this.$emit('input', val)
+      },
     },
-    cDisable () { return this.$attrs.readonly || this.disable },
+    cDisable () {
+      return this.$attrs.readonly || this.disable
+    },
     cLabelValue () {
       const { value, prefix, suffix, labelValue } = this
       if (isFunction(labelValue)) return labelValue(value)

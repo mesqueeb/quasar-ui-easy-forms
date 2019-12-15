@@ -1,16 +1,6 @@
 <template>
-  <EfDiv
-    v-if="rawValue"
-    class="ef-select"
-    v-bind="divProps"
-  />
-  <q-select
-    v-else
-    class="ef-select"
-    v-model="cValue"
-    v-bind="quasarProps"
-    v-on="$attrs.events"
-  />
+  <EfDiv v-if="rawValue" class="ef-select" v-bind="divProps" />
+  <q-select v-else class="ef-select" v-model="cValue" v-bind="quasarProps" v-on="$attrs.events" />
 </template>
 
 <style lang="sass">
@@ -19,7 +9,6 @@
 
 .ef-select
   width: 100%
-
 </style>
 
 <script>
@@ -61,13 +50,22 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
       category: 'model',
       type: undefined, // any
     },
-    valueType: getGenericValueType(['object', 'string', 'boolean', 'number', 'array', 'date', 'null', 'undefined']),
+    valueType: getGenericValueType([
+      'object',
+      'string',
+      'boolean',
+      'number',
+      'array',
+      'date',
+      'null',
+      'undefined',
+    ]),
     // EF props:
-    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
+    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     externalLabels,
     placeholder: {
       type: String,
-      desc: `Will be shown when nothing is selected, but only if 'externalLabels' is not disabled. (Takes the place of the 'label' Quasar prop, because with EfSelect the label is external.)`
+      desc: `Will be shown when nothing is selected, but only if 'externalLabels' is not disabled. (Takes the place of the 'label' Quasar prop, because with EfSelect the label is external.)`,
     },
     // Quasar props with modified defaults:
     outlined: { inheritedProp: 'modified', type: Boolean, default: true },
@@ -81,7 +79,8 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
     options: {
       inheritedProp: true,
       default: () => [],
-      desc: 'The options to select from. Should be an array of strings or objects (`{label, value}`).\n\nFor best performance freeze the list of options with `Object.freeze`.',
+      desc:
+        'The options to select from. Should be an array of strings or objects (`{label, value}`).\n\nFor best performance freeze the list of options with `Object.freeze`.',
       examples: [`[{label: 'JPY', value: 'jpy'}, {label: 'USD', value: 'usd'}]`, `['jpy', 'usd']`],
     },
     hideDropdownIcon: {
@@ -97,21 +96,27 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
   },
   computed: {
     quasarProps () {
-      const overWriteLabelAndHint = (this.externalLabels === false)
-        ? {
-          label: this.$attrs.labelRaw,
-          hint: this.$attrs.subLabelRaw,
-        } : {}
-      return merge(this.$attrs, {
-        // Quasar props with modified defaults:
-        outlined: this.outlined,
-        autogrow: this.autogrow,
-        // Quasar props with modified behavior:
-        label: this.cLabel,
-        options: this.cOptions,
-        hideDropdownIcon: this.cHideDropdownIcon,
-        useChips: this.cUseChips,
-      }, overWriteLabelAndHint)
+      const overWriteLabelAndHint =
+        this.externalLabels === false
+          ? {
+              label: this.$attrs.labelRaw,
+              hint: this.$attrs.subLabelRaw,
+            }
+          : {}
+      return merge(
+        this.$attrs,
+        {
+          // Quasar props with modified defaults:
+          outlined: this.outlined,
+          autogrow: this.autogrow,
+          // Quasar props with modified behavior:
+          label: this.cLabel,
+          options: this.cOptions,
+          hideDropdownIcon: this.cHideDropdownIcon,
+          useChips: this.cUseChips,
+        },
+        overWriteLabelAndHint
+      )
     },
     divProps () {
       return merge(this.$attrs, {
@@ -125,13 +130,11 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
         const { value, valueType, $attrs } = this
         if (value === undefined) return value
         if (valueType === 'object' && $attrs.multiple) {
-          return Object.entries(value)
-            .reduce((carry, [value, label]) => {
-              // filter out those that are `null`
-              if (label) carry.push({value, label})
-              return carry
-            }, [])
-
+          return Object.entries(value).reduce((carry, [value, label]) => {
+            // filter out those that are `null`
+            if (label) carry.push({ value, label })
+            return carry
+          }, [])
         }
         return value
       },
@@ -147,12 +150,11 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
           // of how `multiple: true, valueType: 'object'` works
           const originalValue = value
           const base = isPlainObject(originalValue)
-            ? Object.keys(originalValue)
-              .reduce((carry, key) => ({...carry, [key]: null}), {})
+            ? Object.keys(originalValue).reduce((carry, key) => ({ ...carry, [key]: null }), {})
             : {}
           const cleanValue = val.reduce((carry, option) => {
-            if (isString(option)) return merge(carry, {[option]: option})
-            return merge(carry, {[option.value]: option.label})
+            if (isString(option)) return merge(carry, { [option]: option })
+            return merge(carry, { [option.value]: option.label })
           }, base)
           this.$emit('input', cleanValue)
           return
@@ -163,14 +165,12 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
     cLabel () {
       // hidden when a value is selected
       const { cValue, placeholder } = this
-      return (cValue || cValue === 0)
-        ? undefined
-        : placeholder
+      return cValue || cValue === 0 ? undefined : placeholder
     },
     cOptions () {
       const { options } = this
       if (options.some(o => isString(o))) {
-        return options.map(o => ({label: o, value: o}))
+        return options.map(o => ({ label: o, value: o }))
       }
       return options.filter(o => !o.disabled)
     },

@@ -2,12 +2,7 @@
   <div v-if="rawValue" class="ef-toggle">
     {{ cValue ? '✅' : '❌' }}
   </div>
-  <q-toggle
-    v-else
-    class="ef-toggle"
-    v-model="cValue"
-    v-bind="quasarProps"
-  />
+  <q-toggle v-else class="ef-toggle" v-model="cValue" v-bind="quasarProps" />
 </template>
 
 <style lang="sass">
@@ -15,7 +10,6 @@
 @import '../../index.sass'
 
 // .ef-toggle
-
 </style>
 
 <script>
@@ -36,14 +30,14 @@ export default {
     },
     valueType: getGenericValueType('boolean'),
     // EF props:
-    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
+    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     // Quasar props with modified defaults:
     // Quasar props with modified behavior:
     disable: {
       inheritedProp: 'modified',
       type: Boolean,
       default: false,
-      desc: 'Disables the ability to interact with the field. Is `true` when `readonly: true`'
+      desc: 'Disables the ability to interact with the field. Is `true` when `readonly: true`',
     },
   },
   computed: {
@@ -59,9 +53,13 @@ export default {
         const { value } = this
         return value
       },
-      set (val) { this.$emit('input', val) },
+      set (val) {
+        this.$emit('input', val)
+      },
     },
-    cDisable () { return this.$attrs.readonly || this.disable },
+    cDisable () {
+      return this.$attrs.readonly || this.disable
+    },
   },
   methods: {},
 }

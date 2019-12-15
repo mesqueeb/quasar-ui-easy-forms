@@ -2,14 +2,15 @@ import { QUploaderBase } from 'quasar'
 
 export default {
   name: 'QUploaderFirebase',
-  mixins: [ QUploaderBase ],
+  mixins: [QUploaderBase],
   props: {
     firebaseDependency: undefined,
     path: String,
   },
   data () {
     const Firebase = this.firebaseDependency || window.firebase
-    if (!Firebase) throw new Error(`[QUploaderFirebase]
+    if (!Firebase)
+      throw new Error(`[QUploaderFirebase]
       No Firebase instance was found.
       Please pass a Firebase instance via the prop \`:firebaseDependency="firebase"\` or set your firebase instance to \`window.firebase\`.
       Don't forget to also import Firebase storage like so: \`import 'firebase/storage'\`
@@ -17,7 +18,7 @@ export default {
     const storage = Firebase.storage()
     return {
       storage: storage.ref(),
-      activeTasks: []
+      activeTasks: [],
     }
   },
   computed: {
@@ -45,7 +46,9 @@ export default {
     },
     // [REQUIRED]
     upload () {
-      if (this.disable || !this.queuedFiles.length) { return }
+      if (this.disable || !this.queuedFiles.length) {
+        return
+      }
       const files = this.queuedFiles.slice(0)
       this.queuedFiles = []
       files.forEach(file => {
@@ -68,7 +71,8 @@ export default {
             this.uploadedSize += loaded - file.__uploaded
             this.__updateFile(file, 'uploading', loaded)
           }
-        }, error => {
+        },
+        error => {
           // A full list of error codes is available at
           // https://firebase.google.com/docs/storage/web/handle-errors
           this.queuedFiles.push(file)
@@ -76,32 +80,36 @@ export default {
           this.$emit('failed', { file, error })
           this.uploadedSize -= file.__uploaded
           this.activeTasks = this.activeTasks.filter(t => t !== uploadTask)
-        }, () => {
+        },
+        () => {
           // Upload completed successfully, now we can get the download URL
-          uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
-            const fullPath = uploadTask.snapshot.ref.fullPath
-            const fileName = uploadTask.snapshot.ref.name
-            const fileId = fileName.replace(/\./g, '_')
-            this.uploadedFiles.push(file)
-            this.__updateFile(file, 'uploaded')
-            const uploadTime = Math.round(new Date().getTime() / 1000)
-            const { size: fileSize, type: fileType } = file
-            this.$emit('uploaded', {
-              downloadURL,
-              fileName,
-              fileId,
-              fileSize,
-              fileType,
-              fullPath,
-              uploadTime
+          uploadTask.snapshot.ref
+            .getDownloadURL()
+            .then(downloadURL => {
+              const fullPath = uploadTask.snapshot.ref.fullPath
+              const fileName = uploadTask.snapshot.ref.name
+              const fileId = fileName.replace(/\./g, '_')
+              this.uploadedFiles.push(file)
+              this.__updateFile(file, 'uploaded')
+              const uploadTime = Math.round(new Date().getTime() / 1000)
+              const { size: fileSize, type: fileType } = file
+              this.$emit('uploaded', {
+                downloadURL,
+                fileName,
+                fileId,
+                fileSize,
+                fileType,
+                fullPath,
+                uploadTime,
+              })
+              this.uploadedSize += file.size - file.__uploaded
             })
-            this.uploadedSize += file.size - file.__uploaded
-          }).catch(error => {
-            this.$emit('failed', { file, error })
-          })
+            .catch(error => {
+              this.$emit('failed', { file, error })
+            })
           this.activeTasks = this.activeTasks.filter(t => t !== uploadTask)
         }
       )
-    }
-  }
+    },
+  },
 }

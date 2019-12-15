@@ -1,16 +1,8 @@
 <template>
-  <EfInput
-    class="ef-input-date"
-    v-model="cValue"
-    v-bind="propsToPass"
-  >
+  <EfInput class="ef-input-date" v-model="cValue" v-bind="propsToPass">
     <q-icon name="event" class="cursor-pointer">
       <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-        <q-date
-          v-model="cValue"
-          :mask="maskForQDate"
-          @input="() => $refs.qDateProxy.hide()"
-        />
+        <q-date v-model="cValue" :mask="maskForQDate" @input="() => $refs.qDateProxy.hide()" />
       </q-popup-proxy>
     </q-icon>
   </EfInput>
@@ -20,7 +12,6 @@
 // $
 @import '../../index.sass'
 // .ef-input-date
-
 </style>
 
 <script>
@@ -43,12 +34,15 @@ export default {
     // prop categories: behavior content general model state style
     value: {
       category: 'model',
-      type: [String, Date]
+      type: [String, Date],
     },
     // EF props:
     valueType: merge(
-      getGenericValueType(['string', 'date'], `\`valueType: 'date'\` is the default.\nWhen \`valueType: 'date'\` it will try and return a \`new Date\` instance. However, if the user input is not convertable to a valid \`Date\`, it will return the user input as \`string\`.`),
-      {default: 'date'}
+      getGenericValueType(
+        ['string', 'date'],
+        `\`valueType: 'date'\` is the default.\nWhen \`valueType: 'date'\` it will try and return a \`new Date\` instance. However, if the user input is not convertable to a valid \`Date\`, it will return the user input as \`string\`.`
+      ),
+      { default: 'date' }
     ),
     validDateErrorMessage: {
       category: 'behavior',
@@ -57,7 +51,7 @@ export default {
       default: 'Please enter a valid date.',
     },
     // Quasar props with modified defaults:
-    fillMask: {inheritedProp: 'modified', type: Boolean, default: false},
+    fillMask: { inheritedProp: 'modified', type: Boolean, default: false },
     // Quasar props with modified behavior:
     mask: {
       inheritedProp: 'modified',
@@ -75,11 +69,10 @@ export default {
   }),
   computed: {
     propsToPass () {
-      const inheritedProps = Object.keys(EfInput.props)
-        .reduce((carry, propKey) => {
-          carry[propKey] = this[propKey]
-          return carry
-        }, {})
+      const inheritedProps = Object.keys(EfInput.props).reduce((carry, propKey) => {
+        carry[propKey] = this[propKey]
+        return carry
+      }, {})
       return merge(inheritedProps, this.$attrs, {
         // EF props to pass:
         valueType: 'string', // default to 'string' for underlying input
@@ -121,16 +114,17 @@ export default {
       if (this.mask.includes('[')) return undefined
       return this.mask.replace(/\w/g, '#')
     },
-    maskForQDate () { return this.mask },
+    maskForQDate () {
+      return this.mask
+    },
     cRules () {
       const { value, valueType, mask, rules, validDateErrorMessage } = this
       const dateFormat = mask
       function defaultRule () {
-        const validDate = (
+        const validDate =
           !value ||
           (valueType === 'date' && isDate(value)) ||
           (valueType === 'string' && value.length >= dateFormat.length)
-        )
         return validDate || validDateErrorMessage
       }
       return !rules ? [defaultRule] : rules

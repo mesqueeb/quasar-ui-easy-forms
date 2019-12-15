@@ -2,18 +2,9 @@
   <q-layout view="lhh Lpr lFf">
     <q-header>
       <q-toolbar>
-        <q-btn
-          v-if="$route.fullPath !== '/'"
-          flat
-          dense
-          round
-          to="/"
-          icon="home"
-        />
+        <q-btn v-if="$route.fullPath !== '/'" flat dense round to="/" icon="home" />
 
-        <q-toolbar-title>
-          quasar-ui-easy-forms v{{ version }}
-        </q-toolbar-title>
+        <q-toolbar-title> quasar-ui-easy-forms v{{ version }} </q-toolbar-title>
 
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
@@ -33,8 +24,8 @@ export default {
 
   data () {
     return {
-      version
+      version,
     }
-  }
+  },
 }
 </script>

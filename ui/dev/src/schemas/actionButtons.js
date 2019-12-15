@@ -1,4 +1,3 @@
-
 const description = `EasyForm has a prop called 'actionButtons' with which you can specify which buttons you want your EasyForm to include.
 Some buttons are already set up for you and can be included by just passing the string of the button you want:
 
@@ -48,20 +47,27 @@ For more information on the \`context\` prop passed to a click event see the "Ev
 export const exampleForms = [
   {
     mode: 'view',
-    actionButtons: ['delete', 'archive', 'cancel', 'edit', 'save', {
-      btnLabel: 'log the data',
-      push: true,
-      events: {
-        click: (event, {formDataNested}) => console.log(formDataNested),
+    actionButtons: [
+      'delete',
+      'archive',
+      'cancel',
+      'edit',
+      'save',
+      {
+        btnLabel: 'log the data',
+        push: true,
+        events: {
+          click: (event, { formDataNested }) => console.log(formDataNested),
+        },
       },
-    }],
+    ],
     schema: [
       {
         id: 'name',
         fieldType: 'input',
         valueType: 'string',
         label: 'Superhero name',
-        subLabel: 'Think of something cool.'
+        subLabel: 'Think of something cool.',
       },
       {
         id: 'powerOrigin',
@@ -69,12 +75,12 @@ export const exampleForms = [
         label: 'Power origin',
         subLabel: 'Where does your power come from?',
         options: [
-          {label: 'Mutation', value: 'mutation'},
-          {label: 'Self taught', value: 'self'},
-          {label: 'By item', value: 'item'},
+          { label: 'Mutation', value: 'mutation' },
+          { label: 'Self taught', value: 'self' },
+          { label: 'By item', value: 'item' },
         ],
       },
-    ]
+    ],
   },
 ]
 
@@ -86,7 +92,7 @@ export const pageForm = {
       fieldType: 'markdown',
       src: description,
     },
-  ]
+  ],
 }
 
 export default {

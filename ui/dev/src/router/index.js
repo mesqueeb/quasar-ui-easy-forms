@@ -19,13 +19,15 @@ export default function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     mode: process.env.VUE_ROUTER_MODE,
-    base: process.env.VUE_ROUTER_BASE
+    base: process.env.VUE_ROUTER_BASE,
   })
 
   // we get each page from server first!
   if (process.env.MODE === 'ssr' && process.env.CLIENT) {
     console.log('!!!!')
-    console.log('On route change we deliberately load page from server -- in order to test hydration errors')
+    console.log(
+      'On route change we deliberately load page from server -- in order to test hydration errors'
+    )
     console.log('!!!!')
 
     let reload = false

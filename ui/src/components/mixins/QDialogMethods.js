@@ -1,4 +1,3 @@
-
 export default {
   methods: {
     // following method is REQUIRED
@@ -35,6 +34,6 @@ export default {
     onCancelClick () {
       // we just need to hide dialog
       this.hide()
-    }
-  }
+    },
+  },
 }

@@ -1,9 +1,5 @@
 <template>
-  <q-btn
-    class="ef-btn"
-    v-bind="quasarProps"
-    v-on="$listeners"
-  />
+  <q-btn class="ef-btn" v-bind="quasarProps" v-on="$listeners" />
 </template>
 
 <style lang="sass">
@@ -14,7 +10,6 @@
   &.-square
     width: 100%
     height: 100%
-
 </style>
 
 <script>
@@ -33,7 +28,8 @@ export default {
     btnLabel: {
       category: 'content',
       type: String,
-      desc: '`btnLabel` is the button\'s "label". (`label` on the other hand is used for the external label of `<EfField />`)',
+      desc:
+        '`btnLabel` is the button\'s "label". (`label` on the other hand is used for the external label of `<EfField />`)',
     },
     // Quasar props with modified defaults:
     color: {
@@ -53,6 +49,6 @@ export default {
       })
     },
   },
-  methods: {}
+  methods: {},
 }
 </script>

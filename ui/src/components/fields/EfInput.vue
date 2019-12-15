@@ -1,16 +1,8 @@
 <template>
-  <EfDiv
-    v-if="rawValue"
-    class="ef-input"
-    v-bind="divProps"
-  />
+  <EfDiv v-if="rawValue" class="ef-input" v-bind="divProps" />
   <q-input
     v-else
-    :class="[
-      'ef-input',
-      `-align-${cAlign}`,
-      `ef-input--align-${cAlign}`
-    ]"
+    :class="['ef-input', `-align-${cAlign}`, `ef-input--align-${cAlign}`]"
     v-model="cValue"
     v-bind="quasarProps"
     v-on="cEvents"
@@ -30,7 +22,6 @@
 .ef-input--align-right
   .q-field__native
     text-align: right
-
 </style>
 
 <script>
@@ -49,22 +40,26 @@ export default {
     // prop categories: behavior content general model state style
     value: {
       category: 'model',
-      type: [String, Number]
+      type: [String, Number],
     },
-    valueType: getGenericValueType(['string', 'number'], `When \`valueType: 'number'\` it will make sure the model is formatted as Number.`),
+    valueType: getGenericValueType(
+      ['string', 'number'],
+      `When \`valueType: 'number'\` it will make sure the model is formatted as Number.`
+    ),
     // EF props:
-    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
-    fieldType: {type: String}, // defined in EasyField
+    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
+    fieldType: { type: String }, // defined in EasyField
     externalLabels,
     maxValue: {
       category: 'model',
       type: Number,
-      descripton: '(only for `valueType: \'number\'`) limit the max number to be entered. Typing or pasting a higher number will set it to the maxValue.',
-      examples: [999]
+      descripton:
+        "(only for `valueType: 'number'`) limit the max number to be entered. Typing or pasting a higher number will set it to the maxValue.",
+      examples: [999],
     },
     align: {
       category: 'style',
-      validator: val => (!val || ['right', 'left', null].includes(val)),
+      validator: val => !val || ['right', 'left', null].includes(val),
       type: String,
       desc: `Alignment of the content. Defaults to 'right' for \`valueType: 'number'\` and 'left' for the rest'`,
       values: ['right', 'left', null],
@@ -77,15 +72,31 @@ export default {
     rules: {
       inheritedProp: 'modified',
       type: Array,
-      desc: 'Same as Quasar, but with added pre-defined rules for \'telJA\' and \'email\'',
-      examples: [`['telJA']`, `['email']`, `[ val => val.length <= 3 || 'Please use maximum 3 characters' ]`],
+      desc: "Same as Quasar, but with added pre-defined rules for 'telJA' and 'email'",
+      examples: [
+        `['telJA']`,
+        `['email']`,
+        `[ val => val.length <= 3 || 'Please use maximum 3 characters' ]`,
+      ],
     },
     type: {
       inheritedProp: 'modified',
       type: String,
       descripton: `The html tag input type. Defaults to 'number' if \`valueType: 'number'\`, otherwise defaults to 'text'.`,
       default: 'text',
-      examples: [`'text'`, `'password'`, `'textarea'`, `'email'`, `'search'`, `'tel'`, `'file'`, `'number'`, `'url'`, `'time'`, `'date'`],
+      examples: [
+        `'text'`,
+        `'password'`,
+        `'textarea'`,
+        `'email'`,
+        `'search'`,
+        `'tel'`,
+        `'file'`,
+        `'number'`,
+        `'url'`,
+        `'time'`,
+        `'date'`,
+      ],
     },
   },
   data () {
@@ -93,19 +104,25 @@ export default {
   },
   computed: {
     quasarProps () {
-      const overWriteLabelAndHint = (this.externalLabels === false)
-        ? {
-          label: this.$attrs.labelRaw,
-          hint: this.$attrs.subLabelRaw,
-        } : {}
-      return merge(this.$attrs, {
-        // Quasar props with modified defaults:
-        outlined: this.outlined,
-        lazyRules: this.lazyRules,
-        // Quasar props with modified behavior:
-        rules: this.cRules,
-        type: this.cType,
-      }, overWriteLabelAndHint)
+      const overWriteLabelAndHint =
+        this.externalLabels === false
+          ? {
+              label: this.$attrs.labelRaw,
+              hint: this.$attrs.subLabelRaw,
+            }
+          : {}
+      return merge(
+        this.$attrs,
+        {
+          // Quasar props with modified defaults:
+          outlined: this.outlined,
+          lazyRules: this.lazyRules,
+          // Quasar props with modified behavior:
+          rules: this.cRules,
+          type: this.cType,
+        },
+        overWriteLabelAndHint
+      )
     },
     divProps () {
       return merge(this.$attrs, {
@@ -118,9 +135,7 @@ export default {
         const { value, valueType } = this
         if (value !== 0 && !value) return ''
         // commafy doesn't work with type="number"
-        return (valueType === 'number')
-          ? Number(value)
-          : value
+        return valueType === 'number' ? Number(value) : value
       },
       set (val) {
         const { maxValue, valueType } = this
@@ -164,22 +179,30 @@ export default {
     },
     cEvents () {
       const { onClick, onKeydown, $listeners } = this
-      return Object.entries($listeners)
-        .reduce((carry, [eventName, eventFn]) => {
+      return Object.entries($listeners).reduce(
+        (carry, [eventName, eventFn]) => {
           // input event is handled in cValue
           if (eventName === 'input') return carry
           if (eventName === 'click') {
-            carry[eventName] = (...args) => { onClick(...args); eventFn(...args) }
+            carry[eventName] = (...args) => {
+              onClick(...args)
+              eventFn(...args)
+            }
           } else if (eventName === 'keydown') {
-            carry[eventName] = (...args) => { onKeydown(...args); eventFn(...args) }
+            carry[eventName] = (...args) => {
+              onKeydown(...args)
+              eventFn(...args)
+            }
           } else {
             carry[eventName] = eventFn
           }
           return carry
-        }, {
+        },
+        {
           click: onClick,
           keydown: onKeydown,
-        })
+        }
+      )
     },
   },
   methods: {
@@ -194,6 +217,6 @@ export default {
         return
       }
     },
-  }
+  },
 }
 </script>

@@ -1,4 +1,3 @@
-
 const description = ``
 
 export const exampleForms = []
@@ -11,7 +10,7 @@ export const pageForm = {
       fieldType: 'markdown',
       src: description,
     },
-  ]
+  ],
 }
 
 export default {

@@ -15,24 +15,24 @@ export const exampleForms = [
         label: 'Width',
         fieldType: 'input',
         valueType: 'number',
-        suffix: 'cm'
+        suffix: 'cm',
       },
       {
         id: 'size.depth',
         label: 'Depth',
         fieldType: 'input',
         valueType: 'number',
-        suffix: 'cm'
+        suffix: 'cm',
       },
       {
         id: 'size.height',
         label: 'Height',
         fieldType: 'input',
         valueType: 'number',
-        suffix: 'cm'
-      }
-    ]
-  }
+        suffix: 'cm',
+      },
+    ],
+  },
 ]
 
 export const pageForm = {
@@ -41,12 +41,12 @@ export const pageForm = {
   schema: [
     {
       fieldType: 'markdown',
-      src: description
-    }
-  ]
+      src: description,
+    },
+  ],
 }
 
 export default {
   exampleForms,
-  pageForm
+  pageForm,
 }

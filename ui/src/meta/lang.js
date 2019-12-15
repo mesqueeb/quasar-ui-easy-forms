@@ -1,4 +1,3 @@
-
 const defaultLang = {
   archive: 'Archive',
   delete: 'Delete',

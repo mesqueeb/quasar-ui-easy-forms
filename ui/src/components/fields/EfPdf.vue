@@ -30,7 +30,6 @@
 @import '../../index.sass'
 
 // .ef-pdf
-
 </style>
 
 <script>
@@ -62,20 +61,23 @@ ${passContentViaValueOrSrc}`,
       type: [String, Array, Object],
       desc: valueDescImgPdf,
     },
-    get src () { return this.value },
+    get src () {
+      return this.value
+    },
     valueType: getGenericValueType(['string', 'object', 'array']),
     // EF props:
-    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
+    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     deletable: {
       type: Boolean,
       default: true,
-      desc: 'Wether or not uploaded files are deletable (deleting would update the `value`). `true` by default but `false` when `readonly: true`',
+      desc:
+        'Wether or not uploaded files are deletable (deleting would update the `value`). `true` by default but `false` when `readonly: true`',
     },
     lang: {
       category: 'content',
       type: Object,
       desc: `The text used in the UI, eg. for required fields, etc.`,
-      default: () => ({delete: 'Delete'}),
+      default: () => ({ delete: 'Delete' }),
       examples: [`{delete: '削除'}`],
     },
     // Quasar props with modified defaults:
@@ -95,12 +97,18 @@ ${passContentViaValueOrSrc}`,
         if (!val) return []
         if (isPlainObject(val)) return [val]
         if (isFullString(val)) {
-          const fileName = val.split('/').slice(-1)[0].split('.pdf')[0] + '.pdf'
-          return [{downloadURL: val, fileName}]
+          const fileName =
+            val
+              .split('/')
+              .slice(-1)[0]
+              .split('.pdf')[0] + '.pdf'
+          return [{ downloadURL: val, fileName }]
         }
         return val.filter(v => isPlainObject(v))
       },
-      set (val) { this.$emit('input', val) },
+      set (val) {
+        this.$emit('input', val)
+      },
     },
     cDeletable () {
       const { deletable, quasarProps, rawValue } = this
@@ -126,6 +134,6 @@ ${passContentViaValueOrSrc}`,
         $q: this.$q,
       })
     },
-  }
+  },
 }
 </script>

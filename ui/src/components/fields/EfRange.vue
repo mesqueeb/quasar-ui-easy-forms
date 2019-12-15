@@ -1,14 +1,7 @@
 <template>
-  <EfDiv
-    v-if="rawValue"
-    class="ef-range ef-range--raw"
-    v-bind="divProps"
-  />
+  <EfDiv v-if="rawValue" class="ef-range ef-range--raw" v-bind="divProps" />
   <div v-else class="ef-range">
-    <q-range
-      v-model="cValue"
-      v-bind="quasarProps"
-    />
+    <q-range v-model="cValue" v-bind="quasarProps" />
   </div>
 </template>
 
@@ -20,7 +13,6 @@
   padding-top: 30px
   padding-left: $md
   padding-right: $md
-
 </style>
 
 <script>
@@ -39,12 +31,12 @@ export default {
       category: 'model',
       inheritedProp: true,
       type: Object,
-      validator: val => isObject(val) && ('min' in val) && ('max' in val),
-      default: {min: 0, max: 0},
+      validator: val => isObject(val) && 'min' in val && 'max' in val,
+      default: { min: 0, max: 0 },
     },
     valueType: getGenericValueType('object'),
     // EF props:
-    rawValue: {type: Boolean}, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
+    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     prefix: {
       category: 'labels',
       type: String,
@@ -58,7 +50,8 @@ export default {
     labelValue: {
       category: 'labels',
       type: Function,
-      desc: 'A **function** to format the value shown inside the left & right labels. When `undefined` it will default to the value with pre- & suffix (if they are set).',
+      desc:
+        'A **function** to format the value shown inside the left & right labels. When `undefined` it will default to the value with pre- & suffix (if they are set).',
       examples: ['val => `${val}.00 USD`'],
     },
     // Quasar props with modified defaults:
@@ -72,7 +65,7 @@ export default {
       inheritedProp: 'modified',
       type: Boolean,
       default: false,
-      desc: 'Disables the ability to interact with the field. Is `true` when `readonly: true`'
+      desc: 'Disables the ability to interact with the field. Is `true` when `readonly: true`',
     },
   },
   computed: {
@@ -95,10 +88,16 @@ export default {
       })
     },
     cValue: {
-      get () { return this.value },
-      set (val) { this.$emit('input', val) },
+      get () {
+        return this.value
+      },
+      set (val) {
+        this.$emit('input', val)
+      },
     },
-    cDisable () { return this.$attrs.readonly || this.disable },
+    cDisable () {
+      return this.$attrs.readonly || this.disable
+    },
     cLeftLabelValue () {
       const { labelValueFn, value } = this
       const val = value.min

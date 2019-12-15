@@ -1,9 +1,5 @@
 <template>
-  <QUploaderFirebase
-    v-on="$listeners"
-    @uploaded="onUploaded"
-    v-bind="propsToPass"
-  />
+  <QUploaderFirebase v-on="$listeners" @uploaded="onUploaded" v-bind="propsToPass" />
 </template>
 
 <style lang="sass">
@@ -11,7 +7,6 @@
 @import '../../index.sass'
 
 // .ef-uploader
-
 </style>
 
 <script>
@@ -27,7 +22,8 @@ export default {
     value: {
       category: 'model',
       type: [Array, Object],
-      desc: 'No `value` needs to be set for UploaderFirebase. However an @input event will be triggered which receives an object as payload with the information on where the image was stored.',
+      desc:
+        'No `value` needs to be set for UploaderFirebase. However an @input event will be triggered which receives an object as payload with the information on where the image was stored.',
     },
     // EF props:
     firebaseDependency: {
@@ -46,7 +42,8 @@ Don't forget to also import Firebase storage like so: \`import 'firebase/storage
     fileType: {
       category: 'behavior',
       type: String,
-      desc: 'The file type the uploader can accept. Currently limited to \'image\' or \'pdf\'. This will automatically limit the uploader to those file types via Quasar\'s `accept` prop.',
+      desc:
+        "The file type the uploader can accept. Currently limited to 'image' or 'pdf'. This will automatically limit the uploader to those file types via Quasar's `accept` prop.",
       values: ['image', 'pdf'],
     },
     // Quasar props with modified defaults:
@@ -86,7 +83,9 @@ Don't forget to also import Firebase storage like so: \`import 'firebase/storage
     },
   },
   methods: {
-    onUploaded (payload) { this.$emit('input', payload) },
+    onUploaded (payload) {
+      this.$emit('input', payload)
+    },
   },
 }
 </script>

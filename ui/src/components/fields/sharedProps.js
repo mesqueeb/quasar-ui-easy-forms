@@ -12,7 +12,8 @@ import { isArray } from 'is-what'
 export const componentStyle = {
   category: 'style',
   type: [Object, String, Array],
-  desc: 'Style to be applied to the component (not including the label etc.). Uses `:style="componentStyle"`',
+  desc:
+    'Style to be applied to the component (not including the label etc.). Uses `:style="componentStyle"`',
   examples: ['border: thin solid black'],
 }
 
@@ -31,15 +32,17 @@ export const valueDescImgPdf = `Accepts a single or multiple files as its \`valu
 - an array of several images; formatted as one of the above.
 (use 'value' OR 'src' prop)`
 
-export function getGenericValueType(types = [], extraDescription = '') {
+export function getGenericValueType (types = [], extraDescription = '') {
   if (!isArray(types)) types = [types]
-  const defaultType = types.length === 1
-    ? {default: types[0]}
-    : {}
+  const defaultType = types.length === 1 ? { default: types[0] } : {}
   return merge(defaultType, {
     category: 'model',
     type: String,
-    desc: `valueType is the type of the model of the field. For this fieldType it can only be: ${types.join(' | ')}. If your actual underlying valueType is different, you must provide a 'format' function (see prop: 'format') to make sure your value becomes the correct valueType.${ extraDescription ? '\n\n' + extraDescription : '' }`,
+    desc: `valueType is the type of the model of the field. For this fieldType it can only be: ${types.join(
+      ' | '
+    )}. If your actual underlying valueType is different, you must provide a 'format' function (see prop: 'format') to make sure your value becomes the correct valueType.${
+      extraDescription ? '\n\n' + extraDescription : ''
+    }`,
     examples: types,
     values: types,
   })
