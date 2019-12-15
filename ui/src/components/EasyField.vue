@@ -12,6 +12,7 @@
     ]"
     :style="cFieldStyle"
   >
+    <!-- display: inline -->
     <div
       v-if="cLabel"
       :class="[
@@ -21,9 +22,8 @@
           'easy-field__label--title': fieldType === 'title' || fieldType === 'form',
         },
       ]"
+      >{{ cLabel }}</div
     >
-      {{ cLabel }}
-    </div>
     <div
       v-if="cSubLabel"
       :class="[

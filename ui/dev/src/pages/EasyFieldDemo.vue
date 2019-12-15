@@ -8,13 +8,13 @@
           class="q-py-md q-px-sm"
           :src="modelShownAsBadge"
         />
+        <!-- display: inline -->
         <div
           v-else
           class="q-ma-sm q-py-sm q-px-xs text-wrap-all bg-grey-2"
           style="width: 97%; border-radius: 0.3em"
+          >{{ modelShownAsBadge }}</div
         >
-          {{ modelShownAsBadge }}
-        </div>
       </InfoBoxWrapper>
     </div>
     <q-markdown v-if="rawComponent.desc" :src="rawComponent.desc" />
