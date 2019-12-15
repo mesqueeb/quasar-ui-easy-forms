@@ -1,5 +1,6 @@
-const description = `EasyForm has a prop called 'actionButtons' with which you can specify which buttons you want your EasyForm to include.
-Some buttons are already set up for you and can be included by just passing the string of the button you want:
+const description = `By default, EasyForm has buttons on the top side of the form to edit/save etc... Each of these actions will $emit an event, so you can do something appropriately. (eg. saving data to a DB when "save" is clicked)
+
+Action buttons are set via the prop 'actionButtons'. Some buttons are already set up for you and can be included by just passing the string of the button you want:
 
 - \`'edit'\`: Adds a button that puts the form in "edit" mode
 - \`'cancel'\`: Adds a button that puts the form back into "view" mode & reverts the content to its original state

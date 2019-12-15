@@ -1,5 +1,5 @@
 export * as actionButtons from './actionButtons'
-export * as basic from './basic'
+export * as basics from './basics'
 export * as advanced from './advanced'
 export * as easyFields from './easyFields'
 export * as evaluatedProps from './evaluatedProps'
