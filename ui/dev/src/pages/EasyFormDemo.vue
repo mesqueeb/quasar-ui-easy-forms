@@ -9,6 +9,7 @@
       tag-name="EasyForm"
       :title="infoCardTitle"
       :prop-data.sync="exampleForms[pageValue.chosenExample]"
+      :static-schema-tab="exampleFormsRaw[pageValue.chosenExample]"
       :props-schema="propsSchema"
       :style-classes="styleClasses"
       :style-classes-data="styleClassesData"
@@ -46,8 +47,6 @@ import merge from 'merge-anything'
 import * as demoSchemas from '../schemas/examples/index'
 import * as pageForms from '../schemas/pages/index'
 import { getInfoCardPropsSchema } from '../helpers/schemaBuilders'
-import ja from '!!raw-loader!../schemas/examples/basics'
-console.log('ja → ', ja)
 
 export default {
   name: 'EasyFormDemo',
@@ -55,15 +54,16 @@ export default {
     schemaId: String,
   },
   data () {
-    console.log('pageForms → ', pageForms)
-    const pageForm = pageForms[this.schemaId]
-    console.log('demoSchemas → ', demoSchemas)
-    const exampleForms = demoSchemas[this.schemaId]
+    const { schemaId } = this
+    const pageForm = pageForms[schemaId]
+    const exampleForms = demoSchemas[schemaId].code
+    const exampleFormsRaw = demoSchemas[schemaId].string
     const propsSchema = getInfoCardPropsSchema('EasyForm')
     return {
       pageValue: { chosenExample: 0 },
       pageForm,
       exampleForms: exampleForms.map(f => merge({ value: {} }, f)),
+      exampleFormsRaw,
       propsSchema,
     }
   },

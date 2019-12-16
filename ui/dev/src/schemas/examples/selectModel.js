@@ -1,31 +1,30 @@
-import merge from 'merge-anything'
-import serialize from 'serialize-javascript'
-
-const exampleSelect = {
-  fieldType: 'select',
-  options: [
-    { label: 'Self taught', value: 'self' },
-    { label: 'By item', value: 'item' },
-    { label: 'Mutation', value: 'mutation' },
-  ],
-}
-
-const serializeForMarkdown = code => `\`\`\`js
-${serialize(code)}
+const formatForMarkdown = code => `\`\`\`js
+${JSON.stringify(code, null, 2)}
 \`\`\``
 
 const createExample = (config, i) => [
-  merge(exampleSelect, config, { id: `example${i}` }),
+  Object.assign(
+    {
+      fieldType: 'select',
+      options: [
+        { label: 'Self taught', value: 'self' },
+        { label: 'By item', value: 'item' },
+        { label: 'Mutation', value: 'mutation' },
+      ],
+      id: `example${i}`,
+    },
+    config
+  ),
   {
     id: `example${i}-m`,
     fieldType: 'markdown',
-    src: (val, { formDataNested }) => serializeForMarkdown(formDataNested[`example${i}`]),
+    src: (val, { formDataNested }) => formatForMarkdown(formDataNested[`example${i}`]),
   },
   {
     id: `example${i}-o`,
     fieldType: 'markdown',
     fieldClass: 'text-break-all',
-    src: serializeForMarkdown(config),
+    src: formatForMarkdown(config),
   },
 ]
 
@@ -44,34 +43,32 @@ const exampleConfigs = [
   { valueType: 'object', multiple: true, emitValue: true },
 ]
 
-export default [
-  {
-    actionButtons: [],
-    mode: 'edit',
-    columnCount: 3,
-    schema: [
-      {
-        fieldType: 'space',
-        subLabel: 'Select some values for each select-field down below, and see what happens.',
-      },
-      {
-        fieldType: 'title',
-        span: 1,
-        label: 'Model:',
-      },
-      {
-        fieldType: 'title',
-        span: 1,
-        label: 'Options:',
-      },
-      ...exampleConfigs.reduce((carry, config, i) => {
-        if (config.fieldType === 'title') {
-          carry.push(config)
-          return carry
-        }
-        carry.push(...createExample(config, i))
+export default {
+  actionButtons: [],
+  mode: 'edit',
+  columnCount: 3,
+  schema: [
+    {
+      fieldType: 'space',
+      subLabel: 'Select some values for each select-field down below, and see what happens.',
+    },
+    {
+      fieldType: 'title',
+      span: 1,
+      label: 'Model:',
+    },
+    {
+      fieldType: 'title',
+      span: 1,
+      label: 'Options:',
+    },
+    ...exampleConfigs.reduce((carry, config, i) => {
+      if (config.fieldType === 'title') {
+        carry.push(config)
         return carry
-      }, []),
-    ],
-  },
-]
+      }
+      carry.push(...createExample(config, i))
+      return carry
+    }, []),
+  ],
+}
