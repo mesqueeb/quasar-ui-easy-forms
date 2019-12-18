@@ -79,7 +79,6 @@ import copy from 'copy-anything'
 import { isArray, isFunction, isFullString, isPlainObject } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
 import flattenPerSchema from '../helpers/flattenPerSchema'
-import { validateFormPerSchema } from '../helpers/validation'
 import defaultLang from '../meta/lang'
 import EfBtn from './fields/EfBtn.vue'
 import EasyField from './EasyField.vue'
@@ -435,8 +434,6 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
           const validatorRes = validator(dataEdited, dataBackup)
           if (isFullString(validatorRes)) reject(validatorRes)
         }
-        const result = validateFormPerSchema(schema, formDataFlat, innerLang)
-        console.log('result → ', result)
         $refs.refEasyForm
           .validate()
           .then(success => {
