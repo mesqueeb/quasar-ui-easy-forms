@@ -65,7 +65,7 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
     placeholder: {
       category: 'content|model',
       type: String,
-      desc: `Will be shown IF 'externalLabels' is true OR if 'stackLabel' is true`,
+      desc: `Will be shown if \`(externalLabels ||  (!externalLabels && stackLabel))\``,
     },
     // Quasar props with modified defaults:
     outlined: { inheritedProp: 'modified', type: Boolean, default: true },

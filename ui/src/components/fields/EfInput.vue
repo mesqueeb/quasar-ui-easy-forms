@@ -28,7 +28,7 @@
 import merge from 'merge-anything'
 import { isNumber, isString, isArray, isFunction } from 'is-what'
 import { QInput } from 'quasar'
-import { getGenericValueType, externalLabels } from './sharedProps.js'
+import { getGenericValueType } from './sharedProps.js'
 import focusIfInputEl from '../../helpers/focusIfInputEl'
 
 export default {

@@ -368,7 +368,6 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
     },
     internalLabelMode () {
       const { fieldType, externalLabels } = this
-      // return externalLabels === false && ['input', 'inputDate', 'select'].includes(fieldType)
       return externalLabels === false && !['title', 'space', 'none', undefined].includes(fieldType)
     },
     componentIdentifier () {
