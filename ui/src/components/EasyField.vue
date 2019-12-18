@@ -36,10 +36,8 @@
       <q-markdown v-if="hasMarkdown" no-line-numbers no-container>{{ cSubLabel }}</q-markdown>
       <template v-else>{{ cSubLabel }}</template>
     </div>
-    <div
-      class="easy-field__field"
-      v-if="!['title', 'space', 'none', undefined].includes(fieldType)"
-    >
+    <template v-if="['title', 'space', 'none', undefined].includes(fieldType)"></template>
+    <div class="easy-field__field" v-else-if="cFieldInheritsQField">
       <component
         :is="componentIdentifier"
         v-model="cValue"
@@ -49,6 +47,18 @@
         :style="cInnerStyle"
       />
     </div>
+    <QField class="easy-field__field" v-else v-model="cValue" v-bind="cQFieldProps">
+      <template v-slot:control>
+        <component
+          :is="componentIdentifier"
+          v-model="cValue"
+          v-bind="fieldProps"
+          v-on="cEvents"
+          :class="cInnerClassesArray"
+          :style="cInnerStyle"
+        />
+      </template>
+    </QField>
   </div>
 </template>
 
@@ -99,6 +109,7 @@
 
 <script>
 import { QMarkdown } from '@quasar/quasar-ui-qmarkdown'
+import { QField } from 'quasar'
 import { isFunction, isPlainObject, isArray, isString, isUndefined } from 'is-what'
 import merge from 'merge-anything'
 import defaultLang from '../meta/lang'
@@ -132,7 +143,7 @@ function resolveEasyFieldProp (propKey, propValue, componentValue, component) {
 export default {
   name: 'EasyField',
   inheritAttrs: false,
-  components: { QMarkdown },
+  components: { QMarkdown, QField },
   props: {
     // prop categories: behavior content general model state style
     // EF props used here:
@@ -277,6 +288,14 @@ You can also pass a function that will receive two params you can work with: \`(
       default: false,
       desc: 'An EasyField with `hasMarkdown: true` can have markdown in its sub-label.',
     },
+    externalLabels: {
+      category: 'style',
+      type: Boolean,
+      desc: `By default labels are external to allow similar label styling for any type of field.
+
+When \`externalLabels: false\` it will use the native labels from QField, QInput & QSelect. The subLabel will be passed as 'hint' underneath the field.`,
+      default: true,
+    },
     // Quasar props with modified defaults:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
     readonly: {
@@ -322,6 +341,9 @@ You can also pass a function that will receive two params you can work with: \`(
     },
   },
   computed: {
+    cFieldInheritsQField () {
+      return ['select', 'input', 'inputDate'].includes(this.fieldType)
+    },
     cFieldStyle () {
       const { fieldStyle, cValue } = this
       return resolveEasyFieldProp('fieldStyle', fieldStyle, cValue, this)
@@ -345,9 +367,9 @@ You can also pass a function that will receive two params you can work with: \`(
       return classes
     },
     internalLabelMode () {
-      const { fieldType } = this
-      const { externalLabels } = this.$attrs
-      return externalLabels === false && ['input', 'inputDate', 'select'].includes(fieldType)
+      const { fieldType, externalLabels } = this
+      // return externalLabels === false && ['input', 'inputDate', 'select'].includes(fieldType)
+      return externalLabels === false && !['title', 'space', 'none', undefined].includes(fieldType)
     },
     componentIdentifier () {
       const { fieldType } = this
@@ -358,9 +380,15 @@ You can also pass a function that will receive two params you can work with: \`(
     },
     fieldProps () {
       // props only used here: format, parseInput, label
-      const { cValue, $attrs, required, innerLang } = this
+      const { cValue, $attrs, required, innerLang, fieldType, internalLabelMode } = this
       const self = this
       // add default "required" rule
+      const internalLabelDefaults = !internalLabelMode
+        ? {}
+        : {
+            label: this.label,
+            hint: this.subLabel,
+          }
       const requiredRule = val => !!val || innerLang['requiredField']
       const requiredRules =
         required && isArray($attrs.rules) && $attrs.rules.length
@@ -368,8 +396,8 @@ You can also pass a function that will receive two params you can work with: \`(
           : required
           ? { rules: [requiredRule] }
           : {}
-
       const mergedProps = merge(
+        internalLabelDefaults,
         $attrs,
         {
           // EF props used here, but also to pass:
@@ -378,8 +406,6 @@ You can also pass a function that will receive two params you can work with: \`(
           formMode: this.formMode,
           formId: this.formId,
           fieldType: this.fieldType,
-          labelRaw: this.label,
-          subLabelRaw: this.subLabel,
           lang: this.innerLang,
           events: this.cEvents,
           rawValue: this.rawValue,
@@ -394,6 +420,15 @@ You can also pass a function that will receive two params you can work with: \`(
         carry[propKey] = resolveEasyFieldProp(propKey, propValue, cValue, self)
         return carry
       }, {})
+    },
+    cQFieldProps () {
+      // disable prefix suffix for QField
+      return merge(this.fieldProps, {
+        prefix: undefined,
+        suffix: undefined,
+        borderless: true,
+        stackLabel: true,
+      })
     },
     cValue: {
       get () {

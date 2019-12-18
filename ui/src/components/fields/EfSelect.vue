@@ -15,7 +15,7 @@
 import merge from 'merge-anything'
 import { isString, isPlainObject, isArray } from 'is-what'
 import { QSelect } from 'quasar'
-import { getGenericValueType, externalLabels } from './sharedProps.js'
+import { getGenericValueType } from './sharedProps.js'
 
 export default {
   components: { QSelect },
@@ -62,10 +62,10 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
     ]),
     // EF props:
     rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
-    externalLabels,
     placeholder: {
+      category: 'content|model',
       type: String,
-      desc: `Will be shown when nothing is selected, but only if 'externalLabels' is not disabled. (Takes the place of the 'label' Quasar prop, because with EfSelect the label is external.)`,
+      desc: `Will be shown IF 'externalLabels' is true OR if 'stackLabel' is true`,
     },
     // Quasar props with modified defaults:
     outlined: { inheritedProp: 'modified', type: Boolean, default: true },
@@ -96,27 +96,17 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
   },
   computed: {
     quasarProps () {
-      const overWriteLabelAndHint =
-        this.externalLabels === false
-          ? {
-              label: this.$attrs.labelRaw,
-              hint: this.$attrs.subLabelRaw,
-            }
-          : {}
-      return merge(
-        this.$attrs,
-        {
-          // Quasar props with modified defaults:
-          outlined: this.outlined,
-          autogrow: this.autogrow,
-          // Quasar props with modified behavior:
-          label: this.cLabel,
-          options: this.cOptions,
-          hideDropdownIcon: this.cHideDropdownIcon,
-          useChips: this.cUseChips,
-        },
-        overWriteLabelAndHint
-      )
+      return merge(this.$attrs, {
+        // Quasar props with modified defaults:
+        outlined: this.outlined,
+        autogrow: this.autogrow,
+        // Quasar props with modified behavior:
+        clearable: this.cClearable,
+        label: this.cLabel,
+        options: this.cOptions,
+        hideDropdownIcon: this.cHideDropdownIcon,
+        useChips: this.cUseChips,
+      })
     },
     divProps () {
       return merge(this.$attrs, {
@@ -127,9 +117,13 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
     },
     cValue: {
       get () {
-        const { value, valueType, $attrs } = this
-        if (value === undefined) return value
-        if (valueType === 'object' && $attrs.multiple) {
+        const { value, valueType, placeholder } = this
+        const { multiple, label, stackLabel } = this.$attrs
+        if (value === undefined || value === null) {
+          // show the placeholder as "value" under these conditions:
+          return label && stackLabel ? placeholder : value
+        }
+        if (valueType === 'object' && multiple) {
           return Object.entries(value).reduce((carry, [value, label]) => {
             // filter out those that are `null`
             if (label) carry.push({ value, label })
@@ -162,10 +156,19 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
         this.$emit('input', val)
       },
     },
+    cClearable () {
+      // don't show clearable when the value is the placeholder
+      const { value } = this
+      const { clearable, label, stackLabel } = this.$attrs
+      return label && stackLabel ? !!value : clearable
+    },
     cLabel () {
-      // hidden when a value is selected
       const { cValue, placeholder } = this
-      return cValue || cValue === 0 ? undefined : placeholder
+      const { label, stackLabel } = this.$attrs
+      // show label when passed
+      if (label) return label
+      // show the placeholder as "label" under these conditions:
+      return cValue === undefined || cValue === null ? placeholder : undefined
     },
     cOptions () {
       const { options } = this

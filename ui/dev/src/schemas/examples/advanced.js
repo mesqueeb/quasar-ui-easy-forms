@@ -52,6 +52,7 @@ export default {
       min: 0,
       max: 100,
       default: 50,
+      suffix: ' stamina',
     },
     {
       id: 'md-slider',
@@ -66,6 +67,7 @@ export default {
       valueType: 'number',
       label: 'Power',
       subLabel: 'Fill in a number.',
+      suffix: 'PW',
     },
     {
       id: 'md-input-nr',
@@ -122,7 +124,7 @@ export default {
     {
       id: 'consent',
       span: 3,
-      label: 'Do you agree with our terms.',
+      label: 'Do you agree with our terms?',
       fieldType: 'toggle',
       valueType: 'boolean',
     },
@@ -136,14 +138,14 @@ export default {
       id: 'submissionDate',
       span: 3,
       label: 'Date of submission',
-      fieldType: 'input-date',
+      fieldType: 'inputDate',
       valueType: 'date',
     },
     {
       id: 'md-input-date',
       fieldType: 'markdown',
       span: 1,
-      src: "```js\n{fieldType: 'input-date'}\n```",
+      src: "```js\n{fieldType: 'inputDate'}\n```",
     },
   ],
 }

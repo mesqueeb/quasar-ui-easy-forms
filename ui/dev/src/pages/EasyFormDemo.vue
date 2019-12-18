@@ -31,6 +31,8 @@
   .ef-btn-toggle
     border: solid 2px $primary
     border-radius: 6px
+    > *
+      border-radius: 3px
   // .q-markdown p
   //   margin: 0 !important
   .q-markdown--code

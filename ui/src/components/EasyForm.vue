@@ -79,6 +79,7 @@ import copy from 'copy-anything'
 import { isArray, isFunction, isFullString, isPlainObject } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
 import flattenPerSchema from '../helpers/flattenPerSchema'
+import { validateFormPerSchema } from '../helpers/validation'
 import defaultLang from '../meta/lang'
 import EfBtn from './fields/EfBtn.vue'
 import EasyField from './EasyField.vue'
@@ -225,7 +226,7 @@ See the documentation on "Action Buttons" for more info.`,
       type: Boolean,
       desc: `By default labels are external to allow similar label styling for any type of field.
 
-When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will use an internal label on 'input' fields and pass the subLabel as 'hint' underneath the input field.`,
+When \`externalLabels: false\` it will use the native labels from QField, QInput & QSelect. The subLabel will be passed as 'hint' underneath the field.`,
       default: true,
     },
   },
@@ -428,16 +429,21 @@ When the fieldType is 'input' or 'select' and \`externalLabels: false\` it will 
       this.$emit(EVENTS['cancel'].name)
     },
     validate () {
-      const { $refs, innerLang, validator, dataEdited, dataBackup } = this
+      const { $refs, innerLang, validator, dataEdited, dataBackup, schema, formDataFlat } = this
       return new Promise((resolve, reject) => {
         if (isFunction(validator)) {
           const validatorRes = validator(dataEdited, dataBackup)
           if (isFullString(validatorRes)) reject(validatorRes)
         }
-        $refs.refEasyForm.validate().then(success => {
-          if (success) return resolve()
-          reject(innerLang['formValidationError'])
-        })
+        const result = validateFormPerSchema(schema, formDataFlat, innerLang)
+        console.log('result → ', result)
+        $refs.refEasyForm
+          .validate()
+          .then(success => {
+            if (success) return resolve()
+            reject(innerLang['formValidationError'])
+          })
+          .catch(e => reject(innerLang['formValidationError']))
       })
     },
     tapEdit () {

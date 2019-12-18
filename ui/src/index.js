@@ -21,13 +21,12 @@ import EfUploaderFirebase from './components/fields/EfUploaderFirebase.vue'
 import EfVideo from './components/fields/EfVideo.vue'
 
 import dependencyMap from './meta/dependencyMap'
+import { validateFormPerSchema } from './helpers/validation.js'
 
 export {
   version,
-
   EasyForm,
   EasyField,
-
   EfBtn,
   EfBtnToggle,
   EfDiv,
@@ -44,8 +43,8 @@ export {
   EfToggle,
   EfUploaderFirebase,
   EfVideo,
-
   dependencyMap,
+  validateFormPerSchema,
 }
 
 export default {
@@ -72,6 +71,7 @@ export default {
   EfVideo,
 
   dependencyMap,
+  validateFormPerSchema,
 
   install (Vue) {
     Vue.component(EasyField.name, EasyField)
@@ -93,5 +93,5 @@ export default {
     Vue.component(EfToggle.name, EfToggle)
     Vue.component(EfUploaderFirebase.name, EfUploaderFirebase)
     Vue.component(EfVideo.name, EfVideo)
-  }
+  },
 }

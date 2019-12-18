@@ -97,6 +97,7 @@ const pagesEasyForm = [
   { title: 'Evaluated Props', path: '/evaluatedProps' },
   { title: 'Events', path: '/events' },
   { title: 'Nested data', path: '/nestedData' },
+  { title: 'Validation', path: '/validation' },
 ]
 
 const pagesEasyField = [

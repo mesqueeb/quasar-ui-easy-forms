@@ -48,7 +48,6 @@ export default {
     // EF props:
     rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     fieldType: { type: String }, // defined in EasyField
-    externalLabels,
     maxValue: {
       category: 'model',
       type: Number,
@@ -93,24 +92,13 @@ export default {
   },
   computed: {
     quasarProps () {
-      const overWriteLabelAndHint =
-        this.externalLabels === false
-          ? {
-              label: this.$attrs.labelRaw,
-              hint: this.$attrs.subLabelRaw,
-            }
-          : {}
-      return merge(
-        this.$attrs,
-        {
-          // Quasar props with modified defaults:
-          outlined: this.outlined,
-          lazyRules: this.lazyRules,
-          // Quasar props with modified behavior:
-          type: this.cType,
-        },
-        overWriteLabelAndHint
-      )
+      return merge(this.$attrs, {
+        // Quasar props with modified defaults:
+        outlined: this.outlined,
+        lazyRules: this.lazyRules,
+        // Quasar props with modified behavior:
+        type: this.cType,
+      })
     },
     divProps () {
       return merge(this.$attrs, {

@@ -16,6 +16,13 @@ export const nestedData = {
   code: [require('./nestedData').default],
   string: [require('!!raw-loader!./nestedData').default],
 }
+export const validation = {
+  code: [require('./validation').default, require('./validation2').default],
+  string: [
+    require('!!raw-loader!./validation').default,
+    require('!!raw-loader!./validation2').default,
+  ],
+}
 export const responsiveStyle = {
   code: [require('./responsiveStyle').default],
   string: [require('!!raw-loader!./responsiveStyle').default],
