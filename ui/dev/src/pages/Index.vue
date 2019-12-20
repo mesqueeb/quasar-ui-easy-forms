@@ -102,7 +102,7 @@ const pagesEasyForm = [
 
 const pagesEasyField = [
   { title: 'Easy Field', path: '/EasyFieldDemo' },
-  { title: "fieldType: 'select' models", path: '/selectModel' },
+  { title: "component: 'EfSelect' models", path: '/selectModel' },
 ]
 
 export default {

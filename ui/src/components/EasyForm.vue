@@ -19,7 +19,6 @@
         v-bind="field"
         :value="formDataFlat[field.id]"
         @input="value => fieldInput({ id: field.id, value })"
-        :class="field.fieldType === 'title' ? '-title' : ''"
         :style="
           field.span ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}` : ''
         "
@@ -82,6 +81,7 @@ import flattenPerSchema from '../helpers/flattenPerSchema'
 import defaultLang from '../meta/lang'
 import EfBtn from './fields/EfBtn.vue'
 import EasyField from './EasyField.vue'
+import { mode, labelPosition, externalLabels, hasMarkdown, evaluatedProps } from './sharedProps.js'
 
 export const EVENTS = {
   'update:mode': {
@@ -145,24 +145,20 @@ Read more on Evaluated Props in its dedicated page.`,
       type: Array,
       required: true,
       desc: `This is the heart of your EasyForm. It's the schema that will defined what fields will be generated.`,
-      examples: [`[{id: 'name', fieldType: 'input'}]`],
-    },
-    mode: {
-      category: 'state',
-      type: String,
-      default: 'view',
-      validator: prop => ['edit', 'add', 'view', 'raw'].includes(prop),
-      values: ['edit', 'add', 'view', 'raw'],
-      examples: [`'edit'`, `'add'`, `'view'`, `'raw'`],
-      desc: 'The state of the EasyForm.',
+      examples: [`[{id: 'name', component: 'QInput'}]`],
     },
     actionButtons: {
       category: 'content',
       type: Array,
-      default: () => ['archive', 'cancel', 'edit', 'save'],
-      desc: `Buttons on top of the form that control the 'mode' of the form; clicking them will $emit the following events: 'cancel', 'save', 'delete', 'archive'.
-You can decide which buttons you want to show/hide by passing them in an array to \`:action-buttons="[]"\`. You can also pass custom buttons with a schema just like an EasyField button.
+      default: () => [],
+      desc: `Buttons on top of the form that control the 'mode' of the form. The possible pre-made buttons are:
+- 'edit' a button which puts the form in 'edit' mode & does \`emit('edit')\`
+- 'cancel' a button which puts the form in 'view' mode & does \`emit('cancel')\`
+- 'save' a button which puts the form in 'edit' mode & does \`emit('save', {newData, oldData})\`
+- 'delete' a red button which does \`emit('delete')\`
+- 'archive' a red button which does \`emit('archive')\`
 
+You can also pass custom buttons with a schema just like an EasyField button.
 See the documentation on "Action Buttons" for more info.`,
       examples: [
         `[] (no buttons)`,
@@ -178,20 +174,6 @@ See the documentation on "Action Buttons" for more info.`,
       examples: ['top', 'bottom', 'right', 'left'],
       values: ['top', 'bottom', 'right', 'left'],
       validator: prop => ['top', 'bottom', 'right', 'left'].includes(prop),
-    },
-    labelPosition: {
-      category: 'style',
-      type: [String, Function],
-      default: 'top',
-      desc: 'The position of the labels.',
-      values: ['top', 'left'],
-      examples: ['top', 'left'],
-    },
-    hasMarkdown: {
-      category: 'state',
-      type: [Boolean, Function],
-      default: false,
-      desc: 'An EasyForm with `hasMarkdown: true` can have markdown in its field sub-labels.',
     },
     validator: {
       category: 'behavior',
@@ -220,20 +202,18 @@ See the documentation on "Action Buttons" for more info.`,
       default: () => defaultLang,
       examples: [`{cancel: 'キャンセル', edit: '編集', save: '保存'}`],
     },
-    externalLabels: {
-      category: 'style',
-      type: Boolean,
-      desc: `By default labels are external to allow similar label styling for any type of field.
-
-When \`externalLabels: false\` it will use the native labels from QField, QInput & QSelect. The subLabel will be passed as 'hint' underneath the field.`,
-      default: true,
-    },
+    // shared props:
+    mode,
+    labelPosition,
+    externalLabels,
+    hasMarkdown,
+    evaluatedProps,
   },
   data () {
     const { mode, id, value, schema, lang } = this
     // merge user provided lang onto defaults
     const innerLang = merge(defaultLang, lang)
-    const formMode = mode
+    const innerMode = mode
     const formId = id
     const dataFlat = flattenPerSchema(value, schema)
     const schemaArray = isArray(schema) ? schema : Object.values(schema)
@@ -244,7 +224,7 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
     const formDataFlat = merge(dataFlatDefaults, copy(dataFlat))
     return {
       innerLang,
-      formMode,
+      innerMode,
       formId,
       edited: false,
       editedFields: [],
@@ -255,7 +235,7 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
   },
   watch: {
     mode (newValue) {
-      this.formMode = newValue
+      this.innerMode = newValue
     },
     id (newValue) {
       this.formId = newValue
@@ -276,50 +256,34 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
     },
     cMode: {
       get () {
-        return this.formMode
+        return this.innerMode
       },
       set (val) {
-        this.formMode = val
+        this.innerMode = val
         this.$emit(EVENTS['update:mode'].name, val)
       },
     },
     cSchema () {
       const self = this
-      const {
-        schema,
-        formDataNested,
-        formDataFlat,
-        formMode,
-        formId,
-        externalLabels,
-        innerLang,
-        fieldInput,
-        labelPosition,
-        hasMarkdown,
-      } = this
+      const { schema, formDataNested, formDataFlat, innerMode, formId, innerLang } = this
       const overwritableDefaults = {
-        readonly: formMode === 'view',
-        rawValue: formMode === 'raw',
-        externalLabels,
+        // used here & pass
         lang: innerLang,
-        fieldInput,
-        labelPosition,
-        hasMarkdown,
+        mode: innerMode,
+        fieldInput: this.fieldInput,
+        // just pass
+        externalLabels: this.externalLabels,
+        labelPosition: this.labelPosition,
+        hasMarkdown: this.hasMarkdown,
+        evaluatedProps: this.evaluatedProps,
       }
       const forcedDefaults = {
         formDataNested,
         formDataFlat,
-        formMode,
         formId,
-      }
-      function checkShowCondition ({ id: fieldId, showCondition }) {
-        if (!isFunction(showCondition)) return true
-        return showCondition(formDataFlat[fieldId], self)
       }
       return schema.reduce((carry, blueprint) => {
         const blueprintCleaned = merge(overwritableDefaults, blueprint, forcedDefaults)
-        // return early when showCondition fails
-        if (!checkShowCondition(blueprintCleaned)) return carry
         carry.push(blueprintCleaned)
         return carry
       }, [])

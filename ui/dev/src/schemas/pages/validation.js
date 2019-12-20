@@ -12,12 +12,12 @@ export default {
   actionButtons: [],
   schema: [
     {
-      fieldType: 'markdown',
+      component: 'EfMarkdown',
       src: description,
     },
     {
       id: 'chosenExample',
-      fieldType: 'btn-toggle',
+      component: 'EfBtnToggle',
       noCaps: true,
       options: [
         { label: 'Basic validation', value: 0 },

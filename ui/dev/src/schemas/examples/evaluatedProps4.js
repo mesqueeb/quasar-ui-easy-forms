@@ -25,14 +25,14 @@ export default {
     {
       id: 'year',
       label: 'Year',
-      fieldType: 'select',
+      component: 'QSelect',
       emitValue: true,
       options: [...new Set(carData.map(d => d.year))].map(value => ({ value, label: value })),
     },
     {
       id: 'make',
       label: 'Make',
-      fieldType: 'select',
+      component: 'QSelect',
       emitValue: true,
       options: (val, { formDataNested }) => {
         const { year } = formDataNested || {}
@@ -44,7 +44,7 @@ export default {
     {
       id: 'model',
       label: 'Model',
-      fieldType: 'select',
+      component: 'QSelect',
       emitValue: true,
       options: (val, { formDataNested }) => {
         const { year, make } = formDataNested || {}
@@ -58,7 +58,7 @@ export default {
     {
       id: 'trim',
       label: 'Trim',
-      fieldType: 'select',
+      component: 'QSelect',
       emitValue: true,
       options: (val, { formDataNested }) => {
         const { year, make, model } = formDataNested || {}

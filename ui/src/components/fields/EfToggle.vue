@@ -1,7 +1,4 @@
 <template>
-  <div v-if="rawValue" class="ef-toggle">
-    {{ cValue ? '✅' : '❌' }}
-  </div>
   <q-toggle v-else class="ef-toggle" v-model="cValue" v-bind="quasarProps" />
 </template>
 
@@ -30,7 +27,6 @@ export default {
     },
     valueType: getGenericValueType('boolean'),
     // EF props:
-    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     // Quasar props with modified defaults:
     // Quasar props with modified behavior:
     disable: {

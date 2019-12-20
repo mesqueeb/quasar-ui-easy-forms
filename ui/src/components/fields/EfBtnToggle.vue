@@ -1,7 +1,6 @@
 <template>
-  <EfDiv v-if="rawValue" class="ef-btn-toggle" v-bind="divProps" />
   <q-btn-toggle
-    v-else-if="!separateButtons"
+    v-if="!separateButtons"
     :value="value"
     @input="val => $emit('input', val)"
     v-bind="quasarProps"
@@ -67,8 +66,8 @@ export default {
       type: Boolean,
       default: false,
     },
-    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     // Quasar props with modified defaults:
+    spread: { type: Boolean, default: true, inheritedProp: 'modified' },
     unelevated: { type: Boolean, default: true, inheritedProp: 'modified' },
     toggleColor: { type: String, default: 'primary', inheritedProp: 'modified' },
     // Quasar props with modified behavior:
@@ -84,16 +83,10 @@ export default {
     quasarProps () {
       return merge(this.$attrs, {
         // Quasar props with modified defaults:
+        spread: this.spread,
         unelevated: this.unelevated,
         toggleColor: this.toggleColor,
         // Quasar props with modified behavior:
-        options: this.options,
-      })
-    },
-    divProps () {
-      return merge(this.$attrs, {
-        value: this.value,
-        valueType: this.valueType,
         options: this.options,
       })
     },

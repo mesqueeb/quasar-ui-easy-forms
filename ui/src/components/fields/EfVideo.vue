@@ -1,5 +1,5 @@
 <template>
-  <q-video v-if="readonly || rawValue" class="ef-video" v-bind="quasarProps" />
+  <q-video v-if="readonly" class="ef-video" v-bind="quasarProps" />
   <EfInput v-else class="ef-video" :value="value" @input="onInput" v-bind="quasarProps" />
 </template>
 
@@ -41,7 +41,6 @@ However, in case you will also use \`readonly: false\` (to show the "input") you
     },
     valueType: getGenericValueType('string'),
     // EF props:
-    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     // Quasar props with modified defaults:
     // Quasar props with modified behavior:
     readonly: {

@@ -26,7 +26,7 @@ export function propToPropSchema (propKey, propInfo) {
   // make the raw prop info from the components into an EasyForm:
   // whatever the prop is, default to an 'input' EasyField
   const events = {}
-  let fieldType = 'input'
+  let component = 'EfInput'
   let subLabel = desc
   let options, outlined, standout, disable, parseInput, format, autogrow, debounce, span, emitValue
   let fieldClasses = []
@@ -37,12 +37,12 @@ export function propToPropSchema (propKey, propInfo) {
     type === Boolean ||
     (isArray(type) && [Boolean, Function].every(t => type.includes(t)) && type.length === 2)
   ) {
-    fieldType = 'toggle'
+    component = 'EfToggle'
   }
   // if the prop has a fixed set of possible values, show this as an 'option' EasyField
   const propHasValues = isArray(values) && values.length
   if (propHasValues) {
-    fieldType = 'select'
+    component = 'EfSelect'
     emitValue = true
     options = values.map(v => ({ label: v, value: v }))
   }
@@ -66,7 +66,7 @@ export function propToPropSchema (propKey, propInfo) {
   if (type === Function) disable = true
   // If it's the prop called 'schema', span the entire form, add extra info and don't return any input field
   if (propKey === 'schema') {
-    fieldType = 'none'
+    component = ''
     span = true
     subLabel +=
       '\n\n> 👀 Check「Source tab」→「Schema」to see the following code in color and with indentation.'
@@ -74,7 +74,8 @@ export function propToPropSchema (propKey, propInfo) {
   // Create the EfField schema for the prop
   return {
     id: propKey,
-    fieldType,
+    fieldType: component.slice(2),
+    component,
     valueType: type === Number ? 'number' : undefined,
     // schema,
     label: propKey,
@@ -108,7 +109,7 @@ export function getInfoCardPropsSchema (selectedField) {
       : getAllComponentProps(selectedField)
   return Object.entries(allComponentProps).reduce((carry, [propKey, propInfo]) => {
     // fields to not include in the InfoCard settings:
-    if (propKey === 'fieldType') {
+    if (propKey === 'component' || propKey === 'value') {
       return carry
     }
     carry[propKey] = propToPropSchema(propKey, propInfo)

@@ -5,7 +5,7 @@ export default {
   actionButtons: [],
   schema: [
     {
-      fieldType: 'markdown',
+      component: 'EfMarkdown',
       src: description,
     },
   ],

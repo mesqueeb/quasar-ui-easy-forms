@@ -11,7 +11,7 @@ Evaluated props will receive 2 params: \`(val, context)\`.
 The most important props you can access from \`context\`:
 - \`formDataNested\` This is the *nested* data of all the fields inside an EasyForm.
 - \`formDataFlat\` This is the *flattened* data of all the fields inside an EasyForm.
-- \`formMode\` The current state of the EasyForm. Can be \`'view'\` | \`'edit'\` | \`'add'\`
+- \`mode\` The current mode of the EasyForm. Can be \`'view'\` | \`'edit'\` | \`'add'\` | \`raw\`
 - \`formId\` An 'id' of the EasyForm. This is only present when manually set.
 - Other common Vue props like: \`$store\`, \`$router\`, \`$q\` (for Quasar apps) etc.
 
@@ -23,13 +23,13 @@ export default {
   actionButtons: [],
   schema: Object.values({
     _1: {
-      fieldType: 'markdown',
+      component: 'EfMarkdown',
       src: description,
     },
     get _2 () {
       return {
         id: 'chosenExample',
-        fieldType: 'btn-toggle',
+        component: 'EfBtnToggle',
         noCaps: true,
         options: [this._3, this._4, this._5, this._6].map((field, index) => {
           return { label: field.label, value: index }
@@ -38,21 +38,21 @@ export default {
     },
     _3: {
       showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 0,
-      fieldType: 'title',
+      component: 'EfTitle',
       label: 'Dynamic prop based on the value of the field',
       hasMarkdown: true,
       subLabel: `Eg. \`subLabel: val => val === 'purple' ? 'nice!' : 'choose a color'\``,
     },
     _4: {
       showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 1,
-      fieldType: 'title',
+      component: 'EfTitle',
       label: 'Dynamic prop based on the value of "another" field',
       hasMarkdown: true,
-      subLabel: `Eg. \`disable: (val, {formDataNested}) => formDataNested.over18`,
+      subLabel: `Eg. \`disable: (val, {formDataNested}) => formDataNested.over18\``,
     },
     _5: {
       showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 2,
-      fieldType: 'title',
+      component: 'EfTitle',
       label: 'Dynamic "conditional rendering" of a field',
       hasMarkdown: true,
       subLabel: `
@@ -63,7 +63,7 @@ Eg. \`showCondition: (val, {formDataNested}) => formDataNested.car\`
     },
     _6: {
       showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 3,
-      fieldType: 'title',
+      component: 'EfTitle',
       label: 'Dynamic "options" of a select-field',
       hasMarkdown: true,
       subLabel: `

@@ -7,7 +7,7 @@ export default {
     'edit',
     'save',
     {
-      btnLabel: 'log the data',
+      btnLabel: 'log the data (check console)',
       push: true,
       events: {
         click: (event, { formDataNested }) => console.log(formDataNested),
@@ -17,14 +17,14 @@ export default {
   schema: [
     {
       id: 'name',
-      fieldType: 'input',
+      component: 'QInput',
       valueType: 'string',
       label: 'Superhero name',
       subLabel: 'Think of something cool.',
     },
     {
       id: 'powerOrigin',
-      fieldType: 'btn-toggle',
+      component: 'QBtnToggle',
       label: 'Power origin',
       subLabel: 'Where does your power come from?',
       options: [
@@ -32,6 +32,7 @@ export default {
         { label: 'Self taught', value: 'self' },
         { label: 'By item', value: 'item' },
       ],
+      spread: true,
     },
   ],
 }

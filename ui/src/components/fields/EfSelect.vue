@@ -1,5 +1,4 @@
 <template>
-  <EfDiv v-if="rawValue" class="ef-select" v-bind="divProps" />
   <q-select v-else class="ef-select" v-model="cValue" v-bind="quasarProps" v-on="$attrs.events" />
 </template>
 
@@ -61,7 +60,6 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
       'undefined',
     ]),
     // EF props:
-    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     placeholder: {
       category: 'content|model',
       type: String,
@@ -106,13 +104,6 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
         options: this.cOptions,
         hideDropdownIcon: this.cHideDropdownIcon,
         useChips: this.cUseChips,
-      })
-    },
-    divProps () {
-      return merge(this.$attrs, {
-        value: this.value,
-        valueType: this.valueType,
-        options: this.options,
       })
     },
     cValue: {

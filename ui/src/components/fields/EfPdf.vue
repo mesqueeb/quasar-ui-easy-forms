@@ -66,7 +66,6 @@ ${passContentViaValueOrSrc}`,
     },
     valueType: getGenericValueType(['string', 'object', 'array']),
     // EF props:
-    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     deletable: {
       type: Boolean,
       default: true,
@@ -111,8 +110,8 @@ ${passContentViaValueOrSrc}`,
       },
     },
     cDeletable () {
-      const { deletable, quasarProps, rawValue } = this
-      if (quasarProps.readonly || rawValue) return false
+      const { deletable, quasarProps } = this
+      if (quasarProps.readonly) return false
       return deletable
     },
   },

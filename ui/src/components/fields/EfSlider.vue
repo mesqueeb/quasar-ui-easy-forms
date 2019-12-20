@@ -1,5 +1,4 @@
 <template>
-  <EfDiv v-if="rawValue" class="ef-slider ef-slider--raw" v-bind="divProps" />
   <div v-else class="ef-slider">
     <q-slider v-model="cValue" v-bind="quasarProps" />
   </div>
@@ -33,7 +32,6 @@ export default {
     },
     valueType: getGenericValueType('number'),
     // EF props:
-    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     prefix: {
       type: String,
       desc: 'Prefix shown inside the label.',
@@ -72,14 +70,6 @@ export default {
         // Quasar props with modified behavior:
         labelValue: this.cLabelValue,
         disable: this.cDisable,
-      })
-    },
-    divProps () {
-      return merge(this.$attrs, {
-        value: this.value,
-        valueType: this.valueType,
-        suffix: this.suffix,
-        prefix: this.prefix,
       })
     },
     cValue: {

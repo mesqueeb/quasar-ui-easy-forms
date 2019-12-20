@@ -13,90 +13,90 @@ import {
 } from './quasarPropsJson'
 
 export const dependencyMap = {
-  btn: {
+  EfBtn: {
     componentName: 'EfBtn',
-    fieldType: 'btn',
+    component: 'EfBtn',
     passedProps: { QBtn },
   },
-  btnToggle: {
+  EfBtnToggle: {
     componentName: 'EfBtnToggle',
-    fieldType: 'btnToggle',
+    component: 'EfBtnToggle',
     passedProps: { QBtnToggle },
   },
-  div: {
+  EfDiv: {
     componentName: 'EfDiv',
-    fieldType: 'div',
+    component: 'EfDiv',
     passedProps: {},
   },
-  form: {
+  EfForm: {
     componentName: 'EfForm',
-    fieldType: 'form',
+    component: 'EfForm',
     passedProps: {},
   },
-  img: {
+  EfImg: {
     componentName: 'EfImg',
-    fieldType: 'img',
+    component: 'EfImg',
     passedProps: { QImg },
   },
-  inputDate: {
+  EfInputDate: {
     componentName: 'EfInputDate',
-    fieldType: 'inputDate',
+    component: 'EfInputDate',
     passedProps: { QInput },
   },
-  input: {
+  EfInput: {
     componentName: 'EfInput',
-    fieldType: 'input',
+    component: 'EfInput',
     passedProps: { QInput },
   },
-  link: {
+  EfLink: {
     componentName: 'EfLink',
-    fieldType: 'link',
+    component: 'EfLink',
     passedProps: {},
   },
-  markdown: {
+  EfMarkdown: {
     componentName: 'EfMarkdown',
-    fieldType: 'markdown',
+    component: 'EfMarkdown',
     passedProps: {},
   },
-  pdf: {
+  EfPdf: {
     componentName: 'EfPdf',
-    fieldType: 'pdf',
+    component: 'EfPdf',
     passedProps: {},
   },
-  range: {
+  EfRange: {
     componentName: 'EfRange',
-    fieldType: 'range',
+    component: 'EfRange',
     passedProps: { QRange },
   },
-  select: {
+  EfSelect: {
     componentName: 'EfSelect',
-    fieldType: 'select',
+    component: 'EfSelect',
     passedProps: { QSelect },
   },
-  slider: {
+  EfSlider: {
     componentName: 'EfSlider',
-    fieldType: 'slider',
+    component: 'EfSlider',
     passedProps: { QSlider },
   },
-  toggle: {
+  EfToggle: {
     componentName: 'EfToggle',
-    fieldType: 'toggle',
+    component: 'EfToggle',
     passedProps: { QToggle },
   },
-  uploaderFirebase: {
+  EfUploaderFirebase: {
     componentName: 'EfUploaderFirebase',
-    fieldType: 'uploaderFirebase',
+    component: 'EfUploaderFirebase',
     passedProps: { QUploader },
   },
-  video: {
+  EfVideo: {
     componentName: 'EfVideo',
-    fieldType: 'video',
+    component: 'EfVideo',
     passedProps: { QVideo },
   },
 }
 
-export function getPassedProps (fieldType) {
-  const info = dependencyMap[fieldType] || {}
+export function getPassedProps (component) {
+  const info = dependencyMap[component] || {}
   const { passedProps } = info
   return merge(...Object.values(passedProps))
 }

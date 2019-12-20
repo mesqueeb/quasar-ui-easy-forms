@@ -64,7 +64,7 @@ import { getGenericValueType } from './sharedProps.js'
 export default {
   name: 'EfForm',
   inheritAttrs: false,
-  desc: `EfForm is a single component to which you can pass a "schema". The difference between \`<EasyField fieldType="form" />\` and \`<EasyForm />\` is that the former can be used _as part of_ the latter. The "schema" passed to this component will be parsed as a list with rows. Each EasyField object in the "schema" will be added as a single column.\n(EfForm has nothing to do with QForm)`,
+  desc: `EfForm is a single component to which you can pass a "schema". The difference between \`<EasyField component="EfForm" />\` and \`<EasyForm />\` is that the former can be used _as part of_ the latter. The "schema" passed to this component will be parsed as a list with rows. Each EasyField object in the "schema" will be added as a single column.\n(EfForm has nothing to do with QForm)`,
   props: {
     // prop categories: behavior content general model state style
     value: {
@@ -74,15 +74,14 @@ export default {
     },
     valueType: getGenericValueType('array'),
     // EF props:
-    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
     schema: {
       category: 'model',
       type: Array,
       desc:
         'This is the information on the columns you want to be shown. An array of objects just like an EasyForm.',
-      default: () => [{ fieldType: 'input' }],
+      default: () => [{ component: 'QInput' }],
       examples: [
-        "[{label: 'Amount', id: 'amount', fieldType: 'input', valueType: 'number'}, {label: 'Currency', id: 'curr', fieldType: 'select', options: [{label: 'USD', value: 'usd'}]}]",
+        "[{label: 'Amount', id: 'amount', component: 'QInput', valueType: 'number'}, {label: 'Currency', id: 'curr', component: 'select', options: [{label: 'USD', value: 'usd'}]}]",
       ],
     },
     maxRows: {
@@ -98,10 +97,7 @@ export default {
     cValue: {
       get () {
         const { value, schema, disable, readonly, maxRows } = this
-        const emptyRow = schema.reduce(
-          (carry, { id, fieldType }) => ({ ...carry, [id]: undefined }),
-          {}
-        )
+        const emptyRow = schema.reduce((carry, { id }) => ({ ...carry, [id]: undefined }), {})
         if (!disable && !readonly && (!isNumber(maxRows) || maxRows < value.length)) {
           return value.concat([emptyRow])
         }
@@ -112,8 +108,8 @@ export default {
       },
     },
     attrsToPass () {
-      const { formDataNested, formDataFlat, formId, formMode, fieldInput, rawValue } = this.$attrs
-      return { formDataNested, formDataFlat, formId, formMode, fieldInput, rawValue }
+      const { formDataNested, formDataFlat, formId, mode, fieldInput } = this.$attrs
+      return { formDataNested, formDataFlat, formId, mode, fieldInput }
     },
     cSchema () {
       const { schema, disable, readonly, attrsToPass } = this
@@ -124,7 +120,7 @@ export default {
     schemaLabels () {
       const { schema, attrsToPass } = this
       return schema.map(subfield => {
-        return merge(attrsToPass, subfield, { fieldType: 'none' })
+        return merge(attrsToPass, subfield, { component: undefined })
       })
     },
     columnCountSubForm () {

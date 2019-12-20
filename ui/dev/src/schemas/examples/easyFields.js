@@ -1,22 +1,22 @@
-export const btn = {
+export const EfBtn = {
   id: 'btn',
-  fieldType: 'btn',
+  component: 'EfBtn',
   btnLabel: 'Touch me',
   events: {
     click: (val, context) => console.log('@CLICK\nval → ', val, '\ncontext → ', context),
   },
 }
-export const btnToggle = {
+export const EfBtnToggle = {
   id: 'btnToggle',
-  fieldType: 'btnToggle',
+  component: 'EfBtnToggle',
   options: [
     { label: 'one', value: 1 },
     { label: 'two', value: 2 },
   ],
 }
-export const div = {
+export const EfDiv = {
   id: 'myRank',
-  fieldType: 'div',
+  component: 'EfDiv',
   options: [
     { value: '1', label: 'one' },
     { value: '2', label: 'two' },
@@ -24,14 +24,14 @@ export const div = {
   prefix: 'Rank ',
   value: '1',
 }
-export const form = {
+export const EfForm = {
   id: 'form',
-  fieldType: 'form',
+  component: 'EfForm',
   label: 'Expenses',
   subLabel: "fill in this month's expenses",
   schema: [
     {
-      fieldType: 'select',
+      component: 'EfSelect',
       label: 'Type',
       id: 'type',
       options: [
@@ -39,14 +39,14 @@ export const form = {
         { label: 'Work', value: 'work' },
       ],
     },
-    { fieldType: 'input', label: 'Amount', id: 'amount', valueType: 'number', prefix: '€' },
-    { fieldType: 'toggle', label: 'Notify', id: 'notify', default: true },
+    { component: 'EfInput', label: 'Amount', id: 'amount', valueType: 'number', prefix: '€' },
+    { component: 'EfToggle', label: 'Notify', id: 'notify', default: true },
   ],
   value: [],
 }
-export const img = {
+export const EfImg = {
   id: 'img',
-  fieldType: 'img',
+  component: 'EfImg',
   value: [
     'https://www.dailydot.com/wp-content/uploads/146/6e/6d78ec0c8c8eaf31.png',
     {
@@ -57,28 +57,28 @@ export const img = {
   ],
   // events: { click: (...args) => console.log('on input', ...args) },
 }
-export const input = {
+export const EfInput = {
   id: 'input',
-  fieldType: 'input',
+  component: 'EfInput',
 }
-export const inputDate = {
+export const EfInputDate = {
   id: 'inputDate',
-  fieldType: 'inputDate',
+  component: 'EfInputDate',
 }
-export const link = {
+export const EfLink = {
   id: 'link',
-  fieldType: 'link',
+  component: 'EfLink',
   href: 'https://github.com/mesqueeb',
   newWindow: true,
 }
-export const pdf = {
+export const EfPdf = {
   id: 'pdf',
-  fieldType: 'pdf',
+  component: 'EfPdf',
   value: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
 }
-export const markdown = {
+export const EfMarkdown = {
   id: 'markdown',
-  fieldType: 'markdown',
+  component: 'EfMarkdown',
   valueType: 'string',
   value: `# Markdowny Junior
 
@@ -88,16 +88,16 @@ export const markdown = {
 jarvis.execute(9000)
 \`\`\``,
 }
-export const range = {
+export const EfRange = {
   id: 'range',
-  fieldType: 'range',
+  component: 'EfRange',
   min: 0,
   max: 100,
   value: { min: 25, max: 50 },
 }
-export const select = {
+export const EfSelect = {
   id: 'select',
-  fieldType: 'select',
+  component: 'EfSelect',
   placeholder: 'please select one',
   options: [
     { label: 'one', value: '1' },
@@ -105,43 +105,43 @@ export const select = {
   ],
   // events: { focus: (...args) => console.log('on input', ...args) },
 }
-export const slider = {
+export const EfSlider = {
   id: 'slider',
-  fieldType: 'slider',
+  component: 'EfSlider',
   min: 0,
   max: 100,
   value: 0,
 }
-export const toggle = {
+export const EfToggle = {
   id: 'toggle',
-  fieldType: 'toggle',
+  component: 'EfToggle',
 }
-export const uploaderFirebase = {
+export const EfUploaderFirebase = {
   id: 'uploaderFirebase',
-  fieldType: 'uploaderFirebase',
+  component: 'EfUploaderFirebase',
   path: 'test',
 }
-export const video = {
+export const EfVideo = {
   id: 'video',
-  fieldType: 'video',
+  component: 'EfVideo',
   value: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
 }
 
 export default {
-  btn,
-  btnToggle,
-  div,
-  form,
-  img,
-  input,
-  inputDate,
-  link,
-  markdown,
-  pdf,
-  range,
-  select,
-  slider,
-  toggle,
-  uploaderFirebase,
-  video,
+  EfBtn,
+  EfBtnToggle,
+  EfDiv,
+  EfForm,
+  EfImg,
+  EfInput,
+  EfInputDate,
+  EfLink,
+  EfMarkdown,
+  EfPdf,
+  EfRange,
+  EfSelect,
+  EfSlider,
+  EfToggle,
+  EfUploaderFirebase,
+  EfVideo,
 }

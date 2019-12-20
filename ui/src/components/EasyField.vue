@@ -1,8 +1,10 @@
 <template>
   <div
+    v-if="showConditionCalculated"
     :class="[
       'easy-field',
-      `easy-field--${fieldType}`,
+      `easy-field--${mode}`,
+      `easy-field--${isString(component) ? component : component.name}`,
       `easy-field--label-${labelPosition}`,
       {
         'easy-field--no-label': !cLabel,
@@ -19,7 +21,7 @@
         'easy-field__label',
         'text-wrap-all',
         {
-          'easy-field__label--title': fieldType === 'title' || fieldType === 'form',
+          'easy-field__label--title': component === 'EfTitle' || component === 'EfForm',
         },
       ]"
       >{{ cLabel }}</div
@@ -36,25 +38,25 @@
       <q-markdown v-if="hasMarkdown" no-line-numbers no-container>{{ cSubLabel }}</q-markdown>
       <template v-else>{{ cSubLabel }}</template>
     </div>
-    <template v-if="['title', 'space', 'none', undefined].includes(fieldType)"></template>
-    <div class="easy-field__field" v-else-if="cFieldInheritsQField">
-      <component
-        :is="componentIdentifier"
-        v-model="cValue"
-        v-bind="fieldProps"
-        v-on="cEvents"
-        :class="cInnerClassesArray"
-        :style="cInnerStyle"
-      />
-    </div>
+    <template v-if="['EfTitle', 'EfSpace', undefined].includes(cComponent)"></template>
+    <EfDiv v-else-if="mode === 'raw'" v-bind="divProps" />
+    <component
+      v-else-if="cFieldInheritsQField"
+      :is="cComponent"
+      :class="['easy-field__field', 'easy-field__component', ...cInnerClassesArray]"
+      v-model="cValue"
+      v-bind="fieldProps"
+      v-on="cEvents"
+      :style="cInnerStyle"
+    />
     <QField class="easy-field__field" v-else v-model="cValue" v-bind="cQFieldProps">
       <template v-slot:control>
         <component
-          :is="componentIdentifier"
+          :is="cComponent"
+          :class="['easy-field__component', ...cInnerClassesArray]"
           v-model="cValue"
           v-bind="fieldProps"
           v-on="cEvents"
-          :class="cInnerClassesArray"
           :style="cInnerStyle"
         />
       </template>
@@ -95,6 +97,8 @@
     grid-area: sub-label
   .easy-field__field
     grid-area: field
+  .easy-field__component
+    flex: 1
 // style
 .easy-field
   .easy-field__label--title
@@ -113,12 +117,12 @@ import { QField } from 'quasar'
 import { isFunction, isPlainObject, isArray, isString, isUndefined } from 'is-what'
 import merge from 'merge-anything'
 import defaultLang from '../meta/lang'
+import { mode, labelPosition, externalLabels, hasMarkdown, evaluatedProps } from './sharedProps.js'
 
 function resolveEasyFieldProp (propKey, propValue, componentValue, component) {
   // quasar props that can accept functions should be ignored:
   const propsToIgnore = [
     // EasyForm:
-    'labelValue',
     'fieldInput',
     // QSelect:
     'optionValue',
@@ -147,9 +151,11 @@ export default {
   props: {
     // prop categories: behavior content general model state style
     // EF props used here:
-    fieldType: {
+    component: {
       category: 'general',
       type: [String, Object],
+      desc: `Each EasyField has a label, sublabel and a component rendered via \`<component :is="component" />\`. You can pass (1) the name of a registered component, or (2) a component’s options object.`,
+      examples: ['QInput', 'MyCustomField'],
     },
     value: {
       category: 'model',
@@ -179,14 +185,6 @@ You can also pass a function that will receive two params you can work with: \`(
       category: 'content',
       type: [String, Function],
       desc: 'A smaller label for extra info.',
-    },
-    labelPosition: {
-      category: 'style',
-      type: [String, Function],
-      default: 'top',
-      desc: 'The position of the label.',
-      values: ['top', 'left'],
-      examples: ['top', 'left'],
     },
     fieldStyle: {
       category: 'style',
@@ -220,7 +218,7 @@ You can also pass a function that will receive two params you can work with: \`(
       category: 'model',
       type: Function,
       desc:
-        'You can change how the value is formatted even though the underlying data might be different. Depending on the `fieldType`, you will also need to provide a `parseInput` function to reverse the effect.',
+        'You can change how the value is formatted even though the underlying data might be different. Depending on the `component`, you might also need to provide a `parseInput` function to reverse the effect.',
       examples: ['val => thousandToK(val)'],
     },
     parseInput: {
@@ -238,6 +236,20 @@ You can also pass a function that will receive two params you can work with: \`(
       default: () => ({}),
       examples: ["{click: (val, {$router}) => $router.push('/')}", '{focus: console.log}'],
     },
+    lang: {
+      category: 'content',
+      type: Object,
+      desc: `The text used in the UI, eg. for required fields, etc.`,
+      default: () => defaultLang,
+      examples: [`{requiredField: 'Don\'t forget this field!'}`],
+    },
+    // shared props:
+    mode,
+    labelPosition,
+    externalLabels,
+    hasMarkdown,
+    evaluatedProps,
+    // passed props:
     formDataNested: {
       category: 'easyFormProp',
       type: Object,
@@ -253,48 +265,18 @@ You can also pass a function that will receive two params you can work with: \`(
       type: String,
       desc: `A manually set 'id' of the EasyForm.`,
     },
-    formMode: {
-      category: 'easyFormProp',
-      type: String,
-      validator: prop => ['edit', 'add', 'view', 'raw'].includes(prop),
-      desc:
-        'The state of the EasyForm. Has no effect on the EasyField, because EasyField only looks at `readonly` and `rawValue` props. Is passed so the `formMode` can be accessed by Evaluated Props.',
-      examples: [`'edit'`, `'add'`, `'view'`, `'raw'`],
-      values: ['edit', 'add', 'view', 'raw'],
-    },
     fieldInput: {
       category: 'easyFormProp',
       type: Function,
       desc:
         "The `fieldInput` function of EasyForm. Is passed so it can be used in the input event: `events: {input: (value, {fieldInput} => fieldInput({id: 'otherField', value}))}`",
     },
-    lang: {
-      category: 'content',
-      type: Object,
-      desc: `The text used in the UI, eg. for required fields, etc.`,
-      default: () => defaultLang,
-      examples: [`{requiredField: 'Don\'t forget this field!'}`],
-    },
-    rawValue: {
-      category: 'state',
-      type: [Boolean, Function],
-      default: false,
+    showCondition: {
+      category: 'behavior|state',
+      type: [Function, Boolean],
       desc:
-        'An EasyField with `rawValue: true` will just generate the raw value wrapped in a div, without generating the dedicated field UI.',
-    },
-    hasMarkdown: {
-      category: 'state',
-      type: [Boolean, Function],
-      default: false,
-      desc: 'An EasyField with `hasMarkdown: true` can have markdown in its sub-label.',
-    },
-    externalLabels: {
-      category: 'style',
-      type: Boolean,
-      desc: `By default labels are external to allow similar label styling for any type of field.
-
-When \`externalLabels: false\` it will use the native labels from QField, QInput & QSelect. The subLabel will be passed as 'hint' underneath the field.`,
-      default: true,
+        'Setting to `true` or `false` can show or hide the field. When using as an Evaluated Prop it can be very powerful.',
+      examples: [`false`, `(val, {mode}) => mode.edit`],
     },
     // Quasar props with modified defaults:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
@@ -303,7 +285,7 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
       inheritedProp: 'modified',
       type: [Boolean, Function],
       default: false,
-      desc: "`readonly` is used for 'view' mode of an EasyForm.",
+      desc: "`readonly` defaults to `true` on `mode: 'view'",
     },
     // Quasar props with modified behavior:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
@@ -313,13 +295,6 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
       type: [String, Function],
       desc:
         'An EasyField label is always "external" to the field. (It replaces the Quasar label if the underlying Quasar component uses one.)',
-    },
-    disable: {
-      category: 'state',
-      inheritedProp: 'modified',
-      type: [Boolean, Function],
-      default: false,
-      desc: '`disable` is ignored when `readonly` is true',
     },
   },
   data () {
@@ -341,8 +316,26 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
     },
   },
   computed: {
+    divProps () {
+      return merge(this.$attrs, {
+        value: this.value,
+      })
+    },
+    showConditionCalculated () {
+      const { showCondition, id } = this
+      if (!isFunction(showCondition)) return true
+      return showCondition(id, this)
+    },
     cFieldInheritsQField () {
-      return ['select', 'input', 'inputDate'].includes(this.fieldType)
+      return [
+        'EfSelect',
+        'EfInput',
+        'EfInputDate',
+        'QSelect',
+        'QInput',
+        'q-select',
+        'q-input',
+      ].includes(this.cComponent)
     },
     cFieldStyle () {
       const { fieldStyle, cValue } = this
@@ -367,19 +360,15 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
       return classes
     },
     internalLabelMode () {
-      const { fieldType, externalLabels } = this
-      return externalLabels === false && !['title', 'space', 'none', undefined].includes(fieldType)
+      const { component, externalLabels } = this
+      return externalLabels === false && !['EfTitle', 'EfSpace', undefined].includes(component)
     },
-    componentIdentifier () {
-      const { fieldType } = this
-      if (isPlainObject(fieldType)) return fieldType
-      if (!fieldType) return ''
-      if (fieldType.slice(0, 2) === 'q-') return fieldType
-      return 'Ef' + fieldType[0].toUpperCase() + fieldType.slice(1)
+    cComponent () {
+      return this.component
     },
     fieldProps () {
       // props only used here: format, parseInput, label
-      const { cValue, $attrs, required, innerLang, fieldType, internalLabelMode } = this
+      const { cValue, $attrs, required, innerLang, internalLabelMode } = this
       const self = this
       // add default "required" rule
       const internalLabelDefaults = !internalLabelMode
@@ -402,16 +391,11 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
           // EF props used here, but also to pass:
           formDataNested: this.formDataNested,
           formDataFlat: this.formDataFlat,
-          formMode: this.formMode,
+          mode: this.mode,
           formId: this.formId,
-          fieldType: this.fieldType,
           lang: this.innerLang,
           events: this.cEvents,
-          rawValue: this.rawValue,
-          // Quasar props with modified defaults:
-          readonly: this.readonly,
-          // Quasar props with modified behavior:
-          disable: this.cDisable,
+          readonly: this.mode === 'view' || this.readonly,
         },
         requiredRules
       )
@@ -457,14 +441,9 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
         return carry
       }, {})
     },
-    cDisable () {
-      const { readonly } = this.$attrs
-      if (readonly) return false
-      const { disable } = this
-      return disable
-    },
   },
   methods: {
+    isString,
     updateValue (val) {
       const { parseInput, events } = this
       if (isFunction(parseInput)) val = parseInput(val, this)

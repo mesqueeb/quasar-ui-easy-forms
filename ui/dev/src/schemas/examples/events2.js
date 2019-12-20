@@ -5,7 +5,7 @@ export default {
   schema: [
     {
       id: 'tel',
-      fieldType: 'input',
+      component: 'QInput',
       label: 'Phone nr (hyphenated)',
       subLabel: 'Type any number with `-` or `(  )`',
       events: {
@@ -15,7 +15,7 @@ export default {
     },
     {
       id: 'telClean',
-      fieldType: 'input',
+      component: 'QInput',
       label: 'Phone nr (only numbers)',
       subLabel: 'This field is automatically updated when you type in a phone nr on the left.',
       disable: true,

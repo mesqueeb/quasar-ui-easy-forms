@@ -47,19 +47,16 @@ import { getInfoCardPropsSchema, getRawComponent } from '../helpers/schemaBuilde
 const selectableFields = require
   .context('../../../src/components/fields', true, /^\.\/.*\.vue$/)
   .keys()
-  .map(k => {
-    const name = k.replace(/\.\/Ef/, '').replace(/\.vue/, '')
-    return name[0].toLowerCase() + name.slice(1)
-  })
+  .map(k => k.replace(/(\.vue|\.\/)/g, ''))
   .sort()
 
 export default {
   name: 'EasyFieldDemo',
   data () {
-    const selectedField = 'input'
+    const selectedField = 'EfInput'
     const fieldPicker = {
       label: 'Pick a field',
-      fieldType: 'select',
+      component: 'EfSelect',
       emitValue: true,
       options: selectableFields,
     }

@@ -5,7 +5,7 @@ ${JSON.stringify(code, null, 2)}
 const createExample = (config, i) => [
   Object.assign(
     {
-      fieldType: 'select',
+      component: 'EfSelect',
       options: [
         { label: 'Self taught', value: 'self' },
         { label: 'By item', value: 'item' },
@@ -17,29 +17,34 @@ const createExample = (config, i) => [
   ),
   {
     id: `example${i}-m`,
-    fieldType: 'markdown',
+    component: 'EfMarkdown',
     src: (val, { formDataNested }) => formatForMarkdown(formDataNested[`example${i}`]),
   },
   {
     id: `example${i}-o`,
-    fieldType: 'markdown',
+    component: 'EfMarkdown',
     fieldClass: 'text-break-all',
     src: formatForMarkdown(config),
   },
 ]
 
 const exampleConfigs = [
-  { fieldType: 'title', label: 'Single select' },
+  { component: 'EfTitle', span: true, label: 'Single select' },
   { valueType: 'object' },
   { valueType: 'string', emitValue: true },
   { valueType: 'string', emitValue: true, mapOptions: true },
-  { fieldType: 'title', label: 'Multiple select', subLabel: 'Recommended model' },
+  { component: 'EfTitle', span: true, label: 'Multiple select', subLabel: 'Recommended model' },
   { valueType: 'object', multiple: true },
-  { fieldType: 'title', subLabel: 'Other models' },
+  { component: 'EfTitle', span: true, subLabel: 'Other models' },
   { valueType: 'array', multiple: true },
   { valueType: 'array', multiple: true, emitValue: true },
   { valueType: 'array', multiple: true, emitValue: true, mapOptions: true },
-  { fieldType: 'title', label: 'Do not do this', subLabel: 'Select something and see why 😉' },
+  {
+    component: 'EfTitle',
+    span: true,
+    label: 'Do not do this',
+    subLabel: 'Select something and see why 😉',
+  },
   { valueType: 'object', multiple: true, emitValue: true },
 ]
 
@@ -49,21 +54,21 @@ export default {
   columnCount: 3,
   schema: [
     {
-      fieldType: 'space',
+      component: 'EfSpace',
       subLabel: 'Select some values for each select-field down below, and see what happens.',
     },
     {
-      fieldType: 'title',
+      component: 'EfTitle',
       span: 1,
       label: 'Model:',
     },
     {
-      fieldType: 'title',
+      component: 'EfTitle',
       span: 1,
       label: 'Options:',
     },
     ...exampleConfigs.reduce((carry, config, i) => {
-      if (config.fieldType === 'title') {
+      if (config.component === 'EfTitle') {
         carry.push(config)
         return carry
       }

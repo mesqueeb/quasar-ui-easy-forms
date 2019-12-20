@@ -1,5 +1,4 @@
 <template>
-  <EfDiv v-if="rawValue" class="ef-input" v-bind="divProps" />
   <q-input
     v-else
     :class="['ef-input', `-align-${cAlign}`, `ef-input--align-${cAlign}`]"
@@ -46,8 +45,6 @@ export default {
       `When \`valueType: 'number'\` it will make sure the model is formatted as Number.`
     ),
     // EF props:
-    rawValue: { type: Boolean }, // requires these props for EfDiv: valueType, suffix, prefix, options, multiple
-    fieldType: { type: String }, // defined in EasyField
     maxValue: {
       category: 'model',
       type: Number,
@@ -100,12 +97,6 @@ export default {
         type: this.cType,
       })
     },
-    divProps () {
-      return merge(this.$attrs, {
-        value: this.value,
-        valueType: this.valueType,
-      })
-    },
     cValue: {
       get () {
         const { value, valueType } = this
@@ -130,10 +121,9 @@ export default {
       },
     },
     cType () {
-      const { type, valueType, fieldType } = this
+      const { type, valueType } = this
       if (isString(type)) return type
       if (valueType === 'number') return 'number'
-      if (fieldType === 'textarea') return 'textarea'
       return 'text'
     },
     cAlign () {
