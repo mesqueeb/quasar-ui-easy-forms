@@ -165,7 +165,7 @@ Read more on Evaluated Props in its dedicated page.`,
 - 'delete' a red button which does \`emit('delete')\`
 - 'archive' a red button which does \`emit('archive')\`
 
-You can also pass custom buttons with a schema just like an EasyField button.
+You can also pass custom buttons with a schema as per the EfBtn component.
 See the documentation on "Action Buttons" for more info.`,
       examples: [
         `[] (no buttons)`,
@@ -329,8 +329,8 @@ See the documentation on "Action Buttons" for more info.`,
           }
           if (btn === 'edit' && ['view', 'raw'].includes(cMode)) {
             return {
+              flat: true,
               btnLabel: innerLang['edit'],
-              push: true,
               events: { click: tapEdit },
             }
           }
@@ -343,8 +343,8 @@ See the documentation on "Action Buttons" for more info.`,
           }
           if (btn === 'save' && ['edit', 'add'].includes(cMode)) {
             return {
+              unelevated: true,
               btnLabel: innerLang['save'],
-              push: true,
               events: { click: tapSave },
             }
           }

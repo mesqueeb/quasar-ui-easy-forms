@@ -26,7 +26,7 @@ export function propToPropSchema (propKey, propInfo) {
   // make the raw prop info from the components into an EasyForm:
   // whatever the prop is, default to an 'input' EasyField
   const events = {}
-  let component = 'EfInput'
+  let component = 'QInput'
   let subLabel = desc
   let options,
     outlined,
@@ -46,12 +46,12 @@ export function propToPropSchema (propKey, propInfo) {
     type === Boolean ||
     (isArray(type) && [Boolean, Function].every(t => type.includes(t)) && type.length === 2)
   ) {
-    component = 'EfToggle'
+    component = 'QToggle'
   }
   // if the prop has a fixed set of possible values, show this as an 'option' EasyField
   const propHasValues = isArray(values) && values.length
   if (propHasValues) {
-    component = 'EfSelect'
+    component = 'QSelect'
     emitValue = true
     options = values.map(v => ({ label: v, value: v }))
   }

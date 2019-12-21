@@ -64,7 +64,9 @@ export const internalLabels = {
   default: undefined,
   desc: `Set to true if the component has its own labels and you do not want the EasyField to show a label.
 
-When true subLabels will be passed as a prop called 'hint'. ${propOf}`,
+When \`true\` subLabels will be passed as a prop called 'hint'.
+
+${propOf}`,
 }
 export const internalErrors = {
   category: 'behavior|content',
@@ -73,5 +75,7 @@ export const internalErrors = {
   default: undefined,
   desc: `Set to true if the component has its own error handling. This makes sure it passes on props like \`rules\` and does nothing with them in the EasyField.
 
-Will default to true for components with these names: QInput, QSelect, EfInput, EfSelect, EfInputDate`,
+Will default to \`true\` for components with these names: QInput, QSelect, EfInput, EfSelect, EfInputDate.
+
+${propOf}`,
 }

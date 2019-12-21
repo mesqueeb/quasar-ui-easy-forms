@@ -19,7 +19,7 @@ export default {
     },
     {
       id: 'md-input',
-      component: 'EfMarkdown',
+      component: 'QMarkdown',
       span: 1,
       src: "```js\n{component: 'QInput'}\n```",
     },
@@ -38,7 +38,7 @@ export default {
     },
     {
       id: 'md-btn-toggle',
-      component: 'EfMarkdown',
+      component: 'QMarkdown',
       span: 1,
       src: "```js\n{component: 'QBtnToggle'}\n```",
     },
@@ -50,12 +50,11 @@ export default {
       min: 0,
       max: 100,
       default: 50,
-      labelValue: val => `${val} stamina`,
       labelAlways: true,
     },
     {
       id: 'md-slider',
-      component: 'EfMarkdown',
+      component: 'QMarkdown',
       span: 1,
       src: "```js\n{component: 'QSlider'}\n```",
     },
@@ -71,7 +70,7 @@ export default {
     },
     {
       id: 'md-input-nr',
-      component: 'EfMarkdown',
+      component: 'QMarkdown',
       span: 1,
       src:
         "```js\n{component: 'QInput'}\n```\n↳ But the input is saved as a number instead of a string.",
@@ -117,7 +116,7 @@ export default {
     },
     {
       id: 'md-select',
-      component: 'EfMarkdown',
+      component: 'QMarkdown',
       span: 1,
       src: "```js\n{component: 'QSelect'}\n```",
     },
@@ -145,7 +144,7 @@ export default {
     },
     {
       id: 'md-option-group',
-      component: 'EfMarkdown',
+      component: 'QMarkdown',
       span: 1,
       src: "```js\n{component: 'QOptionGroup'}\n```",
     },
@@ -158,22 +157,24 @@ export default {
     },
     {
       id: 'md-toggle',
-      component: 'EfMarkdown',
+      component: 'QMarkdown',
       span: 1,
       src: "```js\n{component: 'QToggle'}\n```",
     },
     {
       id: 'submissionDate',
-      component: 'EfInputDate',
+      component: 'QInput',
       span: 3,
       label: 'Date of submission',
-      valueType: 'date',
+      parseInput: val => new Date(val),
+      mask: '####/##/##',
+      placeholder: 'YYYY/MM/DD',
     },
     {
       id: 'md-input-date',
-      component: 'EfMarkdown',
+      component: 'QMarkdown',
       span: 1,
-      src: "```js\n{component: 'EfInputDate'}\n```",
+      src: "```js\n{component: 'QInput'}\n```",
     },
   ],
 }

@@ -51,7 +51,13 @@
       :style="cComponentStyle"
     >
       <template v-slot:control>
-        <component :is="component" v-model="cValue" v-bind="fieldProps" v-on="cEvents" />
+        <component
+          :is="component"
+          v-model="cValue"
+          v-bind="fieldProps"
+          v-on="cEvents"
+          style="flex: 1"
+        />
       </template>
     </QField>
   </div>
@@ -95,7 +101,6 @@
 import { QMarkdown } from '@quasar/quasar-ui-qmarkdown'
 import { QField } from 'quasar'
 import { isFunction, isPlainObject, isString, isUndefined, isNullOrUndefined } from 'is-what'
-import { pascalCase } from 'case-anything'
 import merge from 'merge-anything'
 import defaultLang from '../meta/lang'
 import {
@@ -312,9 +317,15 @@ You can also pass a function that will receive two params you can work with: \`(
     internalErrorsCalculated () {
       const { internalErrors, componentName } = this
       if (internalErrors !== undefined) return internalErrors
-      return ['QInput', 'QSelect', 'EfInput', 'EfSelect', 'EfInputDate'].includes(
-        pascalCase(componentName)
-      )
+      return [
+        'QInput',
+        'QSelect',
+        'EfInput',
+        'EfSelect',
+        'EfInputDate',
+        'q-input',
+        'q-select',
+      ].includes(componentName)
     },
     internalLabelsCalculated () {
       const { component, internalLabels } = this

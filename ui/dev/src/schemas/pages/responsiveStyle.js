@@ -5,7 +5,7 @@ export default {
   actionButtons: [],
   schema: [
     {
-      component: 'EfMarkdown',
+      component: 'QMarkdown',
       src: description,
     },
   ],

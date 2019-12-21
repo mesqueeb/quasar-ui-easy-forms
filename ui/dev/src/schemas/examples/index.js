@@ -1,5 +1,3 @@
-export { default as easyFields } from './easyFields'
-
 // easy forms
 export const basics = {
   code: [require('./basics').default],
@@ -55,4 +53,12 @@ export const events = {
 export const EfMiniForm = {
   code: [require('./EfMiniForm').default],
   string: [require('!!raw-loader!./EfMiniForm').default],
+}
+export const EfBtn = {
+  code: [require('./EfBtn').default],
+  string: [require('!!raw-loader!./EfBtn').default],
+}
+export const EfDiv = {
+  code: [require('./EfDiv').default],
+  string: [require('!!raw-loader!./EfDiv').default],
 }

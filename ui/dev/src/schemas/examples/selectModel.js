@@ -5,7 +5,7 @@ ${JSON.stringify(code, null, 2)}
 const createExample = (config, i) => [
   Object.assign(
     {
-      component: 'EfSelect',
+      component: 'QSelect',
       options: [
         { label: 'Self taught', value: 'self' },
         { label: 'By item', value: 'item' },
@@ -17,12 +17,12 @@ const createExample = (config, i) => [
   ),
   {
     id: `example${i}-m`,
-    component: 'EfMarkdown',
+    component: 'QMarkdown',
     src: (val, { formDataNested }) => formatForMarkdown(formDataNested[`example${i}`]),
   },
   {
     id: `example${i}-o`,
-    component: 'EfMarkdown',
+    component: 'QMarkdown',
     fieldClass: 'text-break-all',
     src: formatForMarkdown(config),
   },

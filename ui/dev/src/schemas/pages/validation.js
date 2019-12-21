@@ -12,12 +12,13 @@ export default {
   actionButtons: [],
   schema: [
     {
-      component: 'EfMarkdown',
+      component: 'QMarkdown',
       src: description,
     },
     {
       id: 'chosenExample',
-      component: 'EfBtnToggle',
+      component: 'QBtnToggle',
+      spread: true,
       noCaps: true,
       options: [
         { label: 'Basic validation', value: 0 },

@@ -3,7 +3,7 @@
     <q-list dense class="list">
       <div class="text-h4 q-my-md">< EasyForm /></div>
       <div class="q-my-md">
-        Generate an entire form via just a "schema" object
+        Generate an entire form via just a "schema" object. Use <b>any component</b> you want!
       </div>
       <q-item v-for="page in pagesEasyForm" :key="page.path" :to="page.path">
         <q-item-section avatar>
@@ -17,7 +17,7 @@
         </q-item-section>
       </q-item>
       <div class="text-h4 q-mb-md q-mt-xl">< EasyField /></div>
-      <div class="q-my-md">All possible single <b>fields</b> used inside an EasyForm.</div>
+      <div class="q-my-md">Bonus! Some handy fields usable inside an EasyForm. 😃</div>
       <q-item v-for="page in pagesEasyField" :key="page.path" :to="page.path">
         <q-item-section avatar>
           <q-icon name="label_important" />
@@ -101,9 +101,11 @@ const pagesEasyForm = [
 ]
 
 const pagesEasyField = [
-  { title: 'Easy Field', path: '/EasyFieldDemo' },
-  { title: 'EfMiniForm', path: '/EasyField/EfMiniForm' },
-  { title: "component: 'EfSelect' models", path: '/selectModel' },
+  // { title: 'Easy Field', path: '/EasyFieldDemo' },
+  { title: '<EfMiniForm />', path: '/EasyField/EfMiniForm' },
+  { title: '<EfDiv />', path: '/EasyField/EfDiv' },
+  { title: '<EfBtn />', path: '/EasyField/EfBtn' },
+  // { title: "component: 'QSelect' models", path: '/selectModel' },
 ]
 
 export default {

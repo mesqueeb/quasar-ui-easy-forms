@@ -1,3 +1,5 @@
+<!-- prettier-ignore-start -->
+
 # Breaking changes
 
 ## actionButtons
@@ -126,20 +128,20 @@ Also check out the new prop: `internalErrors`
 
 ## Changes to fields (check all!!)
 
-I removed fields that were _just_ wrapper components without much additive values.
-These should now be replaced with the Quasar component equivalents.
-Here's a list with each of these:
+I removed most fields, because they were _just_ wrapper components without much additive value. Also, the focus of the library is now only on the form generation, not providing a bunch of fields.
 
-### title / EfTitle
+You should update your code to use Quasar components directly instead. See below:
+
+## Fields I deleted:
+
+### title / EfTitle:
 
 ```js
 // Before:
+{ fieldType: 'title', label: 'my title' }
+// v1.0:
 {
-  fieldType: 'title',
-  label: 'my title',
-}
-// Change to:
-{
+  // don't specify any component
   label: 'my title',
   span: true,
   fieldClasses: 'easy-field--title',
@@ -153,292 +155,61 @@ You can make title fields prettier via CSS. Eg.
   font-weight: 600
 ```
 
-### EfBtn
-
-Before
+### Others:
 
 ```js
-{
-  fieldType: 'btn'
-}
+// Before:
+{ fieldType: 'btnToggle' }
+{ fieldType: 'img' }
+{ fieldType: 'input' }
+{ fieldType: 'markdown' }
+{ fieldType: 'range' }
+{ fieldType: 'select' }
+{ fieldType: 'slider' }
+{ fieldType: 'toggle' }
+
+// v1.0:
+{ component: 'QBtnToggle', spread: true }
+{ component: 'QImg' }
+{ component: 'QInput' }
+{ component: 'QMarkdown', noLineNumbers: true /* this is a bug fix */ }
+{ component: 'QRange' }
+{ component: 'QSelect' }
+{ component: 'QSlider' }
+{ component: 'QToggle', default: false }
 ```
 
-Change to
+Some fields might have small differences in behaviour from my previous wrapper components. However, you can check the source code of my wrapper components [here]() and copy the wrapper components to your project if you want.
+
+No equivalents:
 
 ```js
-{
-  component: 'EfBtn'
-}
+// Before:
+{ fieldType: 'inputDate' }
+{ fieldType: 'link' }
+{ fieldType: 'pdf' }
+{ fieldType: 'uploaderFirebase' }
+{ fieldType: 'video' }
+
+// v1.0
+// these don't exist anymore. You can copy my old source code.
 ```
 
-### EfBtnToggle
+As before, check the source code how I did it.
 
-Before
+## Fields I kept as is:
 
 ```js
-{
-  fieldType: 'btnToggle'
-}
+// Before:
+{ fieldType: 'btn' }
+{ fieldType: 'div' }
+{ fieldType: 'form' }
+// v1.0:
+{ component: 'EfBtn' } // because this is used in the action-buttons
+{ component: 'EfDiv' }
+{ component: 'EfMiniForm' }
 ```
 
-Change to
+I updated the name to EfMiniForm to make it easier to understand that this is a mini form, not a full fledged EasyForm.
 
-```js
-{
-  component: 'EfBtnToggle'
-}
-```
-
-### EfDiv
-
-Before
-
-```js
-{
-  fieldType: 'div'
-}
-```
-
-Change to
-
-```js
-{
-  component: 'EfDiv'
-}
-```
-
-### EfForm -> EfMiniForm
-
-Before
-
-```js
-{
-  fieldType: 'form'
-}
-```
-
-> note: I updated the name to EfMiniForm to make it easier to understand that this is a mini form, not a full fledged EasyForm.
-
-Change to
-
-```js
-{
-  component: 'EfMiniForm'
-}
-```
-
-### EfImg
-
-Before
-
-```js
-{
-  fieldType: 'img'
-}
-```
-
-Change to
-
-```js
-{
-  component: 'EfImg'
-}
-```
-
-### EfInput
-
-Before
-
-```js
-{
-  fieldType: 'input'
-}
-```
-
-Change to
-
-```js
-{
-  component: 'EfInput'
-}
-```
-
-### EfInputDate
-
-Before
-
-```js
-{
-  fieldType: 'inputDate'
-}
-```
-
-Change to
-
-```js
-{
-  component: 'EfInputDate'
-}
-```
-
-### EfLink
-
-Before
-
-```js
-{
-  fieldType: 'link'
-}
-```
-
-Change to
-
-```js
-{
-  component: 'EfLink'
-}
-```
-
-### EfMarkdown
-
-Before
-
-```js
-{
-  fieldType: 'markdown'
-}
-```
-
-Change to
-
-```js
-{
-  component: 'EfMarkdown'
-}
-```
-
-### EfPdf
-
-Before
-
-```js
-{
-  fieldType: 'pdf'
-}
-```
-
-Change to
-
-```js
-{
-  component: 'EfPdf'
-}
-```
-
-### EfRange
-
-Before
-
-```js
-{
-  fieldType: 'range'
-}
-```
-
-Change to
-
-```js
-{
-  component: 'EfRange'
-}
-```
-
-### EfSelect
-
-Before
-
-```js
-{
-  fieldType: 'select'
-}
-```
-
-Change to
-
-```js
-{
-  component: 'EfSelect'
-}
-```
-
-### EfSlider
-
-Before
-
-```js
-{
-  fieldType: 'slider'
-}
-```
-
-Change to
-
-```js
-{
-  component: 'EfSlider'
-}
-```
-
-### EfToggle
-
-Before
-
-```js
-{
-  fieldType: 'toggle'
-}
-```
-
-Change to
-
-```js
-{
-  component: 'EfToggle'
-}
-```
-
-### EfUploaderFirebase
-
-Before
-
-```js
-{
-  fieldType: 'uploaderFirebase'
-}
-```
-
-Change to
-
-```js
-{
-  component: 'EfUploaderFirebase'
-}
-```
-
-### EfVideo
-
-Before
-
-```js
-{
-  fieldType: 'video'
-}
-```
-
-Change to
-
-```js
-{
-  component: 'EfVideo'
-}
-```
+<!-- prettier-ignore-end -->

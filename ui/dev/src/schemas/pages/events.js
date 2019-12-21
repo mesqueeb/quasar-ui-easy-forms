@@ -24,13 +24,14 @@ export default {
   actionButtons: [],
   schema: Object.values({
     _1: {
-      component: 'EfMarkdown',
+      component: 'QMarkdown',
       src: description,
     },
     get _2 () {
       return {
         id: 'chosenExample',
-        component: 'EfBtnToggle',
+        component: 'QBtnToggle',
+        spread: true,
         noCaps: true,
         options: [this._3, this._4].map((field, index) => {
           return { label: field.label, value: index }

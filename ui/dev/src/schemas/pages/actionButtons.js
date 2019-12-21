@@ -29,7 +29,7 @@ When you don't specify the action buttons it will default to:
 When you want no buttons to show you can pass:
 - \`:action-buttons="[]"\`
 
-You can also pass custom buttons with a schema just like an EasyField button (see the \`EasyField > button\` documentation).
+You can also pass custom buttons with a schema just like an EfBtn (see the \`EasyField > EfBtn\` documentation).
 
 The function you set to \`events.click\` of custom buttons will receive the native event payload as first parameter and the EasyForm context (the component instance) as second: \`($event, context) => {}\`
 An example of a custom button could be:
@@ -50,7 +50,7 @@ export default {
   actionButtons: [],
   schema: [
     {
-      component: 'EfMarkdown',
+      component: 'QMarkdown',
       src: description,
     },
   ],

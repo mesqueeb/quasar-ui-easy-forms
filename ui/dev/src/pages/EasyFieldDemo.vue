@@ -28,7 +28,7 @@
 <style lang="sass">
 
 .page-form
-  .ef-btn-toggle
+  .q-btn-toggle
     border: solid 2px $primary
     border-radius: 6px
     > *
@@ -62,7 +62,7 @@ export default {
     const pageForm = {
       schema: [
         {
-          component: 'EfMarkdown',
+          component: 'QMarkdown',
           src: desc,
         },
       ],
