@@ -1,5 +1,6 @@
 export { default as easyFields } from './easyFields'
 
+// easy forms
 export const basics = {
   code: [require('./basics').default],
   string: [require('!!raw-loader!./basics').default],
@@ -48,4 +49,10 @@ export const evaluatedProps = {
 export const events = {
   code: [require('./events1').default, require('./events2').default],
   string: [require('!!raw-loader!./events1').default, require('!!raw-loader!./events2').default],
+}
+
+// easy fields
+export const EfMiniForm = {
+  code: [require('./EfMiniForm').default],
+  string: [require('!!raw-loader!./EfMiniForm').default],
 }

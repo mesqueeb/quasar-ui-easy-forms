@@ -31,7 +31,7 @@ export function getGenericValueType (types = [], extraDescription = '') {
     type: String,
     desc: `valueType is the type of the model of the field. For this component it can only be: ${types.join(
       ' | '
-    )}. If your actual underlying valueType is different, you must provide a 'format' function (see prop: 'format') to make sure your value becomes the correct valueType.${
+    )}. If your actual underlying valueType is different, you must provide a 'parseValue' function (see prop: 'parseValue') to make sure your value becomes the correct valueType.${
       extraDescription ? '\n\n' + extraDescription : ''
     }`,
     examples: types,

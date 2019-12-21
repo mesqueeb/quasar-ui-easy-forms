@@ -1,31 +1,22 @@
 <template>
   <div
-    v-if="showConditionCalculated"
+    v-if="showCondition && propsEvaluated.showCondition"
     :class="[
       'easy-field',
       `easy-field--${mode}`,
-      `easy-field--${isString(component) ? component : component.name}`,
+      `easy-field--${componentName}`,
       `easy-field--label-${labelPosition}`,
       {
         'easy-field--no-label': !cLabel,
-        'easy-field--no-sublabel': !cSubLabel,
+        'easy-field--no-sub-label': !cSubLabel,
+        'easy-field--no-component': !component,
       },
       ...cFieldClassesArray,
     ]"
     :style="cFieldStyle"
   >
     <!-- display: inline -->
-    <div
-      v-if="cLabel"
-      :class="[
-        'easy-field__label',
-        'text-wrap-all',
-        {
-          'easy-field__label--title': component === 'EfTitle' || component === 'EfForm',
-        },
-      ]"
-      >{{ cLabel }}</div
-    >
+    <div v-if="cLabel" class="easy-field__label text-wrap-all">{{ cLabel }}</div>
     <div
       v-if="cSubLabel"
       :class="[
@@ -38,27 +29,29 @@
       <q-markdown v-if="hasMarkdown" no-line-numbers no-container>{{ cSubLabel }}</q-markdown>
       <template v-else>{{ cSubLabel }}</template>
     </div>
-    <template v-if="['EfTitle', 'EfSpace', undefined].includes(cComponent)"></template>
-    <EfDiv v-else-if="mode === 'raw'" v-bind="divProps" />
+    <!-- no component -->
+    <template v-if="!component"></template>
+    <!-- raw component -->
+    <EfDiv v-else-if="mode === 'raw'" class="easy-field__component" v-bind="divProps" />
+    <!-- raw component -->
     <component
-      v-else-if="cFieldInheritsQField"
-      :is="cComponent"
-      :class="['easy-field__field', 'easy-field__component', ...cInnerClassesArray]"
+      v-else-if="internalErrorsCalculated"
+      :is="component"
+      :class="['easy-field__component', ...cComponentClassesArray]"
       v-model="cValue"
       v-bind="fieldProps"
       v-on="cEvents"
-      :style="cInnerStyle"
+      :style="cComponentStyle"
     />
-    <QField class="easy-field__field" v-else v-model="cValue" v-bind="cQFieldProps">
+    <QField
+      v-else
+      v-model="cValue"
+      v-bind="cQFieldProps"
+      :class="['easy-field__component', ...cComponentClassesArray]"
+      :style="cComponentStyle"
+    >
       <template v-slot:control>
-        <component
-          :is="cComponent"
-          :class="['easy-field__component', ...cInnerClassesArray]"
-          v-model="cValue"
-          v-bind="fieldProps"
-          v-on="cEvents"
-          :style="cInnerStyle"
-        />
+        <component :is="component" v-model="cValue" v-bind="fieldProps" v-on="cEvents" />
       </template>
     </QField>
   </div>
@@ -75,30 +68,17 @@
   align-content: start
   grid-gap: $sm $md
   &--label-top
-    grid-template-areas: "label" "sub-label" "field"
-    &.easy-field--no-sublabel
-      grid-template-areas: "label" "field"
-    &.easy-field--no-label
-      grid-template-areas: "sub-label" "field"
-    &.easy-field--no-sublabel.easy-field--no-label
-      grid-template-areas: "field"
+    grid-auto-flow: row
   &--label-left
-    grid-template-areas: "label field" "sub-label field"
-    grid-template-columns: auto 1fr
-    &.easy-field--no-sublabel
-      grid-template-areas: "label field"
-    &.easy-field--no-label
-      grid-template-areas: "sub-label field"
-    &.easy-field--no-sublabel.easy-field--no-label
-      grid-template-areas: "field field"
-  .easy-field__label
-    grid-area: label
-  .easy-field__sub-label
-    grid-area: sub-label
-  .easy-field__field
-    grid-area: field
-  .easy-field__component
-    flex: 1
+    grid-auto-flow: column
+    grid-template-columns: minmax(auto, max-content)
+    grid-auto-columns: minmax(50%, 1fr)
+    grid-template-rows: auto
+    grid-auto-rows: 1fr
+    .easy-field__sub-label
+      grid-row: 2 / 3
+    .easy-field__component
+      grid-row: 1 / 3
 // style
 .easy-field
   .easy-field__label--title
@@ -114,34 +94,21 @@
 <script>
 import { QMarkdown } from '@quasar/quasar-ui-qmarkdown'
 import { QField } from 'quasar'
-import { isFunction, isPlainObject, isArray, isString, isUndefined } from 'is-what'
+import { isFunction, isPlainObject, isString, isUndefined, isNullOrUndefined } from 'is-what'
+import { pascalCase } from 'case-anything'
 import merge from 'merge-anything'
 import defaultLang from '../meta/lang'
-import { mode, labelPosition, externalLabels, hasMarkdown, evaluatedProps } from './sharedProps.js'
+import {
+  mode,
+  labelPosition,
+  hasMarkdown,
+  evaluatedProps,
+  internalLabels,
+  internalErrors,
+} from './sharedProps.js'
 
-function resolveEasyFieldProp (propKey, propValue, componentValue, component) {
-  // quasar props that can accept functions should be ignored:
-  const propsToIgnore = [
-    // EasyForm:
-    'fieldInput',
-    // QSelect:
-    'optionValue',
-    'optionLabel',
-    'optionDisable',
-    // QUploader:
-    'filter',
-    'factory',
-    'url',
-    'method',
-    'headers',
-    'fieldName',
-    'formFields',
-    'withCredentials',
-    'sendRaw',
-    'batch',
-  ]
-  if (propsToIgnore.includes(propKey)) return propValue
-  return isFunction(propValue) ? propValue(componentValue, component) : propValue
+function evaluateProp (propValue, componentValue, componentInstance) {
+  return isFunction(propValue) ? propValue(componentValue, componentInstance) : propValue
 }
 
 export default {
@@ -151,15 +118,15 @@ export default {
   props: {
     // prop categories: behavior content general model state style
     // EF props used here:
-    component: {
-      category: 'general',
-      type: [String, Object],
-      desc: `Each EasyField has a label, sublabel and a component rendered via \`<component :is="component" />\`. You can pass (1) the name of a registered component, or (2) a component’s options object.`,
-      examples: ['QInput', 'MyCustomField'],
-    },
     value: {
       category: 'model',
       type: undefined,
+    },
+    component: {
+      category: 'general',
+      type: [String, Object, Function],
+      desc: `Each EasyField has a label, sublabel and a component rendered via \`<component :is="component" />\`. You can pass (1) the name of a registered component, or (2) a component’s options object.`,
+      examples: ['QInput', 'MyCustomField'],
     },
     default: {
       category: 'model',
@@ -172,8 +139,13 @@ You can also pass a function that will receive two params you can work with: \`(
     },
     required: {
       category: 'behavior',
-      type: Boolean,
-      desc: `Wether or not the field is required or not. If a field is marked 'required' it will add a default rule like so: \`[val => !!val || 'Field is required']\`. The default message can be set in the \`lang\` prop as \`requiredField\`.`,
+      type: [Boolean, Function],
+      desc: `Wether or not the field is required or not. If a field is marked 'required' it will add a default rule like so: \`[val => (val !== null && val !== undefined) || 'Field is required']\`. The default message can be set in the \`lang\` prop as \`requiredField\`.`,
+    },
+    rules: {
+      category: 'behavior',
+      type: Array,
+      default: () => [],
     },
     id: {
       category: 'model',
@@ -200,33 +172,33 @@ You can also pass a function that will receive two params you can work with: \`(
         'Custom classes to be applied to the EasyField. Applied like so `:class="fieldClasses"`. Can be an Evaluated Prop (this is why I opted to have a different name from `class`).',
       examples: [`['dark-theme']`],
     },
-    innerStyle: {
+    componentStyle: {
       category: 'style',
       type: [Object, Array, String, Function],
       desc:
-        'Custom styling to be applied to the inner component of EasyField. Applied like so `:style="innerStyle"`. Can be an Evaluated Prop.',
+        'Custom styling to be applied to the inner component of EasyField. Applied like so `:style="componentStyle"`. Can be an Evaluated Prop.',
       examples: [`'padding: 1em;'`],
     },
-    innerClasses: {
+    componentClasses: {
       category: 'style',
       type: [Object, Array, String, Function],
       desc:
-        'Custom classes to be applied to the inner component of EasyField. Applied like so `:class="innerClasses"`. Can be an Evaluated Prop.',
+        'Custom classes to be applied to the inner component of EasyField. Applied like so `:class="componentClasses"`. Can be an Evaluated Prop.',
       examples: [`['dark-theme']`],
     },
-    format: {
+    parseValue: {
       category: 'model',
       type: Function,
       desc:
-        'You can change how the value is formatted even though the underlying data might be different. Depending on the `component`, you might also need to provide a `parseInput` function to reverse the effect.',
-      examples: ['val => thousandToK(val)'],
+        'This function can modify a value before it is passed on to the inner component. Also see `parseInput` for the reverse.',
+      examples: ['val => Number(val)', 'val => Date(val)'],
     },
     parseInput: {
       category: 'model',
       type: Function,
       desc:
-        "You can change how the value is parsed before it's updated. You must return the parsed value.",
-      examples: ['val => kToThousand(val)'],
+        'This function can modify a value upon user input, every time before the value is emitted. Also see `parseValue` for the reverse.',
+      examples: ['val => String(val)', 'val => val.toISOString()'],
     },
     events: {
       category: 'behavior',
@@ -246,9 +218,10 @@ You can also pass a function that will receive two params you can work with: \`(
     // shared props:
     mode,
     labelPosition,
-    externalLabels,
     hasMarkdown,
     evaluatedProps,
+    internalLabels,
+    internalErrors,
     // passed props:
     formDataNested: {
       category: 'easyFormProp',
@@ -277,6 +250,7 @@ You can also pass a function that will receive two params you can work with: \`(
       desc:
         'Setting to `true` or `false` can show or hide the field. When using as an Evaluated Prop it can be very powerful.',
       examples: [`false`, `(val, {mode}) => mode.edit`],
+      default: true,
     },
     // Quasar props with modified defaults:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
@@ -298,7 +272,7 @@ You can also pass a function that will receive two params you can work with: \`(
     },
   },
   data () {
-    const { value, default: df, lang, formDataNested } = this
+    const { value, default: df, lang, formDataNested, internalErrors } = this
     const innerValue = !isUndefined(value) ? value : isFunction(df) ? df(formDataNested, this) : df
     // merge user provided lang onto defaults
     const innerLang = merge(defaultLang, lang)
@@ -316,93 +290,104 @@ You can also pass a function that will receive two params you can work with: \`(
     },
   },
   computed: {
+    cValue: {
+      get () {
+        const { parseValue, innerValue } = this
+        if (isFunction(parseValue)) return parseValue(innerValue, this)
+        return innerValue
+      },
+      set (val) {
+        const { parseInput, events } = this
+        if (isFunction(parseInput)) val = parseInput(val, this)
+        if (isFunction(events.input)) events.input(val, this)
+        this.$emit('input', val)
+      },
+    },
+    componentName () {
+      const { component } = this
+      if (isString(component)) return component
+      const { name } = component || {}
+      return name
+    },
+    internalErrorsCalculated () {
+      const { internalErrors, componentName } = this
+      if (internalErrors !== undefined) return internalErrors
+      return ['QInput', 'QSelect', 'EfInput', 'EfSelect', 'EfInputDate'].includes(
+        pascalCase(componentName)
+      )
+    },
+    internalLabelsCalculated () {
+      const { component, internalLabels } = this
+      return internalLabels && !isNullOrUndefined(component)
+    },
+    propsEvaluated () {
+      const { evaluatedProps, cValue } = this
+      const context = this
+      return evaluatedProps.reduce((carry, propKey) => {
+        const propValue = propKey in context ? context[propKey] : context.$attrs[propKey]
+        carry[propKey] = evaluateProp(propValue, cValue, context)
+        return carry
+      }, {})
+    },
     divProps () {
       return merge(this.$attrs, {
         value: this.value,
       })
     },
-    showConditionCalculated () {
-      const { showCondition, id } = this
-      if (!isFunction(showCondition)) return true
-      return showCondition(id, this)
-    },
-    cFieldInheritsQField () {
-      return [
-        'EfSelect',
-        'EfInput',
-        'EfInputDate',
-        'QSelect',
-        'QInput',
-        'q-select',
-        'q-input',
-      ].includes(this.cComponent)
-    },
     cFieldStyle () {
-      const { fieldStyle, cValue } = this
-      return resolveEasyFieldProp('fieldStyle', fieldStyle, cValue, this)
+      const { fieldStyle, propsEvaluated, evaluatedProps } = this
+      return evaluatedProps.includes('fieldStyle') ? propsEvaluated['fieldStyle'] : fieldStyle
     },
-    cInnerStyle () {
-      const { innerStyle, cValue } = this
-      return resolveEasyFieldProp('innerStyle', innerStyle, cValue, this)
+    cComponentStyle () {
+      const { componentStyle, propsEvaluated, evaluatedProps } = this
+      return evaluatedProps.includes('componentStyle')
+        ? propsEvaluated['componentStyle']
+        : componentStyle
     },
     cFieldClassesArray () {
-      const { fieldClasses, cValue } = this
-      const classes = resolveEasyFieldProp('fieldClasses', fieldClasses, cValue, this)
+      const { fieldClasses, propsEvaluated, evaluatedProps } = this
+      const classes = evaluatedProps.includes('fieldClasses')
+        ? propsEvaluated['fieldClasses']
+        : fieldClasses
       if (isString(classes)) return classes.split(' ')
       if (isPlainObject(classes)) return [classes]
       return classes
     },
-    cInnerClassesArray () {
-      const { innerClasses, cValue } = this
-      const classes = resolveEasyFieldProp('innerClasses', innerClasses, cValue, this)
+    cComponentClassesArray () {
+      const { componentClasses, propsEvaluated, evaluatedProps } = this
+      const classes = evaluatedProps.includes('componentClasses')
+        ? propsEvaluated['componentClasses']
+        : componentClasses
       if (isString(classes)) return classes.split(' ')
       if (isPlainObject(classes)) return [classes]
       return classes
     },
-    internalLabelMode () {
-      const { component, externalLabels } = this
-      return externalLabels === false && !['EfTitle', 'EfSpace', undefined].includes(component)
-    },
-    cComponent () {
-      return this.component
+    cRules () {
+      const { rules, required, evaluatedProps, propsEvaluated, innerLang } = this
+      const req = evaluatedProps.includes('componentClasses') ? propsEvaluated.required : required
+      const requiredRule = val => !isNullOrUndefined(val) || innerLang['requiredField']
+      return req ? rules.concat([requiredRule]) : rules
     },
     fieldProps () {
-      // props only used here: format, parseInput, label
-      const { cValue, $attrs, required, innerLang, internalLabelMode } = this
+      // props only used here: parseValue, parseInput, label
+      const { cValue, $attrs, innerLang, internalLabelsCalculated, propsEvaluated, cRules } = this
       const self = this
-      // add default "required" rule
-      const internalLabelDefaults = !internalLabelMode
-        ? {}
-        : {
-            label: this.label,
-            hint: this.subLabel,
-          }
-      const requiredRule = val => !!val || innerLang['requiredField']
-      const requiredRules =
-        required && isArray($attrs.rules) && $attrs.rules.length
-          ? { rules: $attrs.rules.concat([requiredRule]) }
-          : required
-          ? { rules: [requiredRule] }
-          : {}
-      const mergedProps = merge(
-        internalLabelDefaults,
-        $attrs,
-        {
-          // EF props used here, but also to pass:
-          formDataNested: this.formDataNested,
-          formDataFlat: this.formDataFlat,
-          mode: this.mode,
-          formId: this.formId,
-          lang: this.innerLang,
-          events: this.cEvents,
-          readonly: this.mode === 'view' || this.readonly,
-        },
-        requiredRules
-      )
-      return Object.entries(mergedProps).reduce((carry, [propKey, propValue]) => {
-        carry[propKey] = resolveEasyFieldProp(propKey, propValue, cValue, self)
-        return carry
-      }, {})
+      // should we pass on label & subLabel (as hint) or not
+      const internalLabelDefaults = !internalLabelsCalculated
+        ? { label: undefined }
+        : { label: this.label, hint: this.subLabel }
+      const mergedProps = merge($attrs, propsEvaluated, internalLabelDefaults, {
+        rules: this.cRules,
+        // EF props used here, but also to pass:
+        formDataNested: this.formDataNested,
+        formDataFlat: this.formDataFlat,
+        mode: this.mode,
+        formId: this.formId,
+        lang: this.innerLang,
+        events: this.cEvents,
+        readonly: this.mode === 'view' || this.readonly,
+      })
+      return mergedProps
     },
     cQFieldProps () {
       // disable prefix suffix for QField
@@ -413,42 +398,26 @@ You can also pass a function that will receive two params you can work with: \`(
         stackLabel: true,
       })
     },
-    cValue: {
-      get () {
-        const { format, innerValue } = this
-        if (isFunction(format)) return format(innerValue, this)
-        return innerValue
-      },
-      set (val) {
-        this.updateValue(val)
-      },
-    },
     cLabel () {
-      const { label, cValue, internalLabelMode } = this
-      if (isFunction(label)) return label(cValue, this)
-      return internalLabelMode ? undefined : label
+      const { label, cValue, internalLabelsCalculated, propsEvaluated, evaluatedProps } = this
+      const _label = evaluatedProps.includes('label') ? propsEvaluated.label : label
+      return internalLabelsCalculated ? undefined : _label
     },
     cSubLabel () {
-      const { subLabel, cValue, internalLabelMode } = this
-      if (isFunction(subLabel)) return subLabel(cValue, this)
-      return internalLabelMode ? undefined : subLabel
+      const { subLabel, cValue, internalLabelsCalculated, propsEvaluated, evaluatedProps } = this
+      const _subLabel = evaluatedProps.includes('subLabel') ? propsEvaluated.subLabel : subLabel
+      return internalLabelsCalculated ? undefined : _subLabel
     },
     cEvents () {
-      return Object.entries(this.events).reduce((carry, [eventName, eventFn]) => {
+      const { propsEvaluated, evaluatedProps, events } = this
+      const context = this
+      const _events = evaluatedProps.includes('events') ? propsEvaluated.events : events
+      return Object.entries(_events).reduce((carry, [eventName, eventFn]) => {
         // input event is handled in cValue
         if (eventName === 'input') return carry
-        carry[eventName] = val => eventFn(val, this)
+        carry[eventName] = val => eventFn(val, context)
         return carry
       }, {})
-    },
-  },
-  methods: {
-    isString,
-    updateValue (val) {
-      const { parseInput, events } = this
-      if (isFunction(parseInput)) val = parseInput(val, this)
-      if (isFunction(events.input)) events.input(val, this)
-      this.$emit('input', val)
     },
   },
 }

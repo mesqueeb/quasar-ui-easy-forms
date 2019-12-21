@@ -3,11 +3,9 @@ export default {
   actionButtons: ['delete', 'archive', 'cancel', 'edit', 'save'],
   schema: [
     {
-      component: 'EfSpace',
       span: 3,
     },
     {
-      component: 'EfTitle',
       span: 1,
       label: 'Example component:',
     },

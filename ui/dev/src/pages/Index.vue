@@ -102,6 +102,7 @@ const pagesEasyForm = [
 
 const pagesEasyField = [
   { title: 'Easy Field', path: '/EasyFieldDemo' },
+  { title: 'EfMiniForm', path: '/EasyField/EfMiniForm' },
   { title: "component: 'EfSelect' models", path: '/selectModel' },
 ]
 

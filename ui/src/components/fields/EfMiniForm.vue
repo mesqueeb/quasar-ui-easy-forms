@@ -46,7 +46,6 @@
 @import '../../index.sass'
 
 .ef-form
-  margin-top: $md
   >.ef-form__row
     display: grid
     justify-items: stretch
@@ -62,9 +61,11 @@ import { isNumber } from 'is-what'
 import { getGenericValueType } from './sharedProps.js'
 
 export default {
-  name: 'EfForm',
+  name: 'EfMiniForm',
   inheritAttrs: false,
-  desc: `EfForm is a single component to which you can pass a "schema". The difference between \`<EasyField component="EfForm" />\` and \`<EasyForm />\` is that the former can be used _as part of_ the latter. The "schema" passed to this component will be parsed as a list with rows. Each EasyField object in the "schema" will be added as a single column.\n(EfForm has nothing to do with QForm)`,
+  desc: `EfMiniForm is a component to which you can pass a "schema" just like an EasyForm. The difference is that EfMiniForm is more like a (as the name says) "mini" form. 😃
+
+The "schema" you specify is shown as a single row. New rows are added automatically on user input.`,
   props: {
     // prop categories: behavior content general model state style
     value: {
@@ -72,20 +73,38 @@ export default {
       type: Array,
       default: () => [],
     },
-    valueType: getGenericValueType('array'),
     // EF props:
     schema: {
-      category: 'model',
+      category: 'content',
       type: Array,
       desc:
         'This is the information on the columns you want to be shown. An array of objects just like an EasyForm.',
       default: () => [{ component: 'QInput' }],
       examples: [
-        "[{label: 'Amount', id: 'amount', component: 'QInput', valueType: 'number'}, {label: 'Currency', id: 'curr', component: 'select', options: [{label: 'USD', value: 'usd'}]}]",
+        "[{label: 'Amount', id: 'amount', component: 'QInput', type: 'number'}, {label: 'Currency', id: 'curr', component: 'QSelect', options: [{label: 'USD', value: 'usd'}]}]",
       ],
     },
+    attrsToPass: {
+      category: 'content',
+      type: Array,
+      desc: `A list of prop (attribute) names to be passed on to each single EasyField generated in the mini form.
+
+This is useful when you want to use Evaluated Props in the schema of the mine form but need information from the top level EasyForm.`,
+      default: () => [
+        'formDataNested',
+        'formDataFlat',
+        'formId',
+        'mode',
+        'fieldInput',
+        'lang',
+        'events',
+        'required',
+        'rules',
+      ],
+      examples: [`['formDataNested', 'formId', 'mode', 'fieldInput']`],
+    },
     maxRows: {
-      category: 'model',
+      category: 'content',
       type: Number,
       desc: 'Allows to limit the max amount of rows.',
     },
@@ -107,20 +126,26 @@ export default {
         this.$emit('input', val)
       },
     },
-    attrsToPass () {
-      const { formDataNested, formDataFlat, formId, mode, fieldInput } = this.$attrs
-      return { formDataNested, formDataFlat, formId, mode, fieldInput }
+    miniFormAttrsToPass () {
+      const { attrsToPass, $attrs } = this
+      return attrsToPass.reduce((carry, attrKey) => {
+        carry[attrKey] = $attrs[attrKey]
+        return carry
+      }, {})
     },
     cSchema () {
-      const { schema, disable, readonly, attrsToPass } = this
+      const { schema, disable, readonly, miniFormAttrsToPass } = this
       return schema.map(subfield => {
-        return merge(attrsToPass, { disable, readonly }, subfield, { label: '', subLabel: '' })
+        return merge(miniFormAttrsToPass, { disable, readonly }, subfield, {
+          label: '',
+          subLabel: '',
+        })
       })
     },
     schemaLabels () {
-      const { schema, attrsToPass } = this
+      const { schema, miniFormAttrsToPass } = this
       return schema.map(subfield => {
-        return merge(attrsToPass, subfield, { component: undefined })
+        return merge(miniFormAttrsToPass, subfield, { component: undefined })
       })
     },
     columnCountSubForm () {

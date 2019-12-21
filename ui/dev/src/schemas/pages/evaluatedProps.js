@@ -38,21 +38,18 @@ export default {
     },
     _3: {
       showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 0,
-      component: 'EfTitle',
       label: 'Dynamic prop based on the value of the field',
       hasMarkdown: true,
       subLabel: `Eg. \`subLabel: val => val === 'purple' ? 'nice!' : 'choose a color'\``,
     },
     _4: {
       showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 1,
-      component: 'EfTitle',
       label: 'Dynamic prop based on the value of "another" field',
       hasMarkdown: true,
       subLabel: `Eg. \`disable: (val, {formDataNested}) => formDataNested.over18\``,
     },
     _5: {
       showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 2,
-      component: 'EfTitle',
       label: 'Dynamic "conditional rendering" of a field',
       hasMarkdown: true,
       subLabel: `
@@ -63,7 +60,6 @@ Eg. \`showCondition: (val, {formDataNested}) => formDataNested.car\`
     },
     _6: {
       showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 3,
-      component: 'EfTitle',
       label: 'Dynamic "options" of a select-field',
       hasMarkdown: true,
       subLabel: `

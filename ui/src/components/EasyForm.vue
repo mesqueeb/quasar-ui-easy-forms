@@ -81,7 +81,14 @@ import flattenPerSchema from '../helpers/flattenPerSchema'
 import defaultLang from '../meta/lang'
 import EfBtn from './fields/EfBtn.vue'
 import EasyField from './EasyField.vue'
-import { mode, labelPosition, externalLabels, hasMarkdown, evaluatedProps } from './sharedProps.js'
+import {
+  mode,
+  labelPosition,
+  hasMarkdown,
+  evaluatedProps,
+  internalLabels,
+  internalErrors,
+} from './sharedProps.js'
 
 export const EVENTS = {
   'update:mode': {
@@ -205,9 +212,10 @@ See the documentation on "Action Buttons" for more info.`,
     // shared props:
     mode,
     labelPosition,
-    externalLabels,
     hasMarkdown,
     evaluatedProps,
+    internalLabels,
+    internalErrors,
   },
   data () {
     const { mode, id, value, schema, lang } = this
@@ -272,10 +280,11 @@ See the documentation on "Action Buttons" for more info.`,
         mode: innerMode,
         fieldInput: this.fieldInput,
         // just pass
-        externalLabels: this.externalLabels,
         labelPosition: this.labelPosition,
         hasMarkdown: this.hasMarkdown,
         evaluatedProps: this.evaluatedProps,
+        internalLabels: this.internalLabels,
+        internalErrors: this.internalErrors,
       }
       const forcedDefaults = {
         formDataNested,

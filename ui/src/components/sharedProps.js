@@ -31,14 +31,6 @@ export const labelPosition = {
   values: ['top', 'left'],
   examples: ['top', 'left'],
 }
-export const externalLabels = {
-  category: 'style',
-  type: Boolean,
-  desc: `By default labels are external to allow similar label styling for any type of field.
-
-When \`externalLabels: false\` it will use the native labels from QField, QInput & QSelect. The subLabel will be passed as 'hint' underneath the field. ${propOf}`,
-  default: true,
-}
 export const hasMarkdown = {
   category: 'state|content',
   type: [Boolean, Function],
@@ -49,19 +41,37 @@ export const evaluatedProps = {
   category: 'behavior',
   type: Array,
   default: () => [
+    'component',
+    'showCondition',
     'label',
     'subLabel',
     'required',
     'rules',
     'fieldStyle',
     'fieldClasses',
-    'innerStyle',
-    'innerClasses',
-    'lang',
+    'componentStyle',
+    'componentClasses',
     'disable',
-    'labelPosition',
-    'externalLabels',
-    'hasMarkdown',
+    'events',
+    'lang',
   ],
-  desc: `An array with prop names that should be treated as "Evaluated Props". ${propOf}`,
+  desc: `An array with prop names that should be treated as "Evaluated Props" when passed a function. ${propOf}`,
+}
+export const internalLabels = {
+  category: 'style',
+  type: [Boolean, undefined],
+  required: false,
+  default: undefined,
+  desc: `Set to true if the component has its own labels and you do not want the EasyField to show a label.
+
+When true subLabels will be passed as a prop called 'hint'. ${propOf}`,
+}
+export const internalErrors = {
+  category: 'behavior|content',
+  type: [Boolean, undefined],
+  required: false,
+  default: undefined,
+  desc: `Set to true if the component has its own error handling. This makes sure it passes on props like \`rules\` and does nothing with them in the EasyField.
+
+Will default to true for components with these names: QInput, QSelect, EfInput, EfSelect, EfInputDate`,
 }

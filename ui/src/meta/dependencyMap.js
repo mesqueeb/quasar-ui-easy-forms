@@ -28,9 +28,9 @@ export const dependencyMap = {
     component: 'EfDiv',
     passedProps: {},
   },
-  EfForm: {
-    componentName: 'EfForm',
-    component: 'EfForm',
+  EfMiniForm: {
+    componentName: 'EfMiniForm',
+    component: 'EfMiniForm',
     passedProps: {},
   },
   EfImg: {

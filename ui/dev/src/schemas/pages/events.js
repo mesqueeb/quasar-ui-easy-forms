@@ -39,7 +39,6 @@ export default {
     },
     _3: {
       showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 0,
-      component: 'EfTitle',
       label: 'Notify on events',
       hasMarkdown: true,
       subLabel: `
@@ -53,7 +52,6 @@ events: {
     },
     _4: {
       showCondition: (value, { formDataNested }) => formDataNested.chosenExample === 1,
-      component: 'EfTitle',
       label: "Update other fields on 'input'",
       hasMarkdown: true,
       subLabel: `

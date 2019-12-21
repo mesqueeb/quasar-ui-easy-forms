@@ -1,16 +1,6 @@
 # Breaking changes
 
-### title
-
-Where previously 'title' fields spanned by default, they do not.
-
-**why:**
-It's better to be explicited about how components are rendered. Magical optimizations should be kept to a minimum.
-
-**how to update code:**
-Add `span: true` to span title fields full width.
-
-### actionButtons
+## actionButtons
 
 Action buttons now default to an empty string.
 
@@ -22,7 +12,7 @@ It's good that there are buttons pre-made for us, but it's better that these are
 **how to update code:**
 Anywhere you have not defined action buttons you can pass the previous default ones if you like: `['archive', 'cancel', 'edit', 'save']`
 
-### fieldType
+## fieldType
 
 EasyForms now uses `component` instead of `fieldType`.
 The "component" field can be passed any component name (string) which is globally registered, OR you can pass a component options object directly.
@@ -39,7 +29,7 @@ I still export the original wrapper components I did via the field names with `E
 1. replace `fieldType: 'input'` with `component: 'EfInput'`
 2. repeat for all field types
 
-### mode & formMode
+## mode & formMode
 
 EasyForm has a `mode` which can be 'view', 'edit', 'add' and 'raw'.
 EasyField used to receive this prop as `formMode` but now receives it as just `mode`.
@@ -56,7 +46,7 @@ Unified syntax. A single prop called "mode" can be set globally at the EasyForm 
 2. replace `rawValue: true` with `mode: 'raw'`
 3. replace `readonly: true` with `mode: 'view'`
 
-### disable
+## disable
 
 `disable` used to be ignored in the case `readonly` is true.
 `disable` now is not modified as such any more.
@@ -78,7 +68,7 @@ If you have fields you set to `disable: true` but want it to be `false` when `re
 }
 ```
 
-### evaluatedProps
+## evaluatedProps
 
 An EasyField used to execute any prop which was a function to allow for these "Evaluated Props". Now you need to be explicit about which props you want to use as "Evaluated Props".
 
@@ -90,40 +80,365 @@ Because now any component can a "field" (EasyForm doesn't use its own field wrap
 The new prop called "evaluatedProps" defaults to an array with some prop names by default.
 If your EasyForms only use Evaluated Props for the following props, you don't need to do anything:
 
-- label
-- subLabel
-- required
-- rules
-- fieldStyle
-- fieldClasses
-- innerStyle
-- innerClasses
-- lang
-- disable
-- labelPosition
-- externalLabels
-- hasMarkdown
+```js
+;[
+  'component',
+  'showCondition',
+  'label',
+  'subLabel',
+  'required',
+  'rules',
+  'fieldStyle',
+  'fieldClasses',
+  'componentStyle',
+  'componentClasses',
+  'disable',
+  'events',
+  'lang',
+]
+```
 
 If you have other props in your schemas that were "Evaluated Props" you will have to manually pass an array with _all_ props that you use as evaluated props: `evaluatedProps: ['myProp', 'subLabel']` etc.
 
-### innerClasses, innerStyle
+This can be defined on the EasyForm level or individually on the EasyField level.
 
-Both `innerClasses` and `innerStyle` are renamed to `componentClasses` & `componentStyle` to make it clear that these are applied directly to the top level of the component which is passed.
+## format
 
-###
+The prop called `format` in which you could pass a function is now renamed to `parseValue` and is the opposite from `parseInput`. For clarity! Just search & replace ;)
 
-### When using regular Quasar components instead of the wrappers.
+## innerClasses, innerStyle
 
-**EfBtnToggle 　 → 　 QBtnToggle**
+Both `innerClasses` and `innerStyle` are renamed to `componentClasses` & `componentStyle` to make it clear that these are applied directly to the component. Just search & replace ;)
+
+## CSS
+
+The class `.easy-field__field` was renamed to `.easy-field__component`. Just search & replace ;)
+
+## externalLabels
+
+The prop called `externalLabels` was `true` by default and meant that labels were shown in the EasyField and not the component.
+
+Now when passing `internalLabels: true` it will show the labels as part of the component.
+
+So instead of `externalLabels: false` you need to pass `internalLabels: true` instead.
+
+Also check out the new prop: `internalErrors`
+
+## Changes to fields (check all!!)
+
+I removed fields that were _just_ wrapper components without much additive values.
+These should now be replaced with the Quasar component equivalents.
+Here's a list with each of these:
+
+### title / EfTitle
 
 ```js
-// change
+// Before:
 {
-  fieldValue: 'btnToggle',
+  fieldType: 'title',
+  label: 'my title',
 }
-// to
+// Change to:
 {
-  component: 'QBtnToggle',
-  spread: true,
+  label: 'my title',
+  span: true,
+  fieldClasses: 'easy-field--title',
+}
+```
+
+You can make title fields prettier via CSS. Eg.
+
+```sass
+.easy-field--title .easy-field__label
+  font-weight: 600
+```
+
+### EfBtn
+
+Before
+
+```js
+{
+  fieldType: 'btn'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfBtn'
+}
+```
+
+### EfBtnToggle
+
+Before
+
+```js
+{
+  fieldType: 'btnToggle'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfBtnToggle'
+}
+```
+
+### EfDiv
+
+Before
+
+```js
+{
+  fieldType: 'div'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfDiv'
+}
+```
+
+### EfForm -> EfMiniForm
+
+Before
+
+```js
+{
+  fieldType: 'form'
+}
+```
+
+> note: I updated the name to EfMiniForm to make it easier to understand that this is a mini form, not a full fledged EasyForm.
+
+Change to
+
+```js
+{
+  component: 'EfMiniForm'
+}
+```
+
+### EfImg
+
+Before
+
+```js
+{
+  fieldType: 'img'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfImg'
+}
+```
+
+### EfInput
+
+Before
+
+```js
+{
+  fieldType: 'input'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfInput'
+}
+```
+
+### EfInputDate
+
+Before
+
+```js
+{
+  fieldType: 'inputDate'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfInputDate'
+}
+```
+
+### EfLink
+
+Before
+
+```js
+{
+  fieldType: 'link'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfLink'
+}
+```
+
+### EfMarkdown
+
+Before
+
+```js
+{
+  fieldType: 'markdown'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfMarkdown'
+}
+```
+
+### EfPdf
+
+Before
+
+```js
+{
+  fieldType: 'pdf'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfPdf'
+}
+```
+
+### EfRange
+
+Before
+
+```js
+{
+  fieldType: 'range'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfRange'
+}
+```
+
+### EfSelect
+
+Before
+
+```js
+{
+  fieldType: 'select'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfSelect'
+}
+```
+
+### EfSlider
+
+Before
+
+```js
+{
+  fieldType: 'slider'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfSlider'
+}
+```
+
+### EfToggle
+
+Before
+
+```js
+{
+  fieldType: 'toggle'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfToggle'
+}
+```
+
+### EfUploaderFirebase
+
+Before
+
+```js
+{
+  fieldType: 'uploaderFirebase'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfUploaderFirebase'
+}
+```
+
+### EfVideo
+
+Before
+
+```js
+{
+  fieldType: 'video'
+}
+```
+
+Change to
+
+```js
+{
+  component: 'EfVideo'
 }
 ```

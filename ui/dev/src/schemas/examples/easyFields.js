@@ -24,14 +24,14 @@ export const EfDiv = {
   prefix: 'Rank ',
   value: '1',
 }
-export const EfForm = {
-  id: 'form',
-  component: 'EfForm',
+export const EfMiniForm = {
+  id: 'myMiniForm',
+  component: 'EfMiniForm',
   label: 'Expenses',
   subLabel: "fill in this month's expenses",
   schema: [
     {
-      component: 'EfSelect',
+      component: 'QSelect',
       label: 'Type',
       id: 'type',
       options: [
@@ -39,8 +39,15 @@ export const EfForm = {
         { label: 'Work', value: 'work' },
       ],
     },
-    { component: 'EfInput', label: 'Amount', id: 'amount', valueType: 'number', prefix: '€' },
-    { component: 'EfToggle', label: 'Notify', id: 'notify', default: true },
+    {
+      component: 'QInput',
+      label: 'Amount',
+      id: 'amount',
+      type: 'number',
+      parseInput: Number,
+      prefix: '€',
+    },
+    { component: 'QToggle', label: 'Notify', default: false, id: 'notify' },
   ],
   value: [],
 }
@@ -131,7 +138,7 @@ export default {
   EfBtn,
   EfBtnToggle,
   EfDiv,
-  EfForm,
+  EfMiniForm,
   EfImg,
   EfInput,
   EfInputDate,

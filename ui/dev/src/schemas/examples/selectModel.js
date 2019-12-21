@@ -29,18 +29,17 @@ const createExample = (config, i) => [
 ]
 
 const exampleConfigs = [
-  { component: 'EfTitle', span: true, label: 'Single select' },
+  { span: true, label: 'Single select' },
   { valueType: 'object' },
   { valueType: 'string', emitValue: true },
   { valueType: 'string', emitValue: true, mapOptions: true },
-  { component: 'EfTitle', span: true, label: 'Multiple select', subLabel: 'Recommended model' },
+  { span: true, label: 'Multiple select', subLabel: 'Recommended model' },
   { valueType: 'object', multiple: true },
-  { component: 'EfTitle', span: true, subLabel: 'Other models' },
+  { span: true, subLabel: 'Other models' },
   { valueType: 'array', multiple: true },
   { valueType: 'array', multiple: true, emitValue: true },
   { valueType: 'array', multiple: true, emitValue: true, mapOptions: true },
   {
-    component: 'EfTitle',
     span: true,
     label: 'Do not do this',
     subLabel: 'Select something and see why 😉',
@@ -54,21 +53,18 @@ export default {
   columnCount: 3,
   schema: [
     {
-      component: 'EfSpace',
       subLabel: 'Select some values for each select-field down below, and see what happens.',
     },
     {
-      component: 'EfTitle',
       span: 1,
       label: 'Model:',
     },
     {
-      component: 'EfTitle',
       span: 1,
       label: 'Options:',
     },
     ...exampleConfigs.reduce((carry, config, i) => {
-      if (config.component === 'EfTitle') {
+      if (config.span === true) {
         carry.push(config)
         return carry
       }

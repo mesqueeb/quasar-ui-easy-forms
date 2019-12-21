@@ -8,7 +8,7 @@ const { dependencyMap } = EasyForms
 const { getPassedProps } = dependencyMap
 
 export function getRawComponent (selectedField) {
-  return EasyForms[`Ef${pascalCase(selectedField)}`] || {}
+  return EasyForms[selectedField] || {}
 }
 
 export function getAllComponentProps (selectedField) {
@@ -28,7 +28,16 @@ export function propToPropSchema (propKey, propInfo) {
   const events = {}
   let component = 'EfInput'
   let subLabel = desc
-  let options, outlined, standout, disable, parseInput, format, autogrow, debounce, span, emitValue
+  let options,
+    outlined,
+    standout,
+    disable,
+    parseInput,
+    parseValue,
+    autogrow,
+    debounce,
+    span,
+    emitValue
   let fieldClasses = []
   // If it has a default, write it in the description
   if (!isUndefined(df)) subLabel += `\n\nDefault: \`${isFunction(df) ? JSON.stringify(df()) : df}\``
@@ -58,7 +67,7 @@ export function propToPropSchema (propKey, propInfo) {
     standout = true
     debounce = 500
     parseInput = stringToJs
-    format = JSON.stringify
+    parseValue = JSON.stringify
     autogrow = true
     if (isArray(examples)) subLabel += `\nExamples: \`${examples.join('` | `')}\``
   }
@@ -87,7 +96,7 @@ export function propToPropSchema (propKey, propInfo) {
     standout,
     disable,
     parseInput,
-    format,
+    parseValue,
     autogrow,
     category,
     fieldClasses,

@@ -36,11 +36,10 @@ Benefits of this data model:
 - you can easily print out a list of the labels that are selected
 - you can easily retrieve the value's that are selected
 - you don't need to use QSelect's "mapOptions" which has a performance penalty
-- EfForm formats your model for you just by passing \`multiple: true, valueType: 'object'\`
-- (The only downside is that your array of options may only have strings for its values)
 
 Problems with this data model:
 - You cannot retain a specific "order"
+- You can only have strings as values
 
 A note on events: \`<EfSelect />\` requires the native modifier when applying events directly in the template.`,
   props: {
@@ -63,7 +62,7 @@ A note on events: \`<EfSelect />\` requires the native modifier when applying ev
     placeholder: {
       category: 'content|model',
       type: String,
-      desc: `Will be shown if \`(externalLabels ||  (!externalLabels && stackLabel))\``,
+      desc: `Will be shown if \`(!internalLabels ||  (internalLabels && stackLabel))\``,
     },
     // Quasar props with modified defaults:
     outlined: { inheritedProp: 'modified', type: Boolean, default: true },
