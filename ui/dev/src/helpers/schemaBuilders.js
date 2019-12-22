@@ -8,7 +8,7 @@ const { dependencyMap } = EasyForms
 const { getPassedProps } = dependencyMap
 
 export function getRawComponent (selectedField) {
-  return EasyForms[`Ef${pascalCase(selectedField)}`] || {}
+  return EasyForms[selectedField] || {}
 }
 
 export function getAllComponentProps (selectedField) {
@@ -26,9 +26,18 @@ export function propToPropSchema (propKey, propInfo) {
   // make the raw prop info from the components into an EasyForm:
   // whatever the prop is, default to an 'input' EasyField
   const events = {}
-  let fieldType = 'input'
+  let component = 'QInput'
   let subLabel = desc
-  let options, outlined, standout, disable, parseInput, format, autogrow, debounce, span, emitValue
+  let options,
+    outlined,
+    standout,
+    disable,
+    parseInput,
+    parseValue,
+    autogrow,
+    debounce,
+    span,
+    emitValue
   let fieldClasses = []
   // If it has a default, write it in the description
   if (!isUndefined(df)) subLabel += `\n\nDefault: \`${isFunction(df) ? JSON.stringify(df()) : df}\``
@@ -37,12 +46,12 @@ export function propToPropSchema (propKey, propInfo) {
     type === Boolean ||
     (isArray(type) && [Boolean, Function].every(t => type.includes(t)) && type.length === 2)
   ) {
-    fieldType = 'toggle'
+    component = 'QToggle'
   }
   // if the prop has a fixed set of possible values, show this as an 'option' EasyField
   const propHasValues = isArray(values) && values.length
   if (propHasValues) {
-    fieldType = 'select'
+    component = 'QSelect'
     emitValue = true
     options = values.map(v => ({ label: v, value: v }))
   }
@@ -58,7 +67,7 @@ export function propToPropSchema (propKey, propInfo) {
     standout = true
     debounce = 500
     parseInput = stringToJs
-    format = JSON.stringify
+    parseValue = JSON.stringify
     autogrow = true
     if (isArray(examples)) subLabel += `\nExamples: \`${examples.join('` | `')}\``
   }
@@ -66,16 +75,16 @@ export function propToPropSchema (propKey, propInfo) {
   if (type === Function) disable = true
   // If it's the prop called 'schema', span the entire form, add extra info and don't return any input field
   if (propKey === 'schema') {
-    fieldType = 'none'
+    component = ''
     span = true
     subLabel +=
       '\n\n> 👀 Check「Source tab」→「Schema」to see the following code in color and with indentation.'
   }
-  // Create the EfField schema for the prop
+  // Create the EasyField schema for the prop
   return {
     id: propKey,
-    fieldType,
-    valueType: type === Number ? 'number' : undefined,
+    component,
+    type: type === Number ? 'number' : undefined,
     // schema,
     label: propKey,
     subLabel,
@@ -86,7 +95,7 @@ export function propToPropSchema (propKey, propInfo) {
     standout,
     disable,
     parseInput,
-    format,
+    parseValue,
     autogrow,
     category,
     fieldClasses,
@@ -108,7 +117,7 @@ export function getInfoCardPropsSchema (selectedField) {
       : getAllComponentProps(selectedField)
   return Object.entries(allComponentProps).reduce((carry, [propKey, propInfo]) => {
     // fields to not include in the InfoCard settings:
-    if (propKey === 'fieldType') {
+    if (propKey === 'component' || propKey === 'value') {
       return carry
     }
     carry[propKey] = propToPropSchema(propKey, propInfo)

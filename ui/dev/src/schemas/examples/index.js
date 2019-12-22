@@ -1,5 +1,4 @@
-export { default as easyFields } from './easyFields'
-
+// easy forms
 export const basics = {
   code: [require('./basics').default],
   string: [require('!!raw-loader!./basics').default],
@@ -27,9 +26,9 @@ export const responsiveStyle = {
   code: [require('./responsiveStyle').default],
   string: [require('!!raw-loader!./responsiveStyle').default],
 }
-export const selectModel = {
-  code: [require('./selectModel').default],
-  string: [require('!!raw-loader!./selectModel').default],
+export const QSelectModel = {
+  code: [require('./QSelectModel').default],
+  string: [require('!!raw-loader!./QSelectModel').default],
 }
 export const evaluatedProps = {
   code: [
@@ -48,4 +47,18 @@ export const evaluatedProps = {
 export const events = {
   code: [require('./events1').default, require('./events2').default],
   string: [require('!!raw-loader!./events1').default, require('!!raw-loader!./events2').default],
+}
+
+// easy fields
+export const EfMiniForm = {
+  code: [require('./EfMiniForm').default],
+  string: [require('!!raw-loader!./EfMiniForm').default],
+}
+export const EfBtn = {
+  code: [require('./EfBtn').default],
+  string: [require('!!raw-loader!./EfBtn').default],
+}
+export const EfDiv = {
+  code: [require('./EfDiv').default],
+  string: [require('!!raw-loader!./EfDiv').default],
 }

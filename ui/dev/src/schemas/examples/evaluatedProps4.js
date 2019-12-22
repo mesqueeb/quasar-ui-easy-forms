@@ -25,17 +25,17 @@ export default {
     {
       id: 'year',
       label: 'Year',
-      fieldType: 'select',
+      component: 'QSelect',
       emitValue: true,
       options: [...new Set(carData.map(d => d.year))].map(value => ({ value, label: value })),
     },
     {
       id: 'make',
       label: 'Make',
-      fieldType: 'select',
+      component: 'QSelect',
       emitValue: true,
-      options: (val, { formDataNested }) => {
-        const { year } = formDataNested || {}
+      options: (val, { formData }) => {
+        const { year } = formData || {}
         return [...new Set(carData.filter(car => car.year === year).map(d => d.make))].map(
           value => ({ value, label: value })
         )
@@ -44,10 +44,10 @@ export default {
     {
       id: 'model',
       label: 'Model',
-      fieldType: 'select',
+      component: 'QSelect',
       emitValue: true,
-      options: (val, { formDataNested }) => {
-        const { year, make } = formDataNested || {}
+      options: (val, { formData }) => {
+        const { year, make } = formData || {}
         return [
           ...new Set(
             carData.filter(car => car.year === year && car.make === make).map(d => d.model)
@@ -58,10 +58,10 @@ export default {
     {
       id: 'trim',
       label: 'Trim',
-      fieldType: 'select',
+      component: 'QSelect',
       emitValue: true,
-      options: (val, { formDataNested }) => {
-        const { year, make, model } = formDataNested || {}
+      options: (val, { formData }) => {
+        const { year, make, model } = formData || {}
         return [
           ...new Set(
             carData

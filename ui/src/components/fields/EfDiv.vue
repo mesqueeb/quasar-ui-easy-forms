@@ -9,21 +9,27 @@
 
 <script>
 import parseEasyFieldValue from '../../helpers/parseFieldValue.js'
+import { getUsageDocs } from './sharedProps.js'
 
 export default {
   name: 'EfDiv',
   inheritAttrs: false,
-  desc: `The "div" field can be used to show the raw values of EasyForm data. This means that it will _just_ generate a single div.
-- Using \`<EfDiv />\` will only render a div.
-- Using \`<EasyField field-type="div" />\` will render a div inside an EasyField, so you can still use the EasyField label & sublabel etc.
-When you pass no label or sublabel only the div will be shown.
+  desc: `${getUsageDocs('EfDiv')}
 
-One benefit of the "div" field over a regular div, is that it will parse your value as per your field's schema. It will parse your value based on the following schema props:
+### description
+
+EfDiv is used by EasyForms when \`mode: 'raw'\`. The component shows the raw values of the data inside a simple \`<div>\`.
+
+The difference the EfDiv field over a regular div, is that it will parse your value as per your field's schema. It will parse your value based on the following schema props:
+- \`type\`: shows numbers with thousands separator and dates as YYYY/MM/DD
 - \`valueType\`: shows numbers with thousands separator and dates as YYYY/MM/DD
-- \`suffix\`: value + suffix
-- \`prefix\`: prefix + value
+- \`dateFormat\`: the format used when formatting dates, defaults to 'YYYY/MM/DD'
+- \`suffix\`: shows \`value + suffix\` when passed
+- \`prefix\`: shows \`prefix + value\` when passed
 - \`options\`: shows the "label" of the option which has the value when passed
-- \`multiple\`: checked when options are passed
+- \`multiple\`: if your field allows to have multiple values, \`multiple\` must be \`true\`. This is used when parsing the \`options\`
+
+The difference between \`type\` and \`valueType\` is when you don't want to set the type for an "input" field, you can use \`valueType\` instead of \`type\`.
 `,
   props: {
     // prop categories: behavior content general model state style
@@ -34,6 +40,8 @@ One benefit of the "div" field over a regular div, is that it will parse your va
       type: String,
       desc: `valueType can be any type.`,
     },
+    type: { category: 'model|content', type: String },
+    dateFormat: { category: 'model|content', type: String, default: 'YYYY/MM/DD' },
     suffix: { category: 'model|content', type: String },
     prefix: { category: 'model|content', type: String },
     options: { category: 'model|content', type: Array },
@@ -43,8 +51,12 @@ One benefit of the "div" field over a regular div, is that it will parse your va
   },
   computed: {
     cValue () {
-      const { value, valueType, options, suffix, prefix, multiple } = this
-      return parseEasyFieldValue(value, { valueType, options, suffix, prefix, multiple }, this)
+      const { value, valueType, type, dateFormat, options, suffix, prefix, multiple } = this
+      return parseEasyFieldValue(
+        value,
+        { valueType: valueType || type, dateFormat, options, suffix, prefix, multiple },
+        this
+      )
     },
   },
   methods: {},

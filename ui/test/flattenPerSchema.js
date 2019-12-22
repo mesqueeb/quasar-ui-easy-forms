@@ -18,13 +18,11 @@ test('flattenPerSchema', t => {
     'payAsYouGoPrice': {
       id: 'payAsYouGoPrice',
       label: '使用料別電気単価',
-      fieldType: 'form',
       valueType: 'array',
       schema: [
         {
           id: 'to',
           label: '電気量範囲',
-          fieldType: 'input',
           valueType: 'number',
           prefix: 'kWh以上～',
           suffix: 'kWh未満',
@@ -32,25 +30,22 @@ test('flattenPerSchema', t => {
         {
           id: 'price',
           label: '電気単価',
-          fieldType: 'input',
           valueType: 'number',
           suffix: '円/kWh',
         },
       ],
-      showCondition: [['planType', '===', 'payAsYouGo']]
+      showCondition: [['planType', '===', 'payAsYouGo']],
     },
     'timeFee.d': {
       id: 'timeFee.d',
       label: '昼間の電気単価',
-      fieldType: 'input',
       valueType: 'number',
       suffix: '円/kW',
-      showCondition: [['planType', '===', 'allElecPlan']]
+      showCondition: [['planType', '===', 'allElecPlan']],
     },
     'timeFeeBreakdown.d': {
       id: 'timeFeeBreakdown.d',
       label: '昼間の適用時間帯',
-      fieldType: 'range',
       valueType: 'object',
       showCondition: [['planType', '===', 'allElecPlan']],
       min: 0,
@@ -59,15 +54,13 @@ test('flattenPerSchema', t => {
     'timeFee.n': {
       id: 'timeFee.n',
       label: '夜間の電気単価',
-      fieldType: 'input',
       valueType: 'number',
       suffix: '円/kW',
-      showCondition: [['planType', '===', 'allElecPlan']]
+      showCondition: [['planType', '===', 'allElecPlan']],
     },
     'timeFeeBreakdown.n': {
       id: 'timeFeeBreakdown.n',
       label: '夜間の適用時間帯',
-      fieldType: 'range',
       valueType: 'object',
       showCondition: [['planType', '===', 'allElecPlan']],
       min: -12,
@@ -76,46 +69,51 @@ test('flattenPerSchema', t => {
     'hasMorningFee': {
       id: 'hasMorningFee',
       label: '朝夕間の電気料金の有無',
-      fieldType: 'toggle',
       valueType: 'boolean',
       showCondition: [['planType', '===', 'allElecPlan']],
     },
     'timeFeeBreakdown.m': {
       id: 'timeFeeBreakdown.m',
       label: '朝の適用時間帯',
-      fieldType: 'range',
       valueType: 'object',
-      showCondition: [['planType', '===', 'allElecPlan'], ['hasMorningFee', '===', true]],
+      showCondition: [
+        ['planType', '===', 'allElecPlan'],
+        ['hasMorningFee', '===', true],
+      ],
       min: 0,
       max: 24,
     },
     'timeFee.m': {
       id: 'timeFee.m',
       label: '朝夕間の電気単価',
-      fieldType: 'input',
       valueType: 'number',
       suffix: '円/kW',
-      showCondition: [['planType', '===', 'allElecPlan'], ['hasMorningFee', '===', true]]
+      showCondition: [
+        ['planType', '===', 'allElecPlan'],
+        ['hasMorningFee', '===', true],
+      ],
     },
     'timeFeeBreakdown.e': {
       id: 'timeFeeBreakdown.e',
       label: '夕方の適用時間帯',
-      fieldType: 'range',
       valueType: 'object',
-      showCondition: [['planType', '===', 'allElecPlan'], ['hasMorningFee', '===', true]],
+      showCondition: [
+        ['planType', '===', 'allElecPlan'],
+        ['hasMorningFee', '===', true],
+      ],
       min: 0,
       max: 24,
     },
   }
   res = flattenPerSchema(target, schema)
   t.deepEqual(res, {
-    payAsYouGoPrice: [],
-    price: 0,
-    timeFee: {},
+    'payAsYouGoPrice': [],
+    'price': 0,
+    'timeFee': {},
     'timeFee.d': 23,
     'timeFee.m': 0,
     'timeFee.n': 12.97,
-    timeFeeBreakdown: {},
+    'timeFeeBreakdown': {},
     'timeFeeBreakdown.d': { from: 8, to: 22 },
     'timeFeeBreakdown.e': { from: 21, to: 21 },
     'timeFeeBreakdown.m': { from: 9, to: 9 },

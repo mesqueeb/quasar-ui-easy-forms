@@ -28,7 +28,7 @@
 <style lang="sass">
 
 .page-form
-  .ef-btn-toggle
+  .q-btn-toggle
     border: solid 2px $primary
     border-radius: 6px
     > *
@@ -64,7 +64,7 @@ export default {
     return {
       pageValue: { chosenExample: 0 },
       pageForm,
-      exampleForms: exampleForms.map(f => merge({ value: {} }, f)),
+      exampleForms,
       exampleFormsRaw,
       propsSchema,
     }

@@ -18,16 +18,17 @@ const parseObject = (target, schema) => {
 test('options', t => {
   let res, target, schema
   target = { chargeCycle: 2 }
-  schema = [{
-    id: 'chargeCycle',
-    label: '充電サイクル',
-    fieldType: 'buttons',
-    valueType: 'number',
-    options: [
-      { label: '1回', value: 1 },
-      { label: '2回', value: 2 }
-    ]
-  }]
+  schema = [
+    {
+      id: 'chargeCycle',
+      label: '充電サイクル',
+      valueType: 'number',
+      options: [
+        { label: '1回', value: 1 },
+        { label: '2回', value: 2 },
+      ],
+    },
+  ]
   res = parseObject(target, schema)
   t.deepEqual(res, { chargeCycle: '2回' })
 })
@@ -35,13 +36,14 @@ test('options', t => {
 test('suffix', t => {
   let res, target, schema
   target = { batteryCapacity: 1 }
-  schema = [{
-    id: 'batteryCapacity',
-    label: '定格容量',
-    fieldType: 'input',
-    valueType: 'number',
-    suffix: 'kWh'
-  }]
+  schema = [
+    {
+      id: 'batteryCapacity',
+      label: '定格容量',
+      valueType: 'number',
+      suffix: 'kWh',
+    },
+  ]
   res = parseObject(target, schema)
   t.deepEqual(res, { batteryCapacity: '1kWh' })
 })
@@ -49,12 +51,13 @@ test('suffix', t => {
 test('prefix', t => {
   let res, target, schema
   target = { price: 1 }
-  schema = [{
-    id: 'price',
-    fieldType: 'input',
-    valueType: 'number',
-    prefix: '¥'
-  }]
+  schema = [
+    {
+      id: 'price',
+      valueType: 'number',
+      prefix: '¥',
+    },
+  ]
   res = parseObject(target, schema)
   t.deepEqual(res, { price: '¥1' })
 })
@@ -62,10 +65,12 @@ test('prefix', t => {
 test('nested props', t => {
   let res, target, schema
   target = { sizes: { d: 1, h: 2 } }
-  schema = [{
-    id: 'sizes.d',
-    suffix: 'm'
-  }]
+  schema = [
+    {
+      id: 'sizes.d',
+      suffix: 'm',
+    },
+  ]
   res = parseObject(target, schema)
   t.deepEqual(res, { sizes: { d: '1m', h: 2 } })
 })
@@ -73,15 +78,17 @@ test('nested props', t => {
 test('options, suffix & prefix', t => {
   let res, target, schema
   target = { chargeCycle: 2 }
-  schema = [{
-    id: 'chargeCycle',
-    options: [
-      { label: '1回', value: 1 },
-      { label: '2回', value: 2 }
-    ],
-    prefix: 'a',
-    suffix: 'z',
-  }]
+  schema = [
+    {
+      id: 'chargeCycle',
+      options: [
+        { label: '1回', value: 1 },
+        { label: '2回', value: 2 },
+      ],
+      prefix: 'a',
+      suffix: 'z',
+    },
+  ]
   res = parseObject(target, schema)
   t.deepEqual(res, { chargeCycle: 'a2回z' })
 })

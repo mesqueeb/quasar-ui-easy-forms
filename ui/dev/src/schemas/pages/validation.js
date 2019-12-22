@@ -12,12 +12,15 @@ export default {
   actionButtons: [],
   schema: [
     {
-      fieldType: 'markdown',
+      component: 'QMarkdown',
+      noContainers: true,
+      noLineNumbers: true,
       src: description,
     },
     {
       id: 'chosenExample',
-      fieldType: 'btn-toggle',
+      component: 'QBtnToggle',
+      spread: true,
       noCaps: true,
       options: [
         { label: 'Basic validation', value: 0 },

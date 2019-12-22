@@ -1,129 +1,110 @@
 <template>
   <q-page padding>
-    <div class="row no-wrap items-start q-gutter-md q-mb-lg">
-      <EasyField v-model="selectedField" v-bind="fieldPicker" />
-      <InfoBoxWrapper color="primary" label="v-model" style="flex: 2;">
-        <q-markdown
-          v-if="selectedField !== 'markdown'"
-          class="q-py-md q-px-sm"
-          :src="modelShownAsBadge"
-        />
-        <!-- display: inline -->
-        <div
-          v-else
-          class="q-ma-sm q-py-sm q-px-xs text-wrap-all bg-grey-2"
-          style="width: 97%; border-radius: 0.3em"
-          >{{ modelShownAsBadge }}</div
-        >
-      </InfoBoxWrapper>
-    </div>
-    <q-markdown v-if="rawComponent.desc" :src="rawComponent.desc" />
+    <EasyForm class="page-form" v-model="pageValue" v-bind="pageForm" />
+    <InfoBoxWrapper color="primary" label="v-model" style="flex: 2;">
+      <q-markdown class="q-py-md q-px-sm" :src="modelShownAsBadge" />
+    </InfoBoxWrapper>
     <InfoCard
+      class="q-mt-lg"
       tag-name="EasyField"
-      :key="selectedField"
       :title="infoCardTitle"
-      :prop-data.sync="propData"
+      :prop-data.sync="examples[pageValue.chosenExample]"
+      :static-schema-tab="examplesRaw[pageValue.chosenExample]"
       :props-schema="propsSchema"
       :style-classes="styleClasses"
       :style-classes-data="styleClassesData"
-      :props-separate-tab="[]"
+      :props-separate-tab="['schema']"
     >
-      <EasyField v-model="model" v-bind="field" :key="selectedField" />
+      <EasyField
+        v-model="examples[pageValue.chosenExample].value"
+        v-bind="examples[pageValue.chosenExample]"
+        v-on="examples[pageValue.chosenExample].events"
+        :key="pageValue.chosenExample"
+      />
     </InfoCard>
   </q-page>
 </template>
 
-<style lang="sass"></style>
+<style lang="sass">
+
+.page-form
+  .q-btn-toggle
+    border: solid 2px $primary
+    border-radius: 6px
+    > *
+      border-radius: 3px
+  // .q-markdown p
+  //   margin: 0 !important
+  .q-markdown--code
+    margin: $sm !important
+
+.q-markdown--code
+  word-break: break-word !important
+</style>
 
 <script>
-import { isString, isUndefined, isArray, isPlainObject } from 'is-what'
+import { isString, isArray, isPlainObject } from 'is-what'
 import { capitalCase } from 'case-anything'
-import copy from 'copy-anything'
 import merge from 'merge-anything'
-import EasyForms from 'ui'
-import demoOptions from '../schemas/examples/easyFields'
+import * as demoSchemas from '../schemas/examples/index'
+import * as pageForms from '../schemas/pages/index'
 import { getInfoCardPropsSchema, getRawComponent } from '../helpers/schemaBuilders'
-
-const selectableFields = require
-  .context('../../../src/components/fields', true, /^\.\/.*\.vue$/)
-  .keys()
-  .map(k => {
-    const name = k.replace(/\.\/Ef/, '').replace(/\.vue/, '')
-    return name[0].toLowerCase() + name.slice(1)
-  })
-  .sort()
 
 export default {
   name: 'EasyFieldDemo',
+  props: {
+    component: String,
+  },
   data () {
-    const selectedField = 'input'
-    const fieldPicker = {
-      label: 'Pick a field',
-      fieldType: 'select',
-      emitValue: true,
-      options: selectableFields,
+    const { component } = this
+    const rawComponent = getRawComponent(component)
+    const { desc } = rawComponent
+    const pageForm = {
+      schema: [
+        {
+          component: 'QMarkdown',
+          noContainers: true,
+          noLineNumbers: true,
+          src: desc,
+        },
+      ],
     }
+    const examples = demoSchemas[component].code
+    const examplesRaw = demoSchemas[component].string
+    const propsSchema = getInfoCardPropsSchema(component)
     return {
-      selectedField,
-      selectableFields,
-      fieldPicker,
-      model: '',
-      propData: {},
+      pageValue: { chosenExample: 0 },
+      pageForm,
+      examples,
+      examplesRaw,
+      propsSchema,
     }
   },
   watch: {
-    model (newValue, oldValue) {
-      if (isUndefined(this.propData.value)) return
-      this.propData.value = newValue
-    },
-    propData (newSettings, oldSettings) {
-      if (!newSettings.value || newSettings.value === oldSettings.value) return
-      this.model = newSettings.value
-    },
-    selectedField: {
-      handler (newValue, oldValue) {
-        const { addTestOptions } = this
-        this.model = undefined
-        this.propData.valueType = undefined
-        if (newValue === oldValue) return
-        const ops = copy(demoOptions[newValue])
-        addTestOptions(ops)
-        this.propData.label = `My awesome "${newValue}" field`
-      },
-      immediate: true,
+    'pageValue.chosenExample' (newValue, oldValue) {
+      if (newValue === oldValue) return
+      this.$set(this.examples[this.pageValue.chosenExample], 'value', {})
     },
   },
   computed: {
-    field () {
-      return this.propData
-    },
     infoCardTitle () {
-      return capitalCase(this.selectedField)
-    },
-    rawComponent () {
-      return getRawComponent(this.selectedField)
-    },
-    propsSchema () {
-      return getInfoCardPropsSchema(this.selectedField)
+      const { pageForm, pageValue, examples, component } = this
+      if (examples.length === 1) return capitalCase(component)
+      const { label } = pageForm.schema[1].options[pageValue.chosenExample]
+      return capitalCase(label)
     },
     modelShownAsBadge () {
       const { model } = this
-      const parsedModel = isString(model)
-        ? `"${model}"`
-        : isArray(model) || isPlainObject(model)
-        ? JSON.stringify(model)
-        : model
-      return `\`${parsedModel}\``
+      const { value } = this.examples[this.pageValue.chosenExample]
+      const parsedValue = isString(value)
+        ? `"${value}"`
+        : isArray(value) || isPlainObject(value)
+        ? JSON.stringify(value)
+        : value
+      return `\`${parsedValue}\``
     },
     styleClasses () {
-      const classesEasyField = [
-        '.easy-field',
-        `.easy-field--${this.selectedField}`,
-        '.easy-field__label',
-        '.easy-field__sub-label',
-        '.easy-field__field',
-      ]
-      return classesEasyField
+      return ['.easy-field', '.easy-field__label', '.easy-field__sub-label', '.easy-field__field']
     },
     styleClassesData () {
       return {
@@ -132,17 +113,6 @@ export default {
     },
   },
   methods: {
-    addTestOptions (ops = {}) {
-      if (!ops) return
-      const { value } = ops
-      if (value !== undefined) {
-        this.model = value
-      }
-      this.propData = { value }
-      Object.entries(ops).forEach(([key, value]) => {
-        this.$set(this.propData, key, value)
-      })
-    },
     log (...args) {
       console.log(...args)
     },

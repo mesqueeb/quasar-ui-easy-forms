@@ -6,14 +6,15 @@ The schema of an EasyForm is an array of objects that usually looks something li
 Eg.:
 \`\`\`js
 [
-  { id: 'name', label: 'Name', fieldType: 'input' },
-  // etc.
+  // you can use custom Vue components
+  { id: 'myField', label: 'My Field', component: 'MyFieldVueComponent' },
+
+  // you can use quasar components
+  { id: 'name', label: 'Name', component: 'QInput' },
 ]
 \`\`\`
 
-Besides 'id', 'label' and 'fieldType' there are many more fields you can use: subLabel; required; labelPosition; fieldClasses; innerClasses; format; parseInput; events and many more.
-
-Information on each field you can use and what it does, can be found in the interactive preview under "props" on the [Easy Field demo page](/EasyFieldDemo).
+Besides 'id', 'label' and 'component' there are many more props you can pass: subLabel; required; labelPosition; fieldClasses; componentClasses; parseValue; parseInput; events and many more.
 
 #### **Value/Model**
 
@@ -47,7 +48,9 @@ export default {
   actionButtons: [],
   schema: [
     {
-      fieldType: 'markdown',
+      component: 'QMarkdown',
+      noContainers: true,
+      noLineNumbers: true,
       src: description,
     },
   ],

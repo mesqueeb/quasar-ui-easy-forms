@@ -6,7 +6,7 @@ export default {
     {
       id: 'color',
       span: true,
-      fieldType: 'btn-toggle',
+      component: 'QBtnToggle',
       label: 'What is your favorite color?',
       options: [
         { label: 'red', value: 'red' },
@@ -14,6 +14,7 @@ export default {
         { label: 'green', value: 'green' },
         { label: 'other', value: 'other' },
       ],
+      spread: true,
       subLabel: val =>
         val === 'red'
           ? 'like the sun'

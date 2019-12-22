@@ -1,31 +1,24 @@
 <template>
   <div
+    v-if="getEvaluatedPropOrAttr('showCondition')"
     :class="[
       'easy-field',
-      `easy-field--${fieldType}`,
+      `easy-field--${mode}`,
+      `easy-field--${componentName}`,
       `easy-field--label-${labelPosition}`,
       {
-        'easy-field--no-label': !cLabel,
-        'easy-field--no-sublabel': !cSubLabel,
+        'easy-field--no-label': !labelUsedHere,
+        'easy-field--no-sub-label': !subLabelUsedHere,
+        'easy-field--no-component': !component,
       },
-      ...cFieldClassesArray,
+      ...fieldClassesArrayUsedHere,
     ]"
-    :style="cFieldStyle"
+    :style="fieldStyleUsedHere"
   >
     <!-- display: inline -->
+    <div v-if="labelUsedHere" class="easy-field__label text-wrap-all">{{ labelUsedHere }}</div>
     <div
-      v-if="cLabel"
-      :class="[
-        'easy-field__label',
-        'text-wrap-all',
-        {
-          'easy-field__label--title': fieldType === 'title' || fieldType === 'form',
-        },
-      ]"
-      >{{ cLabel }}</div
-    >
-    <div
-      v-if="cSubLabel"
+      v-if="subLabelUsedHere"
       :class="[
         'easy-field__sub-label',
         {
@@ -33,29 +26,39 @@
         },
       ]"
     >
-      <q-markdown v-if="hasMarkdown" no-line-numbers no-container>{{ cSubLabel }}</q-markdown>
-      <template v-else>{{ cSubLabel }}</template>
+      <q-markdown v-if="hasMarkdown" no-line-numbers no-container>{{
+        subLabelUsedHere
+      }}</q-markdown>
+      <template v-else>{{ subLabelUsedHere }}</template>
     </div>
-    <template v-if="['title', 'space', 'none', undefined].includes(fieldType)"></template>
-    <div class="easy-field__field" v-else-if="cFieldInheritsQField">
-      <component
-        :is="componentIdentifier"
-        v-model="cValue"
-        v-bind="fieldProps"
-        v-on="cEvents"
-        :class="cInnerClassesArray"
-        :style="cInnerStyle"
-      />
-    </div>
-    <QField class="easy-field__field" v-else v-model="cValue" v-bind="cQFieldProps">
+    <!-- no component -->
+    <template v-if="!component"></template>
+    <!-- raw component -->
+    <EfDiv v-else-if="mode === 'raw'" class="easy-field__component" v-bind="EfDivProps" />
+    <!-- raw component -->
+    <component
+      v-else-if="internalErrorsCalculated"
+      :is="component"
+      :class="['easy-field__component', ...componentClassesArrayUsedHere]"
+      v-model="cValue"
+      v-bind="fieldProps"
+      v-on="eventsCalculated"
+      :style="componentStyleUsedHere"
+    />
+    <QField
+      v-else
+      v-model="cValue"
+      v-bind="fieldPropsForQField"
+      :class="['easy-field__component', ...componentClassesArrayUsedHere]"
+      :style="componentStyleUsedHere"
+    >
       <template v-slot:control>
         <component
-          :is="componentIdentifier"
+          :is="component"
           v-model="cValue"
           v-bind="fieldProps"
-          v-on="cEvents"
-          :class="cInnerClassesArray"
-          :style="cInnerStyle"
+          v-on="eventsCalculated"
+          style="flex: 1"
         />
       </template>
     </QField>
@@ -73,28 +76,17 @@
   align-content: start
   grid-gap: $sm $md
   &--label-top
-    grid-template-areas: "label" "sub-label" "field"
-    &.easy-field--no-sublabel
-      grid-template-areas: "label" "field"
-    &.easy-field--no-label
-      grid-template-areas: "sub-label" "field"
-    &.easy-field--no-sublabel.easy-field--no-label
-      grid-template-areas: "field"
+    grid-auto-flow: row
   &--label-left
-    grid-template-areas: "label field" "sub-label field"
-    grid-template-columns: auto 1fr
-    &.easy-field--no-sublabel
-      grid-template-areas: "label field"
-    &.easy-field--no-label
-      grid-template-areas: "sub-label field"
-    &.easy-field--no-sublabel.easy-field--no-label
-      grid-template-areas: "field field"
-  .easy-field__label
-    grid-area: label
-  .easy-field__sub-label
-    grid-area: sub-label
-  .easy-field__field
-    grid-area: field
+    grid-auto-flow: column
+    grid-template-columns: minmax(auto, max-content)
+    grid-auto-columns: minmax(50%, 1fr)
+    grid-template-rows: auto
+    grid-auto-rows: 1fr
+    .easy-field__sub-label
+      grid-row: 2 / 3
+    .easy-field__component
+      grid-row: 1 / 3
 // style
 .easy-field
   .easy-field__label--title
@@ -110,34 +102,20 @@
 <script>
 import { QMarkdown } from '@quasar/quasar-ui-qmarkdown'
 import { QField } from 'quasar'
-import { isFunction, isPlainObject, isArray, isString, isUndefined } from 'is-what'
+import { isFunction, isPlainObject, isString, isUndefined, isNullOrUndefined } from 'is-what'
 import merge from 'merge-anything'
 import defaultLang from '../meta/lang'
+import {
+  mode,
+  labelPosition,
+  hasMarkdown,
+  evaluatedProps,
+  internalLabels,
+  internalErrors,
+} from './sharedProps.js'
 
-function resolveEasyFieldProp (propKey, propValue, componentValue, component) {
-  // quasar props that can accept functions should be ignored:
-  const propsToIgnore = [
-    // EasyForm:
-    'labelValue',
-    'fieldInput',
-    // QSelect:
-    'optionValue',
-    'optionLabel',
-    'optionDisable',
-    // QUploader:
-    'filter',
-    'factory',
-    'url',
-    'method',
-    'headers',
-    'fieldName',
-    'formFields',
-    'withCredentials',
-    'sendRaw',
-    'batch',
-  ]
-  if (propsToIgnore.includes(propKey)) return propValue
-  return isFunction(propValue) ? propValue(componentValue, component) : propValue
+function evaluateProp (propValue, componentValue, componentInstance) {
+  return isFunction(propValue) ? propValue(componentValue, componentInstance) : propValue
 }
 
 export default {
@@ -147,27 +125,34 @@ export default {
   props: {
     // prop categories: behavior content general model state style
     // EF props used here:
-    fieldType: {
-      category: 'general',
-      type: [String, Object],
-    },
     value: {
       category: 'model',
       type: undefined,
+    },
+    component: {
+      category: 'general',
+      type: [String, Object, Function],
+      desc: `Each EasyField has a label, sublabel and a component rendered via \`<component :is="component" />\`. You can pass (1) the name of a registered component, or (2) a component’s options object.`,
+      examples: ['QInput', 'MyCustomField'],
     },
     default: {
       category: 'model',
       type: undefined,
       desc: `A default value to be used when the 'value' is \`undefined\`.
 
-You can also pass a function that will receive two params you can work with: \`(formDataNested, context)\`
-- \`formDataNested\` is the value object of your EasyForm. This will be undefined when EasyField is used as stand-alone (without EasyForm) unless you manually pass it.
+You can also pass a function that will receive two params you can work with: \`(formData, context)\`
+- \`formData\` is the value object of your EasyForm. This will be undefined when EasyField is used as stand-alone (without EasyForm) unless you manually pass it.
 - \`context\` is either your EasyForm or EasyField context with many usefull props. See the documentation on "Evaluated Props" for more info.`,
     },
     required: {
       category: 'behavior',
-      type: Boolean,
-      desc: `Wether or not the field is required or not. If a field is marked 'required' it will add a default rule like so: \`[val => !!val || 'Field is required']\`. The default message can be set in the \`lang\` prop as \`requiredField\`.`,
+      type: [Boolean, Function],
+      desc: `Wether or not the field is required or not. If a field is marked 'required' it will add a default rule like so: \`[val => (val !== null && val !== undefined) || 'Field is required']\`. The default message can be set in the \`lang\` prop as \`requiredField\`.`,
+    },
+    rules: {
+      category: 'behavior',
+      type: Array,
+      default: () => [],
     },
     id: {
       category: 'model',
@@ -179,14 +164,6 @@ You can also pass a function that will receive two params you can work with: \`(
       category: 'content',
       type: [String, Function],
       desc: 'A smaller label for extra info.',
-    },
-    labelPosition: {
-      category: 'style',
-      type: [String, Function],
-      default: 'top',
-      desc: 'The position of the label.',
-      values: ['top', 'left'],
-      examples: ['top', 'left'],
     },
     fieldStyle: {
       category: 'style',
@@ -202,33 +179,33 @@ You can also pass a function that will receive two params you can work with: \`(
         'Custom classes to be applied to the EasyField. Applied like so `:class="fieldClasses"`. Can be an Evaluated Prop (this is why I opted to have a different name from `class`).',
       examples: [`['dark-theme']`],
     },
-    innerStyle: {
+    componentStyle: {
       category: 'style',
       type: [Object, Array, String, Function],
       desc:
-        'Custom styling to be applied to the inner component of EasyField. Applied like so `:style="innerStyle"`. Can be an Evaluated Prop.',
+        'Custom styling to be applied to the inner component of EasyField. Applied like so `:style="componentStyle"`. Can be an Evaluated Prop.',
       examples: [`'padding: 1em;'`],
     },
-    innerClasses: {
+    componentClasses: {
       category: 'style',
       type: [Object, Array, String, Function],
       desc:
-        'Custom classes to be applied to the inner component of EasyField. Applied like so `:class="innerClasses"`. Can be an Evaluated Prop.',
+        'Custom classes to be applied to the inner component of EasyField. Applied like so `:class="componentClasses"`. Can be an Evaluated Prop.',
       examples: [`['dark-theme']`],
     },
-    format: {
+    parseValue: {
       category: 'model',
       type: Function,
       desc:
-        'You can change how the value is formatted even though the underlying data might be different. Depending on the `fieldType`, you will also need to provide a `parseInput` function to reverse the effect.',
-      examples: ['val => thousandToK(val)'],
+        'This function can modify a value before it is passed on to the inner component. Also see `parseInput` for the reverse.',
+      examples: ['val => Number(val)', 'val => Date(val)'],
     },
     parseInput: {
       category: 'model',
       type: Function,
       desc:
-        "You can change how the value is parsed before it's updated. You must return the parsed value.",
-      examples: ['val => kToThousand(val)'],
+        'This function can modify a value upon user input, every time before the value is emitted. Also see `parseValue` for the reverse.',
+      examples: ['val => String(val)', 'val => val.toISOString()'],
     },
     events: {
       category: 'behavior',
@@ -238,7 +215,22 @@ You can also pass a function that will receive two params you can work with: \`(
       default: () => ({}),
       examples: ["{click: (val, {$router}) => $router.push('/')}", '{focus: console.log}'],
     },
-    formDataNested: {
+    lang: {
+      category: 'content',
+      type: Object,
+      desc: `The text used in the UI, eg. for required fields, etc.`,
+      default: () => defaultLang,
+      examples: [`{requiredField: 'Don\'t forget this field!'}`],
+    },
+    // shared props:
+    mode,
+    labelPosition,
+    hasMarkdown,
+    evaluatedProps,
+    internalLabels,
+    internalErrors,
+    // passed props:
+    formData: {
       category: 'easyFormProp',
       type: Object,
       desc: `This is the *nested* data of all the fields inside an EasyForm.`,
@@ -253,47 +245,18 @@ You can also pass a function that will receive two params you can work with: \`(
       type: String,
       desc: `A manually set 'id' of the EasyForm.`,
     },
-    formMode: {
-      category: 'easyFormProp',
-      type: String,
-      validator: prop => ['edit', 'add', 'view', 'raw'].includes(prop),
-      desc:
-        'The state of the EasyForm. Has no effect on the EasyField, because EasyField only looks at `readonly` and `rawValue` props. Is passed so the `formMode` can be accessed by Evaluated Props.',
-      examples: [`'edit'`, `'add'`, `'view'`, `'raw'`],
-      values: ['edit', 'add', 'view', 'raw'],
-    },
     fieldInput: {
       category: 'easyFormProp',
       type: Function,
       desc:
         "The `fieldInput` function of EasyForm. Is passed so it can be used in the input event: `events: {input: (value, {fieldInput} => fieldInput({id: 'otherField', value}))}`",
     },
-    lang: {
-      category: 'content',
-      type: Object,
-      desc: `The text used in the UI, eg. for required fields, etc.`,
-      default: () => defaultLang,
-      examples: [`{requiredField: 'Don\'t forget this field!'}`],
-    },
-    rawValue: {
-      category: 'state',
-      type: [Boolean, Function],
-      default: false,
+    showCondition: {
+      category: 'behavior|state',
+      type: [Function, Boolean],
       desc:
-        'An EasyField with `rawValue: true` will just generate the raw value wrapped in a div, without generating the dedicated field UI.',
-    },
-    hasMarkdown: {
-      category: 'state',
-      type: [Boolean, Function],
-      default: false,
-      desc: 'An EasyField with `hasMarkdown: true` can have markdown in its sub-label.',
-    },
-    externalLabels: {
-      category: 'style',
-      type: Boolean,
-      desc: `By default labels are external to allow similar label styling for any type of field.
-
-When \`externalLabels: false\` it will use the native labels from QField, QInput & QSelect. The subLabel will be passed as 'hint' underneath the field.`,
+        'Setting to `true` or `false` can show or hide the field. When using as an Evaluated Prop it can be very powerful.',
+      examples: [`false`, `(val, {mode}) => mode.edit`],
       default: true,
     },
     // Quasar props with modified defaults:
@@ -303,7 +266,7 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
       inheritedProp: 'modified',
       type: [Boolean, Function],
       default: false,
-      desc: "`readonly` is used for 'view' mode of an EasyForm.",
+      desc: "`readonly` defaults to `true` on `mode: 'view'",
     },
     // Quasar props with modified behavior:
     // (category needs to be specified in case sub-field doesn't inherit this prop from Quasar)
@@ -314,21 +277,12 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
       desc:
         'An EasyField label is always "external" to the field. (It replaces the Quasar label if the underlying Quasar component uses one.)',
     },
-    disable: {
-      category: 'state',
-      inheritedProp: 'modified',
-      type: [Boolean, Function],
-      default: false,
-      desc: '`disable` is ignored when `readonly` is true',
-    },
   },
   data () {
-    const { value, default: df, lang, formDataNested } = this
-    const innerValue = !isUndefined(value) ? value : isFunction(df) ? df(formDataNested, this) : df
+    const { value, default: df, formData, internalErrors } = this
+    const innerValue = !isUndefined(value) ? value : isFunction(df) ? df(formData, this) : df
     // merge user provided lang onto defaults
-    const innerLang = merge(defaultLang, lang)
     return {
-      innerLang,
       innerValue,
     }
   },
@@ -336,91 +290,122 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
     value (newValue) {
       this.innerValue = newValue
     },
-    lang (newValue) {
-      this.innerLang = merge(defaultLang, newValue)
+  },
+  methods: {
+    getEvaluatedPropOrAttr (propOrAttr) {
+      const { evaluatedPropsDataObject } = this
+      if (propOrAttr in evaluatedPropsDataObject) return evaluatedPropsDataObject[propOrAttr]
+      if (propOrAttr in this) return this[propOrAttr]
+      return this.$attrs[propOrAttr]
     },
   },
   computed: {
-    cFieldInheritsQField () {
-      return ['select', 'input', 'inputDate'].includes(this.fieldType)
+    cValue: {
+      get () {
+        const { parseValue, innerValue } = this
+        if (isFunction(parseValue)) return parseValue(innerValue, this)
+        return innerValue
+      },
+      set (val) {
+        const { parseInput, events } = this
+        if (isFunction(parseInput)) val = parseInput(val, this)
+        if (isFunction(events.input)) events.input(val, this)
+        this.$emit('input', val)
+      },
     },
-    cFieldStyle () {
-      const { fieldStyle, cValue } = this
-      return resolveEasyFieldProp('fieldStyle', fieldStyle, cValue, this)
-    },
-    cInnerStyle () {
-      const { innerStyle, cValue } = this
-      return resolveEasyFieldProp('innerStyle', innerStyle, cValue, this)
-    },
-    cFieldClassesArray () {
-      const { fieldClasses, cValue } = this
-      const classes = resolveEasyFieldProp('fieldClasses', fieldClasses, cValue, this)
-      if (isString(classes)) return classes.split(' ')
-      if (isPlainObject(classes)) return [classes]
-      return classes
-    },
-    cInnerClassesArray () {
-      const { innerClasses, cValue } = this
-      const classes = resolveEasyFieldProp('innerClasses', innerClasses, cValue, this)
-      if (isString(classes)) return classes.split(' ')
-      if (isPlainObject(classes)) return [classes]
-      return classes
-    },
-    internalLabelMode () {
-      const { fieldType, externalLabels } = this
-      return externalLabels === false && !['title', 'space', 'none', undefined].includes(fieldType)
-    },
-    componentIdentifier () {
-      const { fieldType } = this
-      if (isPlainObject(fieldType)) return fieldType
-      if (!fieldType) return ''
-      if (fieldType.slice(0, 2) === 'q-') return fieldType
-      return 'Ef' + fieldType[0].toUpperCase() + fieldType.slice(1)
-    },
-    fieldProps () {
-      // props only used here: format, parseInput, label
-      const { cValue, $attrs, required, innerLang, fieldType, internalLabelMode } = this
-      const self = this
-      // add default "required" rule
-      const internalLabelDefaults = !internalLabelMode
-        ? {}
-        : {
-            label: this.label,
-            hint: this.subLabel,
-          }
-      const requiredRule = val => !!val || innerLang['requiredField']
-      const requiredRules =
-        required && isArray($attrs.rules) && $attrs.rules.length
-          ? { rules: $attrs.rules.concat([requiredRule]) }
-          : required
-          ? { rules: [requiredRule] }
-          : {}
-      const mergedProps = merge(
-        internalLabelDefaults,
-        $attrs,
-        {
-          // EF props used here, but also to pass:
-          formDataNested: this.formDataNested,
-          formDataFlat: this.formDataFlat,
-          formMode: this.formMode,
-          formId: this.formId,
-          fieldType: this.fieldType,
-          lang: this.innerLang,
-          events: this.cEvents,
-          rawValue: this.rawValue,
-          // Quasar props with modified defaults:
-          readonly: this.readonly,
-          // Quasar props with modified behavior:
-          disable: this.cDisable,
-        },
-        requiredRules
-      )
-      return Object.entries(mergedProps).reduce((carry, [propKey, propValue]) => {
-        carry[propKey] = resolveEasyFieldProp(propKey, propValue, cValue, self)
+    evaluatedPropsDataObject () {
+      const { evaluatedProps, cValue } = this
+      const context = this
+      return evaluatedProps.reduce((carry, propKey) => {
+        const propValue = propKey in context ? context[propKey] : context.$attrs[propKey]
+        carry[propKey] = evaluateProp(propValue, cValue, context)
         return carry
       }, {})
     },
-    cQFieldProps () {
+    componentName () {
+      const { getEvaluatedPropOrAttr } = this
+      const component = getEvaluatedPropOrAttr('component')
+      if (isString(component)) return component
+      const { name } = component || {}
+      return name
+    },
+    internalErrorsCalculated () {
+      const { getEvaluatedPropOrAttr, componentName } = this
+      const internalErrors = getEvaluatedPropOrAttr('internalErrors')
+      if (internalErrors !== undefined) return internalErrors
+      return [
+        'QInput',
+        'QSelect',
+        'EfInput',
+        'EfSelect',
+        'EfInputDate',
+        'q-input',
+        'q-select',
+      ].includes(componentName)
+    },
+    internalLabelsCalculated () {
+      const { component, getEvaluatedPropOrAttr } = this
+      const internalLabels = getEvaluatedPropOrAttr('internalLabels')
+      return internalLabels && !isNullOrUndefined(component)
+    },
+    langCalculated () {
+      const { getEvaluatedPropOrAttr } = this
+      const lang = getEvaluatedPropOrAttr('lang')
+      return merge(defaultLang, lang)
+    },
+    rulesCalculated () {
+      const { getEvaluatedPropOrAttr, langCalculated } = this
+      const required = getEvaluatedPropOrAttr('required')
+      const rules = getEvaluatedPropOrAttr('rules')
+      const requiredRule = val => !isNullOrUndefined(val) || langCalculated['requiredField']
+      return required ? rules.concat([requiredRule]) : rules
+    },
+    eventsCalculated () {
+      const { getEvaluatedPropOrAttr } = this
+      const context = this
+      const events = getEvaluatedPropOrAttr('events')
+      return Object.entries(events).reduce((carry, [eventName, eventFn]) => {
+        // input event is handled in cValue
+        if (eventName === 'input') return carry
+        carry[eventName] = val => eventFn(val, context)
+        return carry
+      }, {})
+    },
+    fieldProps () {
+      // props only used here: parseValue, parseInput, label
+      const { $props, $attrs, evaluatedPropsDataObject, getEvaluatedPropOrAttr } = this
+      // should we pass on label & subLabel (as hint) or not
+      const labelToPass = !this.internalLabelsCalculated
+        ? undefined
+        : getEvaluatedPropOrAttr('label')
+      const hintToPass = !this.internalLabelsCalculated
+        ? getEvaluatedPropOrAttr('hint')
+        : getEvaluatedPropOrAttr('subLabel')
+      const readonlyToPass =
+        getEvaluatedPropOrAttr('mode') === 'view' || getEvaluatedPropOrAttr('readonly')
+      const mergedProps = merge(
+        // props to pass & which are perhaps replaced by evaluated ones
+        $props,
+        // attributes to pass & which are perhaps replaced by evaluated ones
+        $attrs,
+        // evaluated props
+        evaluatedPropsDataObject,
+        // other props computed after evaluation
+        {
+          lang: this.langCalculated,
+          rules: this.rulesCalculated,
+          events: this.eventsCalculated,
+        },
+        // props with extra calculations just to pass
+        {
+          label: labelToPass,
+          hint: hintToPass,
+          readonly: readonlyToPass,
+        }
+      )
+      return mergedProps
+    },
+    fieldPropsForQField () {
       // disable prefix suffix for QField
       return merge(this.fieldProps, {
         prefix: undefined,
@@ -429,47 +414,44 @@ When \`externalLabels: false\` it will use the native labels from QField, QInput
         stackLabel: true,
       })
     },
-    cValue: {
-      get () {
-        const { format, innerValue } = this
-        if (isFunction(format)) return format(innerValue, this)
-        return innerValue
-      },
-      set (val) {
-        this.updateValue(val)
-      },
+    labelUsedHere () {
+      const { internalLabelsCalculated, getEvaluatedPropOrAttr } = this
+      return internalLabelsCalculated ? undefined : getEvaluatedPropOrAttr('label')
     },
-    cLabel () {
-      const { label, cValue, internalLabelMode } = this
-      if (isFunction(label)) return label(cValue, this)
-      return internalLabelMode ? undefined : label
+    subLabelUsedHere () {
+      const { internalLabelsCalculated, getEvaluatedPropOrAttr } = this
+      return internalLabelsCalculated ? undefined : getEvaluatedPropOrAttr('subLabel')
     },
-    cSubLabel () {
-      const { subLabel, cValue, internalLabelMode } = this
-      if (isFunction(subLabel)) return subLabel(cValue, this)
-      return internalLabelMode ? undefined : subLabel
+    fieldStyleUsedHere () {
+      return this.getEvaluatedPropOrAttr('fieldStyle')
     },
-    cEvents () {
-      return Object.entries(this.events).reduce((carry, [eventName, eventFn]) => {
-        // input event is handled in cValue
-        if (eventName === 'input') return carry
-        carry[eventName] = val => eventFn(val, this)
-        return carry
-      }, {})
+    componentStyleUsedHere () {
+      return this.getEvaluatedPropOrAttr('componentStyle')
     },
-    cDisable () {
-      const { readonly } = this.$attrs
-      if (readonly) return false
-      const { disable } = this
-      return disable
+    fieldClassesArrayUsedHere () {
+      const classes = this.getEvaluatedPropOrAttr('fieldClasses')
+      if (isString(classes)) return classes.split(' ')
+      if (isPlainObject(classes)) return [classes]
+      return classes
     },
-  },
-  methods: {
-    updateValue (val) {
-      const { parseInput, events } = this
-      if (isFunction(parseInput)) val = parseInput(val, this)
-      if (isFunction(events.input)) events.input(val, this)
-      this.$emit('input', val)
+    componentClassesArrayUsedHere () {
+      const classes = this.getEvaluatedPropOrAttr('componentClasses')
+      if (isString(classes)) return classes.split(' ')
+      if (isPlainObject(classes)) return [classes]
+      return classes
+    },
+    EfDivProps () {
+      const { value, getEvaluatedPropOrAttr } = this
+      return {
+        value: this.value,
+        valueType: getEvaluatedPropOrAttr('valueType'),
+        type: getEvaluatedPropOrAttr('type'),
+        dateFormat: getEvaluatedPropOrAttr('dateFormat'),
+        suffix: getEvaluatedPropOrAttr('suffix'),
+        prefix: getEvaluatedPropOrAttr('prefix'),
+        options: getEvaluatedPropOrAttr('options'),
+        multiple: getEvaluatedPropOrAttr('multiple'),
+      }
     },
   },
 }

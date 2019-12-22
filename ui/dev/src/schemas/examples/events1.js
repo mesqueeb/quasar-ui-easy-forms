@@ -5,7 +5,7 @@ export default {
   schema: [
     {
       id: 'testField',
-      fieldType: 'input',
+      component: 'QInput',
       label: 'Type something',
       events: {
         input: (val, { $q }) => $q.notify(val),
