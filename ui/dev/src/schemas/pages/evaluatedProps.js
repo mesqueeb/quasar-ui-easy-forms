@@ -24,7 +24,7 @@ export default {
   schema: Object.values({
     _1: {
       component: 'QMarkdown',
-      noContainers: true,
+      noContainer: true,
       noLineNumbers: true,
       src: description,
     },

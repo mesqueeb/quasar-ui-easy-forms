@@ -182,7 +182,7 @@ You can make title fields prettier via CSS. Eg.
 { component: 'QBtnToggle', spread: true }
 { component: 'QImg' }
 { component: 'QInput' }
-{ component: 'QMarkdown', noContainers: true, /* this is a bug fix */, noLineNumbers: true }
+{ component: 'QMarkdown', noContainer: true, /* this is a bug fix */, noLineNumbers: true }
 { component: 'QRange' }
 { component: 'QSelect' }
 { component: 'QSlider' }

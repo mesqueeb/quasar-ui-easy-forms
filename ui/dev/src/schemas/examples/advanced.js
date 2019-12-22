@@ -20,7 +20,7 @@ export default {
     {
       id: 'md-input',
       component: 'QMarkdown',
-      noContainers: true,
+      noContainer: true,
       noLineNumbers: true,
       span: 1,
       src: "```js\n{component: 'QInput'}\n```",
@@ -41,7 +41,7 @@ export default {
     {
       id: 'md-btn-toggle',
       component: 'QMarkdown',
-      noContainers: true,
+      noContainer: true,
       noLineNumbers: true,
       span: 1,
       src: "```js\n{component: 'QBtnToggle'}\n```",
@@ -59,7 +59,7 @@ export default {
     {
       id: 'md-slider',
       component: 'QMarkdown',
-      noContainers: true,
+      noContainer: true,
       noLineNumbers: true,
       span: 1,
       src: "```js\n{component: 'QSlider'}\n```",
@@ -77,7 +77,7 @@ export default {
     {
       id: 'md-input-nr',
       component: 'QMarkdown',
-      noContainers: true,
+      noContainer: true,
       noLineNumbers: true,
       span: 1,
       src:
@@ -125,7 +125,7 @@ export default {
     {
       id: 'md-select',
       component: 'QMarkdown',
-      noContainers: true,
+      noContainer: true,
       noLineNumbers: true,
       span: 1,
       src: "```js\n{component: 'QSelect'}\n```",
@@ -155,7 +155,7 @@ export default {
     {
       id: 'md-option-group',
       component: 'QMarkdown',
-      noContainers: true,
+      noContainer: true,
       noLineNumbers: true,
       span: 1,
       src: "```js\n{component: 'QOptionGroup'}\n```",
@@ -170,7 +170,7 @@ export default {
     {
       id: 'md-toggle',
       component: 'QMarkdown',
-      noContainers: true,
+      noContainer: true,
       noLineNumbers: true,
       span: 1,
       src: "```js\n{component: 'QToggle'}\n```",
@@ -189,7 +189,7 @@ export default {
     {
       id: 'md-input-date',
       component: 'QMarkdown',
-      noContainers: true,
+      noContainer: true,
       noLineNumbers: true,
       span: 1,
       src:

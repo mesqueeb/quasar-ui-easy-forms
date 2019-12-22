@@ -6,7 +6,7 @@ export default {
   schema: [
     {
       component: 'QMarkdown',
-      noContainers: true,
+      noContainer: true,
       noLineNumbers: true,
       src: description,
     },
