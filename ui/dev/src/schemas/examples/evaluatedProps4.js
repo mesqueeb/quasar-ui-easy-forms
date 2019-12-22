@@ -26,26 +26,29 @@ export default {
       id: 'year',
       label: 'Year',
       component: 'QSelect',
-      emitValue: true,
       options: [...new Set(carData.map(d => d.year))].map(value => ({ value, label: value })),
+      emitValue: true,
     },
     {
       id: 'make',
       label: 'Make',
       component: 'QSelect',
-      emitValue: true,
+      evaluatedProps: ['options'],
+      // component props:
       options: (val, { formData }) => {
         const { year } = formData || {}
         return [...new Set(carData.filter(car => car.year === year).map(d => d.make))].map(
           value => ({ value, label: value })
         )
       },
+      emitValue: true,
     },
     {
       id: 'model',
       label: 'Model',
       component: 'QSelect',
-      emitValue: true,
+      evaluatedProps: ['options'],
+      // component props:
       options: (val, { formData }) => {
         const { year, make } = formData || {}
         return [
@@ -54,12 +57,14 @@ export default {
           ),
         ].map(value => ({ value, label: value }))
       },
+      emitValue: true,
     },
     {
       id: 'trim',
       label: 'Trim',
       component: 'QSelect',
-      emitValue: true,
+      evaluatedProps: ['options'],
+      // component props:
       options: (val, { formData }) => {
         const { year, make, model } = formData || {}
         return [
@@ -70,6 +75,7 @@ export default {
           ),
         ].map(value => ({ value, label: value }))
       },
+      emitValue: true,
     },
   ],
 }

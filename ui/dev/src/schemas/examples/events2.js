@@ -18,6 +18,7 @@ export default {
       component: 'QInput',
       label: 'Phone nr (only numbers)',
       subLabel: 'This field is automatically updated when you type in a phone nr on the left.',
+      // component props:
       disable: true,
     },
   ],

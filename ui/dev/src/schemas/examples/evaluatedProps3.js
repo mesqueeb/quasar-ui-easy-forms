@@ -14,6 +14,7 @@ export default {
       component: 'QInput',
       label: 'What is the brand?',
       subLabel: 'This is only shown when the first question is `true`.',
+      evaluatedProps: ['showCondition'],
       showCondition: (val, { formData }) => formData.car,
     },
     {
@@ -21,6 +22,7 @@ export default {
       component: 'QInput',
       label: 'Enter your license plate brand?',
       subLabel: "This is hidden when the form is set to 'view' mode. Try clicking 'save'.",
+      evaluatedProps: ['showCondition'],
       showCondition: (val, { formData, mode }) => formData.car && mode === 'edit',
     },
   ],

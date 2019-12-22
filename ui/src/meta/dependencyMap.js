@@ -13,6 +13,11 @@ import {
 } from './quasarPropsJson'
 
 export const dependencyMap = {
+  QInput: {
+    componentName: 'QInput',
+    component: 'QInput',
+    passedProps: { QInput },
+  },
   EfBtn: {
     componentName: 'EfBtn',
     component: 'EfBtn',

@@ -50,6 +50,10 @@ export const events = {
 }
 
 // easy fields
+export const QInput = {
+  code: [require('./QInput').default],
+  string: [require('!!raw-loader!./QInput').default],
+}
 export const EfMiniForm = {
   code: [require('./EfMiniForm').default],
   string: [require('!!raw-loader!./EfMiniForm').default],

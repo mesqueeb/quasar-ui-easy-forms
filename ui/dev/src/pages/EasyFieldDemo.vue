@@ -58,7 +58,7 @@ export default {
   data () {
     const { component } = this
     const rawComponent = getRawComponent(component)
-    const { desc } = rawComponent
+    const { desc = '' } = rawComponent
     const pageForm = {
       schema: [
         {

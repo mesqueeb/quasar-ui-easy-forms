@@ -8,13 +8,7 @@ export default {
       span: true,
       component: 'QBtnToggle',
       label: 'What is your favorite color?',
-      options: [
-        { label: 'red', value: 'red' },
-        { label: 'blue', value: 'blue' },
-        { label: 'green', value: 'green' },
-        { label: 'other', value: 'other' },
-      ],
-      spread: true,
+      evaluatedProps: ['subLabel'],
       subLabel: val =>
         val === 'red'
           ? 'like the sun'
@@ -25,6 +19,14 @@ export default {
           : val === 'other'
           ? 'oh, come on, just pick one'
           : 'pick a color!',
+      // component props:
+      options: [
+        { label: 'red', value: 'red' },
+        { label: 'blue', value: 'blue' },
+        { label: 'green', value: 'green' },
+        { label: 'other', value: 'other' },
+      ],
+      spread: true,
     },
   ],
 }

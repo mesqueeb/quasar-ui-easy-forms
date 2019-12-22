@@ -18,7 +18,6 @@ export default {
     {
       id: 'name',
       component: 'QInput',
-      valueType: 'string',
       label: 'Superhero name',
       subLabel: 'Think of something cool.',
     },
@@ -27,6 +26,7 @@ export default {
       component: 'QBtnToggle',
       label: 'Power origin',
       subLabel: 'Where does your power come from?',
+      // component props:
       options: [
         { label: 'Mutation', value: 'mutation' },
         { label: 'Self taught', value: 'self' },

@@ -4,9 +4,10 @@ export default {
   subLabel: "fill in this month's expenses",
   schema: [
     {
-      component: 'QSelect',
-      label: 'Type',
       id: 'type',
+      label: 'Type',
+      component: 'QSelect',
+      // component props:
       emitValue: true,
       mapOptions: true,
       options: [
@@ -15,14 +16,20 @@ export default {
       ],
     },
     {
-      component: 'QInput',
-      label: 'Amount',
       id: 'amount',
+      label: 'Amount',
+      component: 'QInput',
+      // component props:
       type: 'number',
       parseInput: Number,
       prefix: '€',
     },
-    { component: 'QToggle', label: 'Notify', default: false, id: 'notify' },
+    {
+      id: 'notify',
+      label: 'Notify',
+      component: 'QToggle',
+      default: false,
+    },
   ],
   default: [],
 }

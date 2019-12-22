@@ -101,9 +101,10 @@ const pagesEasyForm = [
 ]
 
 const pagesEasyField = [
-  { title: '<EfMiniForm />', path: '/EasyField/EfMiniForm' },
-  { title: '<EfDiv />', path: '/EasyField/EfDiv' },
-  { title: '<EfBtn />', path: '/EasyField/EfBtn' },
+  { title: 'EasyField - in general', path: '/EasyField/QInput' },
+  { title: "component: 'EfMiniForm'", path: '/EasyField/EfMiniForm' },
+  { title: "component: 'EfDiv'", path: '/EasyField/EfDiv' },
+  { title: "component: 'EfBtn'", path: '/EasyField/EfBtn' },
   { title: "component: 'QSelect'", path: '/QSelectModel' },
 ]
 

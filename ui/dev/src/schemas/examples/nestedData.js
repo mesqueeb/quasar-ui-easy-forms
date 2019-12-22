@@ -12,24 +12,27 @@ export default {
       id: 'size.width',
       label: 'Width',
       component: 'QInput',
-      type: 'number',
       parseInput: Number,
+      // component props:
+      type: 'number',
       suffix: 'cm',
     },
     {
       id: 'size.depth',
       label: 'Depth',
       component: 'QInput',
-      type: 'number',
       parseInput: Number,
+      // component props:
+      type: 'number',
       suffix: 'cm',
     },
     {
       id: 'size.height',
       label: 'Height',
       component: 'QInput',
-      type: 'number',
       parseInput: Number,
+      // component props:
+      type: 'number',
       suffix: 'cm',
     },
   ],

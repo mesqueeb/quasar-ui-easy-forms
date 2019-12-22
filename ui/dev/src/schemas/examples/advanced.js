@@ -20,18 +20,20 @@ export default {
     {
       id: 'md-input',
       component: 'QMarkdown',
+      span: 1,
+      // component props:
       noContainer: true,
       noLineNumbers: true,
-      span: 1,
       src: "```js\n{component: 'QInput'}\n```",
     },
     {
       id: 'powerOrigin',
       span: 3,
       component: 'QBtnToggle',
-      spread: true,
       label: 'Power origin',
       subLabel: 'Where does your power come from?',
+      // component props:
+      spread: true,
       options: [
         { label: 'Mutation', value: 'mutation' },
         { label: 'Self taught', value: 'self' },
@@ -41,9 +43,10 @@ export default {
     {
       id: 'md-btn-toggle',
       component: 'QMarkdown',
+      span: 1,
+      // component props:
       noContainer: true,
       noLineNumbers: true,
-      span: 1,
       src: "```js\n{component: 'QBtnToggle'}\n```",
     },
     {
@@ -51,35 +54,39 @@ export default {
       span: 3,
       component: 'QSlider',
       label: 'Stamina',
+      default: 50,
+      // component props:
       min: 0,
       max: 100,
-      default: 50,
       labelAlways: true,
     },
     {
       id: 'md-slider',
       component: 'QMarkdown',
+      span: 1,
+      // component props:
       noContainer: true,
       noLineNumbers: true,
-      span: 1,
       src: "```js\n{component: 'QSlider'}\n```",
     },
     {
       id: 'power',
       span: 3,
       component: 'QInput',
-      type: 'number',
-      parseInput: Number,
       label: 'Power',
       subLabel: 'Fill in a number.',
+      parseInput: Number,
+      // component props:
+      type: 'number',
       suffix: 'PW',
     },
     {
       id: 'md-input-nr',
       component: 'QMarkdown',
+      span: 1,
+      // component props:
       noContainer: true,
       noLineNumbers: true,
-      span: 1,
       src:
         "```js\n{component: 'QInput'}\n```\n↳ But the input is saved as a number instead of a string.",
     },
@@ -87,9 +94,9 @@ export default {
       id: 'roleModel',
       span: 3,
       component: 'QSelect',
-      valueType: 'object',
       label: 'Role model',
       subLabel: 'Who do you look up to?',
+      // component props:
       options: [
         { label: 'Steve Rogers/Captain America', value: 'captain-america' },
         { label: 'Tony Stark/Iron Man', value: 'iron-man' },
@@ -125,17 +132,20 @@ export default {
     {
       id: 'md-select',
       component: 'QMarkdown',
+      span: 1,
+      // component props:
       noContainer: true,
       noLineNumbers: true,
-      span: 1,
       src: "```js\n{component: 'QSelect'}\n```",
     },
     {
       id: 'checkboxes',
-      component: 'QOptionGroup',
-      type: 'checkbox',
       span: 3,
+      component: 'QOptionGroup',
       label: 'Check some boxes',
+      default: () => [], // 'QOptionGroup' might not work without a default array
+      // component props:
+      type: 'checkbox',
       options: [
         {
           label: 'Option 1',
@@ -150,14 +160,14 @@ export default {
           value: 'op3',
         },
       ],
-      default: [],
     },
     {
       id: 'md-option-group',
       component: 'QMarkdown',
+      span: 1,
+      // component props:
       noContainer: true,
       noLineNumbers: true,
-      span: 1,
       src: "```js\n{component: 'QOptionGroup'}\n```",
     },
     {
@@ -170,28 +180,31 @@ export default {
     {
       id: 'md-toggle',
       component: 'QMarkdown',
+      span: 1,
+      // component props:
       noContainer: true,
       noLineNumbers: true,
-      span: 1,
       src: "```js\n{component: 'QToggle'}\n```",
     },
     {
       id: 'submissionDate',
-      component: 'QInput',
       span: 3,
+      component: 'QInput',
       label: 'Date of submission',
       parseInput: val => new Date(val),
+      valueType: 'date', // see `EfDiv` documentation for more info on `valueType`
+      dateFormat: 'YYYY/MM/DD', // see `EfDiv` documentation for more info on `dateFormat`
+      // component props:
       mask: '####/##/##',
       placeholder: 'YYYY/MM/DD',
-      dateFormat: 'YYYY/MM/DD', // see `EfDiv` documentation for more info on `dateFormat`
-      valueType: 'date', // see `EfDiv` documentation for more info on `valueType`
     },
     {
       id: 'md-input-date',
       component: 'QMarkdown',
+      span: 1,
+      // component props:
       noContainer: true,
       noLineNumbers: true,
-      span: 1,
       src:
         "```js\n{component: 'QInput'}\n```\n↳ But the input is saved as a date instead of a string.",
     },

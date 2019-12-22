@@ -39,14 +39,13 @@ export function propToPropSchema (propKey, propInfo) {
     span,
     emitValue
   let fieldClasses = []
+  let _default = df === true || undefined
   // If it has a default, write it in the description
   if (!isUndefined(df)) subLabel += `\n\nDefault: \`${isFunction(df) ? JSON.stringify(df()) : df}\``
   // if the prop is a Boolean, show this as a 'toggle' EasyField
-  if (
-    type === Boolean ||
-    (isArray(type) && [Boolean, Function].every(t => type.includes(t)) && type.length === 2)
-  ) {
+  if (type === Boolean || (isArray(type) && type.includes(Boolean))) {
     component = 'QToggle'
+    _default = df === true
   }
   // if the prop has a fixed set of possible values, show this as an 'option' EasyField
   const propHasValues = isArray(values) && values.length
@@ -104,7 +103,7 @@ export function propToPropSchema (propKey, propInfo) {
     span,
     emitValue,
     // if the prop is `true` by default, set to true
-    default: df === true || undefined,
+    default: _default,
     // defaults
     hasMarkdown: true,
   }
