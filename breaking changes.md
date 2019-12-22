@@ -1,10 +1,13 @@
 <!-- prettier-ignore-start -->
+In version 1.0 I was able to greatly simplify easy-forms. There are no wrapper components needed for every field. You can directly use Quasar components or ANY component you create yourself, without requiring any setup!
+
+Here is a list of all breaking changes.
 
 # Breaking changes
 
 ## actionButtons
 
-Action buttons now default to an empty string.
+Action buttons now default to an empty array.
 
 **why:**
 It's better to be explicited about the components that should be rendered. It's easier to understand that there will be buttons shown at the top of an EasyForm if you see that they are actually passed.

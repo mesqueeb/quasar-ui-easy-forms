@@ -104,7 +104,13 @@ export default {
       return `\`${parsedValue}\``
     },
     styleClasses () {
-      return ['.easy-field', '.easy-field__label', '.easy-field__sub-label', '.easy-field__field']
+      return [
+        '// I plan to improve the Style tab soon with much better documentation.',
+        '.easy-field',
+        '.easy-field__label',
+        '.easy-field__sub-label',
+        '.easy-field__field',
+      ]
     },
     styleClassesData () {
       return {

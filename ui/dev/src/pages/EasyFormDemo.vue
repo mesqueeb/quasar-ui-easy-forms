@@ -94,6 +94,7 @@ export default {
     },
     styleClasses () {
       return [
+        '// I plan to improve the Style tab soon with much better documentation.',
         '.easy-form',
         '.easy-form__nav-row',
         '.easy-form__validation-error',
