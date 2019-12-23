@@ -37,7 +37,8 @@ export function propToPropSchema (propKey, propInfo) {
     autogrow,
     debounce,
     span,
-    emitValue
+    emitValue,
+    _type
   let fieldClasses = []
   let _default = df === true || undefined
   // If it has a default, write it in the description
@@ -46,6 +47,11 @@ export function propToPropSchema (propKey, propInfo) {
   if (type === Boolean || (isArray(type) && type.includes(Boolean))) {
     component = 'QToggle'
     _default = df === true
+  }
+  // if it's a Number field
+  if (type === Number) {
+    _type = 'number'
+    parseInput = Number
   }
   // if the prop has a fixed set of possible values, show this as an 'option' EasyField
   const propHasValues = isArray(values) && values.length
@@ -83,7 +89,7 @@ export function propToPropSchema (propKey, propInfo) {
   return {
     id: propKey,
     component,
-    type: type === Number ? 'number' : undefined,
+    type: _type,
     // schema,
     label: propKey,
     subLabel,
