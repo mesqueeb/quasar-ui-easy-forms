@@ -121,7 +121,7 @@ This is useful when you want to use Evaluated Props in the schema of the mine fo
       get () {
         const { value, schema, disable, readonly, maxRows } = this
         const emptyRow = schema.reduce((carry, { id }) => ({ ...carry, [id]: undefined }), {})
-        if (!disable && !readonly && (!isNumber(maxRows) || maxRows < value.length)) {
+        if (!disable && !readonly && (!isNumber(maxRows) || maxRows > value.length)) {
           return value.concat([emptyRow])
         }
         return value
