@@ -381,7 +381,7 @@ See the documentation on "Action Buttons" for more info.`,
       if (!this.editedFields.includes(id)) this.editedFields.push(id)
       this.$set(this.formDataFlat, id, value)
       this.$emit(EVENTS['field-input'].name, { id, value })
-      this.$emit(EVENTS['input'].name, this.formData)
+      this.$emit(EVENTS['input'].name, this.formData) // do not extract `this` from here
     },
     resetState () {
       this.cMode = 'view'

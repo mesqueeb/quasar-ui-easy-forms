@@ -21,52 +21,73 @@ Try to refrain from accessing props other than the ones listed above, because th
 export default {
   mode: 'edit',
   actionButtons: [],
-  schema: Object.values({
-    _1: {
+  schema: [
+    {
       component: 'QMarkdown',
+      internalErrors: true,
       noContainer: true,
       noLineNumbers: true,
       src: description,
     },
-    get _2 () {
-      return {
-        id: 'chosenExample',
-        component: 'QBtnToggle',
-        spread: true,
-        noCaps: true,
-        options: [this._3, this._4, this._5, this._6].map((field, index) => {
-          return { label: field.label, value: index }
-        }),
-      }
+    {
+      id: 'chosenExample',
+      component: 'QBtnToggle',
+      internalErrors: true,
+      spread: true,
+      noCaps: true,
+      unelevated: true,
+      options: [
+        { label: 'Dynamic prop based on the value of the field', value: 0 },
+        { label: 'Dynamic prop based on the value of "another" field', value: 1 },
+        { label: 'Dynamic "conditional rendering" of a field', value: 2 },
+        { label: 'Dynamic "options" of a select-field', value: 3 },
+      ],
     },
-    _3: {
+    {
+      component: 'QMarkdown',
+      internalErrors: true,
+      noContainer: true,
+      noLineNumbers: true,
       showCondition: (value, { formData }) => formData.chosenExample === 0,
-      label: 'Dynamic prop based on the value of the field',
-      hasMarkdown: true,
-      subLabel: `Eg. \`subLabel: val => val === 'purple' ? 'nice!' : 'choose a color'\``,
+      src: `
+### Dynamic prop based on the value of the field
+Eg. \`subLabel: val => val === 'purple' ? 'nice!' : 'choose a color'\`
+`.trim(),
     },
-    _4: {
+    {
+      component: 'QMarkdown',
+      internalErrors: true,
+      noContainer: true,
+      noLineNumbers: true,
       showCondition: (value, { formData }) => formData.chosenExample === 1,
-      label: 'Dynamic prop based on the value of "another" field',
-      hasMarkdown: true,
-      subLabel: `Eg. \`disable: (val, {formData}) => formData.over18\``,
+      src: `
+### Dynamic prop based on the value of "another" field
+Eg. \`disable: (val, {formData}) => formData.over18\`
+`.trim(),
     },
-    _5: {
+    {
+      component: 'QMarkdown',
+      internalErrors: true,
+      noContainer: true,
+      noLineNumbers: true,
       showCondition: (value, { formData }) => formData.chosenExample === 2,
-      label: 'Dynamic "conditional rendering" of a field',
-      hasMarkdown: true,
-      subLabel: `
+      src: `
+### Dynamic "conditional rendering" of a field
+
 Eg. \`showCondition: (val, {formData}) => formData.car\`
 
 \`showCondition\` is a special prop that can only be used inside the schema of an EasyForm.
-      `.trim(),
+`.trim(),
     },
-    _6: {
+    {
+      component: 'QMarkdown',
+      internalErrors: true,
+      noContainer: true,
+      noLineNumbers: true,
       showCondition: (value, { formData }) => formData.chosenExample === 3,
-      label: 'Dynamic "options" of a select-field',
-      hasMarkdown: true,
-      subLabel: `
-      `.trim(),
+      src: `
+### Dynamic "options" of a select-field
+`.trim(),
     },
-  }),
+  ],
 }

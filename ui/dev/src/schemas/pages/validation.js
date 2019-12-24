@@ -13,6 +13,7 @@ export default {
   schema: [
     {
       component: 'QMarkdown',
+      internalErrors: true,
       noContainer: true,
       noLineNumbers: true,
       src: description,
@@ -20,8 +21,10 @@ export default {
     {
       id: 'chosenExample',
       component: 'QBtnToggle',
+      internalErrors: true,
       spread: true,
       noCaps: true,
+      unelevated: true,
       options: [
         { label: 'Basic validation', value: 0 },
         { label: 'Programatic validation', value: 1 },

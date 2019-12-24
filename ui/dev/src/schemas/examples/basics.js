@@ -3,7 +3,6 @@ export default {
     {
       id: 'name',
       component: 'QInput',
-      valueType: 'string',
       label: 'Superhero name',
       subLabel: 'Think of something cool.',
     },

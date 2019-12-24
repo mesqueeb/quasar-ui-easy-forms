@@ -48,6 +48,18 @@ export const events = {
   code: [require('./events1').default, require('./events2').default],
   string: [require('!!raw-loader!./events1').default, require('!!raw-loader!./events2').default],
 }
+export const computedFields = {
+  code: [
+    require('./computedFields').default,
+    require('./computedFields2').default,
+    require('./computedFields3').default,
+  ],
+  string: [
+    require('!!raw-loader!./computedFields').default,
+    require('!!raw-loader!./computedFields2').default,
+    require('!!raw-loader!./computedFields3').default,
+  ],
+}
 
 // easy fields
 export const QInput = {
