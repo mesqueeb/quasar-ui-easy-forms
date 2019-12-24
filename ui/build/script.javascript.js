@@ -1,11 +1,11 @@
 const path = require('path')
 const rollup = require('rollup')
 const uglify = require('uglify-es')
-const buble = require('rollup-plugin-buble')
-const json = require('rollup-plugin-json')
-const nodeResolve = require('rollup-plugin-node-resolve')
+const buble = require('@rollup/plugin-buble')
+const json = require('@rollup/plugin-json')
+const nodeResolve = require('@rollup/plugin-node-resolve')
 const VuePlugin = require('rollup-plugin-vue')
-const commonjs = require('rollup-plugin-commonjs')
+const commonjs = require('@rollup/plugin-commonjs')
 
 const buildConf = require('./config')
 const buildUtils = require('./utils')
@@ -14,63 +14,63 @@ const rollupPlugins = [
   commonjs(),
   nodeResolve({
     extensions: ['.js'],
-    preferBuiltins: false
+    preferBuiltins: false,
   }),
   VuePlugin(),
   json(),
   buble({
-    objectAssign: 'Object.assign'
-  })
+    objectAssign: 'Object.assign',
+  }),
 ]
 
 const builds = [
   {
     rollup: {
       input: {
-        input: resolve(`entry/index.esm.js`)
+        input: resolve(`entry/index.esm.js`),
       },
       output: {
         file: resolve(`../dist/index.esm.js`),
-        format: 'es'
-      }
+        format: 'es',
+      },
     },
     build: {
       // unminified: true,
-      minified: true
-    }
+      minified: true,
+    },
   },
   {
     rollup: {
       input: {
-        input: resolve(`entry/index.common.js`)
+        input: resolve(`entry/index.common.js`),
       },
       output: {
         file: resolve(`../dist/index.common.js`),
-        format: 'cjs'
-      }
+        format: 'cjs',
+      },
     },
     build: {
       // unminified: true,
-      minified: true
-    }
+      minified: true,
+    },
   },
   {
     rollup: {
       input: {
-        input: resolve(`entry/index.umd.js`)
+        input: resolve(`entry/index.umd.js`),
       },
       output: {
         name: 'easyForms',
         file: resolve(`../dist/index.umd.js`),
-        format: 'umd'
-      }
+        format: 'umd',
+      },
     },
     build: {
       unminified: true,
       minified: true,
-      minExt: true
-    }
-  }
+      minExt: true,
+    },
+  },
 ]
 
 build(builds)
@@ -84,20 +84,18 @@ function resolve (_path) {
 }
 
 function build (builds) {
-  return Promise
-    .all(builds.map(genConfig).map(buildEntry))
-    .catch(buildUtils.logError)
+  return Promise.all(builds.map(genConfig).map(buildEntry)).catch(buildUtils.logError)
 }
 
 function genConfig (opts) {
   Object.assign(opts.rollup.input, {
     plugins: rollupPlugins,
-    external: [ 'vue', 'quasar' ]
+    external: ['vue', 'quasar'],
   })
 
   Object.assign(opts.rollup.output, {
     banner: buildConf.banner,
-    globals: { vue: 'Vue', quasar: 'Quasar' }
+    globals: { vue: 'Vue', quasar: 'Quasar' },
   })
 
   return opts
@@ -113,13 +111,12 @@ function buildEntry (config) {
     .rollup(config.rollup.input)
     .then(bundle => bundle.generate(config.rollup.output))
     .then(({ output }) => {
-      const code = config.rollup.output.format === 'umd'
-        ? injectVueRequirement(output[0].code)
-        : output[0].code
+      const code =
+        config.rollup.output.format === 'umd'
+          ? injectVueRequirement(output[0].code)
+          : output[0].code
 
-      return config.build.unminified
-        ? buildUtils.writeFile(config.rollup.output.file, code)
-        : code
+      return config.build.unminified ? buildUtils.writeFile(config.rollup.output.file, code) : code
     })
     .then(code => {
       if (!config.build.minified) {
@@ -128,8 +125,8 @@ function buildEntry (config) {
 
       const minified = uglify.minify(code, {
         compress: {
-          pure_funcs: ['makeMap']
-        }
+          pure_funcs: ['makeMap'],
+        },
       })
 
       if (minified.error) {
@@ -163,7 +160,5 @@ function injectVueRequirement (code) {
   }
   `
 
-  return code.substring(0, index - 1) +
-    checkMe +
-    code.substring(index)
+  return code.substring(0, index - 1) + checkMe + code.substring(index)
 }
