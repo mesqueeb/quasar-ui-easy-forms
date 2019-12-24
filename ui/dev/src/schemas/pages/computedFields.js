@@ -48,9 +48,9 @@ export default {
 }
 \`\`\`
 
-So even though the fullName has no value, upon generation, it will always stay in sync with the current form data.
+So even though the field \`fullName\` has no \`value\` at all, it will always stay in sync with the current \`formData\`.
 
-When implementing a computed field this way however, \`fullName\` will never have data and thus also not be included when you save form data returned from the EasyForm events: \`@input\`, \`@field-input\` and \`@save\`.
+When implementing a computed field this way however, \`fullName\` will never have that computed value emitted. This means that it won't be included in the EasyForm events: \`@input\`, \`@field-input\` and \`@save\`. So it's difficult to capture and save this calculated value alongside your other data. See the next tab for another method.
 `.trim(),
     },
     {
