@@ -86,15 +86,16 @@ In this case we can use the method called \`fieldInput()\` which is accessible o
       fieldInput({id: 'fullName', value})
     }
   },
-},
-{
-  id: 'fullName',
 }
 \`\`\`
 
-However, this is quite verbose... And it cannot be used if you need a computed field _not_ based on other fields, but eg. a timestamp returning \`new Date()\` or something.
+This method has pro's and con's though:
 
-Luckily there is a third way we can create a computed field (see the last tab).
+- PRO: you don't need to include the Computed Field (\`fullName\`) on the form at all
+- CON: this is quite verbose...
+- CON: it cannot be used if you need a computed field _not_ based on other fields (eg. a timestamp returning \`new Date()\`)
+
+There is also a third way we can create a computed field (see the last tab).
 `.trim(),
     },
     {
@@ -105,9 +106,7 @@ Luckily there is a third way we can create a computed field (see the last tab).
       src: `
 ### Combine \`parseInput\` & \`fieldInput\`
 
-The third way to create a computed field has the best of both worlds.
-- It has the non-verbosity by using \`parseInput\` opposed to listening to input events of other fields
-- It has the ability to also save this data back to your model
+The third way to create a computed field is this:
 
 \`\`\`js
 {
@@ -117,7 +116,9 @@ The third way to create a computed field has the best of both worlds.
     const value = \`\${formData.firstName || ''} \${formData.lastName || ''}\`.trim()
     fieldInput({id: 'fullName', value})
     return value
-  }
+  },
+  // If you want to hide the computed field you can set:
+  // showCondition: false
 }
 \`\`\`
 
@@ -132,9 +133,11 @@ I say "nay". The reason it is discouraged is because side-effects to computed pr
 
 If we understand this reason, then in our case, it is perfectly valid to do so, because we are only modifying the data of the field we are describing right there. We are simply doing something equivalent to triggering a \`emit('input', val)\` on a component manually, nothing wrong with that.
 
-::: warning
-The only thing you need to be careful with is executing \`fieldInput\` to modify **other** fields, besides the one you are describing. Because this _would_ result in a situation where it will be difficult to track why a certain field was modified and from where.
-:::`.trim(),
+However, keep in mind that also this method has its own pro's and con's:
+- PRO: it can be used as stand-alone, without relying on other fields & without the need to render other fields
+- PRO: because it just uses \`parseInput\` it's less verbose (opposed to listening to input events of other fields)
+- PRO: the logic for this field is contained in its own options object
+- CON: you have to include this "Computed Field" in all forms the user can edit the related fields (and probably with \`showCondition: false\`)`.trim(),
     },
   ],
 }
