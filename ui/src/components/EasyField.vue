@@ -441,9 +441,9 @@ You can also pass a function that will receive two params you can work with: \`(
       return classes
     },
     EfDivProps () {
-      const { value, getEvaluatedPropOrAttr } = this
+      const { cValue, getEvaluatedPropOrAttr } = this
       return {
-        value: this.value,
+        value: cValue,
         valueType: getEvaluatedPropOrAttr('valueType'),
         type: getEvaluatedPropOrAttr('type'),
         dateFormat: getEvaluatedPropOrAttr('dateFormat'),
