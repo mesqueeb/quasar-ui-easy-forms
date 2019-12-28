@@ -28,7 +28,7 @@ export default {
     {
       id: 'fullName',
       component: 'QInput',
-      label: 'Full name (calculated)',
+      label: 'Full name (computed)',
       disable: true,
     },
   ],

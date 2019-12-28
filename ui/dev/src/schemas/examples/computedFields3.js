@@ -14,11 +14,11 @@ export default {
     {
       id: 'fullName',
       component: 'QInput',
-      label: 'Full name (calculated)',
+      label: 'Full name (computed)',
       disable: true,
       parseValue: (val, { formData, fieldInput }) => {
         const value = `${formData.firstName || ''} ${formData.lastName || ''}`.trim()
-        fieldInput({ id: 'fullName', value })
+        if (val !== value) fieldInput({ id: 'fullName', value })
         return value
       },
     },

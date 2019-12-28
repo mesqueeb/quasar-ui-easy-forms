@@ -1,10 +1,12 @@
-const description = `Computed fields are fields that don't neccesarily exist in your data, but are calculated based on the data.
+const description = `Computed fields are fields that can represent data which doesn't neccesarily exist in your data. They have a "caluculated value" based on the form data.
 
-Do not confuse this concept with "Evaluated Props" which is about specific props of a field, whereas "Computed Fields" are about the "value" of a field.
+Do not confuse this concept with "Evaluated Props".
+- Evaluated Props: a calculated prop of a field
+- Computed Fields: a field with a calculated value
 
-An example of a calculated field could be a full name of a person which exists of \`\${formData.firstName} \${formData.lastName}\`
+An example of a Computed Field could be a full name of a person which exists of \`\${formData.firstName} \${formData.lastName}\`
 
-There are three ways we could create such a field.
+There are three ways we could create such a field:
 `
 
 export default {
@@ -94,6 +96,7 @@ This method has pro's and con's though:
 - PRO: you don't need to include the Computed Field (\`fullName\`) on the form at all
 - CON: this is quite verbose...
 - CON: it cannot be used if you need a computed field _not_ based on other fields (eg. a timestamp returning \`new Date()\`)
+- CON: you cannot use this method to add a new "caluculated field" at a later time, when your database already has some data
 
 There is also a third way we can create a computed field (see the last tab).
 `.trim(),
@@ -114,7 +117,7 @@ The third way to create a computed field is this:
   component: 'QInput', // or any other component
   parseValue: (val, {formData, fieldInput}) => {
     const value = \`\${formData.firstName || ''} \${formData.lastName || ''}\`.trim()
-    fieldInput({id: 'fullName', value})
+    if (val !== value) fieldInput({id: 'fullName', value})
     return value
   },
   // If you want to hide the computed field you can set:
@@ -137,7 +140,9 @@ However, keep in mind that also this method has its own pro's and con's:
 - PRO: it can be used as stand-alone, without relying on other fields & without the need to render other fields
 - PRO: because it just uses \`parseInput\` it's less verbose (opposed to listening to input events of other fields)
 - PRO: the logic for this field is contained in its own options object
-- CON: you have to include this "Computed Field" in all forms the user can edit the related fields (and probably with \`showCondition: false\`)`.trim(),
+- PRO: even if your database already has data, a computed field like this can be added at a later date
+- CON: you have to include this "Computed Field" in all forms the user can edit the related fields (and probably with \`showCondition: false\`)
+`.trim(),
     },
   ],
 }
