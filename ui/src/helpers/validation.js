@@ -38,7 +38,10 @@ export function validateFormPerSchema (formData, schema, lang) {
         carry[blueprint.id] = blueprint
         return carry
       }, {})
-  const formDataFlat = flattenPerSchema(formData, schema)
+  const formDataFlatEmpty = Object.keys(schemaObject)
+    .reduce((carry, key) => ({ ...carry, [key]: null }), {}) // prettier-ignore
+  const formDataFlatCurrent = flattenPerSchema(formData, schema)
+  const formDataFlat = { ...formDataFlatEmpty, ...formDataFlatCurrent }
   const resultPerField = Object.entries(formDataFlat).reduce((carry, [fieldId, fieldValue]) => {
     const blueprint = schemaObject[fieldId]
     carry[fieldId] = !blueprint || validateFieldPerSchema(fieldValue, blueprint, lang)
