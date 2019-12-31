@@ -47,6 +47,5 @@ export function validateFormPerSchema (formData, schema, lang) {
     carry[fieldId] = !blueprint || validateFieldPerSchema(fieldValue, blueprint, lang)
     return carry
   }, {})
-  const hasAnError = Object.values(resultPerField).some(result => result !== true)
-  return !hasAnError || resultPerField
+  return resultPerField
 }

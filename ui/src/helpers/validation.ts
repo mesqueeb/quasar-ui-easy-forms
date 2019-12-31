@@ -3,7 +3,7 @@ import { PlainObject, Blueprint, Schema, StringObject } from '../types'
 import flattenPerSchema from './flattenPerSchema'
 
 export type ValidationResultField = boolean | (string | boolean)[]
-export type ValidationResultForm = boolean | { [fieldId: string]: ValidationResultField }
+export type ValidationResultForm = { [fieldId: string]: ValidationResultField }
 
 /**
  * Validates a field data based on its blueprint
@@ -58,6 +58,5 @@ export function validateFormPerSchema (
     carry[fieldId] = validateFieldPerSchema(blueprint, fieldValue, lang)
     return carry
   }, {})
-  const hasAnError = Object.values(resultPerField).some(result => result !== true)
-  return !hasAnError || resultPerField
+  return resultPerField
 }
