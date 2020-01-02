@@ -34,7 +34,12 @@
     <!-- no component -->
     <template v-if="!component"></template>
     <!-- raw component -->
-    <EfDiv v-else-if="mode === 'raw'" class="easy-field__component" v-bind="EfDivProps" />
+    <EfDiv
+      v-else-if="mode === 'raw'"
+      v-bind="EfDivProps"
+      :class="['easy-field__component', ...componentClassesArrayUsedHere]"
+      :style="componentStyleUsedHere"
+    />
     <!-- raw component -->
     <component
       v-else-if="internalErrorsCalculated"
