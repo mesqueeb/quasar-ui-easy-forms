@@ -93,12 +93,13 @@
     .easy-field__component
       grid-row: 1 / 3
     &.easy-field--no-sub-label
+      .easy-field__label
+        display: flex
+        align-items: center
       .easy-field__component
         grid-row: 1 / 2
 // style
 .easy-field
-  .easy-field__label--title
-    font-weight: 500
   .easy-field__sub-label
     opacity: 0.8
     font-weight: 300
