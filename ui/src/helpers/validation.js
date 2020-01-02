@@ -12,7 +12,7 @@ import defaultLang from '../meta/lang'
  * @returns {ValidationResultField}
  */
 export function validateFieldPerSchema (payload, { rules = [], required }, lang = defaultLang) {
-  const requiredRule = val => !!val || lang.requiredField
+  const requiredRule = val => val === 0 || !!val || lang.requiredField
   const testRules = !required ? rules : [requiredRule, ...rules]
   const results = testRules.reduce((carry, rule) => {
     carry.push(rule(payload))

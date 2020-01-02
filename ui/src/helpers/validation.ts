@@ -19,7 +19,7 @@ export function validateFieldPerSchema (
   payload: any,
   lang: StringObject
 ): ValidationResultField {
-  const requiredRule = (val: any) => !!val || lang.requiredField
+  const requiredRule = (val: any) => val === 0 || !!val || lang.requiredField
   const testRules = !required ? rules : [requiredRule, ...rules]
   const results = testRules.reduce((carry, rule) => {
     carry.push(rule(payload))

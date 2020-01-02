@@ -365,7 +365,7 @@ You can also pass a function that will receive two params you can work with: \`(
       const { getEvaluatedPropOrAttr, langCalculated } = this
       const required = getEvaluatedPropOrAttr('required')
       const rules = getEvaluatedPropOrAttr('rules')
-      const requiredRule = val => !isNullOrUndefined(val) || langCalculated['requiredField']
+      const requiredRule = val => val === 0 || !!val || langCalculated['requiredField']
       return required ? rules.concat([requiredRule]) : rules
     },
     eventsCalculated () {
