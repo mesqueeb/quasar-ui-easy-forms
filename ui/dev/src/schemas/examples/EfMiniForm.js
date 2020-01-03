@@ -7,6 +7,7 @@ export default {
       id: 'type',
       label: 'Type',
       component: 'QSelect',
+      span: 2,
       // component props:
       emitValue: true,
       mapOptions: true,
@@ -19,17 +20,19 @@ export default {
       id: 'amount',
       label: 'Amount',
       component: 'QInput',
+      span: 2,
       // component props:
       type: 'number',
       parseInput: Number,
       prefix: '€',
     },
     {
-      id: 'notify',
-      label: 'Notify',
+      id: 'paid for',
+      label: 'Paid for',
       component: 'QToggle',
       default: false,
+      span: 1,
     },
   ],
-  default: [],
+  default: () => [],
 }

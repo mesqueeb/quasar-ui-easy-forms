@@ -1,6 +1,6 @@
 <template>
   <div class="ef-form">
-    <div class="ef-form__row" :style="`grid-template-columns:${' 1fr'.repeat(columnCountSubForm)}`">
+    <div class="ef-form__row" :style="`grid-template-columns: repeat(${columnCountSubForm}, 1fr)`">
       <EasyField
         v-for="(subfield, fieldIndex) in schemaLabels"
         :key="fieldIndex"
@@ -18,13 +18,14 @@
     <div
       class="ef-form__row"
       v-for="(row, rowIndex) in cValue"
-      :style="`grid-template-columns:${' 1fr'.repeat(columnCountSubForm)}`"
+      :style="`grid-template-columns: repeat(${columnCountSubForm}, 1fr)`"
       :key="rowIndex"
     >
       <EasyField
         v-for="(subfield, fieldIndex) in cSchema"
         :key="fieldIndex"
         class="ef-form__sub-field"
+        :rowIndex="rowIndex"
         v-bind="subfield"
         :style="
           subfield.span === true
@@ -52,6 +53,7 @@
     align-items: flex-end
     grid-gap: $sm
     margin-bottom: $sm
+    align-items: center
 </style>
 
 <script>
@@ -156,7 +158,7 @@ This is useful when you want to use Evaluated Props in the schema of the mine fo
       const { schema } = this
       if (!schema) return 0
       return schema.reduce((total, field) => {
-        const add = field.span || 1
+        const add = Number(field.span) || 1
         return total + add
       }, 0)
     },
