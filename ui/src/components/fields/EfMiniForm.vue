@@ -1,39 +1,28 @@
 <template>
-  <div class="ef-form">
-    <div class="ef-form__row" :style="`grid-template-columns: repeat(${columnCountSubForm}, 1fr)`">
+  <div class="ef-mini-form">
+    <div
+      class="ef-mini-form__row"
+      :style="`grid-template-columns: ${gridTemplateColumnsCalculated}`"
+    >
       <EasyField
         v-for="(subfield, fieldIndex) in schemaLabels"
         :key="fieldIndex"
-        class="ef-form__sub-field"
+        class="ef-mini-form__sub-field"
         v-bind="subfield"
-        :style="
-          subfield.span === true
-            ? 'grid-column: 1 / -1'
-            : subfield.span
-            ? `grid-column: span ${subfield.span}`
-            : ''
-        "
       />
     </div>
     <div
-      class="ef-form__row"
+      class="ef-mini-form__row"
       v-for="(row, rowIndex) in cValue"
-      :style="`grid-template-columns: repeat(${columnCountSubForm}, 1fr)`"
+      :style="`grid-template-columns: ${gridTemplateColumnsCalculated}`"
       :key="rowIndex"
     >
       <EasyField
         v-for="(subfield, fieldIndex) in cSchema"
         :key="fieldIndex"
-        class="ef-form__sub-field"
+        class="ef-mini-form__sub-field"
         :rowIndex="rowIndex"
         v-bind="subfield"
-        :style="
-          subfield.span === true
-            ? 'grid-column: 1 / -1'
-            : subfield.span
-            ? `grid-column: span ${subfield.span}`
-            : ''
-        "
         :value="cValue[rowIndex][subfield.id]"
         @input="val => setSubFieldValue(val, rowIndex, subfield.id)"
         @keyup.native.delete="onDeleteKey(rowIndex, subfield.id)"
@@ -46,14 +35,13 @@
 // $
 @import '../../index.sass'
 
-.ef-form
-  >.ef-form__row
+.ef-mini-form
+  >.ef-mini-form__row
     display: grid
     justify-items: stretch
-    align-items: flex-end
+    align-items: center
     grid-gap: $sm
     margin-bottom: $sm
-    align-items: center
 </style>
 
 <script>
@@ -154,13 +142,13 @@ This is useful when you want to use Evaluated Props in the schema of the mine fo
         return merge(miniFormAttrsToPass, subfield, { component: undefined })
       })
     },
-    columnCountSubForm () {
+    gridTemplateColumnsCalculated () {
       const { schema } = this
-      if (!schema) return 0
       return schema.reduce((total, field) => {
-        const add = Number(field.span) || 1
-        return total + add
-      }, 0)
+        const fr = Number(field.span)
+        if (isNumber(fr)) return `${total} ${fr}fr`
+        return `${total} ${field.span || '1fr'}`
+      }, '')
     },
   },
   methods: {

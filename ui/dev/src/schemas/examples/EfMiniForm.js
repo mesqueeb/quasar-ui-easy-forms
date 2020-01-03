@@ -4,10 +4,33 @@ export default {
   subLabel: "fill in this month's expenses",
   schema: [
     {
+      component: 'QBtn',
+      events: {
+        click: (e, { $attrs, $parent }) => {
+          const { rowIndex } = $attrs
+          const { value = [] } = $parent
+          const valueCopy = [...value]
+          valueCopy.splice(rowIndex, 1)
+          $parent.$emit('input', valueCopy)
+        },
+      },
+      disable: (val, { $attrs, $parent }) => {
+        const { rowIndex } = $attrs
+        const { value = [] } = $parent
+        return rowIndex + 1 !== value.length
+      },
+      span: '26px',
+      // component props:
+      icon: 'remove_circle',
+      color: 'negative',
+      size: 'sm',
+      flat: true,
+      dense: true,
+    },
+    {
       id: 'type',
       label: 'Type',
       component: 'QSelect',
-      span: 2,
       // component props:
       emitValue: true,
       mapOptions: true,
@@ -20,7 +43,6 @@ export default {
       id: 'amount',
       label: 'Amount',
       component: 'QInput',
-      span: 2,
       // component props:
       type: 'number',
       parseInput: Number,
@@ -31,7 +53,7 @@ export default {
       label: 'Paid for',
       component: 'QToggle',
       default: false,
-      span: 1,
+      span: 'auto',
     },
   ],
   default: () => [],
