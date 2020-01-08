@@ -16,7 +16,7 @@
       <EasyField
         v-for="field in cSchema"
         :key="field.id"
-        v-bind="field"
+        v-bind="{ ...field, span: undefined }"
         :value="formDataFlat[field.id]"
         @input="value => fieldInput({ id: field.id, value })"
         :style="

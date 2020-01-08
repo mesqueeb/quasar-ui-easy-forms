@@ -46,14 +46,14 @@
       :is="component"
       :class="['easy-field__component', ...componentClassesArrayUsedHere]"
       v-model="cValue"
-      v-bind="fieldProps"
+      v-bind="propsAndAttrsToPass"
       v-on="eventsCalculated"
       :style="componentStyleUsedHere"
     />
     <QField
       v-else
       v-model="cValue"
-      v-bind="fieldPropsForQField"
+      v-bind="propsAndAttrsToPassForQField"
       :class="['easy-field__component', ...componentClassesArrayUsedHere]"
       :style="componentStyleUsedHere"
     >
@@ -61,7 +61,7 @@
         <component
           :is="component"
           v-model="cValue"
-          v-bind="fieldProps"
+          v-bind="propsAndAttrsToPass"
           v-on="eventsCalculated"
           style="flex: 1"
         />
@@ -380,43 +380,38 @@ You can also pass a function that will receive two params you can work with: \`(
         return carry
       }, {})
     },
-    fieldProps () {
+    propsAndAttrsToPass () {
       // props only used here: parseValue, parseInput, label
-      const { $props, $attrs, evaluatedPropsDataObject, getEvaluatedPropOrAttr } = this
+      const {
+        $attrs,
+        getEvaluatedPropOrAttr,
+        langCalculated,
+        rulesCalculated,
+        internalLabelsCalculated,
+      } = this
       // should we pass on label & subLabel (as hint) or not
-      const labelToPass = !this.internalLabelsCalculated
-        ? undefined
-        : getEvaluatedPropOrAttr('label')
-      const hintToPass = !this.internalLabelsCalculated
+      const labelToPass = !internalLabelsCalculated ? undefined : getEvaluatedPropOrAttr('label')
+      const hintToPass = !internalLabelsCalculated
         ? getEvaluatedPropOrAttr('hint')
         : getEvaluatedPropOrAttr('subLabel')
       const readonlyToPass =
         getEvaluatedPropOrAttr('mode') === 'view' || getEvaluatedPropOrAttr('readonly')
-      const mergedProps = merge(
-        // props to pass & which are perhaps replaced by evaluated ones
-        $props,
-        // attributes to pass & which are perhaps replaced by evaluated ones
-        $attrs,
-        // evaluated props
-        evaluatedPropsDataObject,
-        // other props computed after evaluation
-        {
-          lang: this.langCalculated,
-          rules: this.rulesCalculated,
-          events: this.eventsCalculated,
-        },
-        // props with extra calculations just to pass
-        {
-          label: labelToPass,
-          hint: hintToPass,
-          readonly: readonlyToPass,
-        }
-      )
-      return mergedProps
+      const propsToPass = {
+        lang: langCalculated,
+        rules: rulesCalculated,
+        label: labelToPass,
+        hint: hintToPass,
+        readonly: readonlyToPass,
+      }
+      const attrsToPass = Object.keys($attrs).reduce((carry, attrKey) => {
+        carry[attrKey] = getEvaluatedPropOrAttr(attrKey)
+        return carry
+      }, {})
+      return { ...propsToPass, ...attrsToPass }
     },
-    fieldPropsForQField () {
+    propsAndAttrsToPassForQField () {
       // disable prefix suffix for QField
-      return merge(this.fieldProps, {
+      return merge(this.propsAndAttrsToPass, {
         prefix: undefined,
         suffix: undefined,
         borderless: true,
