@@ -84,18 +84,8 @@ The "schema" you specify is shown as a single row. New rows are added automatica
       desc: `A list of prop (attribute) names to be passed on to each single EasyField generated in the mini form.
 
 This is useful when you want to use Evaluated Props in the schema of the mine form but need information from the top level EasyForm.`,
-      default: () => [
-        'formData',
-        'formDataFlat',
-        'formId',
-        'mode',
-        'fieldInput',
-        'lang',
-        'events',
-        'required',
-        'rules',
-      ],
-      examples: [`['formData', 'formId', 'mode', 'fieldInput']`],
+      default: () => ['formData', 'formDataFlat', 'formId', 'mode', 'fieldInput', 'lang'],
+      examples: [`['formData', 'mode', 'myCustomProp']`],
     },
     maxRows: {
       category: 'content',
@@ -121,9 +111,9 @@ This is useful when you want to use Evaluated Props in the schema of the mine fo
       },
     },
     miniFormAttrsToPass () {
-      const { attrsToPass, $attrs } = this
+      const { attrsToPass, getPropOrAttrOrParentProp } = this
       return attrsToPass.reduce((carry, attrKey) => {
-        carry[attrKey] = $attrs[attrKey]
+        carry[attrKey] = getPropOrAttrOrParentProp(attrKey)
         return carry
       }, {})
     },
@@ -152,6 +142,12 @@ This is useful when you want to use Evaluated Props in the schema of the mine fo
     },
   },
   methods: {
+    getPropOrAttrOrParentProp (propKey) {
+      if (propKey in this) return this[propKey]
+      if (propKey in this.$attrs) return this.$attrs[propKey]
+      if (propKey in this.$parent) return this.$parent[propKey]
+      return this.$parent.$parent[propKey]
+    },
     deleteRow (rowIndex) {
       const { value } = this
       const allRows = copy(value)

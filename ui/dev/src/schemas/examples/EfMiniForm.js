@@ -17,7 +17,7 @@ export default {
       disable: (val, { $attrs, $parent }) => {
         const { rowIndex } = $attrs
         const { value = [] } = $parent
-        return rowIndex + 1 !== value.length
+        return rowIndex === value.length
       },
       span: '26px',
       // component props:
