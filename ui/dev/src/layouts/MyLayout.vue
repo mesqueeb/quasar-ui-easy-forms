@@ -4,9 +4,24 @@
       <q-toolbar>
         <q-btn v-if="$route.fullPath !== '/'" flat dense round to="/" icon="home" />
 
-        <q-toolbar-title> quasar-ui-easy-forms v{{ version }} </q-toolbar-title>
+        <q-toolbar-title
+          >quasar-ui-easy-forms
+          <q-icon size="16px" class="q-pb-md" name="info">
+            <q-tooltip size="md" content-style="font-size: 16px">
+              demo versions:
+              <div class="row">
+                <div class="text-bold q-mr-xs" style="min-width: 70px">v{{ version }}</div>
+                <div>quasar-ui-easy-forms</div>
+              </div>
+              <div class="row">
+                <div class="text-bold q-mr-xs" style="min-width: 70px">v{{ $q.version }}</div>
+                <div>quasar</div>
+              </div>
+            </q-tooltip>
+          </q-icon></q-toolbar-title
+        >
 
-        <div>Quasar v{{ $q.version }}</div>
+        <PrimaryColorPicker />
       </q-toolbar>
     </q-header>
 

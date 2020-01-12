@@ -1,7 +1,7 @@
 <template>
   <div class="info-box-wrapper">
     <q-badge :color="color">{{ label }}</q-badge>
-    <div class="_inner-wrapper" :style="{ borderColor: colorAsHex }">
+    <div class="_inner-wrapper">
       <slot />
     </div>
   </div>
@@ -12,15 +12,14 @@
 
 .info-box-wrapper
   > ._inner-wrapper
-    border: thin solid
+    border: thin solid $primary
+    border: thin solid var(--q-color-primary)
     min-height: 70px
     min-width: 170px
     margin-top: -10px
-    // display: flex
     > *
       width: 100%
       height: 100%
-      // justify-self: stretch
   .easy-form
     padding: 1em
   // if markdown is used in slot:

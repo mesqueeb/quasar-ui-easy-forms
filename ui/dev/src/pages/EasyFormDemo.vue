@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <EasyForm class="page-form" v-model="pageValue" v-bind="pageForm" />
-    <InfoBoxWrapper color="primary" label="v-model" style="flex: 2;">
+    <InfoBoxWrapper label="v-model" style="flex: 2;">
       <q-markdown class="q-py-md q-px-sm" :src="modelShownAsBadge" />
     </InfoBoxWrapper>
     <InfoCard
@@ -30,6 +30,7 @@
 .page-form
   .q-btn-toggle
     border: solid 2px $primary
+    border: solid 2px var(--q-color-primary)
     border-radius: 6px
     > *
       border-radius: 3px

@@ -81,6 +81,7 @@ export default {
     min-height: 44px
     font-size: 12px !important
     color: $primary
+    color: var(--q-color-primary)
     outline: none !important
   &.-overlayed
     ._inner-wrapper
