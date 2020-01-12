@@ -42,7 +42,7 @@
     />
     <!-- raw component -->
     <component
-      v-else-if="internalErrorsCalculated"
+      v-else-if="hasInternalOrNoErrors"
       :is="component"
       :class="['easy-field__component', ...componentClassesArrayUsedHere]"
       v-model="cValue"
@@ -160,7 +160,7 @@ You can also pass a function that will receive two params you can work with: \`(
     },
     rules: {
       category: 'behavior',
-      type: Array,
+      type: [Array, Function],
       default: () => [],
     },
     id: {
@@ -338,19 +338,24 @@ You can also pass a function that will receive two params you can work with: \`(
       const { name } = component || {}
       return name
     },
-    internalErrorsCalculated () {
-      const { getEvaluatedPropOrAttr, componentName } = this
+    hasInternalOrNoErrors () {
+      const { getEvaluatedPropOrAttr, componentName, rulesCalculated } = this
       const internalErrors = getEvaluatedPropOrAttr('internalErrors')
       if (internalErrors !== undefined) return internalErrors
-      return [
-        'QInput',
-        'QSelect',
-        'EfInput',
-        'EfSelect',
-        'EfInputDate',
-        'q-input',
-        'q-select',
-      ].includes(componentName)
+      return (
+        !rulesCalculated.length ||
+        [
+          'QInput',
+          'QSelect',
+          'QField',
+          'EfInput',
+          'EfSelect',
+          'EfInputDate',
+          'q-input',
+          'q-select',
+          'q-field',
+        ].includes(componentName)
+      )
     },
     internalLabelsCalculated () {
       const { component, getEvaluatedPropOrAttr } = this
