@@ -2,10 +2,10 @@
   <q-form ref="refEasyForm" :class="`easy-form easy-form--nav-${actionButtonsPosition}`">
     <div
       :class="`easy-form__nav-row easy-form__nav-row--${actionButtonsPosition}`"
-      v-if="isFullString(errorMsg) || cActionButtons.length"
+      v-if="isFullString(formErrorMsg) || cActionButtons.length"
     >
-      <div class="easy-form__validation-error text-negative" v-if="isFullString(errorMsg)">
-        {{ errorMsg }}
+      <div class="easy-form__validation-error text-negative" v-if="isFullString(formErrorMsg)">
+        {{ formErrorMsg }}
       </div>
       <EfBtn v-for="btn in cActionButtons" :key="btn.btnLabel" v-bind="btn" v-on="btn.events" />
     </div>
@@ -77,6 +77,7 @@ import merge from 'merge-anything'
 import copy from 'copy-anything'
 import { isArray, isFunction, isFullString, isPlainObject } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
+import { validateFormPerSchema } from '../helpers/validation'
 import flattenPerSchema from '../helpers/flattenPerSchema'
 import defaultLang from '../meta/lang'
 import EfBtn from './fields/EfBtn.vue'
@@ -238,7 +239,7 @@ See the documentation on "Action Buttons" for more info.`,
       editedFields: [],
       formDataFlat,
       formDataFlatBackups: [copy(formDataFlat)],
-      errorMsg: '',
+      formErrorMsg: '',
     }
   },
   watch: {
@@ -377,18 +378,31 @@ See the documentation on "Action Buttons" for more info.`,
   methods: {
     isFullString,
     fieldInput ({ id, value }) {
+      // no idea why I do this:
       this.edited = true
+      // keep a list of edited field ids
       if (!this.editedFields.includes(id)) this.editedFields.push(id)
+      // set the new value onto the formData (might be an empty object)
       this.$set(this.formDataFlat, id, value)
+      // emit field-input with field's id and new data
       this.$emit(EVENTS['field-input'].name, { id, value })
+      // emit input with entire formData
       this.$emit(EVENTS['input'].name, this.formData) // do not extract `this` from here
+      // if the form has a formErrorMsg, validate gain to check to see if it's solved
+      if (isFullString(this.formErrorMsg)) {
+        const res = validateFormPerSchema(this.formData, this.schema, this.innerLang)
+        console.log('res → ', res)
+        const errorsRemain = Object.values(res).some(val => val !== true)
+        console.log('errorsRemain → ', errorsRemain)
+        if (!errorsRemain) this.formErrorMsg = null
+      }
     },
     resetState () {
       this.cMode = 'view'
       this.edited = false
       this.editedFields = []
       this.formDataFlatBackups.push(copy(this.formDataFlat))
-      this.errorMsg = ''
+      this.formErrorMsg = ''
     },
     restoreBackup () {
       if (!this.formDataFlatBackups.length) return
@@ -401,6 +415,7 @@ See the documentation on "Action Buttons" for more info.`,
       this.$emit(EVENTS['cancel'].name)
     },
     validate () {
+      // validate will focus the field with error, so only it when the user is not typing something else
       const { $refs, innerLang, validator, dataEdited, dataBackup, schema, formDataFlat } = this
       return new Promise((resolve, reject) => {
         if (isFunction(validator)) {
@@ -429,8 +444,8 @@ See the documentation on "Action Buttons" for more info.`,
           this.$emit(EVENTS['save'].name, { newData, oldData })
           resetState()
         })
-        .catch(errorMsg => {
-          this.errorMsg = errorMsg
+        .catch(formErrorMsg => {
+          this.formErrorMsg = formErrorMsg
         })
     },
     tapDelete () {
