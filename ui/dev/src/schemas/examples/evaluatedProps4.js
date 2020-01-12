@@ -17,16 +17,28 @@ const carData = [
   { year: 2016, make: 'Dodge', model: 'Challanger', trim: 'd3.0' },
 ]
 
+const uniqueValues = array => [...new Set(array)]
+const mapForQSelect = value => ({ value, label: value })
+
+const clearFields = (fieldIds, fieldInput) => {
+  fieldIds.forEach(id => fieldInput({ id, value: '' }))
+}
+
 export default {
   mode: 'edit',
-  actionButtons: [],
+  actionButtons: ['cancel', 'edit', 'save'],
   columnCount: 4,
   schema: [
     {
       id: 'year',
       label: 'Year',
       component: 'QSelect',
-      options: [...new Set(carData.map(d => d.year))].map(value => ({ value, label: value })),
+      events: {
+        // clear fields right from input to prevent invalid data
+        input: (val, { fieldInput }) => clearFields(['make', 'model', 'trim'], fieldInput),
+      },
+      // component props:
+      options: uniqueValues(carData.map(d => d.year)).map(mapForQSelect),
       emitValue: true,
     },
     {
@@ -34,11 +46,15 @@ export default {
       label: 'Make',
       component: 'QSelect',
       evaluatedProps: ['options'],
+      events: {
+        // clear fields right from input to prevent invalid data
+        input: (val, { fieldInput }) => clearFields(['model', 'trim'], fieldInput),
+      },
       // component props:
       options: (val, { formData }) => {
         const { year } = formData || {}
-        return [...new Set(carData.filter(car => car.year === year).map(d => d.make))].map(
-          value => ({ value, label: value })
+        return uniqueValues(carData.filter(car => car.year === year).map(d => d.make)).map(
+          mapForQSelect
         )
       },
       emitValue: true,
@@ -48,14 +64,16 @@ export default {
       label: 'Model',
       component: 'QSelect',
       evaluatedProps: ['options'],
+      events: {
+        // clear fields right from input to prevent invalid data
+        input: (val, { fieldInput }) => clearFields(['trim'], fieldInput),
+      },
       // component props:
       options: (val, { formData }) => {
         const { year, make } = formData || {}
-        return [
-          ...new Set(
-            carData.filter(car => car.year === year && car.make === make).map(d => d.model)
-          ),
-        ].map(value => ({ value, label: value }))
+        return uniqueValues(
+          carData.filter(car => car.year === year && car.make === make).map(d => d.model)
+        ).map(mapForQSelect)
       },
       emitValue: true,
     },
@@ -67,13 +85,11 @@ export default {
       // component props:
       options: (val, { formData }) => {
         const { year, make, model } = formData || {}
-        return [
-          ...new Set(
-            carData
-              .filter(car => car.year === year && car.make === make && car.model === model)
-              .map(d => d.trim)
-          ),
-        ].map(value => ({ value, label: value }))
+        return uniqueValues(
+          carData
+            .filter(car => car.year === year && car.make === make && car.model === model)
+            .map(d => d.trim)
+        ).map(mapForQSelect)
       },
       emitValue: true,
     },
