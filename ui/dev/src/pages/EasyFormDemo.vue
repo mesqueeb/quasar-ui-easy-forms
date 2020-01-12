@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <EasyForm class="page-form" v-model="pageValue" v-bind="pageForm" />
+    <EasyForm class="page-form q-mb-md" v-model="pageValue" v-bind="pageForm" />
     <InfoBoxWrapper label="v-model" style="flex: 2;">
       <q-markdown class="q-py-md q-px-sm" :src="modelShownAsBadge" />
     </InfoBoxWrapper>
