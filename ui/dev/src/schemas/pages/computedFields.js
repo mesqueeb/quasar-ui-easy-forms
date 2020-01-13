@@ -14,16 +14,13 @@ export default {
   actionButtons: [],
   schema: [
     {
-      component: 'QMarkdown',
-      internalErrors: true,
-      noContainer: true,
+      component: 'QMarkdown', noContainer: true,
       noLineNumbers: true,
       src: description,
     },
     {
       id: 'chosenExample',
       component: 'QBtnToggle',
-      internalErrors: true,
       spread: true,
       noCaps: true,
       unelevated: true,
@@ -34,10 +31,8 @@ export default {
       ],
     },
     {
-      component: 'QMarkdown',
+      component: 'QMarkdown', noContainer: true,
       showCondition: (value, { formData }) => formData.chosenExample === 0,
-      internalErrors: true,
-      noContainer: true,
       noLineNumbers: true,
       src: `
 ### The \`parseValue\` prop
@@ -56,10 +51,8 @@ When implementing a computed field this way however, \`fullName\` will never hav
 `.trim(),
     },
     {
-      component: 'QMarkdown',
+      component: 'QMarkdown', noContainer: true,
       showCondition: (value, { formData }) => formData.chosenExample === 1,
-      internalErrors: true,
-      noContainer: true,
       noLineNumbers: true,
       src: `
 ### Update via \`fieldInput\`
@@ -102,9 +95,8 @@ There is also a third way we can create a computed field (see the last tab).
 `.trim(),
     },
     {
-      component: 'QMarkdown',
+      component: 'QMarkdown', noContainer: true,
       showCondition: (value, { formData }) => formData.chosenExample === 2,
-      internalErrors: true,
       noLineNumbers: true,
       src: `
 ### Combine \`parseInput\` & \`fieldInput\`

@@ -19,10 +19,9 @@ export default {
     },
     {
       id: 'md-input',
-      component: 'QMarkdown',
+      component: 'QMarkdown', noContainer: true,
       span: 1,
       // component props:
-      noContainer: true,
       noLineNumbers: true,
       src: "```js\n{component: 'QInput'}\n```",
     },
@@ -42,10 +41,9 @@ export default {
     },
     {
       id: 'md-btn-toggle',
-      component: 'QMarkdown',
+      component: 'QMarkdown', noContainer: true,
       span: 1,
       // component props:
-      noContainer: true,
       noLineNumbers: true,
       src: "```js\n{component: 'QBtnToggle'}\n```",
     },
@@ -62,10 +60,9 @@ export default {
     },
     {
       id: 'md-slider',
-      component: 'QMarkdown',
+      component: 'QMarkdown', noContainer: true,
       span: 1,
       // component props:
-      noContainer: true,
       noLineNumbers: true,
       src: "```js\n{component: 'QSlider'}\n```",
     },
@@ -82,10 +79,9 @@ export default {
     },
     {
       id: 'md-input-nr',
-      component: 'QMarkdown',
+      component: 'QMarkdown', noContainer: true,
       span: 1,
       // component props:
-      noContainer: true,
       noLineNumbers: true,
       src:
         "```js\n{component: 'QInput'}\n```\n↳ But the input is saved as a number instead of a string.",
@@ -131,10 +127,9 @@ export default {
     },
     {
       id: 'md-select',
-      component: 'QMarkdown',
+      component: 'QMarkdown', noContainer: true,
       span: 1,
       // component props:
-      noContainer: true,
       noLineNumbers: true,
       src: "```js\n{component: 'QSelect'}\n```",
     },
@@ -163,10 +158,9 @@ export default {
     },
     {
       id: 'md-option-group',
-      component: 'QMarkdown',
+      component: 'QMarkdown', noContainer: true,
       span: 1,
       // component props:
-      noContainer: true,
       noLineNumbers: true,
       src: "```js\n{component: 'QOptionGroup'}\n```",
     },
@@ -175,14 +169,14 @@ export default {
       component: 'QToggle',
       span: 3,
       label: 'Do you agree with our terms?',
+      rules: [val => val || 'You must accept our terms'],
       default: false,
     },
     {
       id: 'md-toggle',
-      component: 'QMarkdown',
+      component: 'QMarkdown', noContainer: true,
       span: 1,
       // component props:
-      noContainer: true,
       noLineNumbers: true,
       src: "```js\n{component: 'QToggle'}\n```",
     },
@@ -200,10 +194,9 @@ export default {
     },
     {
       id: 'md-input-date',
-      component: 'QMarkdown',
+      component: 'QMarkdown', noContainer: true,
       span: 1,
       // component props:
-      noContainer: true,
       noLineNumbers: true,
       src:
         "```js\n{component: 'QInput'}\n```\n↳ But the input is saved as a date instead of a string.",

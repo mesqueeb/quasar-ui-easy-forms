@@ -23,16 +23,13 @@ export default {
   actionButtons: [],
   schema: [
     {
-      component: 'QMarkdown',
-      internalErrors: true,
-      noContainer: true,
+      component: 'QMarkdown', noContainer: true,
       noLineNumbers: true,
       src: description,
     },
     {
       id: 'chosenExample',
       component: 'QBtnToggle',
-      internalErrors: true,
       spread: true,
       noCaps: true,
       unelevated: true,
@@ -44,9 +41,7 @@ export default {
       ],
     },
     {
-      component: 'QMarkdown',
-      internalErrors: true,
-      noContainer: true,
+      component: 'QMarkdown', noContainer: true,
       noLineNumbers: true,
       showCondition: (value, { formData }) => formData.chosenExample === 0,
       src: `
@@ -55,9 +50,7 @@ Eg. \`subLabel: val => val === 'purple' ? 'nice!' : 'choose a color'\`
 `.trim(),
     },
     {
-      component: 'QMarkdown',
-      internalErrors: true,
-      noContainer: true,
+      component: 'QMarkdown', noContainer: true,
       noLineNumbers: true,
       showCondition: (value, { formData }) => formData.chosenExample === 1,
       src: `
@@ -66,9 +59,7 @@ Eg. \`disable: (val, {formData}) => formData.over18\`
 `.trim(),
     },
     {
-      component: 'QMarkdown',
-      internalErrors: true,
-      noContainer: true,
+      component: 'QMarkdown', noContainer: true,
       noLineNumbers: true,
       showCondition: (value, { formData }) => formData.chosenExample === 2,
       src: `
@@ -80,9 +71,7 @@ Eg. \`showCondition: (val, {formData}) => formData.car\`
 `.trim(),
     },
     {
-      component: 'QMarkdown',
-      internalErrors: true,
-      noContainer: true,
+      component: 'QMarkdown', noContainer: true,
       noLineNumbers: true,
       showCondition: (value, { formData }) => formData.chosenExample === 3,
       src: `

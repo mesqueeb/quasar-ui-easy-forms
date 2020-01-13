@@ -7,7 +7,7 @@ module.exports = function (ctx) {
   return {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
-    boot: ['firebase.js', 'vueComponents.js', 'register.js'],
+    boot: ['vueComponents.js', 'register.js'],
 
     css: ['app.sass'],
 

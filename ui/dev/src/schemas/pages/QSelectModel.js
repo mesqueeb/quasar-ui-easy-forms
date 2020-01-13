@@ -11,9 +11,7 @@ export default {
   actionButtons: [],
   schema: [
     {
-      component: 'QMarkdown',
-      internalErrors: true,
-      noContainer: true,
+      component: 'QMarkdown', noContainer: true,
       noLineNumbers: true,
       src: description,
     },

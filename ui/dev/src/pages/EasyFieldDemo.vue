@@ -63,8 +63,7 @@ export default {
     const pageForm = {
       schema: [
         {
-          component: 'QMarkdown',
-          noContainer: true,
+          component: 'QMarkdown', noContainer: true,
           noLineNumbers: true,
           src: desc,
         },

@@ -12,16 +12,14 @@ export default {
   actionButtons: [],
   schema: [
     {
-      component: 'QMarkdown',
-      internalErrors: true,
-      noContainer: true,
+      component: 'QMarkdown', noContainer: true,
+
       noLineNumbers: true,
       src: description,
     },
     {
       id: 'chosenExample',
       component: 'QBtnToggle',
-      internalErrors: true,
       spread: true,
       noCaps: true,
       unelevated: true,

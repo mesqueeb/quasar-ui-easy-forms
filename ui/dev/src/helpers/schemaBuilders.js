@@ -28,17 +28,8 @@ export function propToPropSchema (propKey, propInfo) {
   const events = {}
   let component = 'QInput'
   let subLabel = desc
-  let options,
-    outlined,
-    standout,
-    disable,
-    parseInput,
-    parseValue,
-    autogrow,
-    debounce,
-    span,
-    emitValue,
-    _type
+  let options, standout, disable, parseInput, parseValue, autogrow, debounce, span, emitValue, _type
+  let outlined = true
   let fieldClasses = []
   let _default = df === true || undefined
   // If it has a default, write it in the description
