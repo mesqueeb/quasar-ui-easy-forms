@@ -315,11 +315,11 @@ You can also pass a function that will receive two params you can work with: \`(
         if (isFunction(parseValue)) return parseValue(innerValue, this)
         return innerValue
       },
-      set (val) {
+      set (val, ...otherArguments) {
         const { parseInput, events } = this
         if (isFunction(parseInput)) val = parseInput(val, this)
         if (isFunction(events.input)) events.input(val, this)
-        this.$emit('input', val)
+        this.$emit('input', val, ...otherArguments)
       },
     },
     evaluatedPropsDataObject () {
@@ -381,7 +381,7 @@ You can also pass a function that will receive two params you can work with: \`(
       return Object.entries(events).reduce((carry, [eventName, eventFn]) => {
         // input event is handled in cValue
         if (eventName === 'input') return carry
-        carry[eventName] = val => eventFn(val, context)
+        carry[eventName] = (val, ...otherArguments) => eventFn(val, context, ...otherArguments)
         return carry
       }, {})
     },
