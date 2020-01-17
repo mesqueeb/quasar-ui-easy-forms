@@ -1,5 +1,5 @@
 import flattenPerSchema from './flattenPerSchema'
-import { isArray } from 'is-what'
+import { isArray, isFunction } from 'is-what'
 import defaultLang from '../meta/lang'
 
 /**
@@ -8,13 +8,15 @@ import defaultLang from '../meta/lang'
  * @export
  * @param {*} payload
  * @param {Blueprint} { rules = [], required }
- * @param {StringObject} lang
+ * @param {Context} context
  * @returns {ValidationResultField}
  */
-export function validateFieldPerSchema (payload, { rules = [], required }, lang = defaultLang) {
+export function validateFieldPerSchema (payload, { rules = [], required }, context = {}) {
+  const lang = context.lang || defaultLang
+  const rulesEvaluated = !isFunction(rules) ? rules : rules(payload, context)
   const requiredRule = val => val === 0 || !!val || lang.requiredField
-  const testRules = !required ? rules : [requiredRule, ...rules]
-  const results = testRules.reduce((carry, rule) => {
+  const rulesToTest = !required ? rulesEvaluated : [requiredRule, ...rulesEvaluated]
+  const results = rulesToTest.reduce((carry, rule) => {
     carry.push(rule(payload))
     return carry
   }, [])
@@ -44,7 +46,8 @@ export function validateFormPerSchema (formData, schema, lang) {
   const formDataFlat = { ...formDataFlatEmpty, ...formDataFlatCurrent }
   const resultPerField = Object.entries(formDataFlat).reduce((carry, [fieldId, fieldValue]) => {
     const blueprint = schemaObject[fieldId]
-    carry[fieldId] = !blueprint || validateFieldPerSchema(fieldValue, blueprint, lang)
+    const context = { formData, formDataFlat, lang }
+    carry[fieldId] = !blueprint || validateFieldPerSchema(fieldValue, blueprint, context)
     return carry
   }, {})
   return resultPerField
