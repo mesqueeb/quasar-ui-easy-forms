@@ -14,7 +14,8 @@ export default {
   actionButtons: [],
   schema: [
     {
-      component: 'QMarkdown', noContainer: true,
+      component: 'QMarkdown',
+      noContainer: true,
       noLineNumbers: true,
       src: description,
     },
@@ -27,11 +28,12 @@ export default {
       options: [
         { label: 'The parseValue prop', value: 0 },
         { label: 'Update via fieldInput', value: 1 },
-        { label: 'Combine parseInput & fieldInput', value: 2 },
+        { label: 'Combine parseValue & fieldInput', value: 2 },
       ],
     },
     {
-      component: 'QMarkdown', noContainer: true,
+      component: 'QMarkdown',
+      noContainer: true,
       showCondition: (value, { formData }) => formData.chosenExample === 0,
       noLineNumbers: true,
       src: `
@@ -51,7 +53,8 @@ When implementing a computed field this way however, \`fullName\` will never hav
 `.trim(),
     },
     {
-      component: 'QMarkdown', noContainer: true,
+      component: 'QMarkdown',
+      noContainer: true,
       showCondition: (value, { formData }) => formData.chosenExample === 1,
       noLineNumbers: true,
       src: `
@@ -95,11 +98,12 @@ There is also a third way we can create a computed field (see the last tab).
 `.trim(),
     },
     {
-      component: 'QMarkdown', noContainer: true,
+      component: 'QMarkdown',
+      noContainer: true,
       showCondition: (value, { formData }) => formData.chosenExample === 2,
       noLineNumbers: true,
       src: `
-### Combine \`parseInput\` & \`fieldInput\`
+### Combine \`parseValue\` & \`fieldInput\`
 
 The third way to create a computed field is this:
 
@@ -130,7 +134,7 @@ If we understand this reason, then in our case, it is perfectly valid to do so, 
 
 However, keep in mind that also this method has its own pro's and con's:
 - PRO: it can be used as stand-alone, without relying on other fields & without the need to render other fields
-- PRO: because it just uses \`parseInput\` it's less verbose (opposed to listening to input events of other fields)
+- PRO: because it just uses \`parseValue\` it's less verbose (opposed to listening to input events of other fields)
 - PRO: the logic for this field is contained in its own options object
 - PRO: even if your database already has data, a computed field like this can be added at a later date
 - CON: you have to include this "Computed Field" in all forms the user can edit the related fields (and probably with \`showCondition: false\`)
