@@ -24,7 +24,7 @@ export default {
   actionButtons: [],
   schema: [
     {
-      component: 'QMarkdown', noContainer: true,
+      component: 'QMarkdown',
       noLineNumbers: true,
       src: description,
     },
@@ -40,7 +40,7 @@ export default {
       ],
     },
     {
-      component: 'QMarkdown', noContainer: true,
+      component: 'QMarkdown',
       showCondition: (value, { formData }) => formData.chosenExample === 0,
       noLineNumbers: true,
       src: `
@@ -55,7 +55,7 @@ events: {
 \`\`\``.trim(),
     },
     {
-      component: 'QMarkdown', noContainer: true,
+      component: 'QMarkdown',
       showCondition: (value, { formData }) => formData.chosenExample === 1,
       noLineNumbers: true,
       src: `

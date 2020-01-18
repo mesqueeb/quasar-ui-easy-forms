@@ -15,7 +15,7 @@ export default {
   schema: [
     {
       component: 'QMarkdown',
-      noContainer: true,
+
       noLineNumbers: true,
       src: description,
     },
@@ -33,7 +33,7 @@ export default {
     },
     {
       component: 'QMarkdown',
-      noContainer: true,
+
       showCondition: (value, { formData }) => formData.chosenExample === 0,
       noLineNumbers: true,
       src: `
@@ -54,7 +54,7 @@ When implementing a computed field this way however, \`fullName\` will never hav
     },
     {
       component: 'QMarkdown',
-      noContainer: true,
+
       showCondition: (value, { formData }) => formData.chosenExample === 1,
       noLineNumbers: true,
       src: `
@@ -99,7 +99,7 @@ There is also a third way we can create a computed field (see the last tab).
     },
     {
       component: 'QMarkdown',
-      noContainer: true,
+
       showCondition: (value, { formData }) => formData.chosenExample === 2,
       noLineNumbers: true,
       src: `
