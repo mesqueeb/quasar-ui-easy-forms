@@ -109,7 +109,8 @@
 </style>
 
 <script>
-import { QMarkdown } from '@quasar/quasar-ui-qmarkdown'
+import QMarkdown from '@quasar/quasar-ui-qmarkdown/src/index.js'
+import '@quasar/quasar-ui-qmarkdown/dist/index.css'
 import { QField } from 'quasar'
 import { isFunction, isPlainObject, isString, isUndefined, isNullOrUndefined } from 'is-what'
 import merge from 'merge-anything'
