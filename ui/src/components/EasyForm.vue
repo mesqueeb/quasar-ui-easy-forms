@@ -85,7 +85,6 @@ import EasyField from './EasyField.vue'
 import {
   mode,
   labelPosition,
-  hasMarkdown,
   evaluatedProps,
   internalLabels,
   internalErrors,
@@ -213,7 +212,6 @@ See the documentation on "Action Buttons" for more info.`,
     // shared props:
     mode,
     labelPosition,
-    hasMarkdown,
     evaluatedProps,
     internalLabels,
     internalErrors,
@@ -282,7 +280,6 @@ See the documentation on "Action Buttons" for more info.`,
         fieldInput: this.fieldInput,
         // just pass
         labelPosition: this.labelPosition,
-        hasMarkdown: this.hasMarkdown,
         evaluatedProps: this.evaluatedProps,
         internalLabels: this.internalLabels,
         internalErrors: this.internalErrors,

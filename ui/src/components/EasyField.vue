@@ -111,7 +111,6 @@ import defaultLang from '../meta/lang'
 import {
   mode,
   labelPosition,
-  hasMarkdown,
   evaluatedProps,
   internalLabels,
   internalErrors,
@@ -228,7 +227,6 @@ You can also pass a function that will receive two params you can work with: \`(
     // shared props:
     mode,
     labelPosition,
-    hasMarkdown,
     evaluatedProps,
     internalLabels,
     internalErrors,

@@ -31,12 +31,6 @@ export const labelPosition = {
   values: ['top', 'left'],
   examples: ['top', 'left'],
 }
-export const hasMarkdown = {
-  category: 'state|content',
-  type: [Boolean, Function],
-  default: false,
-  desc: `Allows a field to have markdown in its sub-labels. ${propOf}`,
-}
 export const evaluatedProps = {
   category: 'behavior',
   type: Array,
