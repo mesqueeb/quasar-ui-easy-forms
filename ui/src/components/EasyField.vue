@@ -8,7 +8,7 @@
       `easy-field--label-${labelPosition}`,
       {
         'easy-field--no-label': !labelUsedHere,
-        'easy-field--no-sub-label': !subLabelUsedHere,
+        'easy-field--no-sub-label': !subLabelHtmlUsedHere,
         'easy-field--no-component': !component,
       },
       ...fieldClassesArrayUsedHere,
@@ -16,21 +16,8 @@
     :style="fieldStyleUsedHere"
   >
     <!-- display: inline -->
-    <div v-if="labelUsedHere" class="easy-field__label text-wrap-all">{{ labelUsedHere }}</div>
-    <div
-      v-if="subLabelUsedHere"
-      :class="[
-        'easy-field__sub-label',
-        {
-          'text-wrap-all': !hasMarkdown,
-        },
-      ]"
-    >
-      <q-markdown v-if="hasMarkdown" no-line-numbers no-container>{{
-        subLabelUsedHere
-      }}</q-markdown>
-      <template v-else>{{ subLabelUsedHere }}</template>
-    </div>
+    <div v-if="labelUsedHere" class="easy-field__label">{{ labelUsedHere }}</div>
+    <div v-if="subLabelHtmlUsedHere" class="easy-field__sub-label" v-html="subLabelHtmlUsedHere" />
     <!-- no component -->
     <template v-if="!component"></template>
     <!-- raw component -->
@@ -109,10 +96,16 @@
 </style>
 
 <script>
-import QMarkdown from '@quasar/quasar-ui-qmarkdown/src/index.js'
-import '@quasar/quasar-ui-qmarkdown/dist/index.css'
+import snarkdown from 'snarkdown'
 import { QField } from 'quasar'
-import { isFunction, isPlainObject, isString, isUndefined, isNullOrUndefined } from 'is-what'
+import {
+  isFunction,
+  isPlainObject,
+  isString,
+  isUndefined,
+  isNullOrUndefined,
+  isFullString,
+} from 'is-what'
 import merge from 'merge-anything'
 import defaultLang from '../meta/lang'
 import {
@@ -131,7 +124,7 @@ function evaluateProp (propValue, componentValue, componentInstance) {
 export default {
   name: 'EasyField',
   inheritAttrs: false,
-  components: { QMarkdown, QField },
+  components: { QField },
   props: {
     // prop categories: behavior content general model state style
     // EF props used here:
@@ -428,9 +421,11 @@ You can also pass a function that will receive two params you can work with: \`(
       const { internalLabelsCalculated, getEvaluatedPropOrAttr } = this
       return internalLabelsCalculated ? undefined : getEvaluatedPropOrAttr('label')
     },
-    subLabelUsedHere () {
+    subLabelHtmlUsedHere () {
       const { internalLabelsCalculated, getEvaluatedPropOrAttr } = this
-      return internalLabelsCalculated ? undefined : getEvaluatedPropOrAttr('subLabel')
+      const subLabel = internalLabelsCalculated ? undefined : getEvaluatedPropOrAttr('subLabel')
+      if (!isFullString(subLabel)) return null
+      return snarkdown(subLabel)
     },
     fieldStyleUsedHere () {
       return this.getEvaluatedPropOrAttr('fieldStyle')
