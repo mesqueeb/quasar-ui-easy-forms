@@ -10,6 +10,10 @@ const commonjs = require('@rollup/plugin-commonjs')
 const buildConf = require('./config')
 const buildUtils = require('./utils')
 
+// include all dependencies as external by default
+const pkg = require('../package.json')
+const external = Object.keys(pkg.dependencies || [])
+
 const rollupPlugins = [
   commonjs(),
   nodeResolve({
@@ -90,7 +94,7 @@ function build (builds) {
 function genConfig (opts) {
   Object.assign(opts.rollup.input, {
     plugins: rollupPlugins,
-    external: ['vue', 'quasar'],
+    external: external.concat(['vue', 'quasar']),
   })
 
   Object.assign(opts.rollup.output, {
