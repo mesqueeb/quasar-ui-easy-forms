@@ -225,6 +225,7 @@ See the documentation on "Action Buttons" for more info.`,
     const dataFlat = flattenPerSchema(value, schema)
     const schemaArray = isArray(schema) ? schema : Object.values(schema)
     const dataFlatDefaults = schemaArray.reduce((carry, { id, default: df }) => {
+      if (!isFullString(id)) return carry
       carry[id] = isFunction(df) ? df(value, this) : df
       return carry
     }, {})
