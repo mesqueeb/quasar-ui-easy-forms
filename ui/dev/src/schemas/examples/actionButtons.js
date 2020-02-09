@@ -7,6 +7,7 @@ export default {
     'edit',
     'save',
     {
+      component: 'EfBtn',
       btnLabel: 'log the data (check console)',
       push: true,
       events: {
@@ -14,6 +15,12 @@ export default {
       },
     },
   ],
+  actionButtonDefaults: {
+    archive: { icon: 'archive', showCondition: (_, { mode }) => mode !== 'edit' },
+    delete: { icon: 'delete', showCondition: (_, { mode }) => mode !== 'edit' },
+    edit: { icon: 'edit', flat: false, outline: true },
+    save: { icon: 'save' },
+  },
   schema: [
     {
       id: 'name',

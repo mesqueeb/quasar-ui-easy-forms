@@ -2,12 +2,18 @@
   <q-form ref="refEasyForm" :class="`easy-form easy-form--nav-${actionButtonsPosition}`">
     <div
       :class="`easy-form__nav-row easy-form__nav-row--${actionButtonsPosition}`"
-      v-if="isFullString(formErrorMsg) || cActionButtons.length"
+      v-if="isFullString(formErrorMsg) || actionButtonsSchema.length"
     >
       <div class="easy-form__validation-error text-negative" v-if="isFullString(formErrorMsg)">
         {{ formErrorMsg }}
       </div>
-      <EfBtn v-for="btn in cActionButtons" :key="btn.btnLabel" v-bind="btn" v-on="btn.events" />
+      <EasyField
+        v-for="(field, i) in actionButtonsSchema"
+        :key="i"
+        v-bind="{ ...field, span: undefined }"
+        :value="formDataFlat[field.id]"
+        @input="value => fieldInput({ id: field.id, value })"
+      />
     </div>
     <div
       class="easy-form__form"
@@ -75,7 +81,7 @@
 import { QForm } from 'quasar'
 import merge from 'merge-anything'
 import copy from 'copy-anything'
-import { isArray, isFunction, isFullString, isPlainObject } from 'is-what'
+import { isArray, isFunction, isFullString, isPlainObject, isString } from 'is-what'
 import { nestifyObject } from 'nestify-anything'
 import { validateFormPerSchema } from '../helpers/validation'
 import flattenPerSchema from '../helpers/flattenPerSchema'
@@ -165,13 +171,20 @@ Read more on Evaluated Props in its dedicated page.`,
 - 'delete' a red button which does \`emit('delete')\`
 - 'archive' a red button which does \`emit('archive')\`
 
-You can also pass custom buttons with a schema as per the EfBtn component.
+You can also pass custom buttons with the same schema to generate forms.
 See the documentation on "Action Buttons" for more info.`,
       examples: [
         `[] (no buttons)`,
         `['delete', 'cancel', 'edit', 'save']`,
-        `[{btnLabel: 'log', events: {click: console.log}}]`,
+        `[{component: 'EfBtn', btnLabel: 'log', events: {click: console.log}}]`,
       ],
+    },
+    actionButtonDefaults: {
+      category: 'content',
+      type: Object,
+      default: () => ({}),
+      desc: `You can overwrite the schema used for the default action buttons for edit, cancel, save, delete & archive.`,
+      examples: [`{'save': {push: true}, 'delete': {color: 'secondary'}}`],
     },
     actionButtonsPosition: {
       category: 'content',
@@ -271,10 +284,9 @@ See the documentation on "Action Buttons" for more info.`,
         this.$emit(EVENTS['update:mode'].name, val)
       },
     },
-    cSchema () {
-      const self = this
-      const { schema, formData, formDataFlat, innerMode, formId, innerLang } = this
-      const overwritableDefaults = {
+    schemaOverwritableDefaults () {
+      const { innerMode, innerLang } = this
+      return {
         // used here & pass
         lang: innerLang,
         mode: innerMode,
@@ -285,76 +297,83 @@ See the documentation on "Action Buttons" for more info.`,
         internalLabels: this.internalLabels,
         internalErrors: this.internalErrors,
       }
-      const forcedDefaults = {
+    },
+    schemaForcedDefaults () {
+      const { formData, formDataFlat, formId } = this
+      return {
         formData,
         formDataFlat,
         formId,
       }
-      return schema.reduce((carry, blueprint) => {
-        const blueprintCleaned = merge(overwritableDefaults, blueprint, forcedDefaults)
-        carry.push(blueprintCleaned)
-        return carry
-      }, [])
     },
-    cActionButtons () {
+    cSchema () {
+      const { schema, schemaOverwritableDefaults, schemaForcedDefaults } = this
+      return schema.map(blueprint => {
+        const blueprintParsed = merge(schemaOverwritableDefaults, blueprint, schemaForcedDefaults)
+        return blueprintParsed
+      })
+    },
+    actionButtonsMap () {
       const {
-        actionButtons,
         innerLang,
-        cMode,
         tapDelete,
         tapEdit,
         tapArchive,
         tapCancel,
         tapSave,
+        actionButtonDefaults,
       } = this
-      const easyFormContext = this
-      return actionButtons
-        .map(btn => {
-          if (btn === 'delete') {
-            return {
-              btnLabel: innerLang['delete'],
-              flat: true,
-              color: 'negative',
-              events: { click: tapDelete },
-            }
-          }
-          if (btn === 'archive') {
-            return {
-              btnLabel: innerLang['archive'],
-              flat: true,
-              color: 'negative',
-              events: { click: tapArchive },
-            }
-          }
-          if (btn === 'edit' && ['view', 'raw'].includes(cMode)) {
-            return {
-              flat: true,
-              btnLabel: innerLang['edit'],
-              events: { click: tapEdit },
-            }
-          }
-          if (btn === 'cancel' && ['edit', 'add'].includes(cMode)) {
-            return {
-              btnLabel: innerLang['cancel'],
-              flat: true,
-              events: { click: tapCancel },
-            }
-          }
-          if (btn === 'save' && ['edit', 'add'].includes(cMode)) {
-            return {
-              unelevated: true,
-              btnLabel: innerLang['save'],
-              events: { click: tapSave },
-            }
-          }
-          if (isPlainObject(btn)) {
-            if (!isPlainObject(btn.events)) return btn
-            const { click } = btn.events
-            if (isFunction(click)) btn.events.click = val => click(val, easyFormContext)
-            return btn
-          }
-        })
-        .filter(btn => isPlainObject(btn))
+      const map = {
+        delete: {
+          btnLabel: innerLang['delete'],
+          flat: true,
+          color: 'negative',
+          events: { click: tapDelete },
+        },
+        archive: {
+          btnLabel: innerLang['archive'],
+          flat: true,
+          color: 'negative',
+          events: { click: tapArchive },
+        },
+        edit: {
+          showCondition: (_, { mode }) => ['view', 'raw'].includes(mode),
+          flat: true,
+          btnLabel: innerLang['edit'],
+          events: { click: tapEdit },
+        },
+        cancel: {
+          showCondition: (_, { mode }) => ['edit', 'add'].includes(mode),
+          btnLabel: innerLang['cancel'],
+          flat: true,
+          events: { click: tapCancel },
+        },
+        save: {
+          showCondition: (_, { mode }) => ['edit', 'add'].includes(mode),
+          unelevated: true,
+          btnLabel: innerLang['save'],
+          events: { click: tapSave },
+        },
+      }
+      return merge(map, actionButtonDefaults)
+    },
+    actionButtonsSchema () {
+      const {
+        actionButtons,
+        schemaOverwritableDefaults,
+        schemaForcedDefaults,
+        actionButtonsMap,
+      } = this
+      return actionButtons.map(blueprint => {
+        const buttonBlueprint = isString(blueprint) ? actionButtonsMap[blueprint] : blueprint
+        const blueprintParsed = merge(
+          { component: 'EfBtn' },
+          schemaOverwritableDefaults,
+          buttonBlueprint,
+          schemaForcedDefaults
+        )
+        return blueprintParsed
+      })
     },
     dataBackup () {
       const { formDataFlatBackups } = this

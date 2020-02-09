@@ -1,6 +1,15 @@
-const description = `By default, EasyForm has buttons on the top side of the form to edit/save etc... Each of these actions will $emit an event, so you can do something appropriately. (eg. saving data to a DB when "save" is clicked)
+const description = `
+Action buttons are buttons you would want to add to a form to do things like edit/save/delete etc... You can easily add action buttons like these on the top/bottom or sides of your EasyForm.
 
-Action buttons are set via the prop 'actionButtons'. Some buttons are already set up for you and can be included by just passing the string of the button you want:
+Action buttons are set via the prop 'actionButtons'. You can use pre-made action buttons that emit events. You can also overwrite the look of these pre-made buttons. Finally you can also set custom buttons and fields.
+
+### Pre-made action buttons
+
+Pre-made buttons can be added to your form by just passing the string of the button you want:
+
+\`:action-buttons="['edit', 'cancel', 'save', 'delete', 'archive']"\`
+
+When added you will see the buttons like the preview below. They each have a functionality:
 
 - \`'edit'\`: Adds a button that puts the form in "edit" mode
 - \`'cancel'\`: Adds a button that puts the form back into "view" mode & reverts the content to its original state
@@ -9,40 +18,56 @@ Action buttons are set via the prop 'actionButtons'. Some buttons are already se
 
 The buttons above emits the events: \`@edit\`, \`@cancel\`, \`@save\`, \`@delete\`, \`@archive\`
 
-Only \`@save\` receives a payload with the new and old form data.
+You can listen for these events on the \`<EasyForm />\` to use do things like:
+- saving data to a DB when "save" is clicked
+- moving a popup when 'cancel' is clicked
+- clear the form data (\`value\`) when 'delete' is clicked
+
+The \`@save\` event receives a payload with the new and old form data.
+
 - \`@save="onSave"\`
+
 \`\`\`js
-import merge from 'merge-anything' // my merge util 😉
 {
   onSave ({newData, oldData}) {
     console.log(newData) // an object with only the updated fields
     console.log(oldData) // the original object with all the field values
     // if you need a combination of both:
-    const newFormData = merge(oldData, newData)
+    const newFormData = {...oldData, ...newData}
   }
 }
 \`\`\`
 
-When you don't specify the action buttons it will default to:
-- \`:action-buttons="['archive', 'cancel', 'edit', 'save']"\`
+### Overwriting pre-made buttons
 
-When you want no buttons to show you can pass:
-- \`:action-buttons="[]"\`
+You can overwrite how the pre-made buttons look by providing an object like so:
 
-You can also pass custom buttons with a schema just like an EfBtn (see the \`EasyField > EfBtn\` documentation).
+\`\`\`js
+{
+  'edit': { icon: 'edit' },
+  'save': { push: true },
+  'delete': { color: 'secondary' }
+}
+\`\`\`
 
-The function you set to \`events.click\` of custom buttons will receive the native event payload as first parameter and the EasyForm context (the component instance) as second: \`($event, context) => {}\`
+### Providing custom buttons & fields
+
+You can also pass custom buttons & fields with a schema. The schema you provide works just like the EasyForm schema.
+
 An example of a custom button could be:
 \`\`\`js
 actionButtons: [{
+  component: 'EfBtn',
   btnLabel: 'log the data',
+  showCondition: (_, {formData}) => formData.enableLogging,
   events: {
     click: (event, {formData}) => console.log(formData),
   },
 }]
 \`\`\`
 
-For more information on the \`context\` prop passed to a click event see the "Evaluated Props" and "Events" documentation.
+Being able to show/hide these button based on the \`formData\` can be very powerful.
+Be sure to check out the "Evaluated Props" and "Events" documentation.
 `
 
 export default {
