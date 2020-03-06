@@ -18,7 +18,7 @@ export function createRequiredRule (requiredFieldErrorMsg) {
 export function validateFieldPerSchema (payload, { rules = [], required }, context = {}) {
   const lang = context.lang || defaultLang
   const rulesEvaluated = !isFunction(rules) ? rules : rules(payload, context)
-  const requiredEvaluated = !isFunction(rules) ? required : required(payload, context)
+  const requiredEvaluated = !isFunction(required) ? required : required(payload, context)
   const requiredRule = createRequiredRule(lang.requiredField)
   const rulesToTest = !requiredEvaluated ? rulesEvaluated : [requiredRule, ...rulesEvaluated]
   const results = rulesToTest.reduce((carry, rule) => {
