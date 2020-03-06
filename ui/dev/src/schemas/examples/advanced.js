@@ -186,7 +186,7 @@ export default {
       component: 'QInput',
       label: 'Date of submission',
       parseInput: val => new Date(val),
-      valueType: 'date', // see `EfDiv` documentation for more info on `valueType`
+      valueType: 'date',
       dateFormat: 'YYYY/MM/DD', // see `EfDiv` documentation for more info on `dateFormat`
       // component props:
       mask: '####/##/##',

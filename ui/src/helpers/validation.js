@@ -2,6 +2,10 @@ import flattenPerSchema from './flattenPerSchema'
 import { isArray, isFunction } from 'is-what'
 import defaultLang from '../meta/lang'
 
+export function createRequiredRule (requiredFieldErrorMsg) {
+  return val => val === 0 || !!val || requiredFieldErrorMsg
+}
+
 /**
  * Validates a field data based on its blueprint
  *
@@ -14,8 +18,9 @@ import defaultLang from '../meta/lang'
 export function validateFieldPerSchema (payload, { rules = [], required }, context = {}) {
   const lang = context.lang || defaultLang
   const rulesEvaluated = !isFunction(rules) ? rules : rules(payload, context)
-  const requiredRule = val => val === 0 || !!val || lang.requiredField
-  const rulesToTest = !required ? rulesEvaluated : [requiredRule, ...rulesEvaluated]
+  const requiredEvaluated = !isFunction(rules) ? required : required(payload, context)
+  const requiredRule = createRequiredRule(lang.requiredField)
+  const rulesToTest = !requiredEvaluated ? rulesEvaluated : [requiredRule, ...rulesEvaluated]
   const results = rulesToTest.reduce((carry, rule) => {
     carry.push(rule(payload))
     return carry

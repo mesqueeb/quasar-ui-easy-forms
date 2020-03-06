@@ -46,8 +46,6 @@ The difference between \`type\` and \`valueType\` is when you don't want to set 
     prefix: { category: 'model|content', type: String },
     options: { category: 'model|content', type: Array },
     multiple: { category: 'model|content', type: Boolean },
-    // Quasar props with modified defaults:
-    // Quasar props with modified behavior:
   },
   computed: {
     cValue () {

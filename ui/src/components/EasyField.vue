@@ -108,6 +108,7 @@ import {
 } from 'is-what'
 import merge from 'merge-anything'
 import defaultLang from '../meta/lang'
+import { createRequiredRule } from '../helpers/validation'
 import {
   mode,
   labelPosition,
@@ -363,8 +364,8 @@ You can also pass a function that will receive two params you can work with: \`(
       const { getEvaluatedPropOrAttr, langCalculated } = this
       const required = getEvaluatedPropOrAttr('required')
       const rules = getEvaluatedPropOrAttr('rules')
-      const requiredRule = val => val === 0 || !!val || langCalculated['requiredField']
-      return required ? rules.concat([requiredRule]) : rules
+      const requiredRule = createRequiredRule(langCalculated['requiredField'])
+      return required ? [requiredRule, ...rules] : rules
     },
     eventsCalculated () {
       const { getEvaluatedPropOrAttr } = this
