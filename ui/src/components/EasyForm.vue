@@ -432,7 +432,7 @@ See the documentation on "Action Buttons" for more info.`,
       this.$emit(EVENTS['cancel'].name)
     },
     validate () {
-      // validate will focus the field with error, so only it when the user is not typing something else
+      // validate will focus the field with error, so only use it when the user is not typing something else
       const { $refs, innerLang, validator, dataEdited, dataBackup, schema, formDataFlat } = this
       return new Promise((resolve, reject) => {
         if (isFunction(validator)) {
