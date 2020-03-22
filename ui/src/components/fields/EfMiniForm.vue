@@ -22,6 +22,7 @@
         :key="fieldIndex"
         class="ef-mini-form__sub-field"
         :rowIndex="rowIndex"
+        :rowData="cValue[rowIndex]"
         v-bind="subfield"
         :value="cValue[rowIndex][subfield.id]"
         @input="val => setSubFieldValue(val, rowIndex, subfield.id)"
