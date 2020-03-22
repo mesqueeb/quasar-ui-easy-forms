@@ -15,18 +15,18 @@
     "dev:electron": "quasar dev -m electron"
   },
   "dependencies": {
-    "@quasar/extras": "^1.4.2",
-    "@quasar/quasar-ui-qmarkdown": "^1.0.16",
-    "case-anything": "^0.3.0",
-    "copy-anything": "^1.5.1",
-    "is-what": "^3.5.0",
+    "@quasar/extras": "^1.6.0",
+    "@quasar/quasar-ui-qmarkdown": "^1.0.24",
+    "case-anything": "^0.3.1",
+    "copy-anything": "^1.6.0",
+    "is-what": "^3.7.1",
     "merge-anything": "^2.4.4",
     "quasar-ui-component-info-card": "0.0.7",
     "raw-loader": "^4.0.0",
     "sort-anything": "0.0.1"
   },
   "devDependencies": {
-    "@quasar/app": "^1.5.2"
+    "@quasar/app": "^1.6.0"
   },
   "engines": {
     "node": ">= 8.9.0",
