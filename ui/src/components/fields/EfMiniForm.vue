@@ -23,9 +23,10 @@
         class="ef-mini-form__sub-field"
         :rowIndex="rowIndex"
         :rowData="cValue[rowIndex]"
+        :rowInput="params => setSubFieldValue({ id: params.id, value: params.value, rowIndex })"
         v-bind="subfield"
         :value="cValue[rowIndex][subfield.id]"
-        @input="val => setSubFieldValue(val, rowIndex, subfield.id)"
+        @input="val => setSubFieldValue({ id: subfield.id, value: val, rowIndex })"
         @keyup.native.delete="onDeleteKey(rowIndex, subfield.id)"
       />
     </div>
@@ -156,11 +157,11 @@ This is useful when you want to use Evaluated Props in the schema of the mine fo
       allRows.splice(rowIndex, 1)
       this.$emit('input', allRows)
     },
-    setSubFieldValue (newValue, rowIndex, fieldId) {
-      const { value } = this
-      const allRows = copy(value)
+    setSubFieldValue ({ id, value: newValue, rowIndex }) {
+      const { value: oldValue } = this
+      const allRows = copy(oldValue)
       if (allRows[rowIndex] === undefined) this.$set(allRows, rowIndex, {})
-      allRows[rowIndex][fieldId] = newValue
+      allRows[rowIndex][id] = newValue
       this.$emit('input', allRows)
     },
     onDeleteKey (rowIndex, fieldId) {
