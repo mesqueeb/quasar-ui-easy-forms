@@ -8,7 +8,7 @@ import EfDiv from './components/fields/EfDiv.vue'
 import EfMiniForm from './components/fields/EfMiniForm.vue'
 
 import dependencyMap from './meta/dependencyMap'
-import { validateFormPerSchema } from './helpers/validation.js'
+import { validateFormPerSchema } from './helpers/validationJs'
 
 export {
   version,

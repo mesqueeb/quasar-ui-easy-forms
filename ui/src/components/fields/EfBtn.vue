@@ -2,7 +2,7 @@
   <q-btn class="ef-btn" v-bind="quasarProps" v-on="$listeners" />
 </template>
 
-<script>
+<script lang="js">
 import merge from 'merge-anything'
 import { QBtn } from 'quasar'
 import { getUsageDocs } from './sharedProps.js'

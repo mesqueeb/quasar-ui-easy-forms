@@ -77,7 +77,7 @@
     margin-right: $md
 </style>
 
-<script>
+<script lang="js">
 import { QForm } from 'quasar'
 import merge from 'merge-anything'
 import copy from 'copy-anything'

@@ -95,7 +95,8 @@
       word-break: break-word
 </style>
 
-<script>
+<script lang="js">
+import '../types/index.js'
 import snarkdown from 'snarkdown'
 import { QField } from 'quasar'
 import {
@@ -147,6 +148,7 @@ You can also pass a function that will receive two params you can work with: \`(
 - \`formData\` is the value object of your EasyForm. This will be undefined when EasyField is used as stand-alone (without EasyForm) unless you manually pass it.
 - \`context\` is either your EasyForm or EasyField context with many usefull props. See the documentation on "Evaluated Props" for more info.`,
     },
+    /** @type {PropRequired} */
     required: {
       category: 'behavior',
       type: [Boolean, Function],

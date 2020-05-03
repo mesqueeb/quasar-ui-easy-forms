@@ -46,7 +46,7 @@
     margin-bottom: $sm
 </style>
 
-<script>
+<script lang="js">
 import merge from 'merge-anything'
 import copy from 'copy-anything'
 import { isNumber } from 'is-what'

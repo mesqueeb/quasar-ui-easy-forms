@@ -6,6 +6,7 @@ const json = require('@rollup/plugin-json')
 const nodeResolve = require('@rollup/plugin-node-resolve')
 const VuePlugin = require('rollup-plugin-vue')
 const commonjs = require('@rollup/plugin-commonjs')
+const typescript = require('rollup-plugin-typescript2')
 
 const buildConf = require('./config')
 const buildUtils = require('./utils')
@@ -15,6 +16,7 @@ const pkg = require('../package.json')
 const external = Object.keys(pkg.dependencies || [])
 
 const rollupPlugins = [
+  typescript({ typescript: require('typescript') }),
   commonjs(),
   nodeResolve({
     extensions: ['.js'],

@@ -55,6 +55,7 @@ module.exports = function (ctx) {
     },
 
     supportIE: false,
+    supportTS: true,
 
     // animations: 'all', // --- includes all animations
     animations: [],

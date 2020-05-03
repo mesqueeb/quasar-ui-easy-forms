@@ -7,7 +7,7 @@
 @import '../../index.sass'
 </style>
 
-<script>
+<script lang="js">
 import parseEasyFieldValue from '../../helpers/parseFieldValue.js'
 import { getUsageDocs } from './sharedProps.js'
 
