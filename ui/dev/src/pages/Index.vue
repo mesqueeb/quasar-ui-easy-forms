@@ -91,6 +91,7 @@
 
 <script>
 const pagesEasyForm = [
+  { title: 'NewDemo', path: '/new-demo' },
   { title: 'Basics', path: '/basics' },
   { title: 'Advanced', path: '/advanced' },
   { title: 'Action Buttons', path: '/actionButtons' },
