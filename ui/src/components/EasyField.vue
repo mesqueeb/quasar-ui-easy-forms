@@ -282,8 +282,9 @@ You can also pass a function that will receive two params you can work with: \`(
   },
   data () {
     const { value, default: df, formData, internalErrors } = this
-    const innerValue = !isUndefined(value) ? value : isFunction(df) ? df(formData, this) : df
-    // merge user provided lang onto defaults
+    if (!isUndefined(value)) return { innerValue: value }
+    const innerValue = isFunction(df) ? df(formData, this) : df
+    this.$emit('input', innerValue)
     return {
       innerValue,
     }

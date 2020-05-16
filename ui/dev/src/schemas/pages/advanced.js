@@ -12,6 +12,8 @@ You can use any Quasar component, but you need to be sure to register the compon
   }
 }
 \`\`\`
+
+You can check the source code of the example to see what kind of properties are used in the schema to generate this advanced form. Something you can notice is that the form's v-model is updated with the default values specified in the form's schema.
 `
 
 export default {

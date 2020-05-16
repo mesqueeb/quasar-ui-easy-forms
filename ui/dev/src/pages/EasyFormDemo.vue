@@ -1,6 +1,7 @@
 <template>
   <q-page padding>
     <EasyForm class="page-form q-mb-md" v-model="pageValue" v-bind="pageForm" />
+    <EasyForm class="page-form q-mb-md" v-model="t" :schema="[{ subLabel: 'description' }]" />
     <InfoBoxWrapper label="v-model" style="flex: 2;">
       <q-markdown class="q-py-md q-px-sm" :src="modelShownAsBadge" />
     </InfoBoxWrapper>
@@ -63,6 +64,7 @@ export default {
     const exampleFormsRaw = demoSchemas[schemaId].string
     const propsSchema = getInfoCardPropsSchema('EasyForm')
     return {
+      t: {},
       pageValue: { chosenExample: 0 },
       pageForm,
       exampleForms,
