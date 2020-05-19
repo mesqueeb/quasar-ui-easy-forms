@@ -408,9 +408,7 @@ See the documentation on "Action Buttons" for more info.`,
       // if the form has a formErrorMsg, validate gain to check to see if it's solved
       if (isFullString(this.formErrorMsg)) {
         const res = validateFormPerSchema(this.formData, this.schema, this.innerLang)
-        console.log('res → ', res)
         const errorsRemain = Object.values(res).some(val => val !== true)
-        console.log('errorsRemain → ', errorsRemain)
         if (!errorsRemain) this.formErrorMsg = null
       }
     },
