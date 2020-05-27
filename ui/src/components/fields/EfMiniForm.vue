@@ -100,9 +100,6 @@ This is useful when you want to use Evaluated Props in the schema of the mine fo
     disable: { type: Boolean },
     readonly: { type: Boolean },
   },
-  mounted () {
-    console.log(`initial render OK`)
-  },
   computed: {
     cValue: {
       get () {
