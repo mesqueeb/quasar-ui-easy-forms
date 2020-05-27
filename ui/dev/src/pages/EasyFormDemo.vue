@@ -3,7 +3,7 @@
     <EasyForm class="page-form q-mb-md" v-model="pageValue" v-bind="pageForm" />
     <EasyForm class="page-form q-mb-md" v-model="t" :schema="[{ subLabel: 'description' }]" />
     <InfoBoxWrapper label="v-model" style="flex: 2;">
-      <q-markdown class="q-py-md q-px-sm" :src="modelShownAsBadge" />
+      <div class="q-py-md q-px-sm" v-html="modelShownAsBadge" />
     </InfoBoxWrapper>
     <InfoCard
       class="q-mt-lg"
@@ -51,6 +51,7 @@ import merge from 'merge-anything'
 import * as demoSchemas from '../schemas/examples/index'
 import * as pageForms from '../schemas/pages/index'
 import { getInfoCardPropsSchema } from '../helpers/schemaBuilders'
+import snarkdown from 'snarkdown'
 
 export default {
   name: 'EasyFormDemo',
@@ -93,7 +94,7 @@ export default {
         : isArray(value) || isPlainObject(value)
         ? JSON.stringify(value)
         : value
-      return `\`${parsedValue}\``
+      return snarkdown(`\`${parsedValue}\``)
     },
     styleClasses () {
       return [

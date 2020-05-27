@@ -19,7 +19,7 @@ export default {
     },
     {
       id: 'md-input',
-      component: 'QMarkdown',
+      component: 'Snarkdown',
       span: 1,
       // component props:
       noLineNumbers: true,
@@ -41,7 +41,7 @@ export default {
     },
     {
       id: 'md-btn-toggle',
-      component: 'QMarkdown',
+      component: 'Snarkdown',
       span: 1,
       // component props:
       noLineNumbers: true,
@@ -60,7 +60,7 @@ export default {
     },
     {
       id: 'md-slider',
-      component: 'QMarkdown',
+      component: 'Snarkdown',
       span: 1,
       // component props:
       noLineNumbers: true,
@@ -79,7 +79,7 @@ export default {
     },
     {
       id: 'md-input-nr',
-      component: 'QMarkdown',
+      component: 'Snarkdown',
       span: 1,
       // component props:
       noLineNumbers: true,
@@ -127,7 +127,7 @@ export default {
     },
     {
       id: 'md-select',
-      component: 'QMarkdown',
+      component: 'Snarkdown',
       span: 1,
       // component props:
       noLineNumbers: true,
@@ -158,7 +158,7 @@ export default {
     },
     {
       id: 'md-option-group',
-      component: 'QMarkdown',
+      component: 'Snarkdown',
       span: 1,
       // component props:
       noLineNumbers: true,
@@ -174,7 +174,7 @@ export default {
     },
     {
       id: 'md-toggle',
-      component: 'QMarkdown',
+      component: 'Snarkdown',
       span: 1,
       // component props:
       noLineNumbers: true,
@@ -194,7 +194,7 @@ export default {
     },
     {
       id: 'md-input-date',
-      component: 'QMarkdown',
+      component: 'Snarkdown',
       span: 1,
       // component props:
       noLineNumbers: true,

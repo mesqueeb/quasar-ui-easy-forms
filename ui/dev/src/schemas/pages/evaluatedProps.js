@@ -23,7 +23,7 @@ export default {
   actionButtons: [],
   schema: [
     {
-      component: 'QMarkdown',
+      component: 'Snarkdown',
       noLineNumbers: true,
       src: description,
     },
@@ -41,7 +41,7 @@ export default {
       ],
     },
     {
-      component: 'QMarkdown',
+      component: 'Snarkdown',
       noLineNumbers: true,
       showCondition: (value, { formData }) => formData.chosenExample === 0,
       src: `
@@ -50,7 +50,7 @@ Eg. \`subLabel: val => val === 'purple' ? 'nice!' : 'choose a color'\`
 `.trim(),
     },
     {
-      component: 'QMarkdown',
+      component: 'Snarkdown',
       noLineNumbers: true,
       showCondition: (value, { formData }) => formData.chosenExample === 1,
       src: `
@@ -59,7 +59,7 @@ Eg. \`disable: (val, {formData}) => formData.over18\`
 `.trim(),
     },
     {
-      component: 'QMarkdown',
+      component: 'Snarkdown',
       noLineNumbers: true,
       showCondition: (value, { formData }) => formData.chosenExample === 2,
       src: `
@@ -71,7 +71,7 @@ Eg. \`showCondition: (val, {formData}) => formData.car\`
 `.trim(),
     },
     {
-      component: 'QMarkdown',
+      component: 'Snarkdown',
       noLineNumbers: true,
       showCondition: (value, { formData }) => formData.chosenExample === 3,
       src: `

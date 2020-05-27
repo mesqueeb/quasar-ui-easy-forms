@@ -15,20 +15,20 @@
     "dev:electron": "quasar dev -m electron"
   },
   "dependencies": {
-    "@planetar/api-card": "^0.1.4",
-    "@planetar/example-card": "^0.1.0",
+    "@planetar/api-card": "^0.1.8",
+    "@planetar/example-card": "^0.1.2",
     "@quasar/extras": "^1.8.1",
-    "@quasar/quasar-ui-qmarkdown": "^1.0.24",
     "case-anything": "^0.3.1",
     "copy-anything": "^1.6.0",
     "is-what": "^3.8.0",
     "merge-anything": "^2.4.4",
     "quasar-ui-component-info-card": "0.0.7",
     "raw-loader": "^4.0.1",
+    "snarkdown": "^1.2.2",
     "sort-anything": "0.0.1"
   },
   "devDependencies": {
-    "@quasar/app": "^1.8.6"
+    "@quasar/app": "^1.8.10"
   },
   "engines": {
     "node": ">= 8.9.0",

@@ -26,7 +26,9 @@
         :rowInput="params => setSubFieldValue({ id: params.id, value: params.value, rowIndex })"
         v-bind="subfield"
         :value="cValue[rowIndex][subfield.id]"
-        @input="val => setSubFieldValue({ id: subfield.id, value: val, rowIndex })"
+        @input="
+          (val, origin) => setSubFieldValue({ id: subfield.id, value: val, rowIndex }, origin)
+        "
         @keyup.native.delete="onDeleteKey(rowIndex, subfield.id)"
       />
     </div>
@@ -98,6 +100,9 @@ This is useful when you want to use Evaluated Props in the schema of the mine fo
     disable: { type: Boolean },
     readonly: { type: Boolean },
   },
+  mounted () {
+    console.log(`initial render OK`)
+  },
   computed: {
     cValue: {
       get () {
@@ -157,7 +162,9 @@ This is useful when you want to use Evaluated Props in the schema of the mine fo
       allRows.splice(rowIndex, 1)
       this.$emit('input', allRows)
     },
-    setSubFieldValue ({ id, value: newValue, rowIndex }) {
+    setSubFieldValue ({ id, value: newValue, rowIndex }, origin) {
+      // do not emit when the origin is from the default value initialisation
+      if (origin === 'default') return
       const { value: oldValue } = this
       const allRows = copy(oldValue)
       if (allRows[rowIndex] === undefined) this.$set(allRows, rowIndex, {})
