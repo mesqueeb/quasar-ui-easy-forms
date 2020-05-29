@@ -12,7 +12,7 @@
         :key="i"
         v-bind="{ ...field, span: undefined }"
         :value="formDataFlat[field.id]"
-        @input="value => fieldInput({ id: field.id, value })"
+        @input="(value, origin) => fieldInput({ id: field.id, value, origin })"
       />
     </div>
     <div
@@ -24,7 +24,7 @@
         :key="field.id"
         v-bind="{ ...field, span: undefined }"
         :value="formDataFlat[field.id]"
-        @input="value => fieldInput({ id: field.id, value })"
+        @input="(value, origin) => fieldInput({ id: field.id, value, origin })"
         :style="
           field.span ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}` : ''
         "
@@ -394,7 +394,7 @@ See the documentation on "Action Buttons" for more info.`,
   },
   methods: {
     isFullString,
-    fieldInput ({ id, value }) {
+    fieldInput ({ id, value, origin }) {
       // no idea why I do this:
       this.edited = true
       // keep a list of edited field ids
@@ -402,7 +402,7 @@ See the documentation on "Action Buttons" for more info.`,
       // set the new value onto the formData (might be an empty object)
       this.$set(this.formDataFlat, id, value)
       // emit field-input with field's id and new data
-      this.$emit(EVENTS['field-input'].name, { id, value })
+      this.$emit(EVENTS['field-input'].name, { id, value, origin })
       // emit input with entire formData
       this.$emit(EVENTS['input'].name, this.formData) // do not extract `this` from here
       // if the form has a formErrorMsg, validate gain to check to see if it's solved
