@@ -1,6 +1,6 @@
 {
   "name": "quasar-ui-easy-forms",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "author": "Luca Ban - Mesqueeb",
   "description": "A Vue plugin (that uses Quasar components) to easily generate forms by only defining a \"schema\" object.",
   "license": "MIT",
@@ -8,6 +8,7 @@
   "main": "dist/index.common.js",
   "scripts": {
     "deploy": "npm run build && cd dev && npm run deploy && cd .. && npm publish -otp $OTP && cd ../app-extension && npm publish -otp $OTP",
+    "deploy-only-lib": "npm run build && npm publish",
     "dev": "cd dev && yarn dev && cd ..",
     "dev:umd": "yarn build && node build/script.open-umd.js",
     "dev:ssr": "cd dev && yarn 'dev:ssr' && cd ..",
@@ -45,10 +46,13 @@
     "rollup": "^1.32.1",
     "rollup-plugin-vue": "^5.1.9",
     "uglify-es": "^3.3.9",
+    "vue": "^2.6.11",
     "vue-template-compiler": "^2.6.11",
     "zlib": "^1.0.5"
   },
-  "browserslist": ["last 1 version, not dead, ie >= 11"],
+  "browserslist": [
+    "last 1 version, not dead, ie >= 11"
+  ],
   "dependencies": {
     "@vue/composition-api": "^0.3.4",
     "case-anything": "0.0.1",
@@ -61,7 +65,12 @@
     "snarkdown": "^1.2.2"
   },
   "ava": {
-    "require": ["@babel/register", "esm"],
-    "helpers": ["**/helpers/**/*"]
+    "require": [
+      "@babel/register",
+      "esm"
+    ],
+    "helpers": [
+      "**/helpers/**/*"
+    ]
   }
 }

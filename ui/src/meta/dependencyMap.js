@@ -1,16 +1,16 @@
 import merge from 'merge-anything'
-import { QBtn, QInput } from './quasarPropsJson'
+// import { QBtn, QInput } from './quasarPropsJson'
 
 export const dependencyMap = {
   QInput: {
     componentName: 'QInput',
     component: 'QInput',
-    passedProps: { QInput },
+    passedProps: {},
   },
   EfBtn: {
     componentName: 'EfBtn',
     component: 'EfBtn',
-    passedProps: { QBtn },
+    passedProps: {},
   },
   EfDiv: {
     componentName: 'EfDiv',
