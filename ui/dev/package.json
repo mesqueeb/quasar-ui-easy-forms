@@ -24,7 +24,7 @@
     "merge-anything": "^2.4.4",
     "quasar-ui-component-info-card": "0.0.7",
     "raw-loader": "^4.0.1",
-    "snarkdown": "^1.2.2",
+    "snarkdown": "github:mesqueeb/snarkdown#dist",
     "sort-anything": "0.0.1"
   },
   "devDependencies": {
