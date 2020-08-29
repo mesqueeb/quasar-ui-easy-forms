@@ -1,6 +1,6 @@
 {
   "name": "quasar-ui-easy-forms",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "author": "Luca Ban - Mesqueeb",
   "description": "A Vue plugin (that uses Quasar components) to easily generate forms by only defining a \"schema\" object.",
   "license": "MIT",
@@ -62,7 +62,7 @@
     "is-what": "^3.8.0",
     "merge-anything": "^2.4.4",
     "nestify-anything": "0.0.0",
-    "snarkdown": "^1.2.2"
+    "snarkdown": "github:mesqueeb/snarkdown#dist"
   },
   "ava": {
     "require": [
