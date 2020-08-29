@@ -12,7 +12,7 @@
         :key="i"
         v-bind="{ ...field, span: undefined }"
         :value="formDataFlat[field.id]"
-        @input="value => fieldInput({ id: field.id, value })"
+        @input="(value, origin) => fieldInput({ id: field.id, value, origin })"
       />
     </div>
     <div
@@ -24,7 +24,7 @@
         :key="field.id"
         v-bind="{ ...field, span: undefined }"
         :value="formDataFlat[field.id]"
-        @input="value => fieldInput({ id: field.id, value })"
+        @input="(value, origin) => fieldInput({ id: field.id, value, origin })"
         :style="
           field.span ? `grid-column: ${field.span === true ? '1 / -1' : `span ${field.span}`}` : ''
         "
@@ -228,6 +228,14 @@ See the documentation on "Action Buttons" for more info.`,
     evaluatedProps,
     internalLabels,
     internalErrors,
+    /**
+     * Pass the component names (without `.vue`) that have internal error handling.
+     * @type {string[]}
+     */
+    internalErrorsFor: {
+      type: Array,
+      default: () => []
+    },
   },
   data () {
     const { mode, id, value, schema, lang } = this
@@ -295,7 +303,7 @@ See the documentation on "Action Buttons" for more info.`,
         labelPosition: this.labelPosition,
         evaluatedProps: this.evaluatedProps,
         internalLabels: this.internalLabels,
-        internalErrors: this.internalErrors,
+        internalErrors: this.internalErrors
       }
     },
     schemaForcedDefaults () {
@@ -307,9 +315,10 @@ See the documentation on "Action Buttons" for more info.`,
       }
     },
     cSchema () {
-      const { schema, schemaOverwritableDefaults, schemaForcedDefaults } = this
+      const { schema, schemaOverwritableDefaults, schemaForcedDefaults, internalErrorsFor } = this
       return schema.map(blueprint => {
-        const blueprintParsed = merge(schemaOverwritableDefaults, blueprint, schemaForcedDefaults)
+        const other = internalErrorsFor.includes(blueprint.component) ? {internalErrors: true} : {}
+        const blueprintParsed = merge(schemaOverwritableDefaults, other, blueprint, schemaForcedDefaults)
         return blueprintParsed
       })
     },
@@ -394,7 +403,7 @@ See the documentation on "Action Buttons" for more info.`,
   },
   methods: {
     isFullString,
-    fieldInput ({ id, value }) {
+    fieldInput ({ id, value, origin }) {
       // no idea why I do this:
       this.edited = true
       // keep a list of edited field ids
@@ -402,15 +411,13 @@ See the documentation on "Action Buttons" for more info.`,
       // set the new value onto the formData (might be an empty object)
       this.$set(this.formDataFlat, id, value)
       // emit field-input with field's id and new data
-      this.$emit(EVENTS['field-input'].name, { id, value })
+      this.$emit(EVENTS['field-input'].name, { id, value, origin })
       // emit input with entire formData
       this.$emit(EVENTS['input'].name, this.formData) // do not extract `this` from here
       // if the form has a formErrorMsg, validate gain to check to see if it's solved
       if (isFullString(this.formErrorMsg)) {
         const res = validateFormPerSchema(this.formData, this.schema, this.innerLang)
-        console.log('res → ', res)
         const errorsRemain = Object.values(res).some(val => val !== true)
-        console.log('errorsRemain → ', errorsRemain)
         if (!errorsRemain) this.formErrorMsg = null
       }
     },

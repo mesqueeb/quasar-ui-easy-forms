@@ -14,7 +14,7 @@ export default {
   actionButtons: [],
   schema: [
     {
-      component: 'QMarkdown',
+      component: 'Snarkdown',
 
       noLineNumbers: true,
       src: description,
@@ -32,7 +32,7 @@ export default {
       ],
     },
     {
-      component: 'QMarkdown',
+      component: 'Snarkdown',
 
       showCondition: (value, { formData }) => formData.chosenExample === 0,
       noLineNumbers: true,
@@ -53,7 +53,7 @@ When implementing a computed field this way however, \`fullName\` will never hav
 `.trim(),
     },
     {
-      component: 'QMarkdown',
+      component: 'Snarkdown',
 
       showCondition: (value, { formData }) => formData.chosenExample === 1,
       noLineNumbers: true,
@@ -98,7 +98,7 @@ There is also a third way we can create a computed field (see the last tab).
 `.trim(),
     },
     {
-      component: 'QMarkdown',
+      component: 'Snarkdown',
 
       showCondition: (value, { formData }) => formData.chosenExample === 2,
       noLineNumbers: true,

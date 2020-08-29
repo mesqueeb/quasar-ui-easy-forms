@@ -1,0 +1,144 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins:wght@400;500;600;700&display=swap")
+@import 'colors'
+
+=font-globals()
+  font-family: 'Poppins', sans-serif
+  color: $c-primary
+
+=t-h1()
+  +font-globals
+  font-weight: bold
+  font-size: 56px
+  line-height: 64px
+  letter-spacing: 0.01em
+
+=t-h2()
+  +font-globals
+  font-weight: 600
+  font-size: 40px
+  line-height: 56px
+
+=t-h3()
+  +font-globals
+  font-weight: bold
+  font-size: 36px
+  line-height: 40px
+  letter-spacing: 0.01em
+
+=t-h4()
+  +font-globals
+  font-weight: 600
+  font-size: 32px
+  line-height: 40px
+
+=t-h5()
+  +font-globals
+  font-weight: 600
+  font-size: 24px
+  line-height: 30px
+  letter-spacing: 0.01em
+
+=t-h6()
+  +font-globals
+  font-weight: 600
+  font-size: 20px
+  line-height: 24px
+
+=t-subtitle1()
+  +font-globals
+  font-weight: 600
+  font-size: 16px
+  line-height: 20px
+
+=t-subtitle2()
+  +font-globals
+  font-weight: 500
+  font-size: 14px
+  line-height: 20px
+  letter-spacing: 0.005em
+
+=t-body1()
+  +font-globals
+  font-family: 'Open Sans', sans-serif
+  font-weight: normal
+  font-size: 16px
+  line-height: 24px
+
+=t-body2()
+  +font-globals
+  font-family: 'Open Sans', sans-serif
+  font-weight: normal
+  font-size: 14px
+  line-height: 20px
+  letter-spacing: 0.01em
+
+=t-button()
+  +font-globals
+  font-weight: 600
+  font-size: 14px
+  line-height: 24px
+  letter-spacing: 0.01em
+
+=t-caption()
+  +font-globals
+  font-weight: normal
+  font-size: 12px
+  line-height: 16px
+  letter-spacing: 0.02em
+
+=t-caption-semibold()
+  +font-globals
+  font-weight: 600
+  font-size: 12px
+  line-height: 16px
+  letter-spacing: 0.02em
+
+=t-overline()
+  +font-globals
+  font-weight: 600
+  font-size: 12px
+  line-height: 16px
+  letter-spacing: 0.08em
+  text-transform: uppercase
+
+=t-micro()
+  +font-globals
+  font-weight: normal
+  font-size: 10px
+  line-height: 14px
+  letter-spacing: 0.02em
+
+.t-h1, h1
+  +t-h1
+.t-h2, h2
+  +t-h2
+.t-h3, h3
+  +t-h3
+.t-h4, h4
+  +t-h4
+.t-h5, h5
+  +t-h5
+.t-h6, h6
+  +t-h6
+.t-subtitle1
+  +t-subtitle1
+.t-subtitle2
+  +t-subtitle2
+.t-body1
+  +t-body1
+.t-body2
+  +t-body2
+.t-button
+  +t-button
+.t-caption
+  +t-caption
+.t-caption-semibold
+  +t-caption-semibold
+.t-overline
+  +t-overline
+.t-micro
+  +t-micro
+
+h1, h2, h3, h4, h5, h6
+  margin-top: 17px
+  margin-bottom: 17px

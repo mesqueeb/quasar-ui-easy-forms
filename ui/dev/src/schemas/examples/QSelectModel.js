@@ -17,14 +17,14 @@ const createExample = (config, i) => [
   ),
   {
     id: `example${i}-m`,
-    component: 'QMarkdown',
+    component: 'Snarkdown',
     noLineNumbers: true,
     src: (val, { formData }) => formatForMarkdown(formData[`example${i}`]),
     evaluatedProps: ['src'],
   },
   {
     id: `example${i}-o`,
-    component: 'QMarkdown',
+    component: 'Snarkdown',
     noLineNumbers: true,
     fieldClass: 'text-break-all',
     src: formatForMarkdown(config),

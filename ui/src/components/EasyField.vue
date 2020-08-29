@@ -284,7 +284,7 @@ You can also pass a function that will receive two params you can work with: \`(
     const { value, default: df, formData, internalErrors } = this
     if (!isUndefined(value)) return { innerValue: value }
     const innerValue = isFunction(df) ? df(formData, this) : df
-    this.$emit('input', innerValue)
+    this.$emit('input', innerValue, 'default')
     return {
       innerValue,
     }
