@@ -1,28 +1,16 @@
-# Quasar Easy Forms 📮
+Quasar Easy Forms 📮
 
-This is a short README for the Quasar App Extension specifically.
-Check the [Vue component README](../ui) for more info.
+New version:
 
-[![npm](https://img.shields.io/npm/v/quasar-app-extension-easy-forms.svg?label=quasar-app-extension-easy-forms)](https://www.npmjs.com/package/quasar-app-extension-easy-forms)
-[![npm](https://img.shields.io/npm/dt/quasar-app-extension-easy-forms.svg)](https://www.npmjs.com/package/quasar-app-extension-easy-forms)
+# Blitzar released! 🎉 
 
-- Demo: [quasar-easy-forms.web.app](http://quasar-easy-forms.web.app)
-- Support: [jump to support ↓](#support)
+Quasar Easy Forms & Tables was upgraded to become much more powerful!
 
-# Install
+The new version is called **Blitzar**
 
-```bash
-quasar ext add easy-forms
-```
-Quasar CLI will retrieve it from NPM and install the extension.
-
-You can then use the `<EasyForm />` component out of the box.
-
-# Uninstall
-
-```bash
-quasar ext remove easy-forms
-```
+- see blog post here: https://lucaban.medium.com/better-faster-vue-forms-with-blitzar-a0d71258a3bb
+- see documentation here: https://blitzar.cycraft.co
+- see the upgrade guide here: https://github.com/CyCraft/blitzar/releases/tag/v0.0.14
 
 # Support
 
